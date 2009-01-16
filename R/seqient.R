@@ -4,16 +4,14 @@
 
 seqient <- function(seqdata, norm=TRUE) {
 
-	if (!inherits(seqdata,"stslist")) {
-		cat(" [!] data is NOT a sequence object, see seqdef function to create one\n")
-		return()
-		}
+	if (!inherits(seqdata,"stslist"))
+		stop("data is NOT a sequence object, see seqdef function to create one")
 
 	statl <- attr(seqdata,"alphabet")
 	nbstat <- length(statl)
 	iseqtab <- matrix(nrow=seqdim(seqdata)[1],ncol=nbstat)
 
-	cat(" [>] computing within sequence entropy for",seqdim(seqdata)[1],"sequences... \n")
+	message(" [>] computing within sequence entropy for ",seqdim(seqdata)[1]," sequences...")
 
 	for (i in 1:nbstat) {
 		iseqtab[,i] <- apply(seqdata,1,function(x) sum(x==statl[i],na.rm=TRUE))

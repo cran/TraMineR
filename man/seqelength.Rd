@@ -28,14 +28,14 @@ seqesetlength(s,len)
 %\seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
 \examples{
 data(actcal.tse)
-actcal.seqe<-seqecreate(actcal.tse$id,actcal.tse$time,actcal.tse$event)
+actcal.seqe <- seqecreate(actcal.tse)
 ##time to end is added
-sl<-numeric()
-sl[1:2000]<-12
-#All sequences with same length
-seqesetlength(actcal.seqe,sl)
+sl <- numeric()
+sl[1:2000] <- 12
+##All sequences with same length
+seqesetlength(actcal.seqe, sl)
 actcal.seqe[1:10]
-#Retrieve length
+##Retrieve length
 seqelength(actcal.seqe)
 }
 \keyword{attribute}

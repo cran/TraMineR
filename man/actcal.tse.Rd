@@ -13,7 +13,10 @@ This data set contains events defined from the state sequences in the actcal dat
 %\references{}
 \examples{
 data(actcal)
-transition <- seqetm(actcal[,13:24], method="transition")
+actcal.seq <- seqdef(actcal[,13:24])
+
+## Defining the transition matrix
+transition <- seqetm(actcal.seq, method="transition")
 transition[1,1:4] <- c("FullTime"         , "Decrease,PartTime",
      "Decrease,LowPartTime", "Stop")
 transition[2,1:4] <- c("Increase,FullTime", "PartTime"         ,
@@ -23,10 +26,13 @@ transition[3,1:4] <- c("Increase,FullTime", "Increase,PartTime",
 transition[4,1:4] <- c("Start,FullTime"   , "Start,PartTime"   ,
     "Start,LowPartTime"   , "NoActivity")
 transition
-actcal.tse <- seqformat(actcal,var=13:24,from='STS',to='TSE', tevent=transition)
 
+## Converting STS data to TSE
+actcal.tse <- seqformat(actcal,var=13:24, from='STS',to='TSE', 
+	tevent=transition)
 
+## Defining the event sequence object
 actcal.seqe <- seqecreate(id=actcal.tse$id,
-time=actcal.tse$time, event=actcal.tse$event)
+	time=actcal.tse$time, event=actcal.tse$event)
 }
 \keyword{datasets}

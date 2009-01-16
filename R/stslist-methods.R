@@ -2,16 +2,23 @@
 ## Methods for stslist objects
 ## ===========================
 
-print.stslist <- function(x,format='STS',extended=FALSE,...) {
+print.stslist <- function(x,format='STS', extended=FALSE, ...) {
 	if (format=='STS') {
 		if (extended==FALSE) {
-			x <- seqconc(x)
-			print(x,quote=FALSE)
+			void <- attr(x,"void")
+			x <- seqconc(x, void=void)
+			print(x, quote=FALSE)
 		} else NextMethod("print")
 	}
 	if (format=='SPS') {
-		x <- seqformat(x,from='STS',to='SPS') 
-		print(x,quote=FALSE)
+		x <- seqconc(x, void=attr(x,"void"))
+		
+		if (extended==FALSE)
+			x <- suppressMessages(seqformat(x,from='STS', to='SPS', compressed=TRUE))
+		else if (extended==TRUE)
+			x <- suppressMessages(seqformat(x,from='STS', to='SPS', compressed=FALSE))
+
+		print(x, quote=FALSE)
 	}
 }
 
@@ -25,21 +32,22 @@ plot.stslist <- function(x,...) {
 	## Otherwise we copy attributes and update "start" value
 	if (!missing(j) && length(j)>1) {
 		## Storing the attributes
-		a <- attr(x,"alphabet")
-	     s <- attr(x,"start")
-	     m <- attr(x,"missing")
-		cpal <- attr(x,"cpal")
-		lab <- attr(x,"labels")
+		x.attributes <- attributes(x)
 
 		## Applying method
 	     x <- NextMethod("[")
 	
+		## Adapting column names
+		x.attributes$names <- x.attributes$names[j]
+
 		## Redefining attributes
-		attr(x,"alphabet") <- a
-		attr(x,"missing") <- m
-	     attr(x,"start") <- s-1+j[1]
-		attr(x,"cpal") <- cpal
-		attr(x,"labels") <- lab
+		attributes(x) <- x.attributes
+
+	     attr(x,"start") <- x.attributes$start-1+j[1]
+
+		if (!missing(i))
+			attr(x,"row.names") <- attr(x,"row.names")[i]
+
 		return(x)
     }
     NextMethod("[")

@@ -1,35 +1,35 @@
 \name{seqecontain}
 \alias{seqecontain}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Event sequence contain event}
+\title{Event sequence contains event}
 \description{
-  Check if a sequence or a subsequence contain a specific event
+  Check if a sequence or a subsequence contains a specific event
 }
 \usage{
 seqecontain(seq, eventList, exclude = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{seq}{A list of event sequence}
-  \item{eventList}{A list of event}
-  \item{exclude}{if TRUE the search is exclusive, return false for if the subsequence contain an event that is not in eventList}
+  \item{seq}{A list of event sequences or a list of subsequences}
+  \item{eventList}{A list of events}
+  \item{exclude}{if TRUE the search is exclusive and returns FALSE for any subsequence containing an event that is not in \code{eventList}}
 }
 \details{
-  Check every event sequence and check if contain an event in \code{eventList}.
-  if \code{exclude} is TRUE the search is reversed, i.e. all event of the subsequences should be in \code{eventList}.
+  Checks, for each provided event sequence, if it contains an event in \code{eventList}.
+  If \code{exclude} is TRUE, \code{seqecontain} looks if all events of the subsequence are in \code{eventList}.
 }
 \value{
   A logical vector
 }
 \examples{
 data(actcal.tse)
-actcal.seqe <- seqecreate(actcal.tse$id,actcal.tse$time,actcal.tse$event)
+actcal.seqe <- seqecreate(actcal.tse)
 
-#Searching for frequent subsequences, that is, appearing at least 20 times
+##Searching for frequent subsequences, that is appearing at least 20 times
 fsubseq <- seqefsub(actcal.seqe,minSupport=20)
 
 ##looking for subsequence with FullTime
-seqecontain(fsubseq$subseq,c("FullTime"))
+seqecontain(fsubseq,c("FullTime"))
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

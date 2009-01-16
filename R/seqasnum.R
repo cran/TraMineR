@@ -1,6 +1,6 @@
 ## TRANSFORMATION DE SEQUENCES DE CARACTERES EN SEQUENCES NUMERIQUES
 
-seqasnum <- function(seqdata) {
+seqasnum <- function(seqdata, with.miss=FALSE) {
 
 	mnum <- matrix(NA,nrow=seqdim(seqdata)[1],ncol=seqdim(seqdata)[2])
 
@@ -8,6 +8,9 @@ seqasnum <- function(seqdata) {
 	colnames(mnum) <- colnames(seqdata)
 
 	statl <- attr(seqdata,"alphabet")
+
+	if (with.miss)
+		statl <- c(statl, attr(seqdata, "nr"))
 
 	for (i in 1:length(statl)) {
 		mnum[seqdata==statl[i]] <- i-1

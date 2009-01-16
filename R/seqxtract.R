@@ -1,4 +1,6 @@
-## EXTRACT SEQUENCES FROM A DATA SET 
+## =================================
+## EXTRACT SEQUENCES FROM A DATA SET
+## =================================
 
 seqxtract <- function(data, var=NULL, data.frame=FALSE) {
 	

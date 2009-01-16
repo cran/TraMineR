@@ -227,7 +227,7 @@ extern "C" {
             //Clear support stored in tree
             root->clearSupport();
             lastNodeCount=TreeEventNode::getNodeCount();
-            REprintf((char*)"Step %i:\n     Adding sequences (size: %i)\n",k,TreeEventNode::getNodeCount());
+            //REprintf((char*)"Step %i:\n     Adding sequences (size: %i)\n",k,TreeEventNode::getNodeCount());
             //Add every sequence to the tree
             for (int i=0;i<numseq;i++) {
                 seq=VECTOR_ELT(seqs,i);
@@ -236,18 +236,18 @@ extern "C" {
                 root->addSequence(s,mGap,wSize,aMin,aMax,aMaxEnd,k);
                 //Rprintf((char*)"Added %i seq, node=%i\n",i,TreeEventNode::getNodeCount());
             }
-            REprintf((char*)"     Simplifying tree (size: %i)\n",TreeEventNode::getNodeCount());
+            //REprintf((char*)"     Simplifying tree (size: %i)\n",TreeEventNode::getNodeCount());
             //root->print();
             //return ScalarLogical(TRUE);
             //Simplify tree
             root->simplifyTree(mSupport);
-            REprintf((char*)"     Tree simplified (size: %i [added: %i])\n",TreeEventNode::getNodeCount(), (TreeEventNode::getNodeCount()-lastNodeCount));
+            //REprintf((char*)"     Tree simplified (size: %i [added: %i])\n",TreeEventNode::getNodeCount(), (TreeEventNode::getNodeCount()-lastNodeCount));
             if (TreeEventNode::getNodeCount()-lastNodeCount==0)break;
         }
         // root->print();
         //root->print();
         //Tree size (number of node=number of frequent subsequences)
-        REprintf((char*)"Counting subseq...");
+        //REprintf((char*)"Counting subseq...");
         int returnsize=root->countSubsequence(mSupport);
         //Rprintf((char*)"Counting subseq (%i)\n",returnsize);
         SEXP ans, supp,subseq;
@@ -255,9 +255,9 @@ extern "C" {
         PROTECT(supp=allocVector(INTSXP, returnsize)); //Allocate memory
         PROTECT(subseq=allocVector(VECSXP, returnsize)); //Allocate memory
         int index=0;
-        REprintf((char*)"(%i)\nRetrieving subsequences...",returnsize);
+        //REprintf((char*)"(%i)\nRetrieving subsequences...",returnsize);
         root->getSubsequences(subseq,INTEGER(supp),&index,classname, ed); //Extracting all subsequences
-        REprintf((char*)"OK\n");
+        //REprintf((char*)"OK\n");
         SET_VECTOR_ELT(ans,0,supp);
         SET_VECTOR_ELT(ans,1,subseq);
         UNPROTECT(3);

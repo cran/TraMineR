@@ -3,10 +3,14 @@
 ## 'Describing and visualizing sequences'
 ## in TraMineR User's Guide
 ## ======================================
+require(grDevices); require(graphics)
+oask <- devAskNewPage(dev.interactive(orNone = TRUE))
+
+
 library(TraMineR)
 
-## Set 'graphdir' according to your system 
-## and uncomment the pdf() and dev.off() commands 
+## Set 'graphdir' according to your system
+## and uncomment the pdf() and dev.off() commands
 ## if you want to save the graphics as pdf files
 graphdir <- "/****/*****/****/*****/TraMineR-Manual/Graphiques/"
 
@@ -18,7 +22,7 @@ stated <- c("> 37 hours", "19-36 hours", "1-18 hours", "no work")
 actcal.seq <- seqdef(actcal,13:24,labels=stated)
 alphabet(actcal.seq)
 
-sp.ex1 <- rbind("(000,12)-(0W0,9)-(0WU,5)-(1WU,2)", 
+sp.ex1 <- rbind("(000,12)-(0W0,9)-(0WU,5)-(1WU,2)",
 	"(000,12)-(0W0,14)-(1WU,2)")
 sp.ex1
 seqstatl(sp.ex1, format='SPS')
@@ -43,7 +47,7 @@ agelab <- paste("a",seq(15,30),sep="")
 plot(sd$Entropy,
 	main="Entropy of biofam state distribution by age",
 	xlab="Age", ylab="Entropy", type="h", lwd=3.5, col="blue",
-	xes=F, cex=1.3, frame.plot=T)
+	axes=F, cex=1.3, frame.plot=T)
 axis(1,labels=agelab, at=1:16)
 axis(2, at=c(0.0,.2,.4,.6,.8))
 ## dev.off()
@@ -56,7 +60,7 @@ axis(2, at=c(0.0,.2,.4,.6,.8))
 seqfplot(actcal.seq)
 ## dev.off()
 
-seqfplot(actcal.seq, pbarw=TRUE)  
+seqfplot(actcal.seq, pbarw=TRUE)
 
 data(biofam)
 biofam.seq <- seqdef(biofam,10:25, labels=bfstates)
@@ -79,7 +83,7 @@ rowSums(seqtrate(actcal.seq))
 seqiplot(actcal.seq)
 
 seqiplot(actcal.seq, sortv=actcal$sex, tlim=0,
-         withborder=FALSE, space=0)
+         border=NA, space=0)
 
 ## -----------------------------
 ## State frequencies by sequence
@@ -142,9 +146,9 @@ hist(actcal.ient,col="cyan",
 	main="Entropy for the sequences in the actcal data set",
 	xlab="Entropy")
 
-hist(seqient(actcal.seq),col="cyan",
-	main="Entropy for the sequences in the actcal data set",
-	xlab="Entropy")
+## hist(seqient(actcal.seq),col="cyan",
+##	main="Entropy for the sequences in the actcal data set",
+##	xlab="Entropy")
 
 max(actcal.ient)
 which(actcal.ient==max(actcal.ient))
@@ -172,7 +176,8 @@ ient.min <- biofam.seq[biofam$Entropy<=q1,]
 ient.med <- biofam.seq[biofam$Entropy>=q49 & biofam$Entropy<=q51,]
 ient.max <- biofam.seq[biofam$Entropy>=q99,]
 
-par(mfrow=c(2,2))
+omar <- par(mar=c(5,4,4,2)+.1)
+opar <- par(mfrow=c(2,2))
 seqiplot(ient.min,
          title="10 seq. with low entropy",
          withlegend=FALSE)
@@ -184,6 +189,8 @@ seqiplot(ient.max,
          withlegend=FALSE)
 seqlegend(biofam.seq)
 
+par(opar)
+
 table(biofam$birthyr)
 
 biofam <- data.frame(biofam,
@@ -193,6 +200,7 @@ table(biofam$ageg)
 
 boxplot(Entropy ~ ageg,
         data=biofam,
+        main="Boxplot of within entropy by birth cohorts",
         xlab="Birth cohort",
         ylab="Sequences entropy",
         col="cyan")
@@ -249,7 +257,7 @@ turb.min <- biofam.seq[biofam$Turbulence<=q1,]
 turb.med <- biofam.seq[biofam$Turbulence>=q49 & biofam$Turbulence<=q51,]
 turb.max <- biofam.seq[biofam$Turbulence>=q99,]
 
-par(mfrow=c(2,2))
+opar <- par(mfrow=c(2,2))
 seqiplot(turb.min,
          title="10 seq. with low turbulence",
          withlegend=FALSE)
@@ -259,7 +267,8 @@ seqiplot(turb.med,
 seqiplot(turb.max,
          title="10 seq. with high turbulence",
          withlegend=FALSE)
-seqlegend(biofam.seq) 
+seqlegend(biofam.seq)
 
-
-
+par(opar)
+par(omar)
+devAskNewPage(oask)

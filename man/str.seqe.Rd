@@ -21,9 +21,7 @@
 \seealso{\code{\link{seqecreate}} for a full example }
 \examples{
 data(actcal.tse)
-actcal.seqe <- seqecreate(actcal.tse$id,
-	actcal.tse$time,
-	actcal.tse$event)
+actcal.seqe <- seqecreate(actcal.tse)
 as.character(actcal.seqe)
 }
 \keyword{internal}

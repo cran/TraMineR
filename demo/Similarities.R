@@ -5,6 +5,11 @@
 ## in TraMineR User's Guide
 ## ============================
 
+##require(grDevices); require(graphics)
+##oask <- devAskNewPage(dev.interactive(orNone = TRUE))
+
+require(TraMineR)
+
 ## ----
 ## MPOS
 ## ----
@@ -22,9 +27,9 @@ data(famform)
 famform.seq <- seqdef(famform)
 famform.seq
 
-seqLCP(famform.seq[1,],famform.seq[2,])
-seqLCP(famform.seq[3,],famform.seq[4,])
-seqLCP(famform.seq[3,],famform.seq[5,])
+seqLLCP(famform.seq[1,],famform.seq[2,])
+seqLLCP(famform.seq[3,],famform.seq[4,])
+seqLLCP(famform.seq[3,],famform.seq[5,])
 
 seqdist(famform.seq,method="LCP")
 
@@ -62,4 +67,4 @@ biofam.om2[1:10,1:10]
 
 all.equal(biofam.om2,biofam.lcs)
 
-
+##devAskNewPage(oask)

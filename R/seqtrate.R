@@ -4,13 +4,12 @@
 
 seqtrate <- function(seqdata, statl=NULL) {
 
-	if (!inherits(seqdata,"stslist")) {
-		stop(" [!] data is NOT a sequence object, see seqdef function to create one\n")
-		return()
-		}
+	if (!inherits(seqdata,"stslist")) 
+		stop("data is NOT a sequence object, see seqdef function to create one")
 
 	## State list if not specified
 	if (is.null(statl)) statl <- attr(seqdata,"alphabet")
+	nr <- attr(seqdata,"nr")
 
 	nbetat <- length(statl)
 	tmat <- matrix(nrow=nbetat, ncol=nbetat)
@@ -27,7 +26,7 @@ seqtrate <- function(seqdata, statl=NULL) {
 		## Count
 		PA <- 0
 		for (sl in 1:(sdur-1))
-			PA <- PA + sum(seqdata[,sl]==statl[x] & !is.na(seqdata[,sl+1]),na.rm=TRUE)
+			PA <- PA + sum(seqdata[,sl]==statl[x] & seqdata[,sl+1]!=nr,na.rm=TRUE)
 		for (y in 1:nbetat) {
 			PAB <- 0
 			for (i in 1:sdur-1) {

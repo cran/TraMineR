@@ -8,7 +8,7 @@ Computes the number of distinct subsequences in a sequence using Elzinga's algor
  seqsubsn(seqdata, DSS=TRUE)
 }
 \arguments{
-  \item{seqdata}{a sequence object created with the \code{\link{seqdef}} function.}
+  \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
 \item{DSS}{if TRUE, the Distinct State Sequences (DSS, see \code{\link{seqdss}}) are first extracted, eg. the DSS contained in 'D-D-D-D-A-A-A-A-A-A-A-D' is 'D-A-D', and the number of distinct subsequences in the DSS is computed. If FALSE, the number of distinct subsequences is computed from sequences as they appear in the input sequence object. Hence the number of distinct subsequences is in most cases much higher with the DSS=FALSE option.}  
 }
 \value{a vector containing the number of distinct subsequences for each sequence in the input sequence object.}

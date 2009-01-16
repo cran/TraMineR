@@ -2,46 +2,50 @@
 ## Convert from STS to SPS format
 ## ==============================
 
-STS_to_SPS <- function(seqdata,type) {
+STS_to_SPS <- function(seqdata, spsformat, 
+	left=NA, right="DEL", gaps=NA, missing=NA, void="%", nr="*") {
 
 	nbseq <- seqdim(seqdata)[1]
-	out <- matrix("", nrow=nbseq, ncol=1)
+	maxsl <- seqdim(seqdata)[2]
+
+	out <- matrix(NA, nrow=nbseq, ncol=maxsl)
 
 	rownames(out) <- paste("[",seq(1:nbseq),"]",sep="")
-	colnames(out) <- "SPS sequence"
+	colnames(out) <- paste("[",seq(1:maxsl),"]",sep="")
 
-	if (type==1) {
-		prefix <- "("
-		stdursep <- ","
-		suffix <- ")"
-	}
-	else {
-		prefix <- ""
-		stdursep <- "/"
-		suffix <- ""
-	}		
+	## Defining the format options
+	prefix <- substring(spsformat$xfix,1,1)
+	suffix <- substring(spsformat$xfix,2,2)
+	stdursep <- spsformat$sdsep
+
+	## PREPARING THE DATA
+	seqdata <- as.matrix(seqdata)
+	seqdata <- seqprep(seqdata, missing=missing, left=left, gaps=gaps, right=right, void=void, nr=nr)
 
 	for (i in 1:nbseq) {
 		idx <- 1
-		tmpseq <- strsplit(seqdata[i],split="-")[[1]]
-		
-		while (idx <= length(tmpseq)) {
-			iseq <- tmpseq[idx]
+		j <- 1
 
-			if (idx==1) out[i] <- paste(out[i],prefix,iseq,stdursep,sep="")
-			else out[i] <- paste(out[i],"-",prefix,iseq,stdursep,sep="")
+		tmpseq <- seqdata[i,]
+		sl <- TraMineR.length(tmpseq, void)
+	
+		while (j <= sl) {
+			iseq <- tmpseq[j]
 
 			dur <- 1
-			while (idx < length(tmpseq) & tmpseq[idx+1]==iseq) { 
+			while (j < sl & tmpseq[j+1]==iseq) { 
 				dur <- dur+1
-				idx <- idx+1
+				j <- j+1
 			}
 
 			## adding suffix
-			out[i] <- paste(out[i],dur,suffix,sep="")
+			sps <- paste(prefix, iseq, stdursep, dur, suffix, sep="")
+
+			out[i,idx] <- sps
+
+			j <- j+1
 			idx <- idx+1
 		}
-
 	}
 
 	return(out)

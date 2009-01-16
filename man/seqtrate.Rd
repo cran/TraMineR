@@ -1,19 +1,21 @@
 \name{seqtrate}
 \alias{seqtrate}
-\title{Transition rates between states.}
+\title{Compute transition rates between states}
 \description{
 Returns a matrix with transition rates between states, computed from a set of sequences.
 }
 \details{
-Transition rates are the probabilities of transition from one state to another in the sequence data. Substitution costs based on transition rates can be used when computing distances between sequences with the optimal matching method.
+Transition rates are the probabilities of transition from one state to another observed in the sequence data. Substitution costs based on transition rates can be used when computing distances between sequences with the optimal matching method (see \link{seqdist}).
 }
 \usage{
  seqtrate(seqdata, statl=NULL)
 }
 \arguments{
-  \item{seqdata}{a sequence object (see \code{\link{seqdef}} function).}
+  \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
   \item{statl}{a list of states or events for which the transition rates will be computed. If omitted (default), transition rates are computed between the distinct states in seqdata (obtained with the \code{\link{alphabet}} function).}
 }
+
+\value{a matrix of dimension \eqn{ns*ns}, where \eqn{ns} is the number of states in the \link{alphabet} of the sequence object.}
 
 \seealso{
  \code{\link{seqdist}} \code{\link{seqsubm}} \code{\link{alphabet}}.
@@ -30,6 +32,6 @@ Transition rates are the probabilities of transition from one state to another i
   seqtrate(actcal.seq)
 
   ## Computing transition rates between states "A" and "B" only
-  seqtrate(actcal.seq,c("A","B"))	
+  seqtrate(actcal.seq, c("A","B"))	
 }
 \keyword{nonparametric}

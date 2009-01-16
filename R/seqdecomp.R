@@ -8,11 +8,6 @@ seqdecomp <- function(data, var=NULL, sep="-", miss="NA", vnames=NULL) {
 	## Extracting the sequences from the data set
 	seqdata <- seqxtract(data, var)
 
-	if (seqfcheck(seqdata)!=sep) {
-		cat(" The separator ",sep," has not been found in the data! \n Goodbye!")
-		return()
-	}
-
 	seqdata <- as.vector(seqdata)
 	nbseq <- length(seqdata)
 

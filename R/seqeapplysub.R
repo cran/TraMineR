@@ -2,10 +2,9 @@
 ## Count number of time a subsequence appear in a sequence
 ## ========================================
 
-seqeapplysub<-function(subseq, seq, method="count", maxGap=-1, windowSize=-1, ageMin=-1, ageMax=-1, ageMaxEnd=-1){
+seqeapplysub<-function(subseq, method="count",constraint=NULL){
 #message("Event sequence analysis module is still experimental")
-if(!is.seqelist(seq))stop("seq should be a seqelist. See help on seqecreate.")
-if(!is.seqelist(subseq))stop("subseq should be a seqelist. See help on seqecreate.")
+if(!is.subseqelist(subseq))stop("subseq should be a subseqelist. See help on seqefsub.")
   lastparam<-as.integer(c(1))
   if(method=="count")
     lastparam<-as.integer(c(1))
@@ -13,9 +12,15 @@ if(!is.seqelist(subseq))stop("subseq should be a seqelist. See help on seqecreat
     lastparam<-as.integer(c(2))
   else if(method=="age")
     lastparam<-as.integer(c(3))
-
-  return(.Call("tmrmatrixsubseqinseq",unlist(list(subseq)),unlist(list(seq)),
-    as.double(c(maxGap)),as.double(c(windowSize)),
-    as.double(c(ageMin)),as.double(c(ageMax)),as.double(c(ageMaxEnd)),
+  if(is.null(constraint)){
+    constraint<-subseq$constraint
+  }
+  if(!inherits(constraint,"seqeconstraint")){
+    constraint=seqeconstraint()
+    warning("constraint argument should be set using seqeconstraint function. No constraint where used.")
+  }
+  return(.Call("tmrmatrixsubseqinseq",unlist(list(subseq$subseq)),unlist(list(subseq$seqe)),
+    as.double(c(constraint$maxGap)),as.double(c(constraint$windowSize)),
+    as.double(c(constraint$ageMin)),as.double(c(constraint$ageMax)),as.double(c(constraint$ageMaxEnd)),
     lastparam,PACKAGE="TraMineR"))
 }

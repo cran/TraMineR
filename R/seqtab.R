@@ -1,8 +1,10 @@
+## =========================
 ## Sequences frequency table
+## =========================
 
 seqtab <- function(seqdata, tlim=0) {
 	if (!inherits(seqdata,"stslist")) {
-		stop(" [!] data is not a sequence object, see seqdef function to create one")
+		stop("data is not a sequence object, see seqdef function to create one")
 		}
 
 	## Eliminating empty sequences 
@@ -11,7 +13,7 @@ seqtab <- function(seqdata, tlim=0) {
 	if (seqfcheck(seqdata)=="-X") 
 		warning("'-' character in states codes may cause invalid results")
 	
-	seqdata <- suppressMessages(seqformat(seqdata,from='STS',to='SPS2'))
+	seqdata <- suppressMessages(seqformat(seqdata,from='STS', to='SPS', compressed=TRUE))
 	fseq <- table(seqdata)
 
 	if (tlim==0) tlim=length(fseq)

@@ -1,6 +1,6 @@
 \name{seqdecomp}
 \alias{seqdecomp}
-\title{Convert a character string into a vector of states or events.}
+\title{Convert a character string into a vector of states or events}
 \description{
   For the moment, each character in the string will be considered to be one state or event = this function will not give accurate results if the character string representing the sequence contains events or states coded with more than one character.
 }

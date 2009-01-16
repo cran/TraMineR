@@ -3,7 +3,6 @@
 ## ==============================
 
 STS_to_SRS <- function(seqdata,nrep) {
-	seqdata <- seqdecomp(seqdata)
 
 	nbseq <- seqdim(seqdata)[1]
 	seql <- seqdim(seqdata)[2]

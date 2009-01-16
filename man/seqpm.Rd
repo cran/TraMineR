@@ -8,12 +8,15 @@
  seqpm(seqdata, pattern)
 }
 \arguments{
-  \item{seqdata}{a sequence object (see \code{\link{seqdef}} function).}
+  \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
   \item{pattern}{a character string representing the pattern (subsequence) to search for, without sperator between the states.}
 }
 \details{
 	This function search a pattern (a character string) into a set of sequences and returns a list containing the results. The elements of the list are 'Nbmatch', containing the number of occurences of pattern and 'MatchesIndex', containing the indexes (row numbers) of the sequences that match the pattern (see exemples below).
 	}
+
+\value{a list with two elements (see details).}
+
 %\seealso{}
 \examples{
 data(actcal)
