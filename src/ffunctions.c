@@ -123,3 +123,27 @@ void cLCS(int *iseq, int *jseq , double *length, int *result) {
 
      *result = L[m][n];
 }
+
+
+
+void cLCP(int *iseq, int *jseq , double *length, int *result) {
+
+	int clength, isym, i, n, m;
+	n = (int)length[1];
+	m = (int)length[0];
+	
+	// Computing min length
+	if (n<m) clength = n;
+	else clength = m;
+
+	i=1;
+	isym=0;
+ 
+     while (iseq[i-1]==jseq[i-1] && i<=clength) {
+		isym = i;
+		i = i+1;
+	}
+		
+     *result = isym;
+}
+

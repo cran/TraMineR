@@ -13,7 +13,7 @@ seqeid(s)
 %\seealso{}
 \examples{
 data(actcal.tse)
-actcal.seqe<-seqecreate(actcal.tse$id,actcal.tse$time,actcal.tse$event)
+actcal.seqe <- seqecreate(actcal.tse)
 seqeid(actcal.seqe)
 }
 \keyword{attribute}

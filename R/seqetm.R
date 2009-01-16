@@ -1,6 +1,6 @@
 seqetm<-function(seq, method="transition", use.labels=TRUE, sep=">", bp="", ep="end"){
 
-  statl <- seqstatl(seq)
+  statl <- alphabet(seq)#seqstatl(seq)
   nbstat <- length(statl)
   tevent <- matrix(nrow=nbstat,ncol=nbstat)
   rownames(tevent) <- statl
@@ -18,12 +18,14 @@ seqetm<-function(seq, method="transition", use.labels=TRUE, sep=">", bp="", ep="
   for(i in 1:nbstat){
     for(j in 1:nbstat){
       if(i==j){
-        tevent[i,j]=alphabet[[i]]
+        tevent[i,j]<-alphabet[[i]]
       }else{
         if(method=="transition"){
-          tevent[i,j]=paste(alphabet[[i]],alphabet[[j]],sep=sep)
+          tevent[i,j]<-paste(alphabet[[i]],alphabet[[j]],sep=sep)
         }else if(method=="period"){
-          tevent[i,j]=paste(ep,alphabet[[i]],",",bp,alphabet[[j]],sep="")
+          tevent[i,j]<-paste(ep,alphabet[[i]],",",bp,alphabet[[j]],sep="")
+        }else if(method=="state"){
+          tevent[i,j]<-alphabet[[j]]
         }
       }
     }

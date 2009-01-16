@@ -5,12 +5,15 @@
   If the alphabet (the list of possible states or events in a set of sequences) is composed of characters, this function converts the sequence data using a numerical alphabet. The first state (for exemple 'A') is coded with the value '0', the second state (for exemple 'B') is coded with the value '1', etc... The function returns a sequence object containing the original sequences coded with the new numerical alphabet. 
 }
 \usage{
- seqnum(seqdata)
+ seqnum(seqdata, with.miss=FALSE)
 }
 \arguments{
-  \item{seqdata}{a sequence object (see \code{\link{seqdef}} function).}
+	\item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
+
+	\item{with.miss}{if TRUE, missing elements in the sequences are turned into numerical values as well. The code for missing values in the sequences is retrieved as the 'nr' attribute of \code{seqdata}.}
 }
 %\seealso{}
+
 \examples{
 data(actcal)
 actcal.seq <- seqdef(actcal,13:24)

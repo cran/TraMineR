@@ -2,82 +2,136 @@
 ## Plotting individual sequences
 ## =============================
 
-seqiplot <- function(seqdata, tlim=1:10, sortv=NULL, statl=NULL, title=NULL, cpal=NULL, 
-	withlegend=TRUE, withborder=TRUE, space=NULL, ltext=NULL, slab=FALSE, xtlab=NULL,
-	bmar=1) {
+seqiplot <- function(seqdata, group=NULL, tlim=1:10, sortv=NULL, title=NULL, 
+	cpal=NULL, missing.color=NULL,
+	withborder=TRUE, 
+	ylab, axes="all", xtlab=NULL, cex.plot=1,
+	withlegend="auto", ltext=NULL, cex.legend=1,
+	use.layout=(!is.null(group) | withlegend!=FALSE), 
+	legend.prop=NA, rows=NA, cols=NA, ...) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use 'seqdef' function to create one")
 	
-	if (is.null(statl)) statl <- attr(seqdata,"alphabet")
-
-	if (tlim[1]==0) tlim <- 1:seqdim(seqdata)[1]
-
-	if (!is.null(sortv)) {
-		seqdata <- seqdata[order(sortv),]
-		sortlab <- paste(", sorted")
-	}
-	else sortlab <- NULL
-
+	## 
+ 	statl <- attr(seqdata,"alphabet")
+	nr <- attr(seqdata,"nr")
 	nbstat <- length(statl)
 	seql <- seqdim(seqdata)[2]
-	ssamp <- seqdata[tlim,]
-	nbseq <- seqdim(ssamp)[1]
+
+	## Message if obsolete option withborder is specified
+	if (!missing(withborder)) 
+		warning(" [!] option 'withborder' is obsolete, use 'border=NA' to plot without border")
 	
-	seqbar <- apply(ssamp,1,seqgbar,seql, statl,nbstat)
-
-	if (is.null(cpal)) cpal <- c(attr(seqdata,"cpal"),"white")
-	else cpal <- c(cpal,"white")
-
-	if (withborder==TRUE) bordcol <- "black" else bordcol <- NA
-
-	## Adding some space for the title and legend
-	if (!is.null(title)) mt <- 2
-	else mt <- 0
-	
-	if (withlegend==TRUE) ml <- 6
-	else ml <- 0
-
-	par(mar = c(bmar+3, 3, bmar+mt+ml, 2) + 0.1, xpd=TRUE)
-
-	sppar <- space
-
-	## The PLot
-	barplot(seqbar,col=cpal,
-		names.arg=tlim,
-		ylab=paste("Sequences ",min(tlim),"-",max(tlim),sortlab,sep=""),
-		mgp=c(1.5,0,0),
-		main=title,
-		horiz=TRUE,
-		border=bordcol,
-		yaxt="n",
-		axes=FALSE,
-		las=1, 
-		space=sppar
-		)
-
-	tstart <-  attr(seqdata,"start")
-
-	if (is.null(xtlab)) xtlab <- colnames(seqdata)
-	axis(1,at=1:seql-0.5,labels=xtlab,mgp=c(3,0.5,0))
-
-	if (slab==TRUE) {
-		for (i in 1:nbseq) 
-			for (j in 1:seql)  
-				text(j,i+(i*0.2),ssamp[i,j],cex=1.5,adj=c(1.5,1.3))
-	}
-	
+	## ================================
+	## Setting color palette and labels
+	## ================================
 	if (is.null(ltext)) ltext <- attr(seqdata,"labels")
 
-	## Computing some parameters for the legend's plotting
-	leg.ncol <- if (round(nbstat/3,0)>1)  round(nbstat/3,0) else 2
-	leg.inset <- -0.2 + ((2-leg.ncol)*0.025)
+	if (is.null(missing.color)) missing.color <- attr(seqdata,"missing.color") 
 
-	if (withlegend==TRUE) 
-		legend("top",inset=c(0,leg.inset),
-			legend=ltext,
-			fill=cpal,
-			ncol=leg.ncol,
-			bty="n")
+	if (is.null(cpal)) cpal <- c(attr(seqdata,"cpal"))
+
+	if (is.null(xtlab)) xtlab <- colnames(seqdata)
+
+	if (missing(ylab)) ylab.auto=TRUE else ylab.auto=FALSE
+
+	## Adding an entry for missing in the legend
+	if (any(seqdata==nr)) {
+		cpal <- c(cpal,missing.color)
+		ltext <- c(ltext,"missing")
+		statl <- c(statl,nr)
+		nbstat <- nbstat+1
+		}
+
+	## ==============================
+	## Preparing if group is not null
+	## ==============================
+	if (!is.null(group)) {
+		## Eliminating the unused levels
+		group <- factor(group)
+		nplot <- length(levels(group))
+		gindex <- vector("list",nplot)
+				
+		for (s in 1:nplot)
+			gindex[[s]] <- which(group==levels(group)[s])
+	}
+	else {
+		nplot <- 1
+		gindex <- vector("list",1)
+		gindex[[1]] <- 1:seqdim(seqdata)[1]
+	}
+
+	## ===================
+	## Defining the layout
+	## ===================
+	if (use.layout | !is.null(group) ) {
+		lout <- TraMineR.setlayout(nplot, rows, cols, withlegend, axes, legend.prop)
+	  	layout(lout$laymat, heights=lout$heights, widths=lout$widths)
+		axisp <- lout$axisp
+		legpos <- lout$legpos
+	}
+	else {
+		if(axes!=FALSE) axisp <- 1
+		else axisp <- 0
+		legpos <- NULL
+	}
+
+	## =======
+	## Ploting
+	## =======
+	for (np in 1:nplot) {
+		subdata <- seqdata[gindex[[np]],]
+		nbsub <- seqdim(subdata)[1]
+
+		if (tlim[1]==0) 
+			sublim <- 1:nbsub
+		else {
+			if (max(tlim) <= nbsub) 
+				sublim <- tlim
+			else sublim <- 1:nbsub
+		}
+
+		if (!is.null(sortv)) {
+			subsort <- sortv[gindex[[np]]] 
+			subdata <- subdata[order(subsort),]
+			sortlab <- paste(", sorted")
+		}
+		else sortlab <- NULL
+
+		if (ylab.auto)
+			ylab <- paste("Seq. ", min(sublim)," to ",max(sublim), " (n=",nbsub,")", sortlab, sep="")
+
+		ssamp <- subdata[sublim,]
+		nbseq <- seqdim(ssamp)[1]
+	
+		seqbar <- apply(ssamp,1,seqgbar, statl=statl, seql=seql)
+
+		if (nplot>1) {
+			subtitle <- levels(group)[np]
+			if (!is.null(title)) subtitle <- paste(title,"-",subtitle)
+		} 
+		else subtitle <- title
+
+		## The PLot
+		barplot(seqbar,col=cpal,
+			ylab=ylab,
+			main=subtitle,
+			horiz=TRUE,
+			yaxt="n",
+			axes=FALSE,
+			las=1, 
+			...
+			)
+
+		## Plotting the x axis
+		if (any(np==axisp)) 
+			axis(1, at=1:seql-0.5, labels=xtlab, 
+			# mgp=c(3,0.5,0), 
+			cex.axis=cex.plot)
+
+	}
+
+	## Plotting the legend
+	if (!is.null(legpos)) TraMineR.legend(legpos, ltext, cpal, cex=cex.legend)
 }
-		

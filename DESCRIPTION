@@ -1,12 +1,12 @@
 Package: TraMineR
-Version: 1.0
-Date: 2008-07-10
-Title: Sequences and trajectories mining for social scientists 
-Author: Alexis Gabadinho <alexis.gabadinho@unige.ch>, Matthias Studer <matthias.studer@unige.ch>, Nicolas S. M\"{u}ller <nicolas.muller@unige.ch>, Gilbert Ritschard <gilbert.ritschard@unige.ch>.
+Version: 1.1
+Date: 2009-01-16
+Title: Sequences and trajectories mining for social scientists
+Author: Alexis Gabadinho <alexis.gabadinho@unige.ch>, Matthias Studer <matthias.studer@unige.ch>, Nicolas S. Muller <nicolas.muller@unige.ch>, Gilbert Ritschard <gilbert.ritschard@unige.ch>.
 Maintainer: Alexis Gabadinho <alexis.gabadinho@unige.ch>
-Depends: R (>= 2.4.0), RColorBrewer
+Depends: R (>= 2.7.1), RColorBrewer, boot
 Suggests: cluster
-Description: This package is intended for sequence manipulation, description and data mining in the field of social sciences. In this field, sequences are sets of states or events describing life histories, for example family formation histories. It provides tools for translating sequences from one format to another, statistical functions for describing sequences and methods for computing distances between sequences using several metrics like optimal matching and some other metrics proposed by C. Elzinga.
+Description: This package is a toolbox for sequence manipulation, description, rendering and more generally sequence data mining in the field of social sciences. Though it is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers its features apply indeed also to many other kinds of categorical sequence data. It accepts as input many different sequence representations and provides tools for translating sequences from one format to another. It offers several statistical functions for describing and rendering sequences, for computing distances between sequences with different metrics among which optimal matching, the longest common prefix and the longest common subsequence, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them.
 License: GPL (>= 2)
 URL: http://mephisto.unige.ch/traminer
-Packaged: Mon Jul 14 19:07:43 2008; gabuntu
+Packaged: Fri Jan 16 18:59:50 2009; gabuntu

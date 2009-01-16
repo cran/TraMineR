@@ -1,6 +1,6 @@
 \name{seqdss}
 \alias{seqdss}
-\title{Extract distinct states sequence from a sequence object.}
+\title{Extract distinct states sequence from a sequence object}
 \description{
 Extract distinct states sequence from a sequence object. Returns a sequence object containing the distinct states sequences, ie the durations are not taken into account. The DSS contained in 'D-D-D-D-A-A-A-A-A-A-A-D' is 'D-A-D'. Durations can be extracted with the 'seqdur' function.
  }
@@ -8,7 +8,7 @@ Extract distinct states sequence from a sequence object. Returns a sequence obje
 seqdss(seqdata)
 }
 \arguments{
-   \item{seqdata}{a sequence object (see \code{\link{seqdef}} function).}
+   \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
 }
 \value{a sequence object containing the distinct state sequence (DSS) for each sequence in the object given as argument.}
 \seealso{

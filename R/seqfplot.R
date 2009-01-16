@@ -2,69 +2,144 @@
 ## PLot of the sequences frequency
 ## ================================
 
-seqfplot <- function(seqdata, tlim=10, title=NULL, cpal=NULL, pbarw=FALSE, 
-	withlegend=TRUE, ltext=NULL, xtlab=NULL,bmar=1) {
+seqfplot <- function(seqdata, group=NULL, tlim=10, title=NULL, 
+	pbarw=FALSE, 
+	cpal=NULL, missing.color=NA, 
+	ylab, axes="all", xtlab=NULL, cex.plot=1,
+	withlegend="auto", ltext=NULL, cex.legend=1, 
+	use.layout=(!is.null(group) | withlegend!=FALSE), legend.prop=NA, rows=NA, cols=NA, ...) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use seqdef function to create one")
 
-	n <- seqdim(seqdata)[1]
-
-	tab <- seqtab(seqdata,tlim)
-	seqlist <- suppressMessages(seqformat(row.names(tab),from="SPS2",to="STS"))
-	seqlist <- seqdecomp(seqlist)
-
+	## Extracting some sequence characteristics
+	seql <- seqdim(seqdata)[2]
 	statl <- attr(seqdata,"alphabet")
+	nr <- attr(seqdata,"nr")
 	nbstat <- length(statl)
-	seql <- seqdim(seqlist)[2]
 
-	seqbar <- matrix(0,nrow=nrow(seqlist),ncol=seql*(nbstat+1))
-	
-	for (i in 1:tlim) {
-		for (j in 1:seql) { 
-			if (!is.na(seqlist[i,j])) seqbar[i,((j-1)*(nbstat+1))+which(statl==seqlist[i,j])] <- 1
-			else seqbar[i,((j-1)*(nbstat+1))+nbstat+1] <- 1
-		}
-	}
-
-	if (is.null(cpal)) cpal <- c(attr(seqdata,"cpal"),"white")
-	else cpal <- c(cpal,"white")
-
-	if (pbarw==TRUE) barw=tab$Percent else barw=1
-
-	## allowing the legend to be plotted outside the plot region
-	if (!is.null(title)) mt <- 2
-	else mt <- 0
-	
-	if (withlegend==TRUE) ml <- 6
-	else ml <- 0
-
-	par(mar = c(bmar+3, 4, bmar+mt+ml, 2) + 0.1, xpd=TRUE)
-
-	barplot(t(seqbar),col=cpal,width=barw,
-		names.arg=paste(round(tab$Percent,1),"%",sep=""),
-		cex.names=0.9,
-		ylab=paste("Freq. (n=",n,")",sep=""),
-		mgp=c(2.5,0,0),
-		main=title,
-		horiz=TRUE,
-		axes=FALSE,
-		las=1)
-	
-	if (is.null(xtlab)) xtlab <- colnames(seqdata)[1:seql]
-	axis(1,at=1:seql-0.5,labels=xtlab,mgp=c(2.5,0.5,0))
-
-	## Computing some parameters for the legend's plotting
-	leg.ncol <- if (round(nbstat/3,0)>1)  round(nbstat/3,0) else 2
-	leg.inset <- -0.2 + ((2-leg.ncol)*0.025)
-
-	## Plotting the legend	
+	## ================================
+	## Setting color palette and labels
+	## ================================
 	if (is.null(ltext)) ltext <- attr(seqdata,"labels")
 
-	if (withlegend==TRUE) 
-		legend("top",inset=c(0,leg.inset),
-			legend=ltext,
-			fill=cpal,
-			ncol=leg.ncol,
-			bty="n")
+	if (is.null(missing.color)) missing.color <- attr(seqdata,"missing.color") 
+
+	if (is.null(cpal)) cpal <- attr(seqdata,"cpal")
+
+	if (is.null(xtlab)) xtlab <- colnames(seqdata)
+
+	if (missing(ylab)) ylab.auto=TRUE 
+	else ylab.auto=FALSE
+
+	## Adding an entry for missing in the legend
+	if (any(seqdata==nr)) {
+		cpal <- c(cpal,missing.color)
+		ltext <- c(ltext,"missing")
+		statl <- c(statl,nr)
+		nbstat <- nbstat+1
+		}
+
+	## ==============================
+	## Preparing if group is not null
+	## ==============================
+	if (!is.null(group)) {
+		## Eliminate the unused levels
+		group <- factor(group)
+		nplot <- length(levels(group))
+		gindex <- vector("list",nplot)
+				
+		for (s in 1:nplot)
+			gindex[[s]] <- which(group==levels(group)[s])
+
+		nrplot <- ceiling(nplot/2)
 	}
+	else {
+		nplot <- 1
+		gindex <- vector("list",1)
+		gindex[[1]] <- 1:seqdim(seqdata)[1]
+	}
+
+	## ===================
+	## Defining the layout
+	## ===================
+	if (use.layout | !is.null(group) ) {
+		lout <- TraMineR.setlayout(nplot, rows, cols, withlegend, axes, legend.prop)
+	  	layout(lout$laymat, heights=lout$heights, widths=lout$widths)
+		axisp <- lout$axisp
+		legpos <- lout$legpos
+	}
+	else {
+		axisp <- 1
+		legpos <- NULL
+	}
+
+	## =======
+	## Ploting
+	## =======
+	for (np in 1:nplot) {
+		subdata <- seqdata[gindex[[np]],]
+		
+		n <- seqdim(subdata)[1]
+
+		tab <- seqtab(subdata)
+		ndseq <- nrow(tab)
+		if (ndseq<tlim) tlim <- ndseq
+		tab <- tab[1:tlim,]
+
+		seqlist <- suppressMessages(seqformat(row.names(tab),from="SPS",to="STS"))
+
+		seqbar <- apply(seqlist,1, seqgbar, seql=seql, statl=statl)
+
+		if (pbarw==TRUE) barw=tab$Percent 
+		else barw=1
+
+		if (nplot>1) {
+			subtitle <- levels(group)[np]
+			if (!is.null(title)) subtitle <- paste(title,"-",subtitle)
+		} 
+		else subtitle <- title
+
+		if (ylab.auto)
+			ylab <- paste("% freq. (n=",n,")",sep="")
+
+		barplot(seqbar,col=cpal, width=barw,
+			ylab=ylab,
+			main=subtitle,
+			horiz=TRUE,
+			axes=FALSE,
+			axisnames=FALSE,
+			...)
+	
+		## Plotting the x axis
+		if (any(np==axisp)) 
+			axis(1, at=1:seql-0.5, labels=xtlab, 
+				# mgp=c(2.5,0.5,0), 
+				cex.axis=cex.plot)
+
+		## Plotting the y axis
+		if (!pbarw) {
+			y.lab <- tab$Percent
+
+			y.lab.pos <- 0.7
+			for (p in 2:length(y.lab))
+				y.lab.pos <- c(y.lab.pos, (p-1)+((p-1)*0.2)+0.7)
+			} 
+		else { 
+			y.lab <- tab$Percent[tab$Percent>=1]
+
+			y.lab.pos <- (tab$Percent[1]/2)+1
+			for (p in 2:length(y.lab))
+				y.lab.pos <- c(y.lab.pos, sum(y.lab[1:(p-1)]+0.4)+(y.lab[p]/2+0.5))
+			} 
+				
+		axis(2, at=y.lab.pos, 
+			labels=paste(round(y.lab,1),sep=""), 
+			tick=FALSE,
+			mgp=c(1.5,0,0), 
+			las=1, cex.axis=cex.plot)
+	}	
+
+	## Plotting the legend
+	if (!is.null(legpos)) TraMineR.legend(legpos, ltext, cpal, cex=cex.legend)
+}

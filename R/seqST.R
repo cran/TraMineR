@@ -30,16 +30,16 @@ seqST <- function(seqdata) {
 	if (!inherits(seqdata,"stslist"))
 		stop("data is NOT a sequence object, see 'seqdef' function to create one")
 
-	cat(" [>] extracting symbols and durations \n")
+	message(" [>] extracting symbols and durations...")
 	states <- seqdss(seqdata)
 	dur <- seqdur(seqdata)
 
-	cat(" [>] Computing turbulence for ",seqdim(seqdata)[1],"sequences, please wait... \n")
+	message(" [>] Computing turbulence for ",seqdim(seqdata)[1],"sequences, please wait...")
 	phi <- seqsubsn(states, DSS=FALSE)
 	s2.tx <- apply(dur, 1, realvar)
 	mean.tx <- apply(dur, 1, mean, na.rm=TRUE)
 	sum.tx <- apply(dur, 1, sum, na.rm=TRUE)
-	n <- apply(states, 1, function(x) sum(!is.na(x)))
+	n <- apply(states, 1, function(x) sum(x!=attr(seqdata,"void")))
 
 	tmp <- data.frame(phi, n, mean.tx, s2.tx)
 	Tx <- apply(tmp, 1, turb)

@@ -1,0 +1,41 @@
+Version 1.1
+
+mvad example data set added
+
+Name changes of the following functions
+  - seqLLCP() instead of old seqLCP()
+  - seqLLCS() instead of old seqLCS()
+
+New diss module for analysing a dissimilarity matrix (such as the one returned by seqdist)
+  - dissassoc(): Computes association with a factor
+  - dissreg()  : Regression analysis of a dissimilarity matrix
+  - disstree() : Tree analysis of a dissimilarity matrix
+  - dissvar()  : Computes a pseudo-variance from a dissimilarity matrix.
+
+Changes in the graphics functions (seqiplot, seqfplot, seqdplot, ...):
+  - New 'group' option allowing to draw several plots for the levels
+    of a factor within a single command
+  - TraMineR now uses 'layout' for controlling the position of the
+    plots and the legend in the graphic area. This is not compatible
+    with par(mfrow=...). To use the standard 'par(mfrow=...)' method,
+    one must set the 'use.layout=FALSE' option in the plot functions.
+  - seqmtplot() : new function that plots the mean time spent in each state.
+  - Option 'withborder=FALSE' is now obsolete and replaced by the standard 'border=NA' option.
+
+Changes in Event Sequence Analysis (seqe module):
+  - New plot for exhibiting discriminant subsequences (seqecmpgroup).
+  - Overall syntax have been reviewed and is now much simpler.
+  - seqefsub now allows to search for user specified subsequences (seqefsub).
+  - Event subsequence lists now have specific plot and print method (seqefsub, seqecmpgroup)
+  - seqecreate now accepts state sequence and performs automatic conversion (seqecreate)
+  - Time constraints are now implemented separately and are stored with the results (seqeconstraint)
+
+Changes in the seqformat function:
+  - new options for importing SPELL formated data
+  - STS internal and output in STS, SPS or DSS formats is now by default in the extended format (a matrix with one state per column) instead of compressed format (a character string). Use compressed=TRUE option for an output in the compressed format (sequences as character strings)
+  - SPS1 and SPS2 formats are now replaced by the generic SPS format with options SPS.in and SPS.out for defining the characters used as sperators and surrounding the state/duration couples
+
+Other new functions:
+  - seqgen()   : generates a random sequence.
+
+

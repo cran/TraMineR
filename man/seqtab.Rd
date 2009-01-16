@@ -8,7 +8,7 @@ Returns a frequency table for the sequences (frequency and percent).
  seqtab(seqdata, tlim=0)
 }
 \arguments{
-  \item{seqdata}{a sequence object created with the \code{\link{seqdef}} function.}
+  \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
   \item{tlim}{if tlim>0, shows only the 'tlim' most frequent sequences.}
 }
 \seealso{

@@ -7,7 +7,7 @@ STS_to_TSE <- function(seqdata,id=NULL,tevent) {
 	slength <- seqdim(seqdata)[2]
 	statl <- seqstatl(seqdata)
 
-	cat(" => Converting",nseq, "sequences to TSE format, please wait\n")
+	message(" [>] Converting ",nseq, " sequences to TSE format, please wait")
 	## cat("     Transition-to-events conversion matrix:\n")
 	## print(tevent)
 
@@ -16,11 +16,13 @@ STS_to_TSE <- function(seqdata,id=NULL,tevent) {
 	trans <- data.frame(id=NULL, time=NULL, event=NULL)
 
 	for (i in 1:nseq) {
-    ## First status=> entrance event (diagonal of tevent)
-   	s1 <- seqdata[i,1]
-   	if(!is.na(tevent[s1,s1])){ #if NA, we don't generate an event
-     	levent <- tevent[s1,s1]
-    	levent <- strsplit(levent,",")[[1]]
+		## First status=> entrance event (diagonal of tevent)
+	   	s1 <- seqdata[i,1]
+		if (!is.na(tevent[s1,s1])) { #if NA, we don't generate an event
+			levent <- tevent[s1,s1]
+     	if (is.character(levent)) {
+			levent <- strsplit(levent,",")[[1]]
+     	}
     	for (k in 1:length(levent))
     		trans <- rbind(trans, data.frame(id=id[i],time=0,event=levent[k]))
   	} #end if
@@ -35,7 +37,9 @@ STS_to_TSE <- function(seqdata,id=NULL,tevent) {
 
 				if (s2!=s1) {
 					levent <- tevent[s1,s2]
-					levent <- strsplit(levent,",")[[1]]
+					if(is.character(levent)){
+      	   levent <- strsplit(levent,",")[[1]]
+       	  }
 					for (k in 1:length(levent))			
 						trans <- rbind(trans, data.frame(id=id[i],time=j,event=levent[k]))
 				}

@@ -2,10 +2,12 @@
 
 LCPdist <- function(seq1,l1, seq2,l2, norm) {
 
+	result <- .C("cLCP", as.integer(seq1), as.integer(seq2), as.double(c(l1,l2)), result = as.integer(0), PACKAGE="TraMineR")$result
+
 	if (norm==TRUE) 
-		dist <- 1-(seqLCP(seq1[1:l1],seq2[1:l2])/sqrt(l1*l2))
+		dist <- 1-(result/sqrt(l1*l2))
 	else 
-		dist <- l1+l2-2*seqLCP(seq1[1:l1],seq2[1:l2]) 
+		dist <- l1+l2-2*result
 
 	return(dist)
 

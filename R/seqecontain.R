@@ -1,4 +1,5 @@
 seqecontain<-function(seq, eventList,exclude=FALSE){
+  if(is.subseqelist(seq))seq <- seq$subseq
   if(!is.seqelist(seq))stop("seq should be a seqelist. See help on seqecreate.")
   dict<-levels.seqelist(seq)
 

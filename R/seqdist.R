@@ -3,21 +3,22 @@
 ## Available metrics (method):
 ## OM = optimal matching
 ## LCP = Longest Common Prefix (Elzinga)
-## LCPnorm = Longest Common Prefix normalized (Elzinga)
 ## LCS = Longest Common Subsequence (Elzinga)
-## LCSold = Long Common Subsequence (R code) (Elzinga)
 ## ====================================================
 
-seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE, indel=1, sm=NA) {
+seqdist <- function(seqdata, method, refseq=NULL, 
+	norm=FALSE, indel=1, sm=NA,
+	with.miss=FALSE, full.matrix=TRUE) {
 
-	if (!inherits(seqdata,"stslist")) {
+	## ======
+	## CHECKS
+	## ======
+	if (!inherits(seqdata,"stslist")) 
 		stop("data is not a sequence object, use 'seqdef' function to create one")
-		}
 
-	metlist <- c("OM","LCP", "LCS")
-	if (!method %in% metlist) {
-			stop("Method must be one of: ", paste(metlist,collapse=" "))
-		}
+	metlist <- c("OM","LCP", "LCS", "LCPinv")
+	if (!method %in% metlist) 
+		stop("Method must be one of: ", paste(metlist,collapse=" "))
 
 	n <- seqdim(seqdata)[1]
 	alphabet <- attr(seqdata,"alphabet")
@@ -25,19 +26,31 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE, indel=1, sm=NA) {
 	message(" [>] ",n," sequences with ", alphsize,
 		" distinct events/states (", paste(alphabet,collapse="/"),")")
 
-	## Checking if substitution cost matrix contains values for each state
-	if (method=="OM") { 
-		if (nrow(sm)!=alphsize | ncol(sm)!=alphsize) {
-			stop("size of substitution cost matrix must be ",alphsize,"x", alphsize)
-		}
+	if (with.miss) {
+		alphabet <- c(alphabet,attr(seqdata,"nr"))
+		alphsize <- length(alphabet)
+		message(" [>] including missing value as additional state" )
 	}
+	else 
+		if (any(seqdata==attr(seqdata,"nr")))
+			stop("found missing values in sequences, please set 'with.miss' option to nevertheless compute distances")
+
+	## Checking if substitution cost matrix contains values for each state
+	if (method=="OM") 
+		if (nrow(sm)!=alphsize | ncol(sm)!=alphsize)
+			stop("size of substitution cost matrix must be ",alphsize,"x", alphsize)
 
 	## Reference sequence
 	if (!is.null(refseq)) {
 		if (refseq==0) {
 			mfseq <- row.names(seqtab(seqdata,tlim=1))
-			message(" [>] using most frequent sequence (",mfseq,") as reference")
-			compseq <- seqdata[which(seqformat(seqdata,from='STS',to='SPS2')==mfseq)[1],]
+			message(" [>] using most frequent sequence as reference: ", mfseq)
+
+			idxmfseq <- suppressMessages(which(seqformat(seqdata, 
+				from='STS', to='SPS', compressed=TRUE)==mfseq))
+			message(" [>] most frequent sequence appears ", length(idxmfseq), " times")
+
+			compseq <- seqdata[idxmfseq[1],]
 		}
 		if (refseq>0) {
 			compseq <- seqdata[refseq,]
@@ -45,112 +58,114 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE, indel=1, sm=NA) {
 		}
 		lcompseq <- sum(!is.na(compseq))
 		distmat <- FALSE
-	} else {
+	} 
+	else
 		distmat <- TRUE
-	}
 
 	## ==============
 	## Preparing data
 	## ==============
-	seqdata <- seqnum(seqdata)
+	seqdata <- seqnum(seqdata, with.miss=with.miss)
+
+	## Selecting distinct sequences only and saving the indexes 
 	dseq <- unique(seqdata)
+	mcorr <- match(seqconc(seqdata),seqconc(dseq))
+
 	nd <- seqdim(dseq)[1]
 	message(" [>] ", nd," distinct sequences")
-
-	if (distmat==FALSE) {
-		m <- vector(mode="numeric", length=nd)
-		compseq <- seqasnum(seqnum(compseq))
-	}
-	else {
-		m <- matrix(nrow=nd, ncol=nd)
-		diag(m) <- 0
-	}
 
 	l <- ncol(dseq)
 	slength <- seqlength(dseq)
 
-	dseq <- seqasnum(dseq)
+	dseq <- seqasnum(dseq, with.miss=with.miss)
 
 	message(" [>] min/max sequence length: ",min(slength),"/",max(slength))
 
 	debut <- Sys.time()
 
-	message(" [>] computing distances using ",method,appendLF =FALSE)
-	if (norm==TRUE) message(" normalized metric ...",appendLF =FALSE) else message(" metric ...",appendLF =FALSE)
+	message(" [>] computing distances using ",method, appendLF=FALSE)
+	if (norm==TRUE) 
+		message(" normalized metric ...",appendLF =FALSE) 
+	else 
+		message(" metric ...",appendLF =FALSE)
 	
-	## Function and arguments 
-	if (method=="OM") {
-		if (distmat==FALSE) {
+	## Function and arguments
+	if (distmat==FALSE) {
+		m <- vector(mode="numeric", length=nd)
+		compseq <- seqasnum(seqnum(compseq))
+
+		if (method=="OM") {
 			for (i in 1:nd) 
 				m[i] <- levenshtein(dseq[i,], slength[i], compseq, lcompseq, indel,sm,alphsize,norm)
-		} else {
-			for(i in 1:(nd-1)) {
-				l1 <- slength[i]
-				seq1 <- dseq[i,1:l1]
-				for(j in 1:(nd-i)) {
-					l2 <- slength[i+j]
-					seq2 <- dseq[i+j,1:l2]	
-					m[i+j,i] <- levenshtein(seq1,l1,seq2,l2,indel,sm,alphsize,norm)
-				}
-			}
-		}
-	}
-
-	if (method=="LCP") {
-		if (distmat==FALSE) {
+			} 
+		else	if (method=="LCP") {
 			for (i in 1:nd) 
 				m[i] <- LCPdist(dseq[i,],slength[i],compseq,lcompseq,norm)
-		} else {
-			for(i in 1:(nd-1)) {
-				l1 <- slength[i]
-				seq1 <- dseq[i,1:l1]
-				for(j in 1:(nd-i)) {
-					l2 <- slength[i+j]
-					seq2 <- dseq[i+j,1:l2]
-					m[i+j,i] <- LCPdist(seq1,l1,seq2,l2,norm)
-				}
 			}
-		}
-	}
-
-     if (method=="LCS") {
-		if (distmat==FALSE) {
+		else if (method=="LCS") {
 			for (i in 1:nd) 
 				m[i] <- LCSdist(dseq[i,],slength[i],compseq,lcompseq,norm)
-		} else {
-			for(i in 1:(nd-1)) {
-				l1 <- slength[i]
-				seq1 <- dseq[i,1:l1]
-				for(j in 1:(nd-i)) {
-					l2 <- slength[i+j]
-					seq2 <- dseq[i+j,1:l2]
-					m[i+j,i] <- LCSdist(seq1,l1,seq2,l2,norm)
-				}
 			}
-		}	
+
+		## Constructing the final distance vector
+		mcorr <- match(seqconc(seqdata),seqconc(dseq))
+		distances <- m[mcorr]
+		names(distances) <- NULL
 	}
+	else {
+		magicSeq <- order(mcorr)
+		magicIndex <- c(unique(rank(mcorr, ties.method="min")), nrow(seqdata)+1)-1
+
+		if (method=="OM") {
+			## One for OM, 2 for LCP
+   			disttype <- as.integer(1)
+		}
+		else if (method=="LCS") {
+			disttype <- as.integer(1)
+			if(norm)norm<-as.integer(2)
+			sm <- suppressMessages(seqsubm(seqdata, method="CONSTANT", cval=2, with.miss=with.miss, miss.cost=2))
+			indel <- 1
+			disttype <- as.integer(1)
+#			print(norm)
+		}		
+		else if (method=="LCP") {
+   		disttype <- as.integer(2) ##One for OM, 2 for LCP
+			sm <- 0
+			indel <- 0
+		}
+		else if (method=="LCPinv") {
+   		disttype <- as.integer(3) ##One for OM, 2 for LCP
+			sm <- 0
+			indel <- 0
+		}
+ 	
+		distances <- .Call("cstringdistance",
+			as.integer(dseq),
+			as.integer(dim(dseq)),
+			as.integer(slength), 
+			as.double(indel),
+			as.integer(alphsize),
+			as.double(sm),
+			as.integer(norm),
+			as.integer(magicIndex),
+			as.integer(magicSeq),
+			disttype,
+			PACKAGE="TraMineR")
+
+		## Setting some attributes for the dist object
+ 		class(distances) <- "dist"
+		attr(distances,"Size") <- length(magicSeq)
+ 		attr(distances,"method") <- method
+ 		attr(distances, "Labels") <- dimnames(seqdata)[[1]]
+ 		attr(distances, "Diag") <- FALSE
+ 		attr(distances, "Upper") <- FALSE
+	}
+
 
 	fin <- Sys.time()
 	message(" (",round(difftime(fin,debut,units="mins"),2)," minutes)")
 
-	## CONSTRUCTION DE LA MATRICE DES DISTANCES AVEC TOUTES LES SEQUENCES
-	if (distmat==TRUE) {
-		message(" [>] creating distance matrix ... ",appendLF =FALSE)
-		debut2 <- Sys.time()
-
-		m[upper.tri(m)] <- t(m)[upper.tri(m)]
-		md <- matrix(nrow=n, ncol=n)
-		mcorr <- match(seqconc(seqdata),seqconc(dseq))
-		md <- m[mcorr,mcorr]
-
-		fin <- Sys.time()
-		message("(",round(difftime(fin,debut2,units="mins"),2)," minutes)")
-	} else {
-		mcorr <- match(seqconc(seqdata),seqconc(dseq))
-		md <- m[mcorr]
-		names(md) <- NULL
-	}
-		
-	return(md)
+	if (full.matrix) return(as.matrix(distances))
+	else return(distances)
 }
 

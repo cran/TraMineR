@@ -3,20 +3,17 @@
 ## ===================================
 
 seqlength <- function(seqdata) {
+
 	if (!inherits(seqdata,"stslist")) {
-		cat(" => data is not a sequence object, see function seqdef to create one\n")
-		return()
-	}
+		stop("data is not a sequence object, use 'seqdef' function to create one")
+		}
 	
-	missing <- attr(seqdata,"missing")
+	## missing <- attr(seqdata,"missing")
+	## if (!is.na(missing)) seqdata[seqdata==missing] <- NA
 
-	if (!is.na(missing)) seqdata[seqdata==missing] <- NA
+	void <- attr(seqdata,"void")
 
-	if (seqdim(seqdata)[1]==1) {
-		sl <- sum(!is.na(seqdata))
-	} else {
-		sl <- apply(seqdata,1, function(x) sum(!is.na(x)))
-	}
+	sl <- apply(seqdata,1, function(x) TraMineR.length(x,void))
 
 	return(sl)
 }

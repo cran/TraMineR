@@ -1,0 +1,111 @@
+import(boot, RColorBrewer)
+
+export(
+	alphabet,
+	"alphabet<-",
+	cpal,
+	"cpal<-",
+	read.tda.mdist,
+	seqcomp,
+	seqconc,
+	seqdecomp,
+	seqdef,
+	seqdiff,
+	seqdim,
+	seqdist,
+	seqdplot,
+	seqdss,
+	seqdur,
+	seqfcheck,
+	seqfind,
+	seqformat,
+	seqfplot,
+	seqfpos,
+	seqgen,
+	seqient,
+	seqiplot,
+	seqistatd,
+	seqlegend,
+	seqlength,
+	seqLLCP,
+	seqLLCS,
+	seqmpos,
+	seqmtplot,
+	seqnum,
+	seqpm,
+	seqsep,
+	seqstatd,
+	seqstatl,
+	seqST,
+	seqsubm,
+	seqsubsn,
+	seqtab,
+	seqtrate
+  )
+
+##stslist module
+S3method(summary, stslist)
+S3method(print, stslist)
+S3method("[", stslist)
+
+## diss module
+export(
+	dissassoc,
+	disscenter,
+	dissreg,
+	disstree2dot,
+	disstreeleaf,
+	disstree,
+	dissvar,
+	gower_matrix,
+	seqtree2dot
+)
+S3method(hist,dissassoc)
+S3method(print,dissassoc)
+S3method(print,dissregression)
+S3method(print,disstree)
+S3method(print,seqdiff)
+S3method(plot,seqdiff)
+
+
+## Subsequence module
+S3method(plot,subseqelistchisq)
+S3method(plot,subseqelist)
+S3method("[",seqelist)
+S3method(Math,seqelist)
+S3method(Ops,seqelist)
+S3method(Summary,seqelist)
+S3method(Math,seqe)
+S3method(Ops,seqe)
+S3method(Summary,seqe)
+S3method(levels,seqe)
+S3method(levels,seqelist)
+S3method(str,seqelist)
+S3method(str,seqe)
+S3method(as.character,seqe)
+S3method(as.character,seqelist)
+S3method(print,seqe)
+S3method(print,seqelist)
+S3method(print,seqeconstraint)
+S3method(print,subseqelist)
+S3method("[",subseqelist)
+S3method(plot,subseqelist)
+
+export(
+  seqeapplysub,
+	seqecmpgroup,
+	seqeconstraint,
+	seqecontain,
+	seqecreate,
+	seqefsub,
+	seqeid,
+	seqelength,
+	seqesetlength,
+	is.seqe,
+	is.seqelist,
+  seqetm
+)
+
+
+useDynLib(TraMineR)
+

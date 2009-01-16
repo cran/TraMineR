@@ -1,12 +1,11 @@
-## ============================================
+## =======================================
 ## Extracts distinct states from sequences
-## ============================================
+## =======================================
 
 seqdss <- function(seqdata) {
 
-	if (!inherits(seqdata,"stslist")) {
+	if (!inherits(seqdata,"stslist"))
 		stop("data is NOT a sequence object, see seqdef function to create one")
-	}
 
 	nbseq <- seqdim(seqdata)[1]
 	maxsl <- max(seqlength(seqdata))
@@ -36,7 +35,7 @@ seqdss <- function(seqdata) {
 		}
 	}
 	
-	trans <- seqdef(trans,alphabet=statl,cnames=paste("ST",seq(1:maxsl),sep=""))
+	trans <- suppressMessages(seqdef(trans, alphabet=statl, cnames=paste("ST",seq(1:maxsl),sep="")))
 
 	return(trans)
 }

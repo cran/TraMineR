@@ -1,7 +1,7 @@
 \name{famform}
 \docType{data}
 \alias{famform}
-\title{Example sequences of family formation}
+\title{Example data set: sequences of family formation}
 \description{
 This data set contains 5 sequences of family formation histories, used by Elzinga to introduce several metrics for computing distances between sequences. These sequences don't contain information about the duration spent in each state, they contain only distinct successive states. This data set is used in TraMineR's manual to check some results obtained by comparing them with those presented by Elzinga.
 }

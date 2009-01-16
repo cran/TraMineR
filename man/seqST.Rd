@@ -5,14 +5,28 @@
   Computes the turbulence for each sequence in a sequence data set, using the measure proposed by Elzinga.
 }
 \details{
-	Returns a vector whose number of elements is the number of sequences in the input data set.
+
+Sequence turbulence is a measure proposed by \cite{Elzinga (2007)}. It is based on the number \eqn{\phi(x)} of distinct subsequences that can be extracted from the distinct state sequence and the variance of the consecutive times \eqn{t_i} spent in the distinct states. For a sequence \eqn{x}, the formula is
+%
+\deqn{T(x)=\log_{2}(\phi(x)\,\frac{s_{t,max}^{2}(x)+1}{s_{t}(x)+1})}
+%
+where \eqn{s_{t}} is the variance of the state-duration for the \eqn{x} sequence and \eqn{s_{t,max}} is the maximum value that this variance can take given the total duration of the sequence. This maximum is computed as follow
+%
+\deqn{s_{t,max}=(n-1)(1-\bar{t})}
+%
+where \eqn{\bar t} is the mean consecutive time spent in the distinct states, i.e. the sequence duration divided by the number of distinct states in the sequence.
+
 }
 \usage{
  seqST(seqdata)
 }
 \arguments{
-  \item{seqdata}{a sequence object (see \code{\link{seqdef}} function).}
+  \item{seqdata}{a sequence object as returned by the the \code{\link{seqdef}} function.}
 }
+
+\value{a vector whose number of elements is the number of sequences in \code{seqdata}, containing the turbulence value of each sequence.
+}
+
 \seealso{
  \code{}.
 }
@@ -27,7 +41,7 @@
 
   ## Defining a sequence object with data in columns 13 to 24
   ## (activity status from january to december 2000)
-  actcal.seq <- seqdef(actcal,13:24,informat='STS')
+  actcal.seq <- seqdef(actcal,13:24, informat='STS')
 
   ## Computing the sequences turbulence
   turb <- seqST(actcal.seq)
