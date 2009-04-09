@@ -1,25 +1,26 @@
 ## SEQUENCE TRUNCATION
 
-TraMineR.trunc <- function(seq, left="DEL", right="DEL", gaps="DEL", 
-	neutral="#", missing=NA, void="%") {
-
-	sl <- length(seq)
+TraMineR.trunc <- function(seq, mstate, sl, 
+	left="DEL", right="DEL", gaps="DEL", 
+	neutral="#", void="%") {
 	
-	if (is.na(missing)) {
-		na.pos <- which(is.na(seq))
-		notna.pos <- which(!is.na(seq))
-	}
-	else {
-		na.pos <- which(seq==missing)
-		notna.pos <- which(seq!=missing)	
-	}
+	nbmiss <- sum(mstate)
+	sidx <- 1:sl
 
-	if (length(na.pos)==sl)
+	if (nbmiss==0 | nbmiss==sl)
 		return(seq)
 	else {
-		if (any(na.pos < min(notna.pos)))
-			lc <- max(na.pos[na.pos < min(notna.pos)])
+		## Index des missing et index des etats valides
+		na.pos <- sidx[mstate]
+		notna.pos <- sidx[!mstate]
+	
+		## Position du premier etat valide
+		c1 <- notna.pos[1]
+
+		if (c1>1)
+			lc <- c1-1
 		else lc=0
+
 		rc <- max(notna.pos)+1
 		mm <- na.pos[na.pos > lc+1 & na.pos < rc-1]
 
@@ -45,10 +46,6 @@ TraMineR.trunc <- function(seq, left="DEL", right="DEL", gaps="DEL",
 		if (ndel>0) {
 			seq.trunc <- seq.trunc[seq.trunc!=void]
 			seq.trunc <- c(seq.trunc,rep(void,ndel))
-			if (!is.null(names(seq)))
-				names(seq.trunc) <- names(seq)
-			else 
-				names(seq.trunc) <- paste("[",1:sl,"]",sep="")
 		}
 
 		return(seq.trunc)

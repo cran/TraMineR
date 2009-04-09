@@ -5,11 +5,12 @@
 Returns the number of common elements, ie same states appearing at the same position in the two sequences.
 }
 \usage{
- seqmpos(iseq, jseq)
+ seqmpos(seq1, seq2, with.miss=FALSE)
 }
 \arguments{
-  \item{iseq}{a sequence from a sequence object or a vector of states.}
-  \item{jseq}{a sequence from a sequence object or a vector of states.}
+  \item{seq1}{a sequence from a sequence object.}
+  \item{seq2}{a sequence from a sequence object.}
+  \item{with.miss}{if \code{TRUE}, gaps appearing at the same position in both sequences are also considedered as common elements}.
 }
 \seealso{
  \code{}.
@@ -20,5 +21,15 @@ famform.seq <- seqdef(famform)
 
 seqmpos(famform.seq[1,],famform.seq[2,])
 seqmpos(famform.seq[2,],famform.seq[4,])
+
+## Example with gaps in sequences
+a <- c(NA,"A",NA,"B","C")
+b <- c(NA,"C",NA,"B","C")
+
+ex1.seq <- seqdef(rbind(a,b))
+
+seqmpos(ex1.seq[1,], ex1.seq[2,])
+seqmpos(ex1.seq[1,], ex1.seq[2,], with.miss=TRUE)
+
 }
 \keyword{misc}

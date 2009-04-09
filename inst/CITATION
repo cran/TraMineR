@@ -1,0 +1,16 @@
+citHeader("To cite TraMineR in publications please use:")
+
+p1 <- person("Alexis", "Gabadinho", email = "alexis.gabadinho@unige.ch")
+p2 <- person("Gilbert", "Ritschard", email = "gilbert.ritschard@unige.ch")
+p3 <- person("Matthias", "Studer", email = "matthias.studer@unige.ch")
+p4 <- person("Nicolas", "Muller", email = "nicolas.muller@unige.ch")
+
+citEntry(entry="techreport",
+          title = "Mining Sequence Data in {R} with {T}ra{M}ine{R}: {A} User's Guide",
+          author = personList(p1, p2, p3, p4),
+          institution = "Department of Econometrics and Laboratory of Demography, University of Geneva",
+          year = "2009",
+          address = "Geneva",
+          textVersion = "Gabadinho, A., G. Ritschard, M. Studer and N.S. Müller (2009). Mining sequence data in R with the TraMineR package: A User's Guide. University of Geneva"
+)
+

@@ -2,40 +2,49 @@
 ## Extracts distinct states from sequences
 ## =======================================
 
-seqdss <- function(seqdata) {
+seqdss <- function(seqdata, with.miss=FALSE) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is NOT a sequence object, see seqdef function to create one")
 
-	nbseq <- seqdim(seqdata)[1]
-	maxsl <- max(seqlength(seqdata))
+	nbseq <- nrow(seqdata)
+
+	sl <- seqlength(seqdata) 
+	maxsl <- max(sl)
+
 	trans <- matrix(nrow=nbseq, ncol=maxsl)
 	statl <- attr(seqdata,"alphabet")
+
+	seqdatanum <- TraMineR:::seqasnum(seqdata, with.miss)
+
+	if (!with.miss)
+		seqdatanum[is.na(seqdatanum)] <- -99
 
 	for (i in 1:nbseq) {
 		idx <- 1
 		j <- 1
 
-		tmpseq <- seqdata[i,]
-		sl <- seqlength(tmpseq)
-		tmpseq <- as.integer(seqdata[i,])
+		tmpseq <- seqdatanum[i,]
 		
-		while (idx <= sl) {
+		while (idx <= sl[i]) {
 			iseq <- tmpseq[idx]
-			dur <- 1
 
-			while (idx < sl & tmpseq[idx+1]==iseq) { 
-					idx <- idx+1
+			while (idx < sl[i] & tmpseq[idx+1]==iseq) { 
+				idx <- idx+1
 			}
 
-			trans[i,j] <- statl[iseq]
-
-			j <- j+1
+			## The range of the numeric alphabet 
+			## obtained with seqasnum is 0..n
+			if (iseq!=-99) {
+				trans[i,j] <- statl[(iseq+1)]
+				j <- j+1
+			}
 			idx <- idx+1
 		}
 	}
 	
-	trans <- suppressMessages(seqdef(trans, alphabet=statl, cnames=paste("ST",seq(1:maxsl),sep="")))
+	trans <- suppressMessages(
+		seqdef(trans, alphabet=statl, cnames=paste("ST",seq(1:maxsl),sep=""), cpal=cpal(seqdata)))
 
 	return(trans)
 }

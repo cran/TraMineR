@@ -4,7 +4,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Setting time constraint}
 \description{
-  Function used to set time constraint in several event sequences methods such as \code{\link{seqefsub}}(searching frequent subsequences).
+  Function used to set time constraints in event sequence methods (seqe..) such as \code{\link{seqefsub}} for searching frequent subsequences or \code{\link{seqeapplysub}} for checking occurrences of subsequences.
 }
 \usage{
 seqeconstraint(maxGap = -1, windowSize = -1, 
@@ -12,18 +12,19 @@ seqeconstraint(maxGap = -1, windowSize = -1,
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{maxGap}{The maximum time gap between to event}
-  \item{windowSize}{The maximum window (subsequences time)}
-  \item{ageMin}{Can be used to set a time period. If equal to -1 (default), it won't be considered.}
-  \item{ageMax}{Can be used to set a time period. If equal to -1 (default), it won't be considered.}
-  \item{ageMaxEnd}{Can be used to set a time period. If equal to -1 (default), it won't be considered.}
+  \item{maxGap}{The maximum time gap between to events}
+  \item{windowSize}{The maximum time span accepted for subsequences}
+  \item{ageMin}{Minimal start time position allowed for subsequences. Ignored when equal to -1 (default).}
+  \item{ageMax}{Maximal start time position allowed for subsequences. Ignored when equal to -1 (default).}
+  \item{ageMaxEnd}{Maximal end time position allowed for subsequences. Ignored when equal to -1 (default).}
 }
 \details{
- \code{maxGap}, \code{windowSize}, \code{ageMin}, \code{ageMax} and \code{ageMaxEnd}. If so, two event should not be separated by more than \code{maxGap} and the whole subsequence should be included in a maximum time of \code{windowSize}.
-  The other parameters specify the start and end age of the subsequence, it should start between \code{ageMin} and \code{ageMax} and finish before \code{ageMaxEnd}.
+ \code{maxGap}, \code{windowSize}, \code{ageMin}, \code{ageMax} and \code{ageMaxEnd}. If so, two events should not be separated by more than \code{maxGap} and the whole subsequence should not exceed a \code{windowSize}  time span.
+  The other parameters specify the start and end age of the subsequence, it should start between \code{ageMin} and \code{ageMax} and finish before \code{ageMaxEnd}. 
+  Parameters \code{ageMin}, \code{ageMax} and \code{ageMaxEnd} are interpreted as the number of positions (time units) from the beginning of the sequence.
 }
 \value{
   A constraint object containing one item per constraint type.
 }
-\seealso{\code{\link{seqefsub}}}
+\seealso{\code{\link{seqefsub}}, \code{\link{seqeapplysub}}}
 

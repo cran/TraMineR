@@ -1,4 +1,4 @@
-## Computes the entropy of a distribution
+## Compute the entropy of a distribution
 
 entropy <- function(distrib)
 	{

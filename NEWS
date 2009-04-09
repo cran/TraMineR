@@ -1,3 +1,40 @@
+## ========
+Version 1.2
+
+Changes regarding plotting functions:
+  - New generic function 'plot.stlist()' with option 'type=' for
+    plotting state sequence objects of class 'ststlist' created by
+    the 'seqdef()' function. Old functions 'seqdplot()', 'seqfplot()',
+    'seqiplot()', 'seqmtplot()' work as in the previous version but by
+    calling 'plot.stslist' with the appropriate 'type=' option
+    (types are 'd','f','i' and 'mt'). However, the order of the
+    functions' arguments may have changed and this may cause problems
+    if the names of the arguments were not explicitly specified in your
+    scripts (which is inadvisable anyway).
+
+Changes in the dissimilarity and discrepancy analysis diss module:
+  - dissreg() is renamed to dissmfac() for multi-factor dissimilarity analysis.
+  - disstree(): great speed and memory improvements.
+
+Speed and memory improvements:
+  - seqformat(): conversion to TSE format is now much faster.
+  - seqdur()
+  - seqST()
+
+Changes in the computation of distances between sequences:
+  - seqdist() now checks if substitution costs respects the triangle inequality.
+    When this is the case it ensures that the resulting dissimilarity matrix
+    also respects the triangle inequality.
+  - New options for selecting the distance normalization method.
+  - New reversed LCP, i.e. longest common suffix method. (method="RLCP")
+
+Various changes:
+  - CITATION file added.
+  - seqST() caused an error when run with more than 12 states: bug fixed.
+  - Fixed other minor bugs.
+
+
+## ========
 Version 1.1
 
 mvad example data set added
@@ -30,10 +67,16 @@ Changes in Event Sequence Analysis (seqe module):
   - seqecreate now accepts state sequence and performs automatic conversion (seqecreate)
   - Time constraints are now implemented separately and are stored with the results (seqeconstraint)
 
-Changes in the seqformat function:
-  - new options for importing SPELL formated data
-  - STS internal and output in STS, SPS or DSS formats is now by default in the extended format (a matrix with one state per column) instead of compressed format (a character string). Use compressed=TRUE option for an output in the compressed format (sequences as character strings)
-  - SPS1 and SPS2 formats are now replaced by the generic SPS format with options SPS.in and SPS.out for defining the characters used as sperators and surrounding the state/duration couples
+Changes in the seqformat() function:
+  - New options for importing SPELL formatted data.
+  - The STS internal and the output in STS, SPS or DSS formats are now by
+    default in extended format (a matrix with one state per column) instead of
+    compressed format (a character string).
+    Use the compressed=TRUE option to get an output in the compressed format
+    (sequences as character strings).
+  - SPS1 and SPS2 formats are now replaced by the generic SPS format with
+    options SPS.in and SPS.out for defining the separator and surrounding
+    characters used for specifying the state/duration couples.
 
 Other new functions:
   - seqgen()   : generates a random sequence.

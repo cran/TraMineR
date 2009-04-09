@@ -4,9 +4,9 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Length of event sequences}
 \description{
-The length of event sequence correspond to the total time of observation of the corresponding individual. This information is optional but can be used to perform survival analysis.
-\code{seqelength} can be used to retrieve the length of some sequences.
-\code{seqesetlength} can be used to set the length of these sequences.
+The length of an event sequence is its time span, i.e. the total time of observation. This information is optional but may be useful to perform for instance a survival analysis.
+\code{seqelength} retrieves the length the given sequences.
+\code{seqesetlength} sets the length of the sequences.
 
 }
 \usage{
@@ -15,11 +15,11 @@ seqesetlength(s,len)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{s}{A list of sequences.}
-  \item{len}{A list of time corresponding to each sequences.}
+  \item{s}{An event sequence object (\code{seqelist}).}
+  \item{len}{A list of sequence lengths.}
 }
 \value{
-  \code{seqelength} return a numeric vector with the length of each sequences.
+  \code{seqelength} returns a numeric vector with the length of each sequences.
 }
 %\references{ ~put references to the literature/web site here ~ }
 %\author{ ~~who you are~~ }

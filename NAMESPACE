@@ -33,6 +33,8 @@ export(
 	seqmtplot,
 	seqnum,
 	seqpm,
+	## seqrep,
+	## seqrplot,
 	seqsep,
 	seqstatd,
 	seqstatl,
@@ -47,12 +49,14 @@ export(
 S3method(summary, stslist)
 S3method(print, stslist)
 S3method("[", stslist)
+S3method(plot, stslist)
 
 ## diss module
 export(
 	dissassoc,
 	disscenter,
 	dissreg,
+	dissmfac,
 	disstree2dot,
 	disstreeleaf,
 	disstree,
@@ -63,6 +67,7 @@ export(
 S3method(hist,dissassoc)
 S3method(print,dissassoc)
 S3method(print,dissregression)
+S3method(print,dissmultifactor)
 S3method(print,disstree)
 S3method(print,seqdiff)
 S3method(plot,seqdiff)

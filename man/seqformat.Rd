@@ -12,8 +12,8 @@ See \cite{Gabadinho et al. (2008)} for more details on longitudinal data formats
 
 \usage{
 seqformat(data, var=NULL, id=NULL, 
-	from=NULL, to=NULL, compressed=FALSE,
-	nrep=NULL, tevent=NULL, stsep, covar=NULL,
+	from, to, compressed=FALSE,
+	nrep=NULL, tevent, stsep, covar=NULL,
 	SPS.in=list(xfix="()", sdsep=","),
 	SPS.out=list(xfix="()", sdsep=","),
 	begin=NULL, end=NULL, status=NULL, 
@@ -24,14 +24,14 @@ seqformat(data, var=NULL, id=NULL,
 \arguments{
   \item{data}{a data frame or matrix containing sequence data.}
 
-  \item{var}{the list of columns containing the sequences. Defaut to NULL, ie all the columns. 
+  \item{var}{the list of columns containing the sequences. Defaut to \code{NULL}, ie all the columns. 
 Whether the sequences are in the compressed (character strings) or extended format is automatically detected by counting the number of columns.}
 
-   \item{id}{column containing the identification numbers for the sequences. When using SPELL format as input, this identification number is mandatory, in order to identify all spells belonging to each individual in the data set.}
+   \item{id}{column containing the identification numbers for the sequences. When using \code{SPELL} format as input, this identification number is mandatory, in order to identify all spells belonging to each individual in the data set.}
 
-   \item{from}{format of the original data. Avalaible formats are: STS, SPS, SPELL}
+   \item{from}{format of the original data. Avalaible formats are: STS, SPS, SPELL. If \code{data} is a sequence object, format is automatically set to \code{STS}.}
 
-   \item{to}{format of the output data. Avalaible formats are: STS, SPS, SPELL, SRS, TSE}
+   \item{to}{format of the output data. Avalaible formats are: STS, SPS, SRS, TSE}
 	
 	\item{compressed}{if TRUE and output format is one of STS, SPS or DSS, the output sequences are compressed into character strings} 
 

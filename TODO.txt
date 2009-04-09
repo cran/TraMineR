@@ -1,0 +1,7 @@
+%%% -*- ASCII -*- -*- Soft -*- -*- US -*-
+- Representation des taux de transition par des barplots
+- possibilité de calculer des distances avec une séquence de référence différente pour chaque séquence (example de Juliane)
+- Extend possibilities of conversion between formats: STS -> SPELL, STS -> PPER (person-periods) etc. Ideally implement all conversions discussed in Ritschard et al (2009)
+"Converting between various sequence representations") including conversion of event sequences into state sequences.
+- seqefsub() Suppress display of NA constraints in the print of the seqefsub outcome.
+

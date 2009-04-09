@@ -7,7 +7,8 @@ seqetm<-function(seq, method="transition", use.labels=TRUE, sep=">", bp="", ep="
   colnames(tevent) <- statl
   alphabet<-statl
   if(use.labels&&inherits(seq,"stslist")){
-    label<-attr(seq,"labels")
+    #label<-alphabet(seq)
+	label<-attr(seq, "labels")
     if(length(label)==length(alphabet)){
       alphabet<-label
     }

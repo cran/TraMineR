@@ -1,19 +1,18 @@
-## ===================================
-## Returns the length of the sequences 
-## ===================================
+## ==================================
+## Returns a vector with the lengths 
+## of the sequences in seqdata 
+## ==================================
 
 seqlength <- function(seqdata) {
 
-	if (!inherits(seqdata,"stslist")) {
+	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use 'seqdef' function to create one")
-		}
-	
-	## missing <- attr(seqdata,"missing")
-	## if (!is.na(missing)) seqdata[seqdata==missing] <- NA
 
-	void <- attr(seqdata,"void")
+	sl <- ncol(seqdata)-rowSums( seqdata==attr(seqdata,"void"), na.rm=TRUE )
 
-	sl <- apply(seqdata,1, function(x) TraMineR.length(x,void))
+	sl <- as.matrix(sl)
+	colnames(sl) <- "Length"
+	rownames(sl) <- rownames(seqdata)
 
 	return(sl)
 }

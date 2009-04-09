@@ -14,13 +14,13 @@
 \alias{Summary.seqelist}
 
 
-\title{Event sequences object}
+\title{Event sequence object}
 \description{
-  TraMineR use an internal sequence object to mine frequent event subsequences. is.seqe return true if the argument is an event sequence object.
-  \code{is.seqelist} can be used to check for list of internal object.
-  \code{as.seqelist} can be used to set a list as list of internal sequence object.
+  TraMineR uses an internal event sequence object for all its operations with event sequences such as mining frequent subsequences. 
+  The function \code{is.seqelist} checks wether the argument is an event sequence object while \code{is.seqe} checks wether the argument is a single element of an event sequence object.
+  %\code{as.seqelist} transform a list of event sequences into an internal event sequence object.
 
-  There is a print method to handle this kind of object.
+  There is a print method that can be applied to such event sequence object.
 }
 \usage{
 is.seqe(s)
@@ -29,6 +29,6 @@ is.seqelist(s)
 \arguments{
 \item{s}{Sequence}
 }
-\seealso{\code{\link{str.seqelist}}, \code{\link{str.seqe}},\code{\link{as.character.seqelist}} and \code{\link{as.character.seqe}} to get character string of event object}
+\seealso{\code{\link{str.seqelist}}, \code{\link{str.seqe}},\code{\link{as.character.seqelist}} and \code{\link{as.character.seqe}} to convert sequences from an event sequence object into character strings}
 %\examples{}
 \keyword{internal}

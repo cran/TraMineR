@@ -9,7 +9,7 @@ createsubseqelist<-function(seqe,constraint,subseq,data, type="frequent"){
   ret$seqe<-seqe
   ret$constraint<-constraint
   ret$subseq<-subseq
-  ret$data<-as.data.frame(data)
+  ret$data<-as.data.frame(data, optional=TRUE)
   ret$type<-type
   class(ret$subseq)<-c("seqelist","list")
 #  attr(ret$subseq,"dictionnary")<-attr(seq,"dictionnary")
@@ -17,9 +17,9 @@ createsubseqelist<-function(seqe,constraint,subseq,data, type="frequent"){
   return(ret)
 }
 print.subseqelist<-function(x,...){
-  z<-data.frame(data.frame(Subsequence=as.character(x$subseq)),x$data)
+  z<-data.frame(data.frame(Subsequence=as.character(x$subseq),check.names=FALSE),x$data, row.names=NULL, check.names=FALSE)
   print(z,...)
-  cat("\nComputed on",length(x$seqe),"event sequences with the following contraints\n")
+  cat("\nComputed on",length(x$seqe),"event sequences\n")
   print(x$constraint,...)
 }
 
