@@ -20,5 +20,6 @@ summary.stslist <- function(object,...) {
 	cat(" [>] colors:",paste(1:nbstates,cpal,collapse=" ",sep="="),"\n")
 	cat(" [>] labels:",paste(1:nbstates,labels,collapse=" ",sep="="),"\n")
 	cat(" [>] code for missing statuses:",nr,"\n")
+	cat(" [>] code for void state:",void,"\n")
 }
 

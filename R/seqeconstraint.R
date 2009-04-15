@@ -10,7 +10,7 @@ seqeconstraint<-function(maxGap=-1, windowSize=-1, ageMin=-1, ageMax=-1,ageMaxEn
 }
 
 print.seqeconstraint<-function(x,...){
-  z<-data.frame(Constraint=names(x),Value=as.numeric(x))
-  z$Value[x==-1]<-NA
-  print(z,row.names=FALSE,...)
+	z<-data.frame(Constraint=names(x),Value=as.numeric(x))
+	z <- z[z$"Value"!=-1,]
+	if(nrow(z) > 0) { print(z,row.names=FALSE,...) }
 }

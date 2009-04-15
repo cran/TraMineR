@@ -6,7 +6,7 @@ Plots a legend for the states in a sequence object. Useful if several graphics a
 }
 \usage{
 seqlegend(seqdata, cpal, ltext, 
-	position="topleft", fontsize=1)
+	position="topleft", fontsize=1, ...)
 }
 \arguments{
   \item{seqdata}{a sequence object as returned by the the \code{\link{seqdef}} function.}
@@ -18,6 +18,7 @@ seqlegend(seqdata, cpal, ltext,
   \item{position}{the position of the legend in the graphic area. For accepted values, see \code{\link{legend}}. Default to 'topleft'.}
 
   \item{fontsize}{size of the font for the labels. A value less than 1 decreases the font size, a value greater than 1 increases the font size. Default to 1. }
+	\item{...}{optional arguments passed to the \code{\link{legend}} function.}
 }
 %\seealso{}
 \examples{

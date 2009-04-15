@@ -9,24 +9,24 @@ seqecmpgroup(subseq, group, method="chisq", pvalue.limit=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{subseq}{The subsequences to order. To get a list of subsequence see \code{\link{seqefsub}}}
-  \item{group}{The group variable to discriminate}
-  \item{method}{The test, bonferroni or chisq}
-  \item{pvalue.limit}{Can be used to filter the results. Only subsequences with p-value lower than this parameter will be kept. If NULL all subsequences are returned (regardless there p-value).}
+  \item{subseq}{A \code{subseqelist} object (list of subsequences) such as produced by \code{\link{seqefsub}}}
+  \item{group}{Variable or factor defining the membership to the groups to discriminate}
+  \item{method}{The required test, one of \code{bonferroni} or \code{chisq}}
+  \item{pvalue.limit}{Can be used to filter the results. Only subsequences with a p-value lower than the value set for this parameter will be selected. If NULL all subsequences are returned (regardless their p-values).}
 }
 \details{
 The following test functions are implemented
-  \code{bonferroni} Chi squared test with Bonferroni correction applied.
-  \code{chisq} Chi squared test.
+  \code{chisq} Pearson Independence Chi squared test.
+  \code{bonferroni} Pearson Independence Chi squared test with Bonferroni correction.
 }
 \value{
-  Returns a specific objet of type \code{subseqelistchisq} (subtype of \code{subseqelist}) that can be plotted and printed.
-  \item{subseq}{List of subsequences}
-  \item{labels}{labels of groups variables}
-  \item{constraint}{time constraints usued to compute subsequences see \code{\link{seqeconstraint}}}
-  \item{seqe}{The event sequences that were used to compute the test}
-  \item{index}{Index of susequence}
-  \item{data}{A \code{data.frame} with the support of each subsequence, index (original order), two column per group with frequencies and pearson residuals}
+  An objet of type \code{subseqelistchisq} (subtype of \code{subseqelist}) with the following elements 
+  \item{subseq}{Sorted list of found discriminating subsequences}
+  \item{seqe}{The event sequence object on which the tests were computed}
+  \item{constraint}{time constraints used for searching the subsequences (see \code{\link{seqeconstraint}})}
+  \item{labels}{levels (value labels) of the target group variable}
+  \item{type}{Type of test used}
+  \item{data}{A data frame with columns support, index (original order of the subsequence) and a pair of frequency and Pearson residual columns for each group}
 }
 %\references{ ~put references to the literature/web site here ~ }
 %\author{ ~~who you are~~ }
@@ -40,7 +40,7 @@ data(actcal.tse)
 actcal.seqe <- seqecreate(actcal.tse)
 
 ##Searching for frequent subsequences, that is, appearing at least 20 times
-fsubseq <- seqefsub(actcal.seqe,pMinSupport=0.01)
+fsubseq <- seqefsub(actcal.seqe, pMinSupport=0.01)
 
 ##searching for susbsequences discriminating the most men and women
 data(actcal)

@@ -3,7 +3,7 @@
 ## =========================================
 
 seqlegend <- function(seqdata, cpal, ltext, 
-	position="topleft", fontsize=1) {
+	position="topleft", fontsize=1,...) {
 	
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use seqdef function to create one")
@@ -13,5 +13,5 @@ seqlegend <- function(seqdata, cpal, ltext,
 	if (missing(ltext)) ltext <- attr(seqdata,"labels")
 
 	plot(0, type= "n", axes=FALSE, xlab="", ylab="")
-	legend(position, fill=cpal, legend=ltext, cex=fontsize)
+	legend(position, fill=cpal, legend=ltext, cex=fontsize,...)
 }

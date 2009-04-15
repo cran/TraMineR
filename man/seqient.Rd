@@ -13,12 +13,14 @@ where \eqn{s} is the size of the alphabet and \eqn{\pi_i} the proportion of occu
 Another measure of entropy is available: \code{\link{seqstatd}} returns the entropy of the distribution of states for each time unit.
 }  
 \usage{
- seqient(seqdata, norm=TRUE)
+ seqient(seqdata, norm=TRUE, with.miss=FALSE)
 }
 \arguments{
   \item{seqdata}{a sequence object as returned by the the \code{\link{seqdef}} function.}
 
   \item{norm}{by default (TRUE), entropy is normalized, ie divided by the maximum entropy. The maximum entropy is computed as the entropy of the alphabet, ie an hypothetic sequence having all the states in the alphabet with equal length. Note that if for example the sequence length is uneven and the number of states in the alphabet is even, the theoretical maximum cannot be observed in the data.}
+
+	\item{with.miss}{if set to TRUE, missing status (gaps in sequences) is handled as an additional state when computing the state distribution in the sequence.}
 }
 
 \value{
@@ -26,7 +28,7 @@ a vector whose number of elements is the number of sequences in \code{seqdata}, 
 }
 
 \references{
-Gabadinho, A., G. Ritschard, M. Studer and N. S. Muller (2008). Mining Sequence Data in \code{R} with \code{TraMineR}: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
+Gabadinho, A., G. Ritschard, M. Studer and N. S. Muller (2009). Mining Sequence Data in \code{R} with \code{TraMineR}: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
 }
 
 \seealso{

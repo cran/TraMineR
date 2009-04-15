@@ -34,18 +34,18 @@ seqST <- function(seqdata) {
 	states <- seqdss(seqdata)
 	dur <- seqdur(seqdata)
 
-	message(" [>] Computing turbulence for ",seqdim(seqdata)[1],"sequences, please wait...")
+	message(" [>] computing turbulence for ",seqdim(seqdata)[1]," sequences, please wait...")
 	phi <- seqsubsn(states, DSS=FALSE)
 	s2.tx <- apply(dur, 1, realvar)
-	mean.tx <- apply(dur, 1, mean, na.rm=TRUE)
-	sum.tx <- apply(dur, 1, sum, na.rm=TRUE)
-	n <- apply(states, 1, function(x) sum(x!=attr(seqdata,"void")))
+	mean.tx <- rowMeans(dur, na.rm=TRUE)
+	## sum.tx <- apply(dur, 1, sum, na.rm=TRUE)
+	n <- seqlength(states)
 
 	tmp <- data.frame(phi, n, mean.tx, s2.tx)
 	Tx <- apply(tmp, 1, turb)
 	Tx <- as.matrix(Tx)
 
-	rownames(Tx) <- paste("[",seq(1:length(Tx)),"]",sep="")
+	rownames(Tx) <- rownames(seqdata)
 	colnames(Tx) <- "Turbulence"
 
 	return(Tx)

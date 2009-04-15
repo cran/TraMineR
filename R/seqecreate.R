@@ -6,14 +6,14 @@
 #tmrsequence<-function(id,timestamp,event){
 #  .Call("tmrsequence",as.integer(id),as.double(timestamp),as.integer(event), PACKAGE="TraMineR")
 #}
-seqecreate<-function(data=NULL, id=NULL,timestamp=NULL, event=NULL, endEvent=NULL, tevent="transition"){
+seqecreate<-function(data=NULL, id=NULL,timestamp=NULL, event=NULL, endEvent=NULL, tevent="transition", use.labels=TRUE){
   if(!is.null(data)){
     if(inherits(data,"stslist")){
       if(!is.matrix(tevent)){
         if(is.character(tevent)){
-          tevent<-seqetm(data, method=tevent)
+          tevent<-seqetm(data, method=tevent, use.labels)
         }else{
-          tevent<-seqetm(data)
+          tevent<-seqetm(data, use.labels)
         }
       }
       data.tse <- suppressMessages(seqformat(data,from='STS',to='TSE', tevent=tevent))

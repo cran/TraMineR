@@ -18,8 +18,10 @@ seqdecomp <- function(data, var=NULL, sep="-", miss="NA", vnames=NULL) {
 	
 	sdecomp <- matrix(nrow=nbseq, ncol=lmax)
 	rownames(sdecomp) <- paste("[",seq(1:nbseq),"]",sep="")
-	if (is.null(vnames)) colnames(sdecomp) <- paste("[",seq(1:lmax),"]",sep="")
-	else colnames(sdecomp) <- vnames
+	if (is.null(vnames)) 
+		colnames(sdecomp) <- paste("[",seq(1:lmax),"]",sep="")
+	else 
+		colnames(sdecomp) <- vnames
 
 	for (i in 1:nbseq) {
 		seq <- tmp[[i]]

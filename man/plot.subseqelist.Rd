@@ -9,9 +9,9 @@ Plot frequencies of subsequences.
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{The subsequences to plot}
-  \item{freq}{The frequences to plot, support if NULL}
-  \item{cex}{To control subsequences texts sizes. see \code{\link{par}}.}
+  \item{x}{The subsequences to plot (a \code{subseqelist} object}
+  \item{freq}{The frequencies to plot, support if NULL}
+  \item{cex}{Font size. See \code{\link{par}}.}
  %  \item{ylim}{A 2 length vector indicating minimum and maximum y values (by default to c(0,1))}
   \item{\dots}{arguments passed to \code{\link{boxplot}}}
 }
@@ -22,7 +22,9 @@ Plot frequencies of subsequences.
 
 % ~Make other sections like Warning with \section{Warning }{....} ~
 %}
-%\seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
+\seealso{ 
+    \code{\link{seqefsub}}
+    }
 \examples{
 ## loading data
 data(actcal.tse)

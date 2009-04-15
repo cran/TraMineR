@@ -6,26 +6,53 @@
 ## LCS = Longest Common Subsequence (Elzinga)
 ## ====================================================
 
-seqdist <- function(seqdata, method, refseq=NULL, 
+seqdist <- function(seqdata, method, refseq, 
 	norm=FALSE, indel=1, sm=NA,
 	with.miss=FALSE, full.matrix=TRUE) {
 
-	## ======
-	## CHECKS
-	## ======
-	if (!inherits(seqdata,"stslist")) 
-		stop("data is not a sequence object, use 'seqdef' function to create one")
-
-	metlist <- c("OM","LCP", "LCS", "LCPinv")
-	if (!method %in% metlist) 
-		stop("Method must be one of: ", paste(metlist,collapse=" "))
-
-	n <- seqdim(seqdata)[1]
+	n <- nrow(seqdata)
 	alphabet <- attr(seqdata,"alphabet")
 	alphsize <- length(alphabet)
 	message(" [>] ",n," sequences with ", alphsize,
 		" distinct events/states (", paste(alphabet,collapse="/"),")")
 
+	## ======
+	## CHECKS
+	## ======
+	if (!inherits(seqdata,"stslist")) 
+		stop("[!] data is not a sequence object, use 'seqdef' function to create one", call.=FALSE)
+
+	metlist <- c("OM","LCP", "LCS", "RLCP")
+	if (!method %in% metlist) 
+		stop("Method must be one of: ", paste(metlist,collapse=" "), call.=FALSE)
+  
+	## Taking care of correct normalization settings
+	if (is.logical(norm)) {
+		if (norm) {
+		## Normalize using Elzinga for LCP, LCS, RLCP
+			if (method %in% c("LCP", "LCS", "RLCP")) {
+				norm <- 2
+			} else {## Normalize using Abbott for OM
+				norm <- 1
+			}
+      	} else {
+      		norm <- 0
+		}
+	} else if (is.character(norm)) {
+		## Using normalization name
+		## Cast to integer for c code and normdist function
+		## Match return the position, removing 1 to start at zero
+		normIndice <- match(norm, c("none", "maxlength", "gmean", "maxdist")) -1
+   
+		if (is.na(normIndice)) {  ##Not found
+			stop("Unknow distance normalization method ", norm)
+		}
+		norm <- normIndice
+	} else {
+		stop("Unknow distance normalization method ", norm)
+	}
+
+	## Gaps in sequences
 	if (with.miss) {
 		alphabet <- c(alphabet,attr(seqdata,"nr"))
 		alphsize <- length(alphabet)
@@ -36,13 +63,30 @@ seqdist <- function(seqdata, method, refseq=NULL,
 			stop("found missing values in sequences, please set 'with.miss' option to nevertheless compute distances")
 
 	## Checking if substitution cost matrix contains values for each state
-	if (method=="OM") 
-		if (nrow(sm)!=alphsize | ncol(sm)!=alphsize)
-			stop("size of substitution cost matrix must be ",alphsize,"x", alphsize)
+	## and if the triangle inequality is respected
+	if (method=="OM") { 
+		if (nrow(sm)!=alphsize | ncol(sm)!=alphsize) {
+			stop("size of substitution cost matrix must be ", alphsize,"x", alphsize)
+		}
+		triangleineq <- checktriangleineq(sm, warn=FALSE, indices=TRUE)
+		## triangleineq contain a vector of problematic indices.
+		if (!is.logical(triangleineq)) {
+			warning("The substitution cost matrix doesn't respect the triangle inequality.\n",
+        			" At least, substitution cost between indices ",triangleineq[1]," and ",triangleineq[2],
+        			" does not respect the triangle inequality. It cost less to first transform ", 
+        			triangleineq[1], " into ",triangleineq[3])
+		}
+	}
 
+	## ==================
 	## Reference sequence
-	if (!is.null(refseq)) {
-		if (refseq==0) {
+	## ==================
+	if (!missing(refseq)) {
+		if (inherits(refseq,"stslist") && nrow(refseq)==1) {
+			compseq <- refseq
+			message(" [>] using (external) sequence ",
+        			suppressMessages(seqformat(compseq, from="STS", to="SPS", compressed=TRUE)), " as reference")
+		} else if (refseq==0) {
 			mfseq <- row.names(seqtab(seqdata,tlim=1))
 			message(" [>] using most frequent sequence as reference: ", mfseq)
 
@@ -51,12 +95,14 @@ seqdist <- function(seqdata, method, refseq=NULL,
 			message(" [>] most frequent sequence appears ", length(idxmfseq), " times")
 
 			compseq <- seqdata[idxmfseq[1],]
-		}
-		if (refseq>0) {
+		} else if (is.numeric(refseq) & refseq>0) {
 			compseq <- seqdata[refseq,]
-			message(" [>] using sequence ",refseq, seqformat(compseq,from="STS",to="SPS")," as reference")
-		}
-		lcompseq <- sum(!is.na(compseq))
+			message(" [>] using sequence ", refseq,": ", 
+        			suppressMessages(seqformat(compseq, from="STS", to="SPS", compressed=TRUE)), " as reference")
+		} else 
+			stop("[!] invalid reference sequence", call.=FALSE)
+
+		lcompseq <- seqlength(compseq)
 		distmat <- FALSE
 	} 
 	else
@@ -69,12 +115,11 @@ seqdist <- function(seqdata, method, refseq=NULL,
 
 	## Selecting distinct sequences only and saving the indexes 
 	dseq <- unique(seqdata)
-	mcorr <- match(seqconc(seqdata),seqconc(dseq))
+	mcorr <- match(seqconc(seqdata), seqconc(dseq))
 
-	nd <- seqdim(dseq)[1]
+	nd <- nrow(dseq)
 	message(" [>] ", nd," distinct sequences")
 
-	l <- ncol(dseq)
 	slength <- seqlength(dseq)
 
 	dseq <- seqasnum(dseq, with.miss=with.miss)
@@ -97,15 +142,19 @@ seqdist <- function(seqdata, method, refseq=NULL,
 		if (method=="OM") {
 			for (i in 1:nd) 
 				m[i] <- levenshtein(dseq[i,], slength[i], compseq, lcompseq, indel,sm,alphsize,norm)
-			} 
-		else	if (method=="LCP") {
+		} else if (method=="LCP") {
 			for (i in 1:nd) 
 				m[i] <- LCPdist(dseq[i,],slength[i],compseq,lcompseq,norm)
-			}
-		else if (method=="LCS") {
+		} else if (method=="RLCP") {
+			## reverse order of compseq ignoring missing values at the end
+			compseq <- rev(compseq[1:lcompseq])
+
+			for (i in 1:nd) 
+				m[i] <- LCPdist(rev(dseq[i,1:slength[i]]),slength[i],compseq,lcompseq,norm)
+		} else if (method=="LCS") {
 			for (i in 1:nd) 
 				m[i] <- LCSdist(dseq[i,],slength[i],compseq,lcompseq,norm)
-			}
+		}
 
 		## Constructing the final distance vector
 		mcorr <- match(seqconc(seqdata),seqconc(dseq))
@@ -122,7 +171,6 @@ seqdist <- function(seqdata, method, refseq=NULL,
 		}
 		else if (method=="LCS") {
 			disttype <- as.integer(1)
-			if(norm)norm<-as.integer(2)
 			sm <- suppressMessages(seqsubm(seqdata, method="CONSTANT", cval=2, with.miss=with.miss, miss.cost=2))
 			indel <- 1
 			disttype <- as.integer(1)
@@ -133,7 +181,7 @@ seqdist <- function(seqdata, method, refseq=NULL,
 			sm <- 0
 			indel <- 0
 		}
-		else if (method=="LCPinv") {
+		else if (method=="RLCP") {
    		disttype <- as.integer(3) ##One for OM, 2 for LCP
 			sm <- 0
 			indel <- 0
@@ -161,11 +209,12 @@ seqdist <- function(seqdata, method, refseq=NULL,
  		attr(distances, "Upper") <- FALSE
 	}
 
-
 	fin <- Sys.time()
 	message(" (",round(difftime(fin,debut,units="mins"),2)," minutes)")
 
-	if (full.matrix) return(as.matrix(distances))
-	else return(distances)
+	if (full.matrix && inherits(distances, "dist")) 
+		return(dist2matrix(distances))
+	else 
+		return(distances)
 }
 

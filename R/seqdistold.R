@@ -74,7 +74,8 @@ seqdistold <- function(seqdata, method, refseq=NULL,
 	dseq <- unique(seqdata)
 	mcorr <- match(seqconc(seqdata),seqconc(dseq))
 
-	nd <- seqdim(dseq)[1]
+	## nd <- seqdim(dseq)[1]
+	nd <- nrow(dseq)
 	message(" [>] ", nd," distinct sequences")
 
 	if (distmat==FALSE) {
@@ -86,7 +87,7 @@ seqdistold <- function(seqdata, method, refseq=NULL,
 		diag(m) <- 0
 	}
 
-	l <- ncol(dseq)
+	## l <- ncol(dseq)
 	slength <- seqlength(dseq)
 
 	dseq <- seqasnum(dseq, with.miss=with.miss)

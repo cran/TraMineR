@@ -2,19 +2,23 @@
 ## Number of matching positions
 ## ============================
 
-seqmpos <- function(iseq,jseq) {
+seqmpos <- function(seq1, seq2, with.miss=FALSE) {
 
-	clength <- min(length(iseq), length(jseq))
+	if (!inherits(seq1,"stslist") | !inherits(seq2,"stslist")) 
+		stop("sequences must be sequence objects")
 
-	mpos <- 0
+	## Defining the positions to compare with logical values
+	## void positions are set to FALSE and hence will not be
+	## counted in the sum of matching positions
+	comp1 <- seq1!=attr(seq1,"void")
+	comp2 <- seq2!=attr(seq2,"void")
 
-	for (isym in 1:clength) {
-		c <- iseq[isym]==jseq[isym]
-		
-		if (!is.na(c)) {
-			if (c==TRUE) mpos <- mpos+1
-		}
+	if (!with.miss) {
+		comp1 <- comp1 & seq1!=attr(seq1,"nr")
+		comp2 <- comp2 & seq2!=attr(seq2,"nr")
 	}
+
+	mpos <- sum(seq1==seq2 & comp1 & comp2)
 
 	return(mpos)
 }

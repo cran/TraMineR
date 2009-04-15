@@ -29,7 +29,7 @@ seqefsub<-function(seq,strsubseq=NULL,minSupport=NULL, pMinSupport=NULL,constrai
     subseq<-.Call("tmrfindsubsequences",unlist(list(seq)),as.double(c(constraint$maxGap)),as.double(c(constraint$windowSize)),
       as.double(c(constraint$ageMin)),as.double(c(constraint$ageMax)),as.double(c(constraint$ageMaxEnd)),as.integer(c(minSupport)),as.integer(c(maxK)),classname,PACKAGE="TraMineR")
     ord<-order(unlist(subseq[1]),decreasing=TRUE)
-    ret<-createsubseqelist(seq,constraint,unlist(subseq[2])[ord],data.frame(Support=(unlist(subseq[1])[ord]/length(seq))))
+    ret<-createsubseqelist(seq,constraint,unlist(subseq[2])[ord],data.frame(Support=(unlist(subseq[1])[ord]/length(seq)), Count=(unlist(subseq[1])[ord])))
   }
   return(ret)
 }

@@ -14,18 +14,6 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 
 	if (!is.null(pdata) & !is.null(pvar)) pdata <- pdata[, pvar]
 
-#	if(process==TRUE && mean(begincolumn[!is.na(begincolumn) & begincolumn > 0]) > 1900 && is.null(pdata)) {
-#		stop("Option mismatch : you want age sequences but you don't have ages in the begin column. You need to set birth years with pdata or specify process=FALSE")
-#	}
-#	if(process==FALSE && mean(begincolumn[!is.na(begincolumn) & begincolumn > 0]) < 100 && is.null(pdata)) {
-#		stop("Option mismatch : you want year sequences, but you don't have years in the begin column. You need to set birth years with pdata or specify process=TRUE")
-#	}
-#	# option redondante : on a des années, on veut des années, et on donne des années de naissance en +
-#	if(process==FALSE && mean(begincolumn[!is.na(begincolumn) & begincolumn > 0]) > 1900 && !is.null(pdata)) {
-#		pdata <- NULL
-#		warning("You want year sequences and you have years at the beginning and at the end of episodes. Ignoring the pdata option") 
-#	}
-
 	if (process==TRUE) {
 		if (!is.null(pdata)) frmoption <- "year2age"
 		else frmoption <- "age2age"

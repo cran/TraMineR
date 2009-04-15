@@ -1,38 +1,45 @@
+\encoding{latin1}
 \name{seqeapplysub}
 \alias{seqeapplysub}
-\title{Applying Subsequences to Event Sequences}
+\title{Checking if event sequences contain given subsequences}
 \description{
-Apply every subsequences \code{subseq} to each event sequences and compute the result of the given \code{method}.
+Checks occurrences of the subsequences \code{subseq} among the event sequences and returns the result according to the selected \code{method}.
 }
 \usage{
 seqeapplysub(subseq, method = "count", constraint = NULL)
 }
 \arguments{
- \item{subseq}{a list of subsequences}
- \item{method}{type of the result expected, should be one of "count", "presence" or "age"}
+ \item{subseq}{list of subsequences (an event subsequence object) such as created by \code{\link{seqefsub}}}
+ \item{method}{type of result, should be one of "count", "presence" or "age"}
  \item{constraint}{
-	Other time constraint overriding those used to compute subseq. See \code{\link{seqeconstraint}}
+	Time constraints overriding those used to compute subseq. See \code{\link{seqeconstraint}}
 	}
 }
 \details{
-  They are three methods implemented:
-  'count' counts the number of occurrence of a given subsequences in an event sequence;
-  'presence' returns one if the subsequence is present, 0 otherwise;
-  'age' returns the age of appearance of a subsequence in an event sequence. 
-In case of multiple possiblities, the age of the first occurences is returned. When the subsequences is not in the sequence, -1 is returned.
+  There are three methods implemented:
+  'count' counts the number of occurrence of each given subsequence in each event sequence;
+  'presence' returns 1 if the subsequence is present, 0 otherwise;
+  'age' returns the age of appearance of each subsequence in each event sequence. 
+In case of multiple possibilities, the age of the first occurrence is returned. When the subsequence is not in the sequence, -1 is returned.
 }
 
 \value{
-The return value is a matrix where every row correspond to a sequence (row names are set accordingly) and each column correspond to a subsequence (col names are set accordingly).
-The matrix store the results of the count method.
+The return value is a matrix where each row corresponds to a sequence (row names are set accordingly) and each column corresponds to a subsequence (col names are set accordingly).
+The cells of the matrix contain the requested values (count, presence-absence indicator or age).
 }
 
-\seealso{See Also as \code{\link{seqecreate}} for more information on how to use event sequence analysis module.}
+\seealso{\code{\link{seqecreate}} for more information on event sequence object and \cite{Gabadinho et al. (2009)} on how to use the event sequence analysis module.}
+
+\references{
+Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with \code{TraMineR}: A user's guide for version 1.1. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
+}
+
+
 \examples{
 ## Loading data
 data(actcal.tse)
 
-## Creating sequences
+## Creating the event sequence object
 actcal.seqe <- seqecreate(actcal.tse)
 
 ## Printing sequences
@@ -41,7 +48,7 @@ actcal.seqe[1:10]
 ## Looking for frequent subsequences
 fsubseq <- seqefsub(actcal.seqe,pMinSupport=0.01)
 
-## Counting the number of occurence of each subsequence
+## Counting the number of occurrences of each subsequence
 msubcount <- seqeapplysub(fsubseq,method="count")
 ## First lines...
 msubcount[1:10,1:10]
@@ -50,7 +57,7 @@ msubpres <- seqeapplysub(fsubseq,method="presence")
 ## First lines...
 msubpres[1:10,1:10]
 
-## Age of first appearance of each subsequence
+## Age at first appearance of each subsequence
 msubage <- seqeapplysub(fsubseq,method="age")
 
 ## First lines...

@@ -26,8 +26,6 @@ seqsubsn <- function(seqdata, DSS=TRUE) {
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, see seqdef function to create one")
 
-	nbseq <- seqdim(seqdata)[1]
-
 	if (DSS==TRUE) seqdata <- suppressMessages(seqdss(seqdata))
 
 	## alphabet
@@ -37,8 +35,11 @@ seqsubsn <- function(seqdata, DSS=TRUE) {
 	void <- attr(seqdata,"void")
 		
 	result <- apply(seqdata,1,nsubs,nbstat=ns,statlist=sl, void=void)
-	
-	names(result) <- NULL
+
+	result <- as.matrix(result)
+	colnames(result) <- "Subseq."
+	rownames(result) <- rownames(seqdata)
+
 	return(result)
 }
 

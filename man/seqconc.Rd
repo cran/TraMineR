@@ -32,5 +32,6 @@ Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2008). Mining Sequence 
 \examples{
 data(actcal)
 actcal.string <- seqconc(actcal,13:24)
+head(actcal.string)
 }
 \keyword{manip}

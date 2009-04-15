@@ -14,4 +14,4 @@ disstreeleaf(tree)
 }
 
 
-\seealso{\code{\link{disstree}} for example}
+\seealso{\code{\link{disstree}} for examples}

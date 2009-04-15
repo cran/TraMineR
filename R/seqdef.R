@@ -2,10 +2,10 @@
 ## Defining a set of sequences as an object
 ## ========================================
 
-seqdef <- function(data, var=NULL, informat='STS', stsep='-', 
-	alphabet=NULL, states=NULL, start=1, 
+seqdef <- function(data, var, informat="STS", stsep="-", 
+	alphabet, states, start=1, 
 	left=NA, right="DEL", gaps=NA, missing=NA, void="%", nr="*",
-	cnames=NULL, cpal=NULL, missing.color="darkgrey", labels=NULL, ...) {
+	cnames, cpal, missing.color="darkgrey", labels, ...) {
 
 	## ===================
 	## Extracting the data
@@ -15,7 +15,7 @@ seqdef <- function(data, var=NULL, informat='STS', stsep='-',
 	## ============
 	## INPUT FORMAT
 	## ============
-	if (informat=='STS') {
+	if (informat=="STS") {
 		sf <- seqfcheck(seqdata)
 		if (sf %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=sf)
 		else if (sf=="-X") 
@@ -35,14 +35,15 @@ seqdef <- function(data, var=NULL, informat='STS', stsep='-',
 	## DEFINING THE ALPHABET
 	## =====================
 	statl <- seqstatl(seqdata)
-	if (is.null(alphabet)) plevels <- statl
+	if (missing(alphabet)) plevels <- statl
 	else plevels <- alphabet
 
 	## ===================
 	## PREPARING THE DATA
 	## ===================
 	seqdata <- as.matrix(seqdata)
-	seqdata <- seqprep(seqdata, left=left, gaps=gaps, right=right, void=void, nr=nr)
+	if (any(is.na(seqdata)))
+		seqdata <- seqprep(seqdata, left=left, gaps=gaps, right=right, void=void, nr=nr)
 
 	## ======================================
 	## DEFINING THE CLASS AND SOME ATTRIBUTES
@@ -57,7 +58,7 @@ seqdef <- function(data, var=NULL, informat='STS', stsep='-',
 	attr(seqdata,"nr") <- nr
 
 	## 
-	if (is.null(states)) {
+	if (missing(states)) {
 		message(" [>] distinct states appearing in the data: ",paste(statl,collapse="/"))
 		attr(seqdata,"alphabet") <- plevels
 		}
@@ -70,7 +71,7 @@ seqdef <- function(data, var=NULL, informat='STS', stsep='-',
 	nbstates <- length(alphabet)
 
 	if (nbstates==1) stop("alphabet has only one state!")
-	if (nbstates>12 & is.null(cpal)) 
+	if (nbstates>12 && missing(cpal)) 
 		stop("Can not attribute automatic color palete, number of states too high. Please specify one using 'cpal' option!")
 
 	message(" [>] alphabet: ",paste(1:nbstates,alphabet,collapse=" ",sep="="))
@@ -78,7 +79,7 @@ seqdef <- function(data, var=NULL, informat='STS', stsep='-',
 	## ==========================================
 	## COLOR PALETTE AND STATES LABELS ATTRIBUTES
 	## ==========================================
-	if (is.null(cpal)) {
+	if (missing(cpal)) {
 		if (nbstates==2) attr(seqdata,"cpal") <- brewer.pal(3,"Accent")[1:2]
 		else if (nbstates<=8) attr(seqdata,"cpal") <- brewer.pal(nbstates,"Accent")
 		else if (nbstates>8 & nbstates<=12) attr(seqdata,"cpal") <- brewer.pal(nbstates,"Set3")
@@ -87,7 +88,7 @@ seqdef <- function(data, var=NULL, informat='STS', stsep='-',
 
 	attr(seqdata,"missing.color") <- missing.color
 
-	if (!is.null(labels)) attr(seqdata,"labels") <- labels
+	if (!missing(labels)) attr(seqdata,"labels") <- labels
 	else attr(seqdata,"labels") <- alphabet
 	labels <- attr(seqdata,"labels")
 
@@ -96,7 +97,7 @@ seqdef <- function(data, var=NULL, informat='STS', stsep='-',
 	## =====
 	## Stats
 	## =====
-	nbseq <- seqdim(seqdata)[1]
+	nbseq <- nrow(seqdata)
 	seql <- seqlength(seqdata)
 
 	message(" [>] ", nbseq, " sequences in the data set")
@@ -105,7 +106,7 @@ seqdef <- function(data, var=NULL, informat='STS', stsep='-',
 	## ==================================
 	## Converting each column to a factor
 	## ==================================
-	for (i in 1:seqdim(seqdata)[2]) {
+	for (i in 1:ncol(seqdata)) {
 		seqdata[,i] <- factor(seqdata[,i], 
 			levels=c(plevels,nr,void),
 			labels=c(attr(seqdata,"alphabet"),nr,void))
@@ -114,7 +115,7 @@ seqdef <- function(data, var=NULL, informat='STS', stsep='-',
 	## ======================
 	## Rows and columns names
 	## ======================
-	if (!is.null(cnames)) colnames(seqdata) <- cnames
+	if (!missing(cnames)) colnames(seqdata) <- cnames
 	else {
 		if (is.null(cntmp)) 
 			colnames(seqdata) <- paste("T",start:(max(seql)+start-1),sep="")
@@ -123,7 +124,7 @@ seqdef <- function(data, var=NULL, informat='STS', stsep='-',
 		else colnames(seqdata) <- paste("T",start:(max(seql)+start-1),sep="")
 	}
 
-	rownames(seqdata) <- paste("[",1:seqdim(seqdata)[1],"]",sep="")
+	rownames(seqdata) <- paste("[",1:nbseq,"]",sep="")
 	
 	## ======================
 	## Returning the object

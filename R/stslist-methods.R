@@ -22,9 +22,9 @@ print.stslist <- function(x,format='STS', extended=FALSE, ...) {
 	}
 }
 
-plot.stslist <- function(x,...) {
-	seqiplot(x)
-}
+## plot.stslist <- function(x,...) {
+##	seqiplot(x)
+## }
 
 "[.stslist" <- function(x,i,j,drop=FALSE) {
 	## Specialized only for column subscript

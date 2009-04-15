@@ -3,7 +3,7 @@
 \alias{print.seqdiff}
 \alias{plot.seqdiff}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Decompose the diffences between groups of sequences}
+\title{Decompose the difference between groups of sequences}
 \description{
   Decompose the difference between groups of sequences
 }
@@ -19,15 +19,15 @@ seqdiff(seqdata, group, cmprange = c(0, 1),
   \item{seqdist_arg}{argument passed directly to seqdist as a list}
 }
 \details{
-  Analyse for each timestamp the pseudo-variance of a subsequence (defined by \code{cmprange}) explained by the \code{group} variable. 
-  The method compute a distance matrix, using \code{\link{seqdist}} for each timestamp and then apply dissassoc to compute the pseudo variance explained.
+  Analyse for each timestamp the discrepancy of a subsequence (defined by \code{cmprange}) explained by the \code{group} variable.
+  The method compute a distance matrix, using \code{\link{seqdist}} for each timestamp and then apply dissassoc to compute the discrepancy explained.
   
   There are print and plot method for the result returned.
 }
 \value{
   A \code{seqdiff} object, with the following item:
   \item{stat}{A \code{data.frame} with tree statistics, PseudoF, PseudoR2 and PseudoT for each timestamp of the sequence, see \code{\link{dissassoc}}}
-  \item{variance}{A \code{data.frame} with the variance of each \code{group} defined by the \code{group} variable and for the whole population at each timestamp}
+  \item{variance}{A \code{data.frame} with the discrepancy of each \code{group} defined by the \code{group} variable and for the whole population at each timestamp}
 }
 \seealso{\code{\link{dissassoc}} to analyse the association with the whole sequence}
 \examples{

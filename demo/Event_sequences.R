@@ -3,42 +3,37 @@ oask <- devAskNewPage(dev.interactive(orNone = TRUE))
 
 library(TraMineR)
 data(actcal)
-transition <- seqetm(seqdef(actcal[,13:24]), method="transition")
-transition[1,1:4] <- c("FullTime"         , "Decrease,PartTime",
-     "Decrease,LowPartTime", "Stop")
-transition[2,1:4] <- c("Increase,FullTime", "PartTime"         ,
-     "Decrease,LowPartTime", "Stop")
+actcal.seq <- seqdef(actcal[,13:24])
+transition <- seqetm(actcal.seq, method="transition")
+transition[1,1:4] <- c("FullTime", "Decrease,PartTime",
+		"Decrease,LowPartTime", "Stop")
+transition[2,1:4] <- c("Increase,FullTime", "PartTime",
+		"Decrease,LowPartTime", "Stop")
 transition[3,1:4] <- c("Increase,FullTime", "Increase,PartTime",
-    "LowPartTime"         , "Stop")
-transition[4,1:4] <- c("Start,FullTime"   , "Start,PartTime"   ,
-    "Start,LowPartTime"   , "NoActivity")
-transition
-actcal.tse <- seqformat(actcal,var=13:24,from='STS',to='TSE', tevent=transition)
+		"LowPartTime", "Stop")
+transition[4,1:4] <- c("Start,FullTime", "Start,PartTime",
+		"Start,LowPartTime", "NoActivity")
+print(transition)
 
+actcal.seqe <- seqecreate(actcal.seq, tevent=transition)
 
-actcal.seqe <- seqecreate(actcal.tse)
-
-sl <- numeric()
-sl[1:2000] <- 12
-# All sequences are of length 12
-seqesetlength(actcal.seqe,sl)
-actcal.seqe[1:10]
-
-fsubseq <- seqefsub(actcal.seqe,minSupport=100)
-msubcount<-seqeapplysub(fsubseq, method="count")
+fsubseq <- seqefsub(actcal.seqe, minSupport=100)
+msubcount <- seqeapplysub(fsubseq, method="count")
 #First lines...
-msubcount[1:9,6:7]
+msubcount[1:9, 6:7]
 ## Using time constraints
 ## Searching subsequences starting in summer (between June and September)
-fsubseq <- seqefsub(actcal.seqe, minSupport=10, constraint=seqeconstraint(ageMin=6, ageMax=9))
+fsubseq <- seqefsub(actcal.seqe, minSupport=10,
+		constraint=seqeconstraint(ageMin=6, ageMax=9))
 fsubseq[1:10]
 ## Searching subsequences occurring in summer (between June and September)
-fsubseq <- seqefsub(actcal.seqe, minSupport=10, constraint=seqeconstraint(ageMin=6, ageMax=9,
-                    ageMaxEnd=9))
+fsubseq <- seqefsub(actcal.seqe, minSupport=10,
+		constraint=seqeconstraint(ageMin=6, ageMax=9, ageMaxEnd=9))
 fsubseq[1:10]
 ## Searching subsequences enclosed in a 6 months period
 ## and with a maximum gap of 2 months
-fsubseq <- seqefsub(actcal.seqe, minSupport=10, constraint=seqeconstraint(maxGap=2, windowSize=6))
+fsubseq <- seqefsub(actcal.seqe, minSupport=10,
+		constraint=seqeconstraint(maxGap=2, windowSize=6))
 fsubseq[1:10]
 
 ## Looking for frequent subsequences
@@ -52,7 +47,7 @@ seqecontain(fsubseq, c("FullTime"))
 
 
 ## Looking for the discriminating subsequences for sex
-sexsubseq<- seqecmpgroup(fsubseq, group=actcal$sex,
+sexsubseq <- seqecmpgroup(fsubseq, group=actcal$sex,
                     method="bonferroni")
 ## Plotting the ten most discriminating subsequences in 2 x 4 format
 plot(sexsubseq[1:10])

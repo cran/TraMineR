@@ -3,8 +3,8 @@
 ## ============================================
 
 seqformat <- function(data, var=NULL, id=NULL, 
-	from=NULL, to=NULL, compressed=FALSE,
-	nrep=NULL, tevent=NULL, stsep, covar=NULL,
+	from, to, compressed=FALSE,
+	nrep=NULL, tevent, stsep, covar=NULL,
 	SPS.in=list(xfix="()", sdsep=","),
 	SPS.out=list(xfix="()", sdsep=","),
 	begin=NULL, end=NULL, status=NULL, 
@@ -12,10 +12,19 @@ seqformat <- function(data, var=NULL, id=NULL,
 	fillblanks=NULL, tmin=NULL, tmax=NULL) {
 
 	## Checking the format
-	listform <- c("STS","SPS","SPELL","DSS","SRS","TSE")
-	if (!from %in% listform | !to %in% listform)	
-		stop("input and output formats must be one of: ", listform)
+	list.from <- c("STS","SPS","SPELL")
+	list.to <- c("STS","SPS","DSS","SRS","TSE")
 
+	if (inherits(data,"stslist")) {
+		message(" [>] input is a sequence object, converting from STS format")
+		from <- "STS"
+	} else if (missing(from) || !from %in% list.from)	
+		stop("input format must be one of: ", paste(list.from), call.=FALSE)
+
+	if (missing(to) || !to %in% list.to)	
+		stop("output format must be one of: ", paste(list.to), call.=FALSE)
+
+	## 
 	if (!is.null(covar)) covariates <- subset(data,,covar)
 
 	if (!is.null(id)) ident <- as.matrix(subset(data,,id))
@@ -28,11 +37,19 @@ seqformat <- function(data, var=NULL, id=NULL,
 		## Extracting the sequences from the data set
 		seqdata <- seqxtract(data, var)
 
-		if (missing(stsep)) {
-			sf <- seqfcheck(seqdata)
-			if (sf %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=sf)
+		if (inherits(data,"stslist")) {
+			message(" [>] converting special codes for missing states to NA's")
+			seqdata[seqdata==attr(data,"nr")] <- NA
+			seqdata[seqdata==attr(data,"void")] <- NA
+		} 
+		else {
+			if (missing(stsep)) {
+				sf <- seqfcheck(seqdata)
+				if (sf %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=sf)
+			}
+			else 
+				seqdata <- seqdecomp(seqdata,sep=sf)
 		}
-		else seqdata <- seqdecomp(seqdata,sep=sf)
 
 		trans <- seqdata
 	}
@@ -40,7 +57,7 @@ seqformat <- function(data, var=NULL, id=NULL,
 	## ========
 	## From SPS
 	## ========
-	if (from=="SPS") {
+	else if (from=="SPS") {
 		## Extracting the sequences from the data set
 		seqdata <- seqxtract(data, var)
 
@@ -53,7 +70,7 @@ seqformat <- function(data, var=NULL, id=NULL,
 	## ==========
 	## From SPELL
 	## ==========
-	if (from=="SPELL") {
+	else if (from=="SPELL") {
 		if (!is.null(var)) data <- subset(data,,var)
 
 		if (!is.null(id)) ident <- as.matrix(subset(data,,id))
@@ -98,7 +115,7 @@ seqformat <- function(data, var=NULL, id=NULL,
 		}
 
 	## To Distinct-State-Sequence format
-	if (to=="DSS") {
+	else if (to=="DSS") {
 		out <- STS_to_DSS(trans)
 		nbout <- seqdim(out)[1]
 
@@ -106,23 +123,27 @@ seqformat <- function(data, var=NULL, id=NULL,
 	}
 
 	## STS
-	if (to=="STS") {
+	else if (to=="STS") {
 		out <- trans
 		nbout <- seqdim(out)[1]
 
 		if (compressed) out <- seqconc(out)
 		}
 
-	if (to=="SRS") {
+	else if (to=="SRS") {
 		out <- STS_to_SRS(trans,nrep)
 		if (!is.null(covar)) out <- merge(out,data.frame(id=seq(1:nbin),covariates))
 		nbout <- nrow(out)
 	}
 
-	if (to=="TSE") {
+	else if (to=="TSE") {
+		if (missing(tevent))
+			stop(" [!] you must provide a transition-definition matrix (see seqetm)", call.=FALSE)
 		out <- STS_to_TSE(trans, ident, tevent)
 		nbout <- nrow(out)
 		}
+	else 
+		stop("Output format is unsupported")
 
 	if (to!="STS") message(" [>] STS sequences converted to ",nbout," ", to," seq./rows")
 	return(out)

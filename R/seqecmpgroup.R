@@ -25,7 +25,7 @@ seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL){
       names(resid)<-paste("Resid",names(chi$residuals[,"1"]),sep=".")
       freq<-as.list(chi$observed[,"1"]/rowSums(chi$observed))
       names(freq)<-paste("Freq",names(chi$residuals[,"1"]),sep=".")
-      return(data.frame(p.value=chi$p.value,statistic=chi$statistic,index=index,freq,resid))
+      return(data.frame(p.value=chi$p.value,statistic=chi$statistic,index=index,freq,resid, check.names=FALSE))
       #return(data.frame(p.value=chi$p.value,statistic=chi$statistic,index=index))
     }
     vals<-numeric(length(levels(group)))
@@ -33,7 +33,7 @@ seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL){
     names(vals)<-paste("Resid",levels(group),sep=".")
     names(vals2)<-paste("Freq",levels(group),sep=".")
     vals2[]<-sp/length(group)
-    return(data.frame(p.value=NA,statistic=NA,index=index,as.list(vals2),as.list(vals)))
+    return(data.frame(p.value=NA,statistic=NA,index=index,as.list(vals2),as.list(vals), check.names=FALSE))
 #    return(data.frame(p.value=NA,statistic=NA,index=index))
   }
   if(is.null(pvalue.limit))pvalue.limit<- 2
@@ -62,7 +62,7 @@ seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL){
 	}
 	subseqnum<-1:sum(res[,1]<=pvalue.limit)
   cres<-order(as.double(res[,1]),decreasing =decreasing)[subseqnum]#[!is.na(as.double(res$stat))]
-  data<-data.frame(as.data.frame(subseq$data[cres,]),res[cres,])
+  data<-data.frame(Support=as.data.frame(subseq$data[cres,"Support"],optional=TRUE),res[cres,], check.names=FALSE)
   rownames(data)<-1:nrow(data)
   ret<-createsubseqelist(subseq$seqe,subseq$constraint,subseq$subseq[cres],data=data,type=method)
   ret$labels<-levels(group)

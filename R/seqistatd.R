@@ -2,7 +2,7 @@
 ## State distribution for each individual
 ## ======================================
 
-seqistatd <- function(seqdata) {
+seqistatd <- function(seqdata, with.miss=FALSE) {
 
 	if (!inherits(seqdata,"stslist")) {
 		stop("data is not a sequence object, see seqdef function to create one")
@@ -10,12 +10,18 @@ seqistatd <- function(seqdata) {
 	}
 
 	statl <- alphabet(seqdata)
+	if (with.miss) 
+		statl <- c(statl, attr(seqdata,"nr"))
+
 	nbstat <- length(statl)
-	iseqtab <- matrix(nrow=seqdim(seqdata)[1],ncol=nbstat)
+	nbseq <- nrow(seqdata)
+
+	iseqtab <- matrix(nrow=nbseq, ncol=nbstat)
 
 	colnames(iseqtab) <- statl
+	rownames(iseqtab) <- rownames(seqdata)
 
-	message(" [>] Computing state distribution for ",seqdim(seqdata)[1]," sequences ...")
+	message(" [>] Computing state distribution for ", nbseq," sequences ...")
 
 	for (i in 1:nbstat) {
 		iseqtab[,i] <- apply(seqdata,1,function(x) sum(x==statl[i],na.rm=TRUE))
