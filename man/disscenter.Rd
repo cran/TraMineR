@@ -6,13 +6,13 @@
  Compute the dissimilarity between each objects and group centers according to a matrix of dissimilarity.
 }
 \usage{
-disscenter(diss, group=NULL, medoids.index=FALSE)
+disscenter(diss, group=NULL, medoids.index=NULL)
 }
 \arguments{
   \item{diss}{A matrix of dissimilarity such as the one computed by \code{\link{seqdist}}, or a \code{dist} object (see \code{\link{dist}}}
   \item{group}{If null, only one group is considered, otherwise group to compute center}
 %  \item{trim}{Percentage of individuals that are considered as outliers and included in computation of distance to center}
-  \item{medoids.index}{Logical: If TRUE, return the index of the first encountered most central sequence. One index per group is returned.}
+  \item{medoids.index}{If NULL, return dissimilarity to center. If equal to "first", return the index of the first encountered most central sequence. One index per group is returned. If equal to "all", all medoids index are returned. If \code{group} is set, one list per group is returned.}
 %  \item{max.iter}{Maximum number of iteration to trim the outliers}
 }
 \details{
@@ -61,5 +61,13 @@ dc <- disscenter(mvad.lcs, group=mvad$gcse5eq)
 
 ## Ploting distribution of dissimilarity  to center 
 boxplot(dc~mvad$gcse5eq, col="cyan")
+
+## Retrieving index of the first medoids, one per group
+dc <- disscenter(mvad.lcs, group=mvad$Grammar, medoids.index="first")
+print(dc)
+
+## Retrieving index of all medoids in each group
+dc <- disscenter(mvad.lcs, group=mvad$Grammar, medoids.index="all")
+print(dc)
 }
 

@@ -33,8 +33,6 @@ export(
 	seqmtplot,
 	seqnum,
 	seqpm,
-	## seqrep,
-	## seqrplot,
 	seqsep,
 	seqstatd,
 	seqstatl,

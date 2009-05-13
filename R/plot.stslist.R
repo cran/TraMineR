@@ -4,8 +4,7 @@
 
 plot.stslist <- function(x, group=NULL, type="i", title=NULL, tlim=NULL, 
 	pbarw=FALSE, sortv=NULL, 
-	method="modseq", dist.matrix=NULL,
-	cpal=NULL, missing.color=NA, 
+	cpal=NULL, missing.color=NULL, 
 	ylab, yaxis=NULL, axes="all", xtlab=NULL, cex.plot=1,
 	withlegend="auto", ltext=NULL, cex.legend=1, 
 	use.layout=(!is.null(group) | withlegend!=FALSE), legend.prop=NA, rows=NA, cols=NA, ...) {
@@ -100,29 +99,14 @@ plot.stslist <- function(x, group=NULL, type="i", title=NULL, tlim=NULL,
 			TraMineR.dplot(subdata, np, title[np], cpal, ylab, yaxis, axisp, xtlab, cex.plot, ...)
 		## Sequence frequency plot
 		else if (type=="f")
-			TraMineR.fplot(subdata, np, title=title[np], tlim=tlim, cpal, pbarw, ylab, yaxis, axisp, xtlab, 					cex.plot, ...)
+			TraMineR.fplot(subdata, np, title=title[np], tlim=tlim, statl, cpal, pbarw, ylab, yaxis, axisp, xtlab, 					cex.plot, ...)
 		## Sequence index plot
 		else if (type=="i")
 			TraMineR.iplot(subdata, np, title=title[np], tlim=tlim, sortv=subsort, 
-				cpal, ylab, yaxis, axisp, xtlab, cex.plot, ...)
+				statl, cpal, ylab, yaxis, axisp, xtlab, cex.plot, ...)
 		## Mean times
 		else if (type=="mt")
 			TraMineR.mtplot(subdata, np, title=title[np], cpal, ylab, axisp, xtlab, cex.plot, ...)
-		## Representative sequence
-		else if (type=="r") {
-			## Selecting distances according to group
-			if (!is.null(dist.matrix)) {
-				subdist <- dist.matrix[gindex[[np]],gindex[[np]]]
-				dmax <- max(dist.matrix)
-			}
-			else {
-				subdist <- NULL
-				dmax=NULL
-			}
-
-			TraMineR.rplot(subdata, np, title=title[np], method=method, dist.matrix=subdist, 
-				pbarw=pbarw, dmax=dmax, cpal, ylab, axisp, xtlab, cex.plot, ...)
-		}
 	}	
 
 	## Plotting the legend

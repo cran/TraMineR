@@ -2,11 +2,10 @@
 ## PLot of the sequences frequency
 ## ================================
 
-TraMineR.fplot <- function(data, np, title, tlim, cpal, pbarw, ylab, yaxis, axisp, xtlab, cex.plot, ...) {
+TraMineR.fplot <- function(data, np, title, tlim, statl, cpal, pbarw, ylab, yaxis, axisp, xtlab, cex.plot, ...) {
 
 	n <- nrow(data)
 	seql <- ncol(data)
-	statl <- attr(data,"alphabet")
 
 	if (missing(ylab)) 
 		ylab <- paste("Cum. % freq. (n=",n,")",sep="")

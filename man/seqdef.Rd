@@ -9,7 +9,7 @@ Create a state sequence object with attributes such as alphabet, color palette a
 
 \usage{
 seqdef(data, var, informat="STS", stsep="-",
-	alphabet, states, start=1,
+	alphabet, states, id=NULL, start=1,
 	left=NA, right="DEL", gaps=NA, missing=NA, void="\%", nr="*",
 	cnames, cpal, missing.color="darkgrey", labels, ...)
 }
@@ -27,8 +27,12 @@ seqdef(data, var, informat="STS", stsep="-",
 
   \item{states}{an optional vector containing the labels for the states. Must have a length equal to the number of states in the data, and the labels must be ordered accordingly with the values returned by the \code{\link{seqstatl}} function.}
 
+  \item{id}{optinal vector containing the rownames of the sequence object. If \code{NULL}, rownames are labelled from 1 to number of sequences in the input data.}
+
 	\item{start}{starting time. For instance, if your sequences begin at age 15, you can specify 15. At this stage, used only for labelling column names.}
+
 	\item{left}{the behavior for missing values appearing before the first (leftmost) valid state in each sequence. See \cite{Gabadinho et al. (2008)} for more details on the options for handling missing values when defining sequence objects. By default, left missing values are treated as 'real' missing values and converted to the internal missing value code defined by the \code{nr} option.}
+
 	\item{right}{the behavior for missing values appearing after the last (rightmost) valid state in each sequence. See \cite{Gabadinho et al. (2008)} for more details on the options for handling missing values when defining sequence objects. By default, right missing values are treated as 'void' elements and converted to the internal code for void values defined by the \code{void} option.}
 	\item{gaps}{the behavior for missing values appearing inside the sequences, i.e. after the first (leftmost) valid state and before the last (rightmost) valid state of each sequence. See \cite{Gabadinho et al. (2008)} for more details on the options for handling missing values when defining sequence objects. By default, gap missing values are treated as 'real' missing values and converted to the internal missing value code defined by the \code{nr} option.}
 	\item{missing}{the code used for missing values in the input data. When specified, all cells containing this value will be replaced by NA's, the internal R code for missing values. If 'missing' is not specified, cells containing NA's are considered to be missing values.}

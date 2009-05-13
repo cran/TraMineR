@@ -3,7 +3,7 @@
 ## ========================================
 
 seqdef <- function(data, var, informat="STS", stsep="-", 
-	alphabet, states, start=1, 
+	alphabet, states, id=NULL, start=1, 
 	left=NA, right="DEL", gaps=NA, missing=NA, void="%", nr="*",
 	cnames, cpal, missing.color="darkgrey", labels, ...) {
 
@@ -124,8 +124,11 @@ seqdef <- function(data, var, informat="STS", stsep="-",
 		else colnames(seqdata) <- paste("T",start:(max(seql)+start-1),sep="")
 	}
 
-	rownames(seqdata) <- paste("[",1:nbseq,"]",sep="")
-	
+	if (!is.null(id))
+		rownames(seqdata) <- id
+	else 
+		rownames(seqdata) <- paste("[",1:nbseq,"]",sep="")
+
 	## ======================
 	## Returning the object
 	## ======================

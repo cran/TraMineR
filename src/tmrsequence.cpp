@@ -4,7 +4,7 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include "eventdictionary.h"
-//#include <math.h>
+#include <Rmath.h>
 
 /**
 	tmrsequence build a sequence obect and return an external pointer to that object
@@ -314,7 +314,7 @@ extern "C" {
                     matrix[j+i*ns]=sub->count(s,mGap,wSize,aMin,aMax, aMaxEnd);
                     break;
                 case 2:
-                    matrix[j+i*ns]=fmin(1.0,sub->count(s,mGap,wSize,aMin,aMax, aMaxEnd));
+                    matrix[j+i*ns]=fmin2(1.0,sub->count(s,mGap,wSize,aMin,aMax, aMaxEnd));
                     break;
                 case 3:
                     matrix[j+i*ns]=sub->first_occurence(s,mGap,wSize, aMin, aMax, aMaxEnd);

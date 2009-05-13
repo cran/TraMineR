@@ -48,7 +48,7 @@ seqdiff <- function(seqdata, group, cmprange=c(0, 1),
 ## Print method for seqdiff
 ###########################
 print.seqdiff <- function(x, ...) {
-	message("\nStatitistics:")
+	message("\nStatistics:")
 	print(x$stat, ...)
 	message("\nVariances:")
 	print(x$variance, ...)
