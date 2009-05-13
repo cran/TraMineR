@@ -80,8 +80,9 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		birthyrid1 <- pdata[,1]
 		birthyr1 <- pdata[,2]
         }
-	######################
-	# individual loop
+	## ===============
+	## individual loop
+	## ===============
 	for (i in 1:nbseq) {
 		spell <- seqdata[seqdata[,id]==lid[i],]
 		# number of spell for individual i
@@ -91,19 +92,19 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 			age1 <- spell[1,begin]
 		}
 		# if we need to convert years to ages, we need the birthyear
-		if(frmoption=="year2age") {
+		if (frmoption=="year2age") {
 			birthy <- birthyr1[birthyrid1==lid[i]]
 			age1 <- spell[1,begin] - birthy
 		}
 		# if we convert from ages to years, we need the birthyear, but don't need to substract it to the time of beginning
-		if(frmoption=="age2year") {
+		if (frmoption=="age2year") {
 			birthy <- birthyr1[birthyrid1==lid[i]]
 			#print("birthyr")
 			#print(birthy)
 			age1 <- spell[1,begin]
 		}
 		if (is.na(age1)) { age1 <- -1 }
-	
+
 		# we fill the line with NAs
 		#seqresult[i,1:(limit+1)] <- c(rep(NA,(limit+1)))
 		seqresult[i,1:(limit)] <- c(rep(NA,(limit)))
@@ -200,7 +201,11 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 				}
 			 }
 		}
-	}	
+	}
+
+	## setting id as rowname 
+	row.names(seqresult) <- lid
+	
 	return(seqresult)
 }
 

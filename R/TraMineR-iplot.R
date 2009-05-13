@@ -2,11 +2,10 @@
 ## Sequence index plot
 ## ====================
 
-TraMineR.iplot <- function(data, np, title, tlim, sortv, cpal, ylab, yaxis, axisp, xtlab, cex.plot, ...) {
+TraMineR.iplot <- function(data, np, title, tlim, sortv, statl, cpal, ylab, yaxis, axisp, xtlab, cex.plot, ...) {
 
 	n <- nrow(data)
 	seql <- ncol(data)
-	statl <- attr(data,"alphabet")
 
 	## Range 
 	if (is.null(tlim)) tlim <- 1:10

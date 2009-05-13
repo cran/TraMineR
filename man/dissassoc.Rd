@@ -1,8 +1,8 @@
+\encoding{latin1}
 \name{dissassoc}
 \alias{dissassoc}
 \alias{hist.dissassoc}
 \alias{print.dissassoc}
-\encoding{latin1}
 \title{Analysis of discrepancy based on dissimilarity measure}
 \description{
 Compute the discrepancy (defined by a dissimilarity measure) explained by a categorical variable.
@@ -30,8 +30,8 @@ Returns an object of class \code{dissassoc} with the following components:
   \item{perms}{The permutation object, see \code{\link{boot}}}
 }
 \references{
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. MÃ¼ller (2009).
-  Analyse de dissimilaritÃ©s par arbre d'induction.
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009).
+  Analyse de dissimilarités par arbre d'induction.
   \emph{Revue des Nouvelles Technologies de l'Information}, EGC'2009.
 
   Batagelj, V. (1988). Generalized Ward and related clustering problems. In H. Bock (Ed.),

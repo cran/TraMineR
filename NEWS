@@ -1,3 +1,15 @@
+## ==========
+Version 1.2-1
+
+Various changes:
+- seqdef(): 'id' option added to the seqdef function to set the rownames of the sequence object
+- disscenter(): additional option for 'medoid.index' argument allow to return the indexes of all medoids (and not only the first one).
+
+Minor bugs fixed:
+- Plotting missing states with seqiplot and seqfplot functions 
+- Sum of transition rates with sequences of different lengths not equal to 1
+
+
 ## ========
 Version 1.2
 

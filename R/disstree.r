@@ -58,7 +58,7 @@ DTNdisstreeleaf <- function(node, co) {
 ## Internal test for computing association
 ###########################
 DTNdissassoc <- function(dmat, grp, indiv, R) {
-	#Significativity can be computed comparing only SCres, sort only starting at 750 indiv
+	## Significativity can be computed comparing only SCres, sort only starting at 750 indiv
 	internalDTNdissassoc <- function(grp, ind, indiv, dmat, grp2, use.sort) {
 		 if (use.sort) {
 				groupe1 <- sort.int(indiv[ind[grp]], method="quick")
@@ -86,7 +86,7 @@ disstree <- function(formula, data=NULL, minSize=0.05, maxdepth=5, R=1000, pval=
 		dissmatrix <- as.matrix(dissmatrix)
  	}
 	formula[[2]] <- NULL
-	#Model matrix from forumla
+	## Model matrix from forumla
 	predictor <- model.frame(formula, data, drop.unused.levels = TRUE, na.action=NULL)
 
 	pop <- nrow(dissmatrix)
@@ -119,12 +119,12 @@ DTNBuildNode <- function(dmat, pred, minSize, ind, vardis,
 			return(node)
 	}
 	for (p in 1:ncol(pred)) {
-		#cat("Checking", varnames[[p]], "...\n")
+		## cat("Checking", varnames[[p]], "...\n")
 		spl <- DTNGroupFactorBinary(dmat, SCres, pred[, p], minSize, varnames[[p]], ind)
 		if (!is.null(spl) && (is.null(bestSpl) || spl$SCres<bestSpl$SCres)) {
 			bestSpl <- spl
 			SCres <- spl$SCres
-			#cat(varnames[[p]], " Ok", "\n")
+			## cat(varnames[[p]], " Ok", "\n")
 		}
 	}
 	if (is.null(bestSpl)) {
@@ -132,7 +132,7 @@ DTNBuildNode <- function(dmat, pred, minSize, ind, vardis,
 	}
 	if (nbperm>1) {
 		spval <- DTNdissassoc(dmat, bestSpl$variable, ind, R=nbperm)
-		#print(paste(label, bestSpl$varname, spval))
+		## print(paste(label, bestSpl$varname, spval))
 		if (spval>pval)return(node)
 	}
 
@@ -159,7 +159,7 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varnam
 	nbGrp <- length(lgrp)
 	has.na <- FALSE
 	llgrp <- lgrp
-	#Here we add a group for missing values
+	## Here we add a group for missing values
 	if (sum(is.na(grp))>0) {
 		nbGrp <- length(lgrp)+1
 		has.na <- TRUE
@@ -170,12 +170,12 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varnam
 	grpSize <- numeric(length=nbGrp)
 	grpSize[] <- 0
 	for (i in 1:length(lgrp)) {
-		#on crée le groupe en question
+		## on crée le groupe en question
 		grpCond[[i]] <- (grp==lgrp[i])
 		grpCond[[i]][is.na(grpCond[[i]])] <- FALSE
 		grpSize[i] <- sum(grpCond[[i]])
 	}
-	#Treating missing values
+	## Treating missing values
 	if (has.na) {
 		grpCond[[nbGrp]] <- is.na(grp)
 		grpSize[nbGrp] <- sum(grpCond[[nbGrp]])
@@ -187,24 +187,24 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varnam
 				grpindiv2 <- ind[grpCond[[j]]]
 				r <- .Call("tmrinterinertia", dissmatrix, as.integer(grpindiv1),
 						as.integer(grpindiv2), PACKAGE="TraMineR")
-				#using only one half of the matrix
+				## using only one half of the matrix
 				inertiaMat[j, i] <- r
 			}
 		r <- .Call("tmrsubmatrixinertia", dissmatrix,
 				as.integer(grpindiv1), PACKAGE="TraMineR")*sum(grpCond[[i]])
 		inertiaMat[i, i] <- r
 	}
-	#FIXME This step is missing in the loop
+	## FIXME This step is missing in the loop
 	inertiaMat[nbGrp, nbGrp] <- .Call("tmrsubmatrixinertia", dissmatrix,
 			as.integer(ind[grpCond[[nbGrp]]]), PACKAGE="TraMineR")*sum(grpCond[[nbGrp]])
-	#Computing residuals
+	## Computing residuals
 	SCres <- sum(diag(inertiaMat)/grpSize)
 	if (SCres>currentSCres)return(NULL)
-	#Fonction to comput inertia based on inertiaMat
+	## Fonction to comput inertia based on inertiaMat
 	inertiaFunction <- function(inertiaMat, co, pop) {
-		#Take care to add one
-		#return(((sum(inertiaMat[co, co])+sum(diag(inertiaMat[co, co])))/2)/pop)
-		#New way, inertiaMat is triangular -> we can just sum the matrix
+		## Take care to add one
+		## return(((sum(inertiaMat[co, co])+sum(diag(inertiaMat[co, co])))/2)/pop)
+		## New way, inertiaMat is triangular -> we can just sum the matrix
 		return(sum(inertiaMat[co, co])/pop)
 	}
 	bestSCres <- currentSCres
@@ -283,23 +283,23 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varnam
 ## Print method for disstree
 ###########################
 print.disstree <- function(x, quote=FALSE, digits=3, ...) {
-	message("Dissimilarity tree")
-	message(paste("Global R2:", format(x$adjustment$stat$PseudoR2, digits =digits)))
+	cat("Dissimilarity tree\n")
+	cat(paste("Global R2:", format(x$adjustment$stat$PseudoR2, digits =digits),"\n"))
 	print(x$root, quote=quote, digits=digits, ...)
-}
 
+}
 ###########################
 ## Internal print method for disstree
 ###########################
 print.DissTreeNode <- function(x, quote=FALSE, digits=3, ...) {
 	gap <- character(x$depth)
-	gap[] <- "	"
+	gap[] <- "      "
 	string <- paste(paste(gap, collapse=" "), "|--", x$label, "[", length(x$ind), "] var:",
-			format(x$vardis, digits =digits), collapse="")
-	message(string)
+	format(x$vardis, digits =digits), collapse="")
+	cat(paste(string,"\n"))
 	if (!is.null(x$split)) {
-		message(paste(paste(gap, collapse=" "), " ", "|->", x$split$varname, " R2:",
-				format(x$R2, digits=digits), collapse=""))
+		cat(paste(paste(gap, collapse=" "), " ", "|->", x$split$varname, " R2:",
+			format(x$R2, digits=digits), "\n", collapse=""))
 		for (i in x$children) {
 			print(i, quote=quote, digits=digits, ...)
 		}

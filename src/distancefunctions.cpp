@@ -36,6 +36,7 @@ static R_INLINE double normalizeDistance(const double& rawdist, const double& ma
         if (maxdist==0)return 1;
         return rawdist/maxdist;
     }
+	return rawdist;
 }
 
 static R_INLINE void setDistance(const int &is,const int &js,const int* magicIndex, const int * magicSeq, const int& finalnseq, SEXP& ans, const double& cmpres) {
@@ -111,7 +112,7 @@ extern "C" {
                 }
               }
             }
-            maxscost=fmin(maxscost,2*indel);
+            maxscost=fmin2(maxscost,2*indel);
             //Initialisation, peut �tre fait qu'une fois
             for (i=0;i<fmatsize;i++) {
                 fmat[TMRMATRIXINDEXC(i,0,fmatsize)]=fmat[TMRMATRIXINDEXC(0,i,fmatsize)]=i*indel;
@@ -176,7 +177,7 @@ extern "C" {
                     m--;
                     n--;
                     //Warning! m and n decreased!!!!!
-                    maxpossiblecost=abs(n-m)*indel+maxscost*fmin((double)m,(double)n);
+                    maxpossiblecost=abs(n-m)*indel+maxscost*fmin2((double)m,(double)n);
                     cmpres=normalizeDistance(fmat[TMRMATRIXINDEXC(m-prefix,n-prefix,fmatsize)], maxpossiblecost, m, n, norm);
 
                 } else if (disttype>1) { //BEGIN LCP

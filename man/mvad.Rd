@@ -18,9 +18,8 @@ joblessness  (JL) \cr
 school (SC) \cr
 training (TR)\cr
 \cr
-The data set contains also the following binary covariates:\cr
+The data set contains also ids and sample weights as well as the following binary covariates:\cr
 \cr
-weight\cr
 male\cr
 catholic\cr
 Belfast, N.Eastern, Southern, S.Eastern, Western (location of school, one of five Education and Library Board areas in Northern Ireland)\cr

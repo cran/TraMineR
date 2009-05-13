@@ -15,11 +15,11 @@ seqiplot(seqdata, group=NULL, title=NULL, tlim=NULL, sortv=NULL,  ...)
 \arguments{
 	\item{seqdata}{a sequence object as defined by the the \code{\link{seqdef}} function.}
 
-	\item{group}{Plots one plot for each level of the factor given as argument.}
+	\item{group}{plots one plot for each level of the factor given as argument.}
 
 	\item{title}{title for the graphic. Default to NULL.}
 
-	\item{tlim}{interval representing the range to be plotted. If \code{NULL} (default) tlim is set to \code{1:10}, ie the first 10 sequences are displayed. Set to 0 if you want to plot all sequences in 'seqdata'.}
+	\item{tlim}{interval representing the range to be plotted. If \code{NULL} (default) \code{tlim} is set to \code{1:10}, ie the first 10 sequences are displayed. Set to 0 if you want to plot all sequences in 'seqdata'.}
 
 	\item{sortv}{name of an optional variable used to sort the data before plotting.}
 
@@ -30,9 +30,9 @@ seqiplot(seqdata, group=NULL, title=NULL, tlim=NULL, sortv=NULL,  ...)
 
 \references{
 Brzinsky-Fay, C., U. Kohler, and M. Luniak (2006). Sequence analysis with Stata. \emph{The Stata Journal} 6 (4), 435-460.
-
+\cr
 Gauthier, J.-A. (2007). \emph{Empirical categorizations of social trajectories: A sequential view on the life course}. thèse, Université de Lausanne, Faculté des sciences sociales et politique (SSP), Lausanne.
-
+\cr
 Scherer, S. (2001). Early career patterns: A comparison of Great Britain and West Germany. \emph{European Sociological Review} 17 (2), 119-144.
 }
 
@@ -46,7 +46,7 @@ seqiplot(seqdef(actcal,13:24))
 ## using 'border=NA' and 'space=0' options to have a nicer plot
 data(biofam)
 biofam.lab <- c("Parent", "Left", "Married", "Left+Marr",
-"Child", "Left+Child", "Left+Marr+Child", "Divorced")
+   "Child", "Left+Child", "Left+Marr+Child", "Divorced")
 biofam.seq <- seqdef(biofam, 10:25, labels=biofam.lab)
 
 seqiplot(biofam.seq, tlim=0, border=NA, space=0, sortv=biofam$birthy)
@@ -55,6 +55,6 @@ seqiplot(biofam.seq, tlim=0, border=NA, space=0, sortv=biofam$birthy)
 ## grouped by levels of the 'gcse5eq' factor
 data(mvad)
 seqiplot(seqdef(mvad,15:86), group=mvad$gcse5eq, title="gcse5eq",
-tlim=0, border=NA, space=0)
+   tlim=0, border=NA, space=0)
 }
 \keyword{hplot}

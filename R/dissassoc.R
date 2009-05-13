@@ -4,6 +4,9 @@
 
 dissassoc <- function(diss, group , R=1000) {
 	#Notation comme pour l'ANOVA, SC=Inertia dans le sens du criète de Ward
+	if (inherits(diss, "dist")) {
+		diss <- dist2matrix(diss)
+	}
 	dissmatrix <- diss[!is.na(group), !is.na(group)]
 	SCtot <- .Call("tmrsubmatrixinertia", dissmatrix, 1:nrow(dissmatrix), PACKAGE="TraMineR")
 	n <- nrow(dissmatrix)

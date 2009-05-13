@@ -101,7 +101,7 @@ seqformat <- function(data, var=NULL, id=NULL,
 	## INTERNAL FORMAT
 	## ===============
 	rm(seqdata)
-	nbin <- seqdim(trans)[1]
+	nbin <- nrow(trans)
 	if (from != "STS") message(" [>] ", from," data converted into ",nbin," STS sequences")
 
 	## =============
@@ -125,7 +125,7 @@ seqformat <- function(data, var=NULL, id=NULL,
 	## STS
 	else if (to=="STS") {
 		out <- trans
-		nbout <- seqdim(out)[1]
+		nbout <- nrow(out)
 
 		if (compressed) out <- seqconc(out)
 		}

@@ -1,156 +1,271 @@
-#include<R.h>
+#include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <Rmath.h>
+#include <stdlib.h>
+#include <stack>
+#include <cmath>
+#include "salttseq.h"
 //#include <math.h>
-
-/**
-
-*/
 
 #define TMRMATRIXINDEXC(ligne, colone,len) (ligne)+(colone)*(len)
 //#define TMRMIN(a,b) ((a)<(b))?a:b
-static R_INLINE double normalizeDistance(const double& rawdist, const double& maxdist, const int& l1, const int& l2, const int&norm) {
-    if (rawdist==0)return 0;
-    switch (norm) {
-    case 0:
-        return rawdist;
-    case 1:
-        if (l1>l2)return rawdist/((double)l1);
-        else if (l2>0) return rawdist/((double)l2);
-        return 0;
-    case 2:
-        if (l1*l2==0) {
-            if (l1!=l2)return 1;
-            return 0;
-        }
-        return 1-((maxdist-rawdist)/(2*R_pow(((double)l1*l2),0.5)));
-    case 3:
-        if (maxdist==0)return 1;
-        return rawdist/maxdist;
-    }
-}
 
+
+
+static R_INLINE double computeDelta(double* previousmatrix, double * salttmatrix, const int& alphasize) {
+	int i, alphafois=alphasize*alphasize;
+	double delta=0;
+	double diff;
+	for(i=0;i<alphafois;i++) {
+		diff = (double)previousmatrix[i] - (double)salttmatrix[i];
+		delta = delta+(diff*diff);
+	}
+	delta=sqrt(delta/alphafois);
+	return delta;
+}
 
 extern "C" {
 
-    SEXP saltt(SEXP Ssequences, SEXP seqdim, SEXP lenS, SEXP indelS, SEXP alphasizeS, SEXP costsS, SEXP normS) {
-        //Objet R
-        SEXP ans, Fmat;
-        //Indices, avec s pour s�quences
-        int i, j, is, js;
-        //longueur des s�quences m=i, n=j
-        int m, n;
-        //Couts de subsistutions
-        double cost;
-        //normalisation?
-        int norm=INTEGER(normS)[0];
-        //Nombre de s�quence
-        int nseq=INTEGER(seqdim)[0];
-        //nb colonnes des s�quences
-        int maxlen=INTEGER(seqdim)[1];
-        //Matrice des s�quences
-        int* sequences=INTEGER(Ssequences);
-        //Tailles des s�quences
-        int* slen=INTEGER(lenS);
-        //indel
-        double indel=REAL(indelS)[0];
-        //nb �tats
-        int alphasize=INTEGER(alphasizeS)[0];
-        //Matrice des co�ts de substitutions
-        double* scost=REAL(costsS);
+SEXP saltt(SEXP Ssequences, SEXP seqdim, SEXP lenS, SEXP indelS,
+		SEXP alphasizeS, SEXP costsS, SEXP normS, SEXP optimS, SEXP pidS, SEXP maxpassS, SEXP retS, SEXP logoddS) {
 
-        double maxscost=0;
+	SEXP ans, scostmat;
+	int nseq = INTEGER(seqdim)[0];
+	double pid = REAL(pidS)[0];
+	PROTECT(ans = allocVector(REALSXP, nseq * nseq));
+	double * distmatrix = REAL(ans);
+	//nb �tats
+	int alphasize = INTEGER(alphasizeS)[0];
+	int optim = INTEGER(optimS)[0];
+	int ret = INTEGER(retS)[0];
+	int logoddmode = INTEGER(logoddS)[0];
+	PROTECT(scostmat = allocVector(REALSXP, (alphasize * alphasize)));
+	double * salttcost = REAL(scostmat);
 
-        //Alocation du vecteur de distance
-        //REprintf("Final seq %d\n",finalnseq);
-        PROTECT(ans = allocVector(REALSXP, nseq*nseq));
-        double * distmatrix = REAL(ans);
-        //Taille de la matrice F de levenshtein
-        int fmatsize=0;
-        double *fmat=NULL;
-        fmatsize=maxlen+1;
-        PROTECT(Fmat = allocVector(REALSXP, (fmatsize*fmatsize)));
-        fmat=REAL(Fmat);
-        for (i=0;i<alphasize;i++) {
-          for(j=i; j<alphasize;j++){
-            if (scost[TMRMATRIXINDEXC(i,j,alphasize)]>maxscost) {
-              maxscost=scost[TMRMATRIXINDEXC(i,j,alphasize)];
-            }
-          }
-        }
-        maxscost=fmin(maxscost,2*indel);
-        //Initialisation, peut �tre fait qu'une fois
-        for (i=0;i<fmatsize;i++) {
-          fmat[TMRMATRIXINDEXC(i,0,fmatsize)]=fmat[TMRMATRIXINDEXC(0,i,fmatsize)]=i*indel;
-        }
-        //Cout pour les diff�rentes possibilit�s
-        double minimum=0, j_indel=0, sub=0;//, lenmax=0;
-        //�tats compar�s
-        int i_state, j_state, prefix;
-        double maxpossiblecost=0;
-        //starting store index
-        //int i_start, j_start, i_end, j_end, i_index, j_index, base_index;
-        //Pour chaque s�quence i
-        for (is=0;is<nseq;is++) {
-            //toutes les distances intra-groupes=0
-            distmatrix[TMRMATRIXINDEXC(is,is,nseq)]=0;
-            for (js=is+1;js<nseq;js++) {
-                double cmpres=0;
-                 ///Calcul des distances
+	int i, is, js, liseq, ljseq, fmatsize;
+	//longueur des s�quences m=i, n=j
 
-                    //On passe les prefix commun
-                    i=1;
-                    j=1;
-                    m=slen[is]+1;
-                    n=slen[js]+1;
-                    prefix=0;
-                    while (i<m&&j<n&&sequences[TMRMATRIXINDEXC(is,i-1,nseq)]==sequences[TMRMATRIXINDEXC(js,j-1,nseq)]) {
-                        i++;
-                        j++;
-                        prefix++;
-                    }
-                    //+1 pour correspondre � la matrice F
-                    while (i<m) {
-                        j=prefix+1;
-                        while (j<n) {
-                            i_state=sequences[TMRMATRIXINDEXC(is,i-1,nseq)];
-                            j_state=sequences[TMRMATRIXINDEXC(js,j-1,nseq)];
-                            if (i_state == j_state) {
-                                cost = 0;
-                            } else {
-                                cost = scost[TMRMATRIXINDEXC(i_state,j_state,alphasize)];
-                                //      				Rprintf("costs = %d %d, %d => %f \n",TMRMATRIXINDEXC(i_state,j_state,alphasize),i_state,j_state,cost);
-                            }
-                            minimum=fmat[TMRMATRIXINDEXC(i-prefix,j-1-prefix,fmatsize)]+ indel;
+	//normalisation?
+	int norm = INTEGER(normS)[0];
+	//Nombre de s�quence
+	//nb colonnes des s�quences
+	int maxlen = INTEGER(seqdim)[1];
+	//Matrice des s�quences
+	int* sequences = INTEGER(Ssequences);
+	//Tailles des s�quences
+	int* slen = INTEGER(lenS);
+	//indel
+	double indel = REAL(indelS)[0];
+	double * fmat;
+	double * tbmat;
+	int maxpass= INTEGER(maxpassS)[0];
+	//Matrice des co�ts de substitutions
+	double* scost = REAL(costsS);
 
-                            j_indel=fmat[TMRMATRIXINDEXC(i-1-prefix,j-prefix,fmatsize)]+ indel;
-                            if (j_indel<minimum)minimum=j_indel;
-                            sub=fmat[TMRMATRIXINDEXC(i-1-prefix,j-1-prefix,fmatsize)]+ cost;
-                            if (sub<minimum)minimum=sub;
-                            fmat[TMRMATRIXINDEXC(i-prefix,j-prefix,fmatsize)]=minimum;
-                            j++;
-                        }
-                        i++;
-                    }//Fmat build
-                    m--;
-                    n--;
-                    //Warning! m and n decreased!!!!!
-                    maxpossiblecost=abs(n-m)*indel+maxscost*fmin((double)m,(double)n);
-                    cmpres=normalizeDistance(fmat[TMRMATRIXINDEXC(m-prefix,n-prefix,fmatsize)], maxpossiblecost, m, n, norm);
+	double *previousmatrix = new double[alphasize * alphasize];
+	double delta = 1;
 
-                
-                //Same for j
-                distmatrix[TMRMATRIXINDEXC(js,is,nseq)]=distmatrix[TMRMATRIXINDEXC(is,js,nseq)]=cmpres;
+	std::stack<Alignement>* stackAligne;
+	stackAligne = new std::stack<Alignement>;
+
+	SEXP Fmat, TBmat;
+
+	fmatsize=maxlen+1;
+    PROTECT(Fmat = allocVector(REALSXP, (fmatsize*fmatsize)));
+    fmat=REAL(Fmat);
+
+    PROTECT(TBmat = allocVector(REALSXP, (fmatsize*fmatsize)));
+    tbmat=REAL(TBmat);
 
 
-                //result[TMRMATRIXINDEXC(is,js,nseq)]=result[TMRMATRIXINDEXC(js,is,nseq)]=cmpres;
-            }//end js
-        }
-        
-        UNPROTECT(2);
-        return ans;
 
-    }
+	for (is = 0; is < nseq; is++) {
+		liseq = slen[is] + 1;
+		for (js = is+1; js < nseq; js++) {
+			ljseq = slen[js] + 1;
+			//if(js!=is) {
+				Alignement align = Alignement(is, js, 0, liseq, ljseq, maxlen);
+				stackAligne->push(align);
+			//}
+		}
+	}
 
+	//REprintf("stack size = %d", stackAligne->size());
+
+	Salttseq seq1 = Salttseq(norm, nseq, slen, maxlen, &indel, alphasize, scost,
+			distmatrix, stackAligne, sequences, salttcost, fmat, tbmat, fmatsize, pid, logoddmode);
+	int pass = 0;
+
+	if (optim == 1) {
+		while (delta > 0.0001) {
+			if(pass==maxpass) {
+				REprintf("\nWe have reached the maximum number of iteration (%d). We stop here.\n", pass);
+				break;
+			}
+
+
+
+			for (i = 0; i < alphasize * alphasize; i++) {
+				previousmatrix[i] = salttcost[i];
+			}
+
+			if(seq1.computeDistances(1)==-1) {
+				REprintf("\n************************\nWarning\n************************\n");
+				REprintf("No alignement has a PID>%f, must stop here\n", pid);
+				delta = 0;
+			}
+			/*REprintf("New cost matrix, after pass #%d \n", pass);
+			seq1.printsalttmatrix();
+			REprintf("indel = %f\n", indel);
+			*/
+			delta = computeDelta(previousmatrix, salttcost, alphasize);
+			REprintf("\ndelta = %f\n", delta);
+			pass++;
+		}
+
+		REprintf("Final optimal matching on all sequences\n");
+		for (is = 0; is < nseq; is++) {
+				liseq = slen[is] + 1;
+				for (js = is + 1; js < nseq; js++) {
+					ljseq = slen[js] + 1;
+					Alignement align = Alignement(is, js, 0, liseq, ljseq, maxlen);
+					stackAligne->push(align);
+				}
+			}
+
+		seq1.computeDistances(0);
+	} else {
+		seq1.computeDistances(0);
+	}
+	UNPROTECT(4);
+	delete previousmatrix;
+	if(ret==1) {
+		return ans;
+	}
+	else {
+		return scostmat;
+	}
+}
+
+SEXP henikoff(SEXP Ssequences, SEXP seqdim, SEXP lenS, SEXP alphasizeS, SEXP logoddS) {
+	SEXP scostmat;
+	REprintf("AAA");
+	int nseq = INTEGER(seqdim)[0];
+	int alphasize = INTEGER(alphasizeS)[0];
+	int logoddmode = INTEGER(logoddS)[0];
+	PROTECT(scostmat = allocVector(REALSXP, (alphasize * alphasize)));
+	double * scosts = REAL(scostmat);
+	//Nombre de s�quence
+	//nb colonnes des s�quences
+	int maxlen = INTEGER(seqdim)[1];
+	//Matrice des s�quences
+	int* sequences = INTEGER(Ssequences);
+	//Tailles des s�quences
+	int* slen = INTEGER(lenS);
+	//indel
+	int i,j,k, statea, stateb;
+	double ** fmat = new double*[alphasize];
+	double ** qijtable = new double*[alphasize];
+	double ** eijtable = new double*[alphasize];
+
+	for(i=0;i<alphasize;i++) {
+		fmat[i] = new double[alphasize];
+
+		eijtable[i] = new double[alphasize];
+	}
+	for(i=0;i<alphasize;i++) {
+		qijtable[i] = new double[alphasize];
+	}
+	double * pri = new double[alphasize];
+
+	for(i=0;i<alphasize;i++) {
+		pri[i]=0;
+		for(j=0;j<alphasize;j++) {
+			fmat[i][j] = fmat[j][i] = qijtable[i][j] = qijtable[j][i] = scosts[TMRMATRIXINDEXC(i,j,alphasize)] = scosts[TMRMATRIXINDEXC(j,i,alphasize)] = 0;
+		}
+	}
+
+
+	//Matrice des co�ts de substitutions
+
+
+	double maxn = ((nseq*(nseq-1))/2)*maxlen;
+
+	for(i=0;i<maxlen;i++) {
+		for(j=0;j<nseq-1;j++) {
+			for(k=j+1;k<nseq;k++) {
+
+				statea = sequences[TMRMATRIXINDEXC(j,i,nseq)];
+				stateb = sequences[TMRMATRIXINDEXC(k,i,nseq)];
+				if(statea!=stateb) {
+					fmat[statea][stateb]+=1;
+					fmat[stateb][statea]+=1;
+				}
+				else {
+					fmat[statea][stateb]+=1;
+				}
+			}
+		}
+	}
+
+
+	for(i=0;i<alphasize;i++) {
+		//REprintf("Init ok\n");
+		for(j=0;j<alphasize;j++) {
+			qijtable[i][j] = qijtable[j][i] = (fmat[i][j])/maxn;
+		}
+	}
+	int a;
+	double sumqij;
+
+	for(a=0;a<alphasize;a++) {
+		sumqij=0;
+		for(i=0;i<alphasize-1;i++) {
+			for(j=i+1;j<alphasize;j++) {
+				sumqij+=qijtable[i][j];
+			}
+		}
+		pri[a]=qijtable[a][a]+(sumqij/2);
+		REprintf("pri[%d] = %f\n", a, pri[a]);
+	}
+
+	for(i=0;i<alphasize;i++) {
+		for(j=i;j<alphasize;j++) {
+			if(i==j) {
+				eijtable[i][j] = eijtable[j][i] = pri[i]*pri[j];
+			}
+			else {
+				eijtable[i][j] = eijtable[j][i] = pri[i]*pri[j]*2;
+			}
+		}
+	}
+
+	REprintf("Last loop\n");
+	for(i=0;i<alphasize;i++) {
+		for(j=i+1;j<alphasize;j++) {
+			scosts[TMRMATRIXINDEXC(i,j,alphasize)] = scosts[TMRMATRIXINDEXC(j,i,alphasize)] = log2(qijtable[i][j]/eijtable[i][j]);
+			//- ((log2(qijtable[i][i]/eijtable[i][i])+log2(qijtable[j][j]/eijtable[j][j]))/2);
+			REprintf("scost[%d][%d] = %f\n",i,j,scosts[TMRMATRIXINDEXC(i,j,alphasize)]);
+		}
+	}
+
+
+
+
+	for(i=0;i<alphasize;i++) {
+		delete[] fmat[i];
+		delete[] qijtable[i];
+		delete[] eijtable[i];
+ 	}
+	delete[] fmat;
+	delete[] pri;
+	delete[] qijtable;
+	delete[] eijtable;
+
+	REprintf("End");
+	UNPROTECT(1);
+	return(scostmat);
+
+	}
 }

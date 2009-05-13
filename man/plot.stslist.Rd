@@ -7,8 +7,7 @@ This is the plot function for sequence objects of class 'stslist' created by the
 \usage{
 \method{plot}{stslist}(x, group=NULL, type="i", title=NULL, 
 	tlim=NULL, pbarw=FALSE, sortv=NULL, 
-	method="modseq", dist.matrix=NULL,
-	cpal=NULL, missing.color=NA, 
+	cpal=NULL, missing.color=NULL, 
 	ylab, yaxis=NULL, axes="all", xtlab=NULL, cex.plot=1,
 	withlegend="auto", ltext=NULL, cex.legend=1, 
 	use.layout=(!is.null(group) | withlegend!=FALSE), 
@@ -28,10 +27,6 @@ This is the plot function for sequence objects of class 'stslist' created by the
 	\item{pbarw}{if \code{type="f"} and \code{pbarw=TRUE}, the width of the bars are proportional to the sequence frequency in the dataset. Default to FALSE.}
 
 	\item{sortv}{if \code{type="i"}, name of an optional variable used to sort the sequences before plotting.}
-
-	\item{method}{Experimental.}
-
-	\item{dist.matrix}{Experimental.}
 
 	\item{cpal}{alternative color palette to use for the states. If user specified, a vector of colors with number of elements equal to the number of distinct states. By default, the 'cpal' attribute of the 'seqdata' sequence object is used (see \code{\link{seqdef}}).}
 
