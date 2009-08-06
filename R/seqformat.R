@@ -4,7 +4,7 @@
 
 seqformat <- function(data, var=NULL, id=NULL, 
 	from, to, compressed=FALSE,
-	nrep=NULL, tevent, stsep, covar=NULL,
+	nrep=NULL, tevent, stsep=NULL, covar=NULL,
 	SPS.in=list(xfix="()", sdsep=","),
 	SPS.out=list(xfix="()", sdsep=","),
 	begin=NULL, end=NULL, status=NULL, 
@@ -43,12 +43,13 @@ seqformat <- function(data, var=NULL, id=NULL,
 			seqdata[seqdata==attr(data,"void")] <- NA
 		} 
 		else {
-			if (missing(stsep)) {
-				sf <- seqfcheck(seqdata)
-				if (sf %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=sf)
+			if (is.null(stsep)) {
+				stsep <- seqfcheck(seqdata)
+				if (stsep %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=stsep)
 			}
-			else 
-				seqdata <- seqdecomp(seqdata,sep=sf)
+			else {
+				seqdata <- seqdecomp(seqdata,sep=stsep)
+			}
 		}
 
 		trans <- seqdata
@@ -61,8 +62,12 @@ seqformat <- function(data, var=NULL, id=NULL,
 		## Extracting the sequences from the data set
 		seqdata <- seqxtract(data, var)
 
-		sf <- seqfcheck(seqdata)
-		if (sf %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=sf)
+		if (is.null(stsep))	{	
+			stsep <- seqfcheck(seqdata)
+			if (stsep %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=stsep)
+		}
+		else
+			seqdata <- seqdecomp(seqdata,sep=stsep)
 
 		trans <- SPS_to_STS(seqdata, spsformat=SPS.in)
 	}

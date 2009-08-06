@@ -1,14 +1,78 @@
+## ========
+Version 1.4
+
+New functionalities:
+  - TraMineR.checkupdates(): check for TraMineR updates.
+  - seqdistmc(): computes multichannel distances.
+  - seqmeant(): computes mean duration in each state.
+  - seqmodst(): returns the sequence of modal states.
+  - seqmsplot(): for plotting the sequence of modal states. This function is
+    a shortcut for seqplot with type="ms", see below.
+  - seqrep(): extracts a set of representative sequences.
+  - seqrplot(): for producing representative sequence plots. This function is
+    a shortcut for seqplot with type="r", see below.
+  - seqHtplot(): for producing Entropy Index plots. This function is
+    a shortcut for seqplot with type="Ht", see below.
+  - seqlogp(): Computing logarithm of sequence probabilities.
+  - seqdef(): new 'weights=' option for providing a vector of weights.
+  - seqstatd(), seqtrate(), seqlogp() and seqtab(): new option 'weighted=TRUE'
+    for using the weights when computing the statistics.
+  - seqtrate() and seqsubm(): new 'time.varying' argument for computing
+    position dependant transition rates or costs.
+  - seqdist(): two additional methods are now available for computing
+    distances, namely "HAM" (Hamming distance) and "DHD" (Dynamic
+    Hamming Distance).
+  - output produced by the seqstatd(), seqtab(), seqmeant(), seqmodst() and 
+    seqrep() can now be plotted with their plot() dedicated methods (see 
+    new classes and methods below). 
+
+Important changes:
+  - seqplot(): is now the generic function for plotting state sequence objects with
+    'type' argument. Available types are "d" for state distribution plots,
+    "f" for sequence frequency plots, "Ht" for entropy index plots, 
+    "i" for sequence index plots, "ms" for modal state sequence plots, 
+    "mt" for meant time plots, "r" for representative plots. 
+    This function replaces the previous generic plot.stslist() function.
+  - plot.stslist(): now produces only a sequence index plot (see new classes and 
+    methods below).
+
+Changes in existing functions:
+  - seqfplot():
+    - new 'yaxis' option: with yaxis="cum" (default) cumulated percentages
+      are displayed, while with yaxis="pct" individual sequence percentages
+      are shown.
+    - pbarw=TRUE is now the default for the pbarw argument.
+  - seqtab(): the 'format' argument that specifies the format of the sequences 
+    displayed as rownames is now set by default to the short SPS format, 
+    e.g. TR/9-EM/63.
+  - seqiplot(): sequence indexes are now displayed by default on the y axis. 
+    This can be disabled with "yaxis=FALSE".
+    
+Fixed minor bugs in seqformat(): changes concern mainly the from="SPELL" and  
+    from="SPS" options.
+
+New classes and methods:
+  - new class 'stslist.statd' for objects produced by the seqstatd() function
+    and methods for printing and plotting such objects.
+  - new class 'stslist.freq' for objects produced by seqtab() function and
+    methods for printing and plotting such objects.
+  - new class 'stslist.meant' for objects produced by seqmeant() function
+    and methods for printing and plotting such objects.
+  - new class 'stslist.modst' for objects produced by seqmodst() function
+    and methods for printing and plotting such objects.
+
+
 ## ==========
 Version 1.2-1
 
-Various changes:
-- seqdef(): 'id' option added to the seqdef function to set the rownames of the sequence object
-- disscenter(): additional option for 'medoid.index' argument allow to return the indexes of all medoids (and not only the first one).
+Changes in function arguments:
+  - seqdef(): new 'id' argument for setting the rownames of the sequence object.
+  - disscenter(): new 'medoid.index' argument to get the indexes of all
+    medoids (rather than only the first one).
 
 Minor bugs fixed:
-- Plotting missing states with seqiplot and seqfplot functions 
-- Sum of transition rates with sequences of different lengths not equal to 1
-
+  - Plotting missing states with seqiplot() and seqfplot() functions.
+  - Sum of transition rates with sequences of different lengths not equal to 1.
 
 ## ========
 Version 1.2

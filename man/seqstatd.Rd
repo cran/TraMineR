@@ -1,22 +1,26 @@
 \name{seqstatd}
 \alias{seqstatd}
-\title{Sequence of the states frequency tables and entropy of the states distributions}
+\title{Sequence of transversal state distributions and their entropies}
 \description{
-Returns the state frequencies, the number of valid states and the entropy of the states distribution for each time unit.
+Returns the state frequencies, the number of valid states and the entropy of the state distribution at each position in the sequence.
 }
 \usage{
- seqstatd(seqdata, digits=2, norm=TRUE)
+ seqstatd(seqdata, weighted=TRUE, with.missing=FALSE, norm=TRUE)
 }
 \arguments{
-  \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
+  \item{seqdata}{a state sequence object as defined by the \code{\link{seqdef}} function.}
 
-  \item{digits}{number of digits for the rounding of the results. Default to 2, set to NULL if you don't want any rounding.}
+  \item{weighted}{if TRUE, distributions account for the weights assigned to the state sequence object 
+  (see \code{\link{seqdef}}).
+  Set to FALSE if you want ignore the weights.}
+  
+  \item{with.missing}{If FALSE (default value), returned distributions ignore missing values.}
 
-  \item{norm}{if TRUE (the default value), entropy is normalized, ie divided by the entropy of the alphabet. Set to FALSE if you want the entropy without normalization.}
+  \item{norm}{if TRUE (default value), entropy is normalized, ie divided by the entropy of the alphabet. Set to FALSE if you want the entropy without normalization.}
 }
 
 \details{
-In addition to the state distribution at each time point, the \code{seqstatd} function provides also for each time point the number of valid states and the Shannon entropy of the observed state distribution. Letting \eqn{p_i} denote the proportion of cases in state \eqn{i} at the considered time point, the entropy is
+In addition to the state distribution at position in the sequence, the \code{seqstatd} function provides also for each time point the number of valid states and the Shannon entropy of the observed state distribution. Letting \eqn{p_i} denote the proportion of cases in state \eqn{i} at the considered time point, the entropy is
 \deqn{
 h(p_1,\ldots,p_s) = -\sum_{i=1}^s p_i \log_2(p_i)
 }
@@ -30,13 +34,27 @@ Fussell, E. (2005). Measuring the early adult life course in Mexico: An applicat
 }
 
 \seealso{
- \code{\link{seqdplot}}.
+ \code{\link{plot.stslist.statd}} the plot method for objects of class \code{stslist.statd}, \code{\link{seqdplot}} and \code{\link{seqHtplot}} for higher level plots.
 }
 \examples{
 data(biofam)
 biofam.seq <- seqdef(biofam,10:25)
 sd <- seqstatd(biofam.seq)
-barplot(sd$Entropy, main="Entropy of the states distribution, by age",
-        ,xlab="Age",ylab="Entropy",col="green")
+## Plotting the state distribution
+plot(sd, type="d")
+
+## Plotting the entropy indexes
+plot(sd, type="Ht")
+
+## ====================
+## example with weights
+## ====================
+data(ex1)
+ex1.seq <- seqdef(ex1, 1:13, weights=ex1$weights)
+
+## Unweighted
+seqstatd(ex1.seq, weighted=FALSE)
+
+seqstatd(ex1.seq, weighted=TRUE)
 }
 \keyword{univar}

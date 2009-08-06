@@ -11,7 +11,9 @@ seqdecomp <- function(data, var=NULL, sep="-", miss="NA", vnames=NULL) {
 	seqdata <- as.vector(seqdata)
 	nbseq <- length(seqdata)
 
+	## Splitting the character strings
 	tmp <- strsplit(seqdata, split=sep)
+
 	## We look for the max sequence length first
 	sl <- sapply(tmp,length)
 	lmax <- max(sl)

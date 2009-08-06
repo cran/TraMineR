@@ -2,31 +2,58 @@
 ## Sequences frequency table
 ## =========================
 
-seqtab <- function(seqdata, tlim=0, format="SPS") {
+seqtab <- function(seqdata, tlim=10, weighted=TRUE, format="SPS") {
 
 	if (!inherits(seqdata,"stslist"))
-		stop("data is not a sequence object, see seqdef function to create one")
+		stop("data is not a sequence object, use seqdef function to create one")
 
 	## Eliminating empty sequences 
 	seqdata <- seqdata[rowSums(seqdata!=attr(seqdata,"nr"))!=0,]
+
+	## Weights
+	weights <- attr(seqdata, "weights")
+
+	if (!weighted || is.null(weights)) 
+		weights <- rep(1.0, nrow(seqdata))
 
 	if (seqfcheck(seqdata)=="-X") 
 		warning("'-' character in states codes may cause invalid results")
 
 	if (format=="SPS")	
-		seqdata <- suppressMessages(seqformat(seqdata,from='STS', to='SPS', compressed=TRUE))
+		seqlist <- suppressMessages(seqformat(seqdata, from='STS', to='SPS', SPS.out=list(xfix="", sdsep="/"), compressed=TRUE))
 	else if (format=="STS")
-		seqdata <- seqconc(seqdata)
+		seqlist <- seqconc(seqdata)
 	else 
 		stop("Format must be one of: STS or SPS")
 
-	fseq <- table(seqdata)
+	Freq <- tapply(weights, seqlist, sum)
 
-	if (tlim==0) tlim=length(fseq)
-	Freq <- sort(fseq,decreasing=TRUE)
-	Percent <- sort(fseq/sum(fseq),decreasing=TRUE)*100
-	Percent <- round(Percent,2)
+	Freq <- sort(Freq, decreasing=TRUE)
+	Percent <- Freq/sum(Freq)*100
+
+	nbuseq <- length(Freq)
+	if (tlim==0 || tlim>nbuseq) {
+		tlim <- nbuseq
+	}	
+
+	res <- seqdata[match(rownames(Freq), seqlist)[1:tlim],]
+
+	table <- data.frame(Freq, Percent)[1:tlim,]
 	
-	return(data.frame(Freq,Percent)[1:tlim,])
+	## ==================================
+	## DEFINING CLASS AND SOME ATTRIBUTES
+	## ==================================
+	class(res) <- c("stslist.freq",class(res))
+
+	## Setting the weights of the object equal to the frequencies
+	attr(res, "weights") <- table$Freq
+	
+	attr(res,"freq") <- table
+	attr(res,"nbseq") <- nrow(seqdata)
+	attr(res,"weighted") <- weighted
+	attr(res,"tlim") <- tlim
+	attr(res,"format") <- format
+
+	return(res)
 }
 	 

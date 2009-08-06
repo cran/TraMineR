@@ -1,11 +1,7 @@
 #ifndef _ALIGNEMENT_INCLUDED_
 #define _ALIGNEMENT_INCLUDED_
 #include <R.h>
-#include <Rinternals.h>
-#include <R_ext/Rdynload.h>
 #include <Rmath.h>
-#include <algorithm>
-#include <utility>
 #include <stack>
 
 #define TMRMATRIXINDEXC(ligne, colone,len) (ligne)+(colone)*(len)
@@ -44,8 +40,8 @@ public:
 	inline double getpid() {
 	  return pid;
 	}
-	inline void setpid(const double& pid) {
-	  this->pid=pid;
+	inline void setpid(const double& ipid) {
+	  this->pid=ipid;
 	}
 //	double getPID();
 };

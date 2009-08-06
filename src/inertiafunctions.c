@@ -1,18 +1,15 @@
-#include<R.h>
-#include <Rinternals.h>
+#include "TraMineR.h"
 
-#define TMRMATRIXINDEX(ligne, colone,len) (ligne-1)+(colone-1)*len
-#define TMRMATRIXINDEXC(ligne, colone,len) (ligne)+(colone)*len
 /** diss: Le vecteur de diss
 L'indexation est donn�e par
 n*(i-1) - i*(i-1)/2 + j-i
 =(i-1)*(n-i/2)- i +j
 
-    indiv: vecteur num�ric des indexs (sorted!) des individus qui forme le groupe (commence � 0)...............
-    matrixsize: taille (nbligne ou colonne de la matrice carr�e)
+    indiv: vecteur numeric des indexs (sorted!) des individus qui forme le groupe (commence a 0)...............
+    matrixsize: taille (nbligne ou colonne de la matrice carree)
     groupesize: taille du groupe
 */
-SEXP tmrsubmatrixinertiadiss(SEXP diss,SEXP diss_size, SEXP individuals) {
+SEXP tmrsubmatrixinertiadiss(SEXP diss, SEXP diss_size, SEXP individuals) {
     int n=INTEGER(diss_size)[0];
     int ilen=length(individuals);
     int * indiv=INTEGER(individuals);
@@ -25,8 +22,8 @@ SEXP tmrsubmatrixinertiadiss(SEXP diss,SEXP diss_size, SEXP individuals) {
         i_indiv=indiv[i];
         base_indice = (i_indiv-1)*(n-i_indiv/2)-i_indiv-1;
         for (j=i+1;j<ilen;j++) {
-//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)]);
-//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)],TMRMATRIXINDEX(indiv[i],indiv[j],mlen));
+//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[MINDICER(indiv[i],indiv[j],mlen)]);
+//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[MINDICER(indiv[i],indiv[j],mlen)],MINDICER(indiv[i],indiv[j],mlen));
             result+=dmat[base_indice+indiv[j]];
         }
     }
@@ -76,8 +73,8 @@ SEXP tmrsubmatrixinertia(SEXP distmatrix, SEXP individuals) {
     for (i=0;i<ilen;i++) {
         i_index=(-1)+(indiv[i]-1)*mlen;
         for (j=i+1;j<ilen;j++) {
-//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)]);
-//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)],TMRMATRIXINDEX(indiv[i],indiv[j],mlen));
+//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[MINDICER(indiv[i],indiv[j],mlen)]);
+//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[MINDICER(indiv[i],indiv[j],mlen)],MINDICER(indiv[i],indiv[j],mlen));
             result+=dmat[i_index+indiv[j]];
         }
     }
@@ -107,8 +104,8 @@ SEXP tmrinertiacontrib(SEXP distmatrix, SEXP individuals) {
     for (i=0;i<ilen;i++) {
         i_index=(-1)+(indiv[i]-1)*mlen;
         for (j=i+1;j<ilen;j++) {
-//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)]);
-//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)],TMRMATRIXINDEX(indiv[i],indiv[j],mlen));
+//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[MINDICER(indiv[i],indiv[j],mlen)]);
+//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[MINDICER(indiv[i],indiv[j],mlen)],MINDICER(indiv[i],indiv[j],mlen));
             r=dmat[i_index+indiv[j]];
             result[i]+=r;
             result[j]+=r;
@@ -145,8 +142,8 @@ SEXP tmrinertiacontribext(SEXP distmatrix, SEXP individuals, SEXP extindivS) {
     for (i=0;i<ilen;i++) {
         i_index=(-1)+(indiv[i]-1)*mlen;
         for (j=i+1;j<ilen;j++) {
-//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)]);
-//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)],TMRMATRIXINDEX(indiv[i],indiv[j],mlen));
+//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[MINDICER(indiv[i],indiv[j],mlen)]);
+//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[MINDICER(indiv[i],indiv[j],mlen)],MINDICER(indiv[i],indiv[j],mlen));
             r=dmat[i_index+indiv[j]];
             result[i]+=r;
             result[j]+=r;
@@ -189,8 +186,8 @@ SEXP tmrinertiacontribdiss(SEXP diss, SEXP diss_size, SEXP individuals) {
         //base_indice=n*(i_indiv-1) - i_indiv*(i_indiv-1)/2 + i_indiv;
         base_indice=n*(i_indiv-1) - i_indiv*(i_indiv-1)/2 -i_indiv-1;
         for (j=i+1;j<ilen;j++) {
-//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)]);
-//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)],TMRMATRIXINDEX(indiv[i],indiv[j],mlen));
+//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[MINDICER(indiv[i],indiv[j],mlen)]);
+//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[MINDICER(indiv[i],indiv[j],mlen)],MINDICER(indiv[i],indiv[j],mlen));
             r=dmat[base_indice+indiv[j]];
             result[i]+=r;
             result[j]+=r;
@@ -224,9 +221,9 @@ SEXP tmrinterinertia(SEXP distmatrix, SEXP grp1,SEXP grp2) {
     double result=0;
     for (i=0;i<ilen1;i++) {
         for (j=0;j<ilen2;j++) {
-//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)]);
-//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[TMRMATRIXINDEX(indiv[i],indiv[j],mlen)],TMRMATRIXINDEX(indiv[i],indiv[j],mlen));
-            result+=dmat[TMRMATRIXINDEX(indiv1[i],indiv2[j],mlen)];
+//      Rprintf("index coord(%i,%i)=%f\n",indiv[i],indiv[j], distmatrix[MINDICER(indiv[i],indiv[j],mlen)]);
+//      Rprintf("cindex coord(%i,%i)=%f, (%i)\n",i,j, distmatrix[MINDICER(indiv[i],indiv[j],mlen)],MINDICER(indiv[i],indiv[j],mlen));
+            result+=dmat[MINDICER(indiv1[i],indiv2[j],mlen)];
         }
     }
 

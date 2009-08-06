@@ -12,9 +12,7 @@ Returns a vector containing the position of the first occurrence of the given el
   \item{seqdata}{a sequence object (see \code{\link{seqdef}} function).}
   \item{state}{the state element to search in the sequences}
 }
-\seealso{
- \code{}.
-}
+
 \examples{
 data(biofam)
 biofam.seq <- seqdef(biofam,10:25)

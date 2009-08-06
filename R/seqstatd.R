@@ -1,25 +1,33 @@
 ## States frequency by time unit
 
-seqstatd <- function(seqdata, digits=2, norm=TRUE) {
+seqstatd <- function(seqdata, weighted=TRUE, with.missing=FALSE, norm=TRUE) {
 
-	if (!inherits(seqdata,"stslist")) {
-		cat(" => data is not a sequence object, see function seqdef to create one\n")
-		return()
-		}
+	if (!inherits(seqdata,"stslist"))
+		stop("data is not a sequence object, use seqdef function to create one")
 	
 	## Retrieving the alphabet
 	statl <- attr(seqdata,"alphabet")
+
+	if (with.missing)
+		statl <- c(statl, attr(seqdata,"nr"))
+
 	nbstat <- length(statl)
 
-	seql <- seqdim(seqdata)[2]
+	seql <- ncol(seqdata)
 
 	sd <- matrix(nrow=nbstat,ncol=seql)
 	row.names(sd) <- statl
 	colnames(sd) <- colnames(seqdata)
 
+	## Weights
+	weights <- attr(seqdata, "weights")
+
+	if (!weighted || is.null(weights)) 
+		weights <- rep(1, nrow(seqdata))
+
 	for (i in 1:nbstat)
 		for (j in 1:seql)
-			sd[i,j] <- sum(seqdata[,j]==statl[i],na.rm=TRUE)
+			sd[i,j] <- sum((seqdata[,j]==statl[i])*weights)
 
 	## sd <-	apply(seqdata,2,table)
 	N <- apply(sd,2,sum)
@@ -32,12 +40,15 @@ seqstatd <- function(seqdata, digits=2, norm=TRUE) {
 		E <- E/E.max
 	}
 
-	if (!is.null(digits)) {
-		sd <- round(sd,digits)
-		E <- round(E,digits)
-	}
+	res <- list(sd,N,E)
+	names(res) <- c("Frequencies", "ValidStates", "Entropy")
+	
+	class(res) <- c("stslist.statd","list")
 
-	sd <- list(sd,N,E)
-	names(sd) <- c("Frequencies","ValidStates","Entropy")
-	return(sd)
-	}
+	attr(res,"nbseq") <- nrow(seqdata)
+	attr(res,"cpal") <- cpal(seqdata)
+	attr(res,"xtlab") <- colnames(seqdata)
+	attr(res,"weighted") <- weighted
+
+	return(res)
+}

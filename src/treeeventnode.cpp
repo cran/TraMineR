@@ -1,14 +1,15 @@
 #include "treeeventnode.h"
 #include "treeeventmap.h"
+#include "constraint.h"
 
 int TreeEventNode::nodeCount=0;
 int TreeEventNode::getNodeCount() {
     return nodeCount;
 }
 
-void TreeEventNode::getSubsequences(SEXP result,int *  support, Sequence *s, int *index,const double &step, SEXP classname,EventDictionary * ed) {
-    this->brother.getSubsequences(result,support,s,index,step, classname,ed);
-    this->child.getSubsequences(result,support,s,index,step+1, classname,ed);
+void TreeEventNode::getSubsequences(SEXP result,int *  isupport, Sequence *s, int *index,const double &step, SEXP classname,EventDictionary * ed) {
+    this->brother.getSubsequences(result,isupport,s,index,step, classname,ed);
+    this->child.getSubsequences(result,isupport,s,index,step+1, classname,ed);
 
 }
 
@@ -36,12 +37,18 @@ TreeEventNode::~TreeEventNode() {
 
 
 //Main function to build the tree
-void TreeEventNode::addSequenceInternal(Sequence *s, SequenceEventNode * en, const double &maxGap,const double &windowSize, const double& ageMax, const double &gapConsumed, const double& currentAge, const int& k, const int&currentK) {
+void TreeEventNode::addSequenceInternal(Sequence *s, SequenceEventNode * en, Constraint * cst, const double &gapConsumed, const double& currentAge, const int& k, const int&currentK) {
     //If we already reached this point with the specified sequence, don't increment
-    if (this->lastID!=s->getIDpers()) {
+    /*if (this->lastID!=s->getIDpers()) {
         this->support++;//
         this->lastID=s->getIDpers();
-    }
+    }*/
+
+	// If we count several by sequences, or the last element added was from another sequence, we had this element to support.
+	if (cst->getcountMethod()==2 || this->lastID!=s->getIDpers()) {
+        this->support++;//
+        this->lastID=s->getIDpers();
+	}
     if (!en->hasNext())return;
     if (currentK>k)return;
     //Current Gap for next subsequence search
@@ -56,9 +63,9 @@ void TreeEventNode::addSequenceInternal(Sequence *s, SequenceEventNode * en, con
         currentGap+=n->getGap(); //Increment current gap
 
         //3 terminations conditions
-        if (	gapConsumed+currentGap>windowSize //current window Size too big
-                ||currentGap>maxGap	//current gap too big
-                ||currentGap+currentAge>ageMax//current age too big
+        if (	gapConsumed+currentGap>cst->getwindowSize() //current window Size too big
+                ||currentGap>cst->getmaxGap()	//current gap too big
+                ||currentGap+currentAge>cst->getageMaxEnd() //current age too big
            ) {
             break;
         }
@@ -84,7 +91,7 @@ void TreeEventNode::addSequenceInternal(Sequence *s, SequenceEventNode * en, con
                 ten=NULL;
             }
         }
-        if (ten!=NULL)ten->addSequenceInternal(s,n,maxGap,windowSize,ageMax,gapConsumed+currentGap, currentAge+currentGap,k,currentK+1);//Increment support and continue
+        if (ten!=NULL)ten->addSequenceInternal(s,n,cst,gapConsumed+currentGap, currentAge+currentGap,k,currentK+1);//Increment support and continue
 
     }//end while(hasNext())
 }

@@ -1,21 +1,14 @@
-#include<R.h>
-#include <Rinternals.h>
-#include <R_ext/Rdynload.h>
-#include <Rmath.h>
-//#include <math.h>
+#include "TraMineR.h"
 
 /**
 
 */
 
-#define TMRMATRIXINDEXC(ligne, colone,len) (ligne)+(colone)*len
-//#define TMRMIN(a,b) ((a)<(b))?a:b
-#define TMRDISTINDEX(i,j,n) (n*(i-1) - i*(i-1)/2 + j-i-1)
-
 static R_INLINE int distIndex(const int &i,const int &j,const int &n) {
     if (i<j)return TMRDISTINDEX(i,j,n);
     else return TMRDISTINDEX(j,i,n);
 }
+
 
 static R_INLINE double normalizeDistance(const double& rawdist, const double& maxdist, const int& l1, const int& l2, const int&norm) {
     if (rawdist==0)return 0;
@@ -36,8 +29,9 @@ static R_INLINE double normalizeDistance(const double& rawdist, const double& ma
         if (maxdist==0)return 1;
         return rawdist/maxdist;
     }
-	return rawdist;
+    return rawdist;
 }
+
 
 static R_INLINE void setDistance(const int &is,const int &js,const int* magicIndex, const int * magicSeq, const int& finalnseq, SEXP& ans, const double& cmpres) {
     int j_start=magicIndex[js];
@@ -58,33 +52,115 @@ static R_INLINE void setDistance(const int &is,const int &js,const int* magicInd
     }
 }
 
+static R_INLINE double OMdistance(int* slen,const int &is,const int &js, const int&nseq, int* sequences, const int &alphasize, double * scost, double * fmat, const int& fmatsize, const double& indel, const double& maxscost, const int&norm) {
+
+    //On passe les prefix commun
+    double minimum=0, j_indel=0, sub=0;//, lenmax=0;
+    //etats comparés
+    int i_state, j_state;
+    double cost, maxpossiblecost;
+    int i=1;
+    int j=1;
+    int m=slen[is]+1;
+    int n=slen[js]+1;
+    int prefix=0;
+    while (i<m&&j<n&&sequences[MINDICE(is,i-1,nseq)]==sequences[MINDICE(js,j-1,nseq)]) {
+        i++;
+        j++;
+        prefix++;
+    }
+    //+1 pour correspondre � la matrice F
+    while (i<m) {
+        j=prefix+1;
+        while (j<n) {
+            i_state=sequences[MINDICE(is,i-1,nseq)];
+            j_state=sequences[MINDICE(js,j-1,nseq)];
+            if (i_state == j_state) {
+                cost = 0;
+            } else {
+                cost = scost[MINDICE(i_state,j_state,alphasize)];
+                //      				Rprintf("costs = %d %d, %d => %f \n",MINDICE(i_state,j_state,alphasize),i_state,j_state,cost);
+            }
+            minimum=fmat[MINDICE(i-prefix,j-1-prefix,fmatsize)]+ indel;
+
+            j_indel=fmat[MINDICE(i-1-prefix,j-prefix,fmatsize)]+ indel;
+            if (j_indel<minimum)minimum=j_indel;
+            sub=fmat[MINDICE(i-1-prefix,j-1-prefix,fmatsize)]+ cost;
+            if (sub<minimum)minimum=sub;
+            fmat[MINDICE(i-prefix,j-prefix,fmatsize)]=minimum;
+            j++;
+        }
+        i++;
+    }//Fmat build
+    m--;
+    n--;
+    //Warning! m and n decreased!!!!!
+    maxpossiblecost=abs(n-m)*indel+maxscost*fmin2((double)m,(double)n);
+    return normalizeDistance(fmat[MINDICE(m-prefix,n-prefix,fmatsize)], maxpossiblecost, m, n, norm);
+}
+static R_INLINE double LCPdistance(int* slen,const int &is,const int &js, const int&nseq, int* sequences, const int&norm, const int& sign) {
+
+    int m=slen[is];
+    int n=slen[js];
+    // Computing min length
+    int minimum = m;
+    if (n<m) minimum = n;
+    int i;
+    if (sign>0) {
+        i=0;
+        while (sequences[MINDICE(is,i,nseq)]==sequences[MINDICE(js,i,nseq)] && i<minimum) {
+            i++;
+        }
+    } else {
+        i=1;
+        while (sequences[MINDICE(is,(m-i),nseq)]==sequences[MINDICE(js,(n-i),nseq)] && i<=minimum) {
+            i++;
+        }
+        i--;
+    }
+    return normalizeDistance((double)n+(double)m-2.0*(double)i, (double)n+(double)m, m, n, norm);
+}
+
+static R_INLINE double DHDdistance(int* slen,const int &is,const int &js, const int&nseq, int* sequences, const int&norm,  const int &alphasize, double * scost, const double& maxscost) {
+
+    int m=slen[is];
+    int n=slen[js];
+    // Computing min length
+    int minimum = m;
+    if (n<m) minimum = n;
+    double cost=0;
+    for (int i=0;i<minimum;i++) {
+        cost += scost[ARINDICE(sequences[MINDICE(is,i,nseq)], sequences[MINDICE(js,i,nseq)], i, alphasize)];
+    }
+    TMRLOG(5, "DHD distance");
+    return normalizeDistance(cost, (double)minimum * maxscost, m, n, norm);
+}
+
 
 extern "C" {
 
     SEXP cstringdistance(SEXP Ssequences, SEXP seqdim, SEXP lenS, SEXP indelS, SEXP alphasizeS, SEXP costsS, SEXP normS, SEXP magicIndexS, SEXP magicSeqS, SEXP disttypeS) {
-        //Objet R
-        SEXP ans, Fmat;
-        //Indices, avec s pour s�quences
+        //Objet R, matrice des distances (objet dist)
+        SEXP ans;//, Fmat;
+        //Indices, avec s pour séquences
         int i, j, is, js;
-        //longueur des s�quences m=i, n=j
-        int m, n;
-        //Couts de subsistutions
-        double cost;
+        //longueur des séquences m=i, n=j
+        //int m, n;
         //normalisation?
         int norm=INTEGER(normS)[0];
-        //Nombre de s�quence
+        //Nombre de séquence
         int nseq=INTEGER(seqdim)[0];
-        //nb colonnes des s�quences
+        //nb colonnes des séquence
         int maxlen=INTEGER(seqdim)[1];
-        //Matrice des s�quences
+        //Matrice des séquence
         int* sequences=INTEGER(Ssequences);
-        //Tailles des s�quences
+        //Tailles des séquence
         int* slen=INTEGER(lenS);
         //indel
         double indel=REAL(indelS)[0];
-        //nb �tats
+        //nb etats
         int alphasize=INTEGER(alphasizeS)[0];
-        //Matrice des co�ts de substitutions
+        //Matrice des couts de substitutions
         double* scost=REAL(costsS);
 
         double maxscost=0;
@@ -92,7 +168,7 @@ extern "C" {
         int disttype=INTEGER(disttypeS)[0];
         int* magicIndex=INTEGER(magicIndexS);
         int* magicSeq=INTEGER(magicSeqS);
-        int finalnseq=length(magicSeqS);
+        int finalnseq=Rf_length(magicSeqS);
 
         //Alocation du vecteur de distance
         //REprintf("Final seq %d\n",finalnseq);
@@ -103,31 +179,31 @@ extern "C" {
         double *fmat=NULL;
         if (disttype==1) {
             fmatsize=maxlen+1;
-            PROTECT(Fmat = allocVector(REALSXP, (fmatsize*fmatsize)));
-            fmat=REAL(Fmat);
+            //PROTECT(Fmat = allocVector(REALSXP, (fmatsize*fmatsize)));
+            fmat= new double[fmatsize*fmatsize];
             for (i=0;i<alphasize;i++) {
-              for(j=i; j<alphasize;j++){
-                if (scost[TMRMATRIXINDEXC(i,j,alphasize)]>maxscost) {
-                  maxscost=scost[TMRMATRIXINDEXC(i,j,alphasize)];
+                for (j=i; j<alphasize;j++) {
+                    if (scost[MINDICE(i,j,alphasize)]>maxscost) {
+                        maxscost=scost[MINDICE(i,j,alphasize)];
+                    }
                 }
-              }
             }
             maxscost=fmin2(maxscost,2*indel);
-            //Initialisation, peut �tre fait qu'une fois
+            //Initialisation, peut etre fait qu'une fois
             for (i=0;i<fmatsize;i++) {
-                fmat[TMRMATRIXINDEXC(i,0,fmatsize)]=fmat[TMRMATRIXINDEXC(0,i,fmatsize)]=i*indel;
+                fmat[MINDICE(i,0,fmatsize)]=fmat[MINDICE(0,i,fmatsize)]=i*indel;
             }
         }
+        if (disttype == 4) {
+            maxscost = indel;
+        }
         //Cout pour les diff�rentes possibilit�s
-        double minimum=0, j_indel=0, sub=0;//, lenmax=0;
-        //�tats compar�s
-        int i_state, j_state, prefix, sign;
-        if (disttype==2) {
-            sign=1;
-        } else if (disttype==3) {
+        //double minimum=0, j_indel=0, sub=0;//, lenmax=0;
+        //etats comparés
+        int sign = 1;
+        if (disttype==3) {
             sign=-1;
         }
-        double maxpossiblecost=0;
         //starting store index
         //int i_start, j_start, i_end, j_end, i_index, j_index, base_index;
         //Pour chaque s�quence i
@@ -139,80 +215,22 @@ extern "C" {
                 double cmpres=0;
                 if (disttype==1) { //optimal matching
                     ///Calcul des distances
+                    cmpres=OMdistance(slen,is,js, nseq, sequences, alphasize, scost, fmat, fmatsize, indel,  maxscost, norm);
 
-                    //On passe les prefix commun
-                    i=1;
-                    j=1;
-                    m=slen[is]+1;
-                    n=slen[js]+1;
-                    prefix=0;
-                    while (i<m&&j<n&&sequences[TMRMATRIXINDEXC(is,i-1,nseq)]==sequences[TMRMATRIXINDEXC(js,j-1,nseq)]) {
-                        i++;
-                        j++;
-                        prefix++;
-                    }
-                    //+1 pour correspondre � la matrice F
-                    while (i<m) {
-                        j=prefix+1;
-                        while (j<n) {
-                            i_state=sequences[TMRMATRIXINDEXC(is,i-1,nseq)];
-                            j_state=sequences[TMRMATRIXINDEXC(js,j-1,nseq)];
-                            if (i_state == j_state) {
-                                cost = 0;
-                            } else {
-                                cost = scost[TMRMATRIXINDEXC(i_state,j_state,alphasize)];
-                                //      				Rprintf("costs = %d %d, %d => %f \n",TMRMATRIXINDEXC(i_state,j_state,alphasize),i_state,j_state,cost);
-                            }
-                            minimum=fmat[TMRMATRIXINDEXC(i-prefix,j-1-prefix,fmatsize)]+ indel;
-
-                            j_indel=fmat[TMRMATRIXINDEXC(i-1-prefix,j-prefix,fmatsize)]+ indel;
-                            if (j_indel<minimum)minimum=j_indel;
-                            sub=fmat[TMRMATRIXINDEXC(i-1-prefix,j-1-prefix,fmatsize)]+ cost;
-                            if (sub<minimum)minimum=sub;
-                            fmat[TMRMATRIXINDEXC(i-prefix,j-prefix,fmatsize)]=minimum;
-                            j++;
-                        }
-                        i++;
-                    }//Fmat build
-                    m--;
-                    n--;
-                    //Warning! m and n decreased!!!!!
-                    maxpossiblecost=abs(n-m)*indel+maxscost*fmin2((double)m,(double)n);
-                    cmpres=normalizeDistance(fmat[TMRMATRIXINDEXC(m-prefix,n-prefix,fmatsize)], maxpossiblecost, m, n, norm);
-
+                } else if (disttype==4) { //DHD
+                    cmpres=DHDdistance(slen,is,js,nseq, sequences, norm, alphasize, scost, maxscost);
                 } else if (disttype>1) { //BEGIN LCP
-                    m=slen[is];
-                    n=slen[js];
-                    // Computing min length
-                    if (n<m) minimum = n;
-                    else minimum = m;
-
-                    if (disttype==2) {
-                        i=0;
-                        while (sequences[TMRMATRIXINDEXC(is,i,nseq)]==sequences[TMRMATRIXINDEXC(js,i,nseq)] && i<minimum) {
-                            i++;
-                        }
-                    } else {
-                        i=1;
-                        while (sequences[TMRMATRIXINDEXC(is,(m-i),nseq)]==sequences[TMRMATRIXINDEXC(js,(n-i),nseq)] && i<=minimum) {
-                            i++;
-                        }
-                        i--;
-                    }
-                    cmpres=normalizeDistance((double)n+(double)m-2.0*(double)i, (double)n+(double)m, m, n, norm);
+                    cmpres=LCPdistance(slen,is,js, nseq, sequences, norm, sign);
                 }//End LCP
-//		  Rprintf("cmpres = %d %d => %f \n",(1+is),(1+js), cmpres);
+                TMRLOG(5,"cmpres = %d %d => %f \n",(1+is),(1+js), cmpres);
                 //return Fmat;
 
                 //Same for j
                 setDistance(is,js,magicIndex,magicSeq, finalnseq, ans, cmpres);
 
 
-                //result[TMRMATRIXINDEXC(is,js,nseq)]=result[TMRMATRIXINDEXC(js,is,nseq)]=cmpres;
+                //result[MINDICE(is,js,nseq)]=result[MINDICE(js,is,nseq)]=cmpres;
             }//end js
-        }
-        if (disttype==1) {
-            UNPROTECT(1);
         }
         UNPROTECT(1);
         return ans;
@@ -220,3 +238,4 @@ extern "C" {
     }
 
 }
+

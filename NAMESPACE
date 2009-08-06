@@ -13,6 +13,7 @@ export(
 	seqdiff,
 	seqdim,
 	seqdist,
+	seqdistmc,
 	seqdplot,
 	seqdss,
 	seqdur,
@@ -22,6 +23,7 @@ export(
 	seqfplot,
 	seqfpos,
 	seqgen,
+	seqHtplot,
 	seqient,
 	seqiplot,
 	seqistatd,
@@ -29,12 +31,20 @@ export(
 	seqlength,
 	seqLLCP,
 	seqLLCS,
+	seqlogp,
+	seqmeant,
+	seqmodst,
 	seqmpos,
+	seqmsplot,
 	seqmtplot,
 	seqnum,
+	seqplot,
 	seqpm,
+	seqrep,
+	seqrplot,
 	seqsep,
 	seqstatd,
+	seqstatf,
 	seqstatl,
 	seqST,
 	seqsubm,
@@ -43,11 +53,35 @@ export(
 	seqtrate
   )
 
-##stslist module
+## stslist methods
 S3method(summary, stslist)
 S3method(print, stslist)
 S3method("[", stslist)
 S3method(plot, stslist)
+
+## stslist.stad methods
+S3method(plot, stslist.statd)
+S3method(print, stslist.statd)
+S3method("[", stslist.statd)
+
+## stslist.freq methods
+S3method(plot, stslist.freq)
+S3method(print, stslist.freq)
+S3method("[", stslist.freq)
+
+## stslist.meant methods
+S3method(plot, stslist.meant)
+S3method(print, stslist.meant)
+
+## stslist.rep methods
+S3method(plot, stslist.rep)
+S3method(print, stslist.rep)
+S3method(summary, stslist.rep)
+
+## stslist.modst methods
+S3method(plot, stslist.modst)
+S3method(print, stslist.modst)
+S3method("[", stslist.modst)
 
 ## diss module
 export(

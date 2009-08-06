@@ -5,6 +5,7 @@
 #include "treeeventmap.h"
 #include<R.h>
 #include "eventdictionary.h"
+#include "constraint.h"
 
 class TreeEventNode;
 
@@ -22,10 +23,11 @@ public:
     PrefixTree();
     //Dtor
     virtual ~PrefixTree();
-    void addSequence(Sequence *s,const double &maxGap,const double &windowSize, const double & ageMin, const double & ageMax,const double & ageMaxEnd, const int& k);
+   // void addSequence(Sequence *s,const double &maxGap,const double &windowSize, const double & ageMin, const double & ageMax,const double & ageMaxEnd, const int& k);
+    void addSequence(Sequence *s, Constraint *cst, const int& k);
     void simplifyTree(int minSup);
     int countSubsequence(int minSup);
-    //Give an overview of this tree (paramètre prof==profondeur, interne)
+    //Give an overview of this tree (paramï¿½tre prof==profondeur, interne)
     void print();
     //Type of this event
     void getSubsequences(SEXP result,int * support, int *index, SEXP classname, EventDictionary * ed);

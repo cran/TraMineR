@@ -4,6 +4,7 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include "eventdictionary.h"
+#include "constraint.h"
 #include <Rmath.h>
 
 /**
@@ -203,18 +204,37 @@ extern "C" {
         return ret;
     }
 
-    /**Main function find frequent subsequences*/
-    SEXP tmrfindsubsequences(SEXP seqs,SEXP maxGap, SEXP windowSize,SEXP ageMinBegin, SEXP ageMaxBegin, SEXP ageMaxEnd, SEXP minSupport, SEXP maxSubseqSize, SEXP classname) {
-        //Initializing parameters
-        double wSize=REAL(windowSize)[0],mGap=REAL(maxGap)[0];
-        double aMin=REAL(ageMinBegin)[0],aMax=REAL(ageMaxBegin)[0],aMaxEnd=REAL(ageMaxEnd)[0];
 
+    /**Main function find frequent subsequences*/
+    SEXP tmrfindsubsequences(SEXP seqs,SEXP maxGap, SEXP windowSize,SEXP ageMinBegin, SEXP ageMaxBegin, SEXP ageMaxEnd, SEXP countMethod, SEXP minSupport, SEXP maxSubseqSize, SEXP classname) {
+        //Initializing parameters
+
+    	Constraint * cst = new Constraint(REAL(maxGap)[0],REAL(windowSize)[0],REAL(ageMinBegin)[0],REAL(ageMaxBegin)[0],REAL(ageMaxEnd)[0], REAL(countMethod)[0]);
+    	//REprintf((char*)"branches/nico 1\n\n");
+
+     // MOVED TO CONSTRAINT OBJ
+     //  double wSize=REAL(windowSize)[0],mGap=REAL(maxGap)[0];
+     //  double aMin=REAL(ageMinBegin)[0],aMax=REAL(ageMaxBegin)[0],aMaxEnd=REAL(ageMaxEnd)[0];
+	/*	double wSize = cst->getwindowSize();
+		double mGap = cst->getmaxGap();
+		//double mGap=REAL(maxGap)[0];
+		double aMin=cst->getageMinBegin();
+		double aMax=cst->getageMaxBegin();
+		double aMaxEnd=cst->getageMaxEnd();
+    	REprintf((char*)"wSize = %f\n", wSize);
+    	REprintf((char*)"maxgap = %f\n", mGap);
+    	REprintf((char*)"aMin = %f\n", aMin);
+    	REprintf((char*)"aMax = %f\n", aMax);
+    	REprintf((char*)"aMaxEnd = %f\n", aMaxEnd);
+	 */
         int mSupport=INTEGER(minSupport)[0], maxK=INTEGER(maxSubseqSize)[0],k=1;
+
         //Default values implies no limit (actually biggest possible limit)
-        if (wSize==-1)wSize=DBL_MAX;
-        if (mGap==-1)mGap=DBL_MAX;
-        if (aMax==-1)aMax=DBL_MAX;
-        if (aMaxEnd==-1)aMaxEnd=DBL_MAX;
+        // MOVED TO CONSTRAINT OBJ
+       // if (wSize==-1)wSize=DBL_MAX;
+      //  if (mGap==-1)mGap=DBL_MAX;
+      //  if (aMax==-1)aMax=DBL_MAX;
+       // if (aMaxEnd==-1)aMaxEnd=DBL_MAX;
         if (maxK==-1)maxK=INT_MAX;
         SEXP seq;
         int numseq=length(seqs);
@@ -233,8 +253,9 @@ extern "C" {
                 seq=VECTOR_ELT(seqs,i);
                 ASSIGN_TMRSEQ_TYPE(s,seq);
                 if(ed==NULL)ed=s->getDictionary();
-                root->addSequence(s,mGap,wSize,aMin,aMax,aMaxEnd,k);
-                //Rprintf((char*)"Added %i seq, node=%i\n",i,TreeEventNode::getNodeCount());
+                //root->addSequence(s,mGap,wSize,aMin,aMax,aMaxEnd,k);
+                root->addSequence(s, cst, k);
+              //  Rprintf((char*)"Added %i seq, node=%i\n",i,TreeEventNode::getNodeCount());
             }
             //REprintf((char*)"     Simplifying tree (size: %i)\n",TreeEventNode::getNodeCount());
             //root->print();

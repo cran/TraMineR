@@ -50,7 +50,9 @@ seqecontain(fsubseq, c("FullTime"))
 sexsubseq <- seqecmpgroup(fsubseq, group=actcal$sex,
                     method="bonferroni")
 ## Plotting the ten most discriminating subsequences in 2 x 4 format
-plot(sexsubseq[1:10])
-
+## frequencies
+plot(sexsubseq[1:10],ptype="freq")
+## residuals
+plot(sexsubseq[1:10],ptype="resid")
 
 devAskNewPage(oask)

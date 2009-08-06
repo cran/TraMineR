@@ -1,11 +1,7 @@
-#include <R.h>
-#include <Rinternals.h>
-#include <R_ext/Rdynload.h>
-#include <Rmath.h>
-#include <stdlib.h>
+#include "TraMineR.h"
 #include <stack>
-#include <cmath>
 #include "salttseq.h"
+#include <cmath>
 //#include <math.h>
 
 #define TMRMATRIXINDEXC(ligne, colone,len) (ligne)+(colone)*(len)
@@ -23,6 +19,11 @@ static R_INLINE double computeDelta(double* previousmatrix, double * salttmatrix
 	}
 	delta=sqrt(delta/alphafois);
 	return delta;
+}
+static R_INLINE double plog2(const double &value) {
+	double res;
+	res = std::log(value)/std::log((double)2);
+	return res;
 }
 
 extern "C" {
@@ -153,7 +154,7 @@ SEXP henikoff(SEXP Ssequences, SEXP seqdim, SEXP lenS, SEXP alphasizeS, SEXP log
 	REprintf("AAA");
 	int nseq = INTEGER(seqdim)[0];
 	int alphasize = INTEGER(alphasizeS)[0];
-	int logoddmode = INTEGER(logoddS)[0];
+	//int logoddmode = INTEGER(logoddS)[0];
 	PROTECT(scostmat = allocVector(REALSXP, (alphasize * alphasize)));
 	double * scosts = REAL(scostmat);
 	//Nombre de s�quence
@@ -162,7 +163,7 @@ SEXP henikoff(SEXP Ssequences, SEXP seqdim, SEXP lenS, SEXP alphasizeS, SEXP log
 	//Matrice des s�quences
 	int* sequences = INTEGER(Ssequences);
 	//Tailles des s�quences
-	int* slen = INTEGER(lenS);
+	//int* slen = INTEGER(lenS);
 	//indel
 	int i,j,k, statea, stateb;
 	double ** fmat = new double*[alphasize];
@@ -244,7 +245,7 @@ SEXP henikoff(SEXP Ssequences, SEXP seqdim, SEXP lenS, SEXP alphasizeS, SEXP log
 	REprintf("Last loop\n");
 	for(i=0;i<alphasize;i++) {
 		for(j=i+1;j<alphasize;j++) {
-			scosts[TMRMATRIXINDEXC(i,j,alphasize)] = scosts[TMRMATRIXINDEXC(j,i,alphasize)] = log2(qijtable[i][j]/eijtable[i][j]);
+			scosts[TMRMATRIXINDEXC(i,j,alphasize)] = scosts[TMRMATRIXINDEXC(j,i,alphasize)] = plog2(qijtable[i][j]/eijtable[i][j]);
 			//- ((log2(qijtable[i][i]/eijtable[i][i])+log2(qijtable[j][j]/eijtable[j][j]))/2);
 			REprintf("scost[%d][%d] = %f\n",i,j,scosts[TMRMATRIXINDEXC(i,j,alphasize)]);
 		}
