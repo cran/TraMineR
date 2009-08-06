@@ -16,57 +16,62 @@
 #}
 
 seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL){
-  seqecmpgroup.chisq<-function(index,group,seqmatrix,bonferroni,ntest){
-    sp<-sum(seqmatrix[,index])
-    if(sp>0&&sp<length(group)){
-      suppressWarnings(chi<- chisq.test(group,seqmatrix[,index]))
-      if(bonferroni) chi$p.value <- (1-(1-chi$p.value)^ntest)
-      resid<-as.list(chi$residuals[,"1"])
-      names(resid)<-paste("Resid",names(chi$residuals[,"1"]),sep=".")
-      freq<-as.list(chi$observed[,"1"]/rowSums(chi$observed))
-      names(freq)<-paste("Freq",names(chi$residuals[,"1"]),sep=".")
-      return(data.frame(p.value=chi$p.value,statistic=chi$statistic,index=index,freq,resid, check.names=FALSE))
-      #return(data.frame(p.value=chi$p.value,statistic=chi$statistic,index=index))
-    }
-    vals<-numeric(length(levels(group)))
-    vals2<-numeric(length(levels(group)))
-    names(vals)<-paste("Resid",levels(group),sep=".")
-    names(vals2)<-paste("Freq",levels(group),sep=".")
-    vals2[]<-sp/length(group)
-    return(data.frame(p.value=NA,statistic=NA,index=index,as.list(vals2),as.list(vals), check.names=FALSE))
+	seqecmpgroup.chisq <- function(index, group, seqmatrix, bonferroni, ntest){
+		sp<-sum(seqmatrix[ , index])
+		if(sp>0 && sp<length(group)){
+			suppressWarnings(chi <- chisq.test(group, seqmatrix[, index]))
+			if (bonferroni) chi$p.value <- (1-(1-chi$p.value)^ntest)
+			resid <- as.list(chi$residuals[, "1"])
+			names(resid) <- paste("Resid", names(chi$residuals[, "1"]), sep=".")
+			freq <- as.list(chi$observed[, "1"]/rowSums(chi$observed))
+			names(freq) <- paste("Freq", names(chi$residuals[, "1"]), sep=".")
+			return(data.frame(p.value=chi$p.value, statistic=chi$statistic, 
+				index=index, freq, resid, check.names=FALSE))
+			#return(data.frame(p.value=chi$p.value,statistic=chi$statistic,index=index))
+		}
+		vals <- numeric(length(levels(group)))
+		vals2 <- numeric(length(levels(group)))
+		names(vals) <- paste("Resid", levels(group), sep=".")
+		names(vals2) <- paste("Freq", levels(group), sep=".")
+		vals2[] <- sp/length(group)
+		return(data.frame(p.value=1.0, statistic=0, index=index, 
+			as.list(vals2), as.list(vals), check.names=FALSE))
 #    return(data.frame(p.value=NA,statistic=NA,index=index))
-  }
-  if(is.null(pvalue.limit))pvalue.limit<- 2
-  if(!is.subseqelist(subseq))stop("subseq should be a subseqelist")
-  group<-factor(group)
-  if(method=="bonferroni"){
-    bonferroni<-TRUE
-    method<-"chisq"
-  }else{
-    bonferroni<-FALSE
-  }
-  if(method=="chisq"){
-    testfunc<-seqecmpgroup.chisq
-    ntest<-length(subseq$subseq)
-    seqmatrix<-seqeapplysub(subseq, method="presence")
-    testfunc.arg<-list(group=group,bonferroni=bonferroni,ntest=ntest,seqmatrix=seqmatrix)
-    decreasing<-FALSE
-  }else{
-    stop("This method is not (yet) implemented")
-  }
+	}
+	if(is.null(pvalue.limit))pvalue.limit<- 2
+	if(!is.subseqelist(subseq)) stop("subseq should be a subseqelist")
+	group<-factor(group)
+	if (method=="bonferroni") {
+		bonferroni<-TRUE
+		method<-"chisq"
+	}
+	else {
+		bonferroni<-FALSE
+	}
+	if (method=="chisq") {
+		testfunc<-seqecmpgroup.chisq
+		ntest<-length(subseq$subseq)
+		seqmatrix<-seqeapplysub(subseq, method="presence")
+		testfunc.arg<-list(group=group, bonferroni=bonferroni, 
+			ntest=ntest, seqmatrix=seqmatrix)
+		decreasing<-FALSE
+	}
+	else {
+		stop("This method is not (yet) implemented")
+	}
 	res<-data.frame()
 	for (i in 1:length(subseq$subseq)) {
-    testfunc.arg$index<-i
-    stat<-do.call(testfunc,testfunc.arg)
-    res<-rbind(res,stat)
+		testfunc.arg$index<-i
+		stat<-do.call(testfunc,testfunc.arg)
+		res<-rbind(res,stat)
 	}
 	subseqnum<-1:sum(res[,1]<=pvalue.limit)
-  cres<-order(as.double(res[,1]),decreasing =decreasing)[subseqnum]#[!is.na(as.double(res$stat))]
-  data<-data.frame(Support=as.data.frame(subseq$data[cres,"Support"],optional=TRUE),res[cres,], check.names=FALSE)
-  rownames(data)<-1:nrow(data)
-  ret<-createsubseqelist(subseq$seqe,subseq$constraint,subseq$subseq[cres],data=data,type=method)
-  ret$labels<-levels(group)
-  class(ret)<-c("subseqelistchisq",class(ret))
+	cres<-order(as.double(res[,1]), decreasing =decreasing)[subseqnum]#[!is.na(as.double(res$stat))]
+	data<-data.frame(Support=as.data.frame(subseq$data[cres,"Support"], optional=TRUE), res[cres,], check.names=FALSE)
+	rownames(data)<-1:nrow(data)
+	ret<-createsubseqelist(subseq$seqe,subseq$constraint,subseq$subseq[cres],data=data,type=method)
+	ret$labels<-levels(group)
+	class(ret)<-c("subseqelistchisq",class(ret))
 	return(ret)
 }
 

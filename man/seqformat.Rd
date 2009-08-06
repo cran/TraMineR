@@ -7,17 +7,18 @@ Translate a sequence data set from one format to another.
 }
 \details{
 The 'seqformat' function is used to convert data from one format to another. The input data is first converted into the STS format and then converted to the output format. Depending on input and output formats, some information can be lost due to the steps in the conversion process. The output is a matrix, NOT a sequence object to be passed to TraMineR functions for plotting and mining sequences (use the \code{\link{seqdef}} function therefore). 
-See \cite{Gabadinho et al. (2008)} for more details on longitudinal data formats and translation between them.
+See \cite{Gabadinho et al. (2009)} and \cite{Ritschard et al. (2009)} for more details on longitudinal data formats and translation between them.
 }
 
 \usage{
 seqformat(data, var=NULL, id=NULL, 
 	from, to, compressed=FALSE,
-	nrep=NULL, tevent, stsep, covar=NULL,
+	nrep=NULL, tevent, stsep=NULL, covar=NULL,
 	SPS.in=list(xfix="()", sdsep=","),
 	SPS.out=list(xfix="()", sdsep=","),
 	begin=NULL, end=NULL, status=NULL, 
-	process=TRUE, pdata=NULL, pvar=NULL, limit=100, overwrite=TRUE, 
+	process=TRUE, pdata=NULL, pvar=NULL, 
+	limit=100, overwrite=TRUE, 
 	fillblanks=NULL, tmin=NULL, tmax=NULL)
 }
 
@@ -39,7 +40,7 @@ Whether the sequences are in the compressed (character strings) or extended form
 
    \item{tevent}{when converting to time-stamped-event (TSE) format, a matrix of size 'ns' * 'ns' where 'ns' is the number of distinct states appearing in the sequences must be given. In this matrix, the cell a,b contains all events associated with a transition from state a to state b.}
 
-  \item{stsep}{the character used as separator in the original data if input format is separated character strings. By default a separator is searched for with the \code{\link{seqfcheck}} function.}
+  \item{stsep}{the character used as separator in the original data if input format is a vector of character strings. If \code{NULL} (default value), the \code{\link{seqfcheck}} function is called for detecting automatically a separator among "-" and ":". Other separators must be specified explicitely.}
 
   \item{covar}{the list of columns containing associated covariates to be included in the output data frame. If to='SRS' is choosed, the covariates are replicated accross each row. Default to NULL. }
 
@@ -55,7 +56,7 @@ Whether the sequences are in the compressed (character strings) or extended form
 
 	\item{process}{when converting from SPELL, create sequences on a process time axis. If set to false, create sequences on a calendar time axis.}
 
-	\item{pdata}{when converting from SPELL, name of the data frame containing the individual 'birth' time, that is, the entering time from which the process time will be computed. The data must contain two columns: an id to match the birth time with SPELL data and a 'birth' time.}
+	\item{pdata}{when converting from SPELL and \code{process=TRUE}, either NULL, "auto" or the name of the data frame containing the individual 'birth' time, that is, the entering time from which the process time will be computed. If set to \code{NULL} (default), the starting and ending time of each spell are supposed to be ages. If set to auto, ages are computed using the starting time of the first spell of each individual as her/his birth date. If external birth dates are provided, the data must contain two columns: an id to match the birth time with SPELL data and a 'birth' time.}
 
 	\item{pvar}{names or numbers of the columns containing the individual identification number and the 'birth' time in pdata.}
 
@@ -73,7 +74,9 @@ Whether the sequences are in the compressed (character strings) or extended form
 \value{a data frame}
 
 \references{
-Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2008). Mining Sequence Data in \code{R} with \code{TraMineR}: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
+Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with \code{TraMineR}: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
+
+Ritschard, G., A. Gabadinho, M. Studer and N. S. Müller. Converting between various sequence representations. in Ras, Z. & Dardzinska, A. (ed.) \emph{Advances in Data Management}, Springer, 2009, 223, 155-175
 }
 
 \seealso{

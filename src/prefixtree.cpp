@@ -1,5 +1,6 @@
 #include "prefixtree.h"
 #include "eventseq.h"
+#include "constraint.h"
 //#include "subsequence.h"
 
 PrefixTree::PrefixTree() {
@@ -14,8 +15,10 @@ PrefixTree::~PrefixTree() {
     this->child.clearAllPointers();
 }
 
-void PrefixTree::addSequence(Sequence *s,const double &maxGap,const double &windowSize, const double & ageMin, const double & ageMax,const double & ageMaxEnd, const int& k) {
-    //subsequences (actually first symbol)
+//void PrefixTree::addSequence(Sequence *s,const double &maxGap,const double &windowSize, const double & ageMin, const double & ageMax,const double & ageMaxEnd, const int& k) {
+void PrefixTree::addSequence(Sequence *s,Constraint * cst, const int& k) {
+
+//subsequences (actually first symbol)
     if (!s->hasEvent())return;
     SequenceEventNode * e=s->getEvent();
     //Iterator to search for brother and child
@@ -25,16 +28,16 @@ void PrefixTree::addSequence(Sequence *s,const double &maxGap,const double &wind
     while (e!=NULL) {
         age+=e->getGap();
         //Only start when ageMin is reached
-        if (age>ageMax) break;
-        if (age>=ageMin) {
+        if (age>cst->getageMaxBegin()) break;
+        if (age>=cst->getageMinBegin()) {
             it=this->child.find(e->getType());
             if (it!=this->child.end()) {
-                it->second->addSequenceInternal(s,e,maxGap,windowSize,ageMaxEnd,0,age,k, 2);
+                it->second->addSequenceInternal(s,e,cst,0,age,k, 2);
             } else if (k==1) { //Build new node only when k==1
                 ten=new TreeEventNode(e->getType());
                 this->child[e->getType()]=ten;
                 //Rprintf("Adding event %i\n",ten->getType());
-                ten->addSequenceInternal(s,e,maxGap,windowSize,ageMaxEnd,0,age,k, 2);
+                ten->addSequenceInternal(s,e,cst,0,age,k, 2);
             }
         }
         e=e->getNext();//Get Next element
@@ -49,7 +52,7 @@ void PrefixTree::simplifyTree(int minSup) {
     this->child.simplifyTreeMap(minSup);
 }
 
-//Give an overview of this tree (paramètre prof==profondeur, interne)
+//Give an overview of this tree (paramï¿½tre prof==profondeur, interne)
 void PrefixTree::print() {
     this->child.print(0,true);
 }

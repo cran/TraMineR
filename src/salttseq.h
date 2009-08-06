@@ -2,7 +2,9 @@
 #define _SALTTSEQ_INCLUDED_
 #include <R.h>
 #include <Rinternals.h>
-#include <R_ext/Rdynload.h>
+#ifdef length
+#undef length
+#endif
 #include <Rmath.h>
 #include "alignement.h"
 #include <stack>
@@ -26,7 +28,7 @@ protected:
 	int fmatsize;
 	double maxscost;
 	std::stack<Alignement>* stackAlign;
-	std::stack<Alignement>* stackAlign2;
+	//std::stack<Alignement>* stackAlign2;
 	double* frequences;
     double* freqconj;
     double* dayhoffcosts;

@@ -28,7 +28,7 @@ where \eqn{\bar t} is the mean consecutive time spent in the distinct states, i.
 }
 
 \seealso{
- \code{}.
+ \code{\link{seqient}} for computing the within sequence entropy.
 }
 \references{
   Elzinga, Cees H. and Liefbroer, Aart C. (2007).

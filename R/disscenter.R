@@ -2,8 +2,7 @@
 ## Compute distance to center for a group
 ############################
 
-disscenter <- function(diss, group=NULL, medoids.index=NULL) {
-	allcenter <- FALSE
+disscenter <- function(diss, group=NULL, medoids.index=NULL, allcenter=FALSE) {
 	if(is.logical(medoids.index)){
 		if(medoids.index){
 			medoids.index <- "First"

@@ -30,16 +30,22 @@ dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
   
 }
 \value{
-  Return a \code{dissmultifactor} object with the following components:
+  A \code{dissmultifactor} object with the following components:
   \item{mfac}{The part of variance explained by each variable (comparing full model to model without the specified variable) and its significance using permutation test}
   \item{call}{Function call}
   \item{perms}{Permutation values as a \code{boot} object}
   \item{perm_method}{Permutation method used to compute significance}
 }
 \references{
+  Studer, M., G. Ritschard, A. Gabadinho, and N. S. Müller (2009) 
+  Discrepancy	analysis of complex objects using dissimilarities.
+  In H. Briand, F. Guillet, G. Ritschard, and D. A. Zighed (Eds.),
+  \emph{Advances in Knowledge Discovery and Management},
+  Studies in Computational Intelligence. Berlin: Springer.
+	
   Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009).
-  Analyse de dissimilarités par arbre d'induction.
-  \emph{Revue des Nouvelles Technologies de l'Information}, EGC'2009.
+  Analyse de dissimilarités par arbre d'induction. In EGC 2009,
+  \emph{Revue des Nouvelles Technologies de l'Information}, Vol. E-15, pp. 7-18.
 
   Anderson, M. J. (2001). A new method for non-parametric multivariate analysis of variance.
 \emph{Austral Ecology} 26, 32-46.
@@ -52,16 +58,13 @@ comment on distance-based redundancy analysis. \emph{Ecology} 82(1), 290-297.
 the National Academy of Sciences of the United States of America} 103(51), 19430-19435.
 }
 \seealso{
-\code{\link{dissvar}} to compute the pseudo variance from dissimilarities and for a basic introduction to concepts of pseudo variance analysis
-
-\code{\link{dissassoc}} to test the association of objects characterized by a dissimilarity matrix with a single explanatory variable
-
+\code{\link{dissvar}} to compute the pseudo variance from dissimilarities and for a basic introduction to concepts of pseudo variance analysis.
+   \cr
+   \code{\link{dissassoc}} to test association between objects represented by their dissimilarities and a covariate.
+\cr
 \code{\link{disstree}} for an induction tree analyse of objects characterized by a dissimilarity matrix.
-
-\code{\link{disscenter}} to compute the distance of each object to its group center from dissimilarities.
-
-\code{\link{dissmfac}} to perform multi-factor analysis of variance using dissimilarities.
-
+\cr
+\code{\link{disscenter}} to compute the distance of each object to its group center from pairwise dissimilarities.
 }
 \examples{
 ## Defining a state sequence object

@@ -1,6 +1,5 @@
-#include<R.h>
-#include <Rinternals.h>
-#define TMRMATRIXINDEX(ligne, colone,len) (ligne-1)+(colone-1)*len
+#include "TraMineR.h"
+
 SEXP dist2matrix(SEXP diss, SEXP diss_size) {
     int n=INTEGER(diss_size)[0];
     SEXP ans;

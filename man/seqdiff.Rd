@@ -1,3 +1,4 @@
+\encoding{latin1}
 \name{seqdiff}
 \alias{seqdiff}
 \alias{print.seqdiff}
@@ -29,6 +30,18 @@ seqdiff(seqdata, group, cmprange = c(0, 1),
   \item{stat}{A \code{data.frame} with tree statistics, PseudoF, PseudoR2 and PseudoT for each timestamp of the sequence, see \code{\link{dissassoc}}}
   \item{variance}{A \code{data.frame} with the discrepancy of each \code{group} defined by the \code{group} variable and for the whole population at each timestamp}
 }
+\references{
+  Studer, M., G. Ritschard, A. Gabadinho, and N. S. Müller (2009) 
+  Discrepancy	analysis of complex objects using dissimilarities.
+  In H. Briand, F. Guillet, G. Ritschard, and D. A. Zighed (Eds.),
+  \emph{Advances in Knowledge Discovery and Management},
+  Studies in Computational Intelligence. Berlin: Springer.
+	
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
+  Analyse de dissimilarités par arbre d'induction. In EGC 2009,
+  \emph{Revue des Nouvelles Technologies de l'Information}, Vol. E-15, pp. 7-18.
+  
+ }
 \seealso{\code{\link{dissassoc}} to analyse the association with the whole sequence}
 \examples{
 ## Defining a state sequence object

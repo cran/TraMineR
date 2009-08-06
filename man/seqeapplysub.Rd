@@ -6,7 +6,7 @@
 Checks occurrences of the subsequences \code{subseq} among the event sequences and returns the result according to the selected \code{method}.
 }
 \usage{
-seqeapplysub(subseq, method = "count", constraint = NULL)
+seqeapplysub(subseq, method = "count", constraint = NULL, rules=FALSE)
 }
 \arguments{
  \item{subseq}{list of subsequences (an event subsequence object) such as created by \code{\link{seqefsub}}}
@@ -14,6 +14,7 @@ seqeapplysub(subseq, method = "count", constraint = NULL)
  \item{constraint}{
 	Time constraints overriding those used to compute subseq. See \code{\link{seqeconstraint}}
 	}
+ \item{rules}{If set to TRUE, instead of checking occurences of the subsequences among the event sequences, check the occurence of the subsequences inside the subsequences (internally used by \code{seqerules})}
 }
 \details{
   There are three methods implemented:

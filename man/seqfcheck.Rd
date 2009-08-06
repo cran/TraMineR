@@ -16,7 +16,7 @@ seqfcheck(seqdata)
  }
 \value{a character string coding the format of the sequence data, either \code{':'},\code{'-'},\code{'X'} or \code{'-X'}.} 
 \seealso{
- \code{\link{seqconc}, \link{seqdecomp}}
+ \code{\link{seqconc}}, \code{\link{seqdecomp}}
 }
 
 \references{

@@ -28,10 +28,15 @@ plingu02 (language of questionnaire) \cr
 p02r01   (religion)\cr
 p02r04   (religious participation) \cr
 cspfaj   (father's social status) \cr
-cspmoj   (mother's social status) \cr  
+cspmoj   (mother's social status) \cr
+\cr
+Two additional weights variables are inserted for example ONLY (since biofam is a subsample of the original data, these weights are not adapted): \cr
+\cr
+wp00tbgp (weights inflating to the swiss population)\cr
+wp00tbgs (weights keeping sample size) \cr
 }
 \usage{data(biofam)}
-\format{A data frame with 2000 rows, 16 state variables, 1 id variable and 7 covariates.}
+\format{A data frame with 2000 rows, 16 state variables, 1 id variable and 7 covariates and 2 weights variables.}
 \source{Swiss Household Panel}
 \references{
   Müller, N. S., M. Studer, G. Ritschard (2007).

@@ -155,7 +155,8 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varnam
 	totpop <- length(ind)
 	grp <- factor(pred, ordered=(is.ordered(pred) || is.numeric(pred)))
 	lgrp <- levels(grp)
-	if (length(lgrp)==1)return(NULL)
+	if (length(lgrp)<=1)return(NULL)
+	grpint <- as.integer(grp)
 	nbGrp <- length(lgrp)
 	has.na <- FALSE
 	llgrp <- lgrp
@@ -165,13 +166,12 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varnam
 		has.na <- TRUE
 		llgrp[nbGrp] <- "<Missing>"
 	}
-
 	grpCond <- list()
 	grpSize <- numeric(length=nbGrp)
 	grpSize[] <- 0
 	for (i in 1:length(lgrp)) {
 		## on crée le groupe en question
-		grpCond[[i]] <- (grp==lgrp[i])
+		grpCond[[i]] <- (grpint==i)
 		grpCond[[i]][is.na(grpCond[[i]])] <- FALSE
 		grpSize[i] <- sum(grpCond[[i]])
 	}
@@ -252,7 +252,7 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varnam
 			rvar=bestRegroup$iothc/bestRegroup$popothc,
 			SCres=bestSCres,
 			varname=varname)
-	ret$variable <- (grp %in% lgrp[bestRegroup$co])
+	ret$variable <- (grpint %in% bestRegroup$co)
 	if (has.na) {
 		ret$variable[is.na(grp)] <- (nbGrp %in% bestRegroup$co)
 	}

@@ -44,7 +44,10 @@ seqdss <- function(seqdata, with.miss=FALSE) {
 	}
 	
 	trans <- suppressMessages(
-		seqdef(trans, alphabet=statl, cnames=paste("ST",seq(1:maxsl),sep=""), cpal=cpal(seqdata)))
+		seqdef(trans, alphabet=statl, 
+		cnames=paste("ST",seq(1:maxsl),sep=""), 
+		cpal=cpal(seqdata),
+		id=rownames(seqdata)))
 
 	return(trans)
 }

@@ -11,10 +11,10 @@ DTNseqplot <- function(ind, seqdata, sortv, plottype, seqplot.title.cex,
 		par(mar=c(bottom, left, top, 0), font.sub=2, mgp=c(0, 0, 0))
 	}
 	if (!is.null(sortv)){
-		plot(seqdata[ind, ], sortv=sortv[ind], ...)
+		seqplot(seqdata[ind, ], sortv=sortv[ind], ...)
 	}
 	else {
-		plot(seqdata[ind, ], ...)
+		seqplot(seqdata[ind, ], ...)
 	}
 }
 

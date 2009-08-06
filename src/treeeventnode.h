@@ -4,6 +4,7 @@
 #include<R.h>
 #include <Rinternals.h>
 #include "eventseq.h"
+#include "constraint.h"
 
 
 class TreeEventMap;
@@ -25,14 +26,15 @@ public:
     TreeEventNode(const int& t);
     //Dtor
     virtual ~TreeEventNode();
-    //Ajoute une séquence et l'ensemble des sous-séquences qui la compose. Méthode récursive (dernier paramètre = paramètre interne)
+    //Ajoute une sï¿½quence et l'ensemble des sous-sï¿½quences qui la compose. Mï¿½thode rï¿½cursive (dernier paramï¿½tre = paramï¿½tre interne)
     //void addSequence(Sequence *s,const double &maxGap,const double &windowSize);
-    //Ajoute une séquence et l'ensemble des sous-séquences qui la compose. Méthode récursive (dernier paramètre = paramètre interne)
-    void addSequenceInternal(Sequence *s, SequenceEventNode * en, const double &maxGap,const double &windowSize,const double & ageMax, const double &gapConsumed,  const double& currentAge, const int& k, const int&currentK);
+    //Ajoute une sï¿½quence et l'ensemble des sous-sï¿½quences qui la compose. Mï¿½thode rï¿½cursive (dernier paramï¿½tre = paramï¿½tre interne)
+//    void addSequenceInternal(Sequence *s, SequenceEventNode * en, const double &maxGap,const double &windowSize,const double & ageMax, const double &gapConsumed,  const double& currentAge, const int& k, const int&currentK);
+    void addSequenceInternal(Sequence *s, SequenceEventNode * en, Constraint * cst, const double &gapConsumed,  const double& currentAge, const int& k, const int&currentK);
 
-    //Simplifie l'arbre pour enlever l'ensemble des sous-séquences qui ne satisfont pas le support minimum (nb occurrences)
+    //Simplifie l'arbre pour enlever l'ensemble des sous-sï¿½quences qui ne satisfont pas le support minimum (nb occurrences)
     void simplifyTree(int minSup);
-    //Give an overview of this tree (paramètre prof==profondeur, interne)
+    //Give an overview of this tree (paramï¿½tre prof==profondeur, interne)
     void print(const int & prof=0, const bool& isbrother=true);
     //Type of this event
     const int& getType() {

@@ -29,16 +29,19 @@ TraMineR.trunc <- function(seq, mstate, sl,
 		if (!is.na(left) & lc>0) {
 			if (left=="DEL") seq.trunc[1:lc] <- void
 			else if (left=="NEUTRAL") seq.trunc[1:lc] <- neutral
+			else seq.trunc[1:lc] <- left
 		}
 
 		if (!is.na(right) & rc<=sl) {
 			if (right=="DEL") seq.trunc[rc:sl] <- void
 			else if (right=="NEUTRAL") seq.trunc[rc:sl] <- neutral
+			else seq.trunc[rc:sl] <- right
 		}
 
 		if (!is.na(gaps) & length(mm>0)) {
 			if (gaps=="DEL") seq.trunc[mm] <- void
 			else if (gaps=="NEUTRAL") seq.trunc[mm] <- neutral
+			else seq.trunc[mm] <- gaps
 		}
 	
 		ndel <- sum(seq.trunc==void, na.rm=TRUE)

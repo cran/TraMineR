@@ -40,32 +40,39 @@ Each node object contains itself the following components:
   \item{R2}{R squared of the split, NULL for terminal nodes}
 }
 \references{
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009).
-  Analyse de dissimilarités par arbre d'induction.
-  \emph{Revue des Nouvelles Technologies de l'Information}, EGC'2009.
+
+  Studer, M., G. Ritschard, A. Gabadinho, and N. S. Müller (2009) 
+  Discrepancy	analysis of complex objects using dissimilarities.
+  In H. Briand, F. Guillet, G. Ritschard, and D. A. Zighed (Eds.),
+  \emph{Advances in Knowledge Discovery and Management},
+  Studies in Computational Intelligence. Berlin: Springer.
+	
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
+  Analyse de dissimilarités par arbre d'induction. In EGC 2009,
+  \emph{Revue des Nouvelles Technologies de l'Information}, Vol. E-15, pp. 7-18.
   
-  Batagelj, V. (1988). Generalized ward and related clustering problems. In H. Bock (Ed.),
-  \emph{Classification and related methods of data analysis}, pp. 67-74. North-Holland, Amsterdam.
+  Batagelj, V. (1988) Generalized ward and related clustering problems. In H. Bock (Ed.),
+  \emph{Classification and related methods of data analysis}, Amsterdam: Norht-Holland, pp. 67-74.
   
-  Anderson, M. J. (2001). A new method for non-parametric multivariate analysis of variance.
-\emph{Austral Ecology} 26, 32-46.
+  Anderson, M. J. (2001) A new method for non-parametric multivariate analysis of variance.
+\emph{Austral Ecology} \bold{26}, 32-46.
   
-  Piccarreta, R. et F. C. Billari (2007). Clustering work and family trajectories by using a divisive
-algorithm. \emph{Journal of the Royal Statistical Society A} 170(4), 1061-1078.
+  Piccarreta, R. et F. C. Billari (2007) Clustering work and family trajectories by using a divisive
+algorithm. \emph{Journal of the Royal Statistical Society A} \bold{170}(4), 1061--1078.
 }
 %\author{}
 \seealso{
    \code{\link{seqtree2dot}} to generate graphic representation of disstree objects when analyzing state sequences.
-   
+   \cr
    \code{\link{disstree2dot}} is a more general interface to generate such representation.
-   
+   \cr
    \code{\link{dissvar}} to compute discrepancy using dissimilarities and for a basic introduction to discrepancy analysis.
-   
+   \cr
    \code{\link{dissassoc}} to test association between objects represented by their dissimilarities and a covariate.
-
+   \cr
 	 \code{\link{dissmfac}} to perform multi-factor analysis of variance from pairwise dissimilarities.
-   
-   \code{\link{disscenter}} to compute the distance of each object to its center of group from pairwise dissimilarities.
+\cr
+\code{\link{disscenter}} to compute the distance of each object to its group center from pairwise dissimilarities.
 
 }
 \examples{

@@ -5,13 +5,13 @@
 
 using namespace std;
 
-Alignement::Alignement(const int& iseq, const int&jseq, const double& pid, const int& liseq, const int& ljseq, int& maxlen) {
-	  this->iseq = iseq;
-	  this->jseq = jseq;
-	  this->pid = pid;
-	  this->liseq = liseq;
-	  this->ljseq = ljseq;
-	  this->maxlen = maxlen;
+Alignement::Alignement(const int& iiseq, const int&ijseq, const double& ipid, const int& iliseq, const int& iljseq, int& imaxlen) {
+	  this->iseq = iiseq;
+	  this->jseq = ijseq;
+	  this->pid = ipid;
+	  this->liseq = iliseq;
+	  this->ljseq = iljseq;
+	  this->maxlen = imaxlen;
 	  //int maxij = std::max(liseq, ljseq);
 	  /*
 	  this->alignements = new int*[2];

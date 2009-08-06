@@ -1,6 +1,6 @@
 Package: TraMineR
-Version: 1.2-1
-Date: 2009-05-13
+Version: 1.4
+Date: 2009-08-06
 Title: Sequences and trajectories mining for social scientists
 Author: Alexis Gabadinho <alexis.gabadinho@unige.ch>, Matthias Studer
         <matthias.studer@unige.ch>, Nicolas S. Muller
@@ -27,6 +27,6 @@ Description: This package is a toolbox for sequence manipulation,
         found on TraMineR's web page.
 License: GPL (>= 2)
 URL: http://mephisto.unige.ch/traminer
-Packaged: Wed May 13 10:31:47 2009; gabuntu
+Packaged: 2009-08-06 10:21:30 UTC; hornik
 Repository: CRAN
-Date/Publication: 2009-05-13 19:16:39
+Date/Publication: 2009-08-06 10:54:02

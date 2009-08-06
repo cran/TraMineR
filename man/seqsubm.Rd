@@ -17,8 +17,8 @@ The substitution-cost matrix is used when computing distances between sequences 
 where \eqn{P(i,j)} is the transition rate between states \eqn{i} and \eqn{j}.  
 }
 \usage{
- seqsubm(seqdata, method, cval=2, 
-	with.miss=FALSE, miss.cost=2)
+ seqsubm(seqdata, method, cval=2, with.miss=FALSE, 
+	miss.cost=2, time.varying=FALSE, weighted=TRUE)
 }
 \arguments{
   \item{seqdata}{a sequence object as returned by the \link{seqdef} function.}
@@ -29,6 +29,8 @@ where \eqn{P(i,j)} is the transition rate between states \eqn{i} and \eqn{j}.
 	\item{with.miss}{if \code{TRUE}, an additional entry is added in the matrix for the missing states. Hence, a new "missing" state is added to the list of "valid" states. Use this if you want to compute distances with missing values inside the sequences. See \cite{Gabadinho, 2008} for more details on the options for handling missing values when computing distances between sequences.}
 
 	\item{miss.cost}{the substitution cost for the missing state.}
+	\item{time.varying}{Logical. If TRUE return an \code{\link{array}} containing a distinct matrix for each time unit. The time is the third dimension (subscript).}
+	\item{weighted}{Logical. If TRUE compute transition rates using weights specified in \code{seqdata}.}
 }
 \seealso{
  \code{\link{seqtrate}} \code{\link{seqdef}}.
@@ -55,5 +57,21 @@ biofam.om.c2 <- seqdist(biofam.seq, method="OM",indel=3,sm=ccost)
 
 ## Displaying the distance matrix for the first 10 sequences
 biofam.om.c2[1:10,1:10]
+
+## =================================
+## Example with weights and missings
+## =================================
+data(ex1)
+ex1.seq <- seqdef(ex1,1:13, weights=ex1$weights)
+
+## Unweighted
+subm <- seqsubm(ex1.seq, method="TRATE", with.miss=TRUE, weighted=FALSE)
+ex1.om <- seqdist(ex1.seq, method="OM", sm=subm, with.miss=TRUE)
+
+## Weighted
+subm.w <- seqsubm(ex1.seq, method="TRATE", with.miss=TRUE, weighted=TRUE)
+ex1.omw <- seqdist(ex1.seq, method="OM", sm=subm.w, with.miss=TRUE)
+
+ex1.om == ex1.omw
 }
 \keyword{misc}

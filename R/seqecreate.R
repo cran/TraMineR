@@ -42,6 +42,9 @@ seqecreate<-function(data=NULL, id=NULL,timestamp=NULL, event=NULL, endEvent=NUL
   if(is.null(event)){
     stop("Could not find an event argument")
   }
+  if (any(is.na(id)) || any(is.na(timestamp)) || any(is.na(event))) {
+	stop("Missing values not supported")
+  }
 #  warning("Event sequence analysis module is still experimental", call.=FALSE)
   classname<-c("seqe")
   intEvent=NULL

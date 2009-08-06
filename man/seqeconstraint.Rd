@@ -8,7 +8,7 @@
 }
 \usage{
 seqeconstraint(maxGap = -1, windowSize = -1, 
-  ageMin = -1, ageMax = -1, ageMaxEnd = -1)
+  ageMin = -1, ageMax = -1, ageMaxEnd = -1, countMethod = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,6 +17,7 @@ seqeconstraint(maxGap = -1, windowSize = -1,
   \item{ageMin}{Minimal start time position allowed for subsequences. Ignored when equal to -1 (default).}
   \item{ageMax}{Maximal start time position allowed for subsequences. Ignored when equal to -1 (default).}
   \item{ageMaxEnd}{Maximal end time position allowed for subsequences. Ignored when equal to -1 (default).}
+  \item{countMethod}{By default, subsequences are counted only one time by sequence. If set to 2, each occurence of the subsequence in a sequence is counted.}
 }
 \details{
  \code{maxGap}, \code{windowSize}, \code{ageMin}, \code{ageMax} and \code{ageMaxEnd}. If so, two events should not be separated by more than \code{maxGap} and the whole subsequence should not exceed a \code{windowSize}  time span.

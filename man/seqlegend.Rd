@@ -5,7 +5,7 @@
 Plots a legend for the states in a sequence object. Useful if several graphics are plotted together and only one legend is necessary. Unless specified by the user, the \emph{cpal} and \emph{labels} attributes of the sequence object are used for the colors and text appearing in the legend (see \code{\link{seqdef}}).
 }
 \usage{
-seqlegend(seqdata, cpal, ltext, 
+seqlegend(seqdata, cpal=NULL, ltext=NULL, 
 	position="topleft", fontsize=1, ...)
 }
 \arguments{
@@ -15,9 +15,9 @@ seqlegend(seqdata, cpal, ltext,
 
   \item{ltext}{optional description of the states to appear in the legend. Must be a vector of character strings with number of elements equal to the number of distinct states. If unspecified, the 'labels' attributes of the 'seqdata' sequence object is used (see \code{\link{seqdef}}). }
 
-  \item{position}{the position of the legend in the graphic area. For accepted values, see \code{\link{legend}}. Default to 'topleft'.}
+  \item{position}{the position of the legend in the graphic area. For accepted values, see \code{\link{legend}}. Defaults to \code{"topleft"}.}
 
-  \item{fontsize}{size of the font for the labels. A value less than 1 decreases the font size, a value greater than 1 increases the font size. Default to 1. }
+  \item{fontsize}{size of the font for the labels. A value less than 1 decreases the font size, a value greater than 1 increases the font size. Defaults to 1.}
 	\item{...}{optional arguments passed to the \code{\link{legend}} function.}
 }
 %\seealso{}

@@ -1,38 +1,38 @@
 #include "salttseq.h"
 #include "alignement.h"
+#include "TraMineR.h"
 #include <stack>
 #include <set>
-#include <math.h>
 #include <algorithm>
 #include <utility>
 
 using namespace std;
 
-Salttseq::Salttseq(const int& norm, const int& nseq, int * slen, const int&maxlen, double*  indel, int  &alphasize, double * scost, double * distmatrix, std::stack<Alignement>* stackAlign, int * sequences, double * salttcost, double * fmat, double * tbmat, const int& fmatsize, const double& pid, const int& logoddmode) {
-	this->norm=norm;
-	this->nseq=nseq;
-	this->maxlen=maxlen;
-	this->indel=indel;
-	this->alphasize=alphasize;
-	this->scost=scost;
-	this->stackAlign=stackAlign;
+Salttseq::Salttseq(const int& inorm, const int& inseq, int * islen, const int&imaxlen, double*  iindel, int  &ialphasize, double * iscost, double * idistmatrix, std::stack<Alignement>* istackAlign, int * isequences, double * isalttcost, double * ifmat, double * itbmat, const int& ifmatsize, const double& ipid, const int& ilogoddmode) {
+	this->norm=inorm;
+	this->nseq=inseq;
+	this->maxlen=imaxlen;
+	this->indel=iindel;
+	this->alphasize=ialphasize;
+	this->scost=iscost;
+	this->stackAlign=istackAlign;
 	this->frequences = new double[alphasize];
 	this->alphafois = alphasize*alphasize;
 	this->freqconj = new double[(int)alphafois];
-	this->sequences=sequences;
-	this->slen=slen;
-	this->salttcost=salttcost;
-	this->fmat = fmat;
-	this->tbmat = tbmat;
-	this->stackAlign2 = new std::stack<Alignement>;
-	this->fmatsize=fmatsize;
-	this->pid=pid;
+	this->sequences=isequences;
+	this->slen=islen;
+	this->salttcost=isalttcost;
+	this->fmat = ifmat;
+	this->tbmat = itbmat;
+	//	this->stackAlign2 = new std::stack<Alignement>;
+	this->fmatsize=ifmatsize;
+	this->pid=ipid;
 	this->totalalignements=0;
-	this->log_odd_mode = logoddmode;
+	this->log_odd_mode = ilogoddmode;
 
 	int i,j;
 	maxscost=0;
-	this->distmatrix=distmatrix;
+	this->distmatrix=idistmatrix;
 
 
     for (i=0;i<alphasize;i++) {
@@ -42,7 +42,7 @@ Salttseq::Salttseq(const int& norm, const int& nseq, int * slen, const int&maxle
         }
       }
     }
-    maxscost=fmin(maxscost,2*(*indel));
+    maxscost=fmin2(maxscost,2*(*indel));
     //Initialisation, peut �tre fait qu'une fois
     for (i=0;i<fmatsize;i++) {
       fmat[TMRMATRIXINDEXC(i,0,fmatsize)]=fmat[TMRMATRIXINDEXC(0,i,fmatsize)]=i*(*indel);
@@ -265,7 +265,7 @@ double Salttseq::levenshtein(const int &is, const int &js, int &m, int &n) {
                  	}
                 }
 	m--; n--;
-	maxpossiblecost=abs(n-m)*(*indel)+maxscost*fmin((double)m,(double)n);
+	maxpossiblecost=abs(n-m)*(*indel)+maxscost*fmin2((double)m,(double)n);
 	cmpres=normalizeDistance(fmat[TMRMATRIXINDEXC(m,n,fmatsize)], maxpossiblecost, m, n, norm);
 	//printtraceback(m,n);
 	//cmpres=fmat[TMRMATRIXINDEXC(m-1,n-1,fmatsize)];
@@ -361,8 +361,9 @@ void Salttseq::moveStack(std::stack<Alignement>* oldstack, std::stack<Alignement
 }
 
 
-double Salttseq::normalizeDistance(const double& rawdist, const double& maxdist, const int& l1, const int& l2, const int&norm) {
-    if (rawdist==0)return 0;
+double Salttseq::normalizeDistance(const double& rawdist, const double& maxdist, const int& l1, const int& l2, const int&inorm) {
+  this->norm=inorm;
+  if (rawdist==0)return 0;
     switch (norm) {
     case 0:
         return rawdist;

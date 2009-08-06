@@ -7,7 +7,7 @@ print.stslist <- function(x,format='STS', extended=FALSE, ...) {
 		if (extended==FALSE) {
 			void <- attr(x,"void")
 			x <- seqconc(x, void=void)
-			print(x, quote=FALSE)
+			print(x, quote=FALSE, ...)
 		} else NextMethod("print")
 	}
 	if (format=='SPS') {
@@ -45,12 +45,20 @@ print.stslist <- function(x,format='STS', extended=FALSE, ...) {
 
 	     attr(x,"start") <- x.attributes$start-1+j[1]
 
-		if (!missing(i))
+		if (!missing(i)) {
 			attr(x,"row.names") <- attr(x,"row.names")[i]
+			attr(x,"weights") <- attr(x,"weights")[i]
+		}
 
 		return(x)
-    }
-    NextMethod("[")
+	}
+
+	x <- NextMethod("[")
+
+	if (!missing(i))
+		attr(x,"weights") <- attr(x,"weights")[i]
+	
+	return(x)
  }
 
 

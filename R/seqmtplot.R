@@ -3,6 +3,6 @@
 ## ============================================
 
 seqmtplot <- function(seqdata, group=NULL, title=NULL, ...) {
-	plot(seqdata, group=group, type="mt", title=title, ...)
+	seqplot(seqdata, group=group, type="mt", title=title, ...)
 
 }

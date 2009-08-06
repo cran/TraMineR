@@ -12,7 +12,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	endcolumn <- seqdata[,end]
 	frmoption <- NULL
 
-	if (!is.null(pdata) & !is.null(pvar)) pdata <- pdata[, pvar]
+	if (!is.null(pdata) && !is.null(pvar) && pdata!="auto") pdata <- pdata[, pvar]
 
 	if (process==TRUE) {
 		if (!is.null(pdata)) frmoption <- "year2age"
@@ -73,16 +73,21 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	
 	# on récupère la liste des individus
 	lid <- unique(seqdata[,id])
+	#print(lid)
 	nbseq <- length(lid)
-
+	#print(paste("nbseq = ", nbseq))
 	# si un dataframe avec les années de naissances a été donné en argument, on récupère les ID et les années
-	if(frmoption=="year2age" || frmoption=="age2year") {
+	birthyrid1<-0
+	if((frmoption=="year2age" || frmoption=="age2year") && (!is.null(pdata) && pdata!="auto")) {
 		birthyrid1 <- pdata[,1]
 		birthyr1 <- pdata[,2]
         }
 	## ===============
 	## individual loop
 	## ===============
+	#print(birthyrid1)
+	#print(length(birthyrid1))
+	#print(nbseq)
 	for (i in 1:nbseq) {
 		spell <- seqdata[seqdata[,id]==lid[i],]
 		# number of spell for individual i
@@ -93,8 +98,20 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		}
 		# if we need to convert years to ages, we need the birthyear
 		if (frmoption=="year2age") {
-			birthy <- birthyr1[birthyrid1==lid[i]]
-			age1 <- spell[1,begin] - birthy
+			if (length(birthyrid1)==1 && pdata=="auto") {
+				birthy <- spell[1,begin]
+				age1 <- 0
+			}
+			else if (all(lid %in% birthyrid1)) {
+				birthy <- birthyr1[birthyrid1==lid[i]]
+				#print(paste("spell 1 = ", spell[1,begin]))
+				#print(paste("birthyr = ", birthy))
+				age1 <- spell[1,begin] - birthy
+			}
+			else {
+				stop(" [>] pdata must be either a vector with a birth year by individual or set to \"auto\"")
+			}
+			
 		}
 		# if we convert from ages to years, we need the birthyear, but don't need to substract it to the time of beginning
 		if (frmoption=="age2year") {
@@ -106,9 +123,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		if (is.na(age1)) { age1 <- -1 }
 
 		# we fill the line with NAs
-		#seqresult[i,1:(limit+1)] <- c(rep(NA,(limit+1)))
 		seqresult[i,1:(limit)] <- c(rep(NA,(limit)))
-		#seqresult[i,limit+1] <- lid[i]
 		
 	      	if (age1 >= 0) {
 			if (idxmax>0) {
@@ -144,8 +159,8 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 					
 					# spell are in year format, and we want age sequences
 					if(frmoption=="year2age") {
-						sstart <- spell[j,begin] - birthy
-						sstop <- spell[j,end] - birthy
+						sstart <- spell[j,begin] - birthy + 1
+						sstop <- spell[j,end] - birthy + 1
 					}
 					
 					#######################
@@ -177,26 +192,26 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 					
 					#########################
 					# conversion from episode to subsequence
-					dur <- sstop - sstart
+					dur <- sstop - sstart + 1
 					# we check if all values look normal
 					if (dur >= 0 && sstop > 0 && sstart >= 0) {
 						state <- spell[j,status]
 						if (!is.na(state)) {
 							# if dur == 0, it means the individual stays in the state only one year
-							if (dur == 0 && (sstop < limit) ) {
-								seqresult[i,sstart] <- state
-                                                        }
-							else {
+							# if (dur == 0 && (sstop < limit) ) {
+							#	seqresult[i,sstart] <- state
+                            #                            }
+				
 								if(sstop <= limit) {
 									# if the sequence begins at age 0, we delete the first state
-									if (sstart==0) { 
-										sstart <- sstart+1 
-										dur <- dur -1
-										} 
-									seqresult[i,sstart:sstop] <- rep(state, dur+1) 
+									# if (sstart==0) { 
+									#	sstart <- sstart+1 
+									#	dur <- dur -1
+									#	} 
+									seqresult[i,sstart:sstop] <- rep(state, dur) 
 								}
-							}
-					        }
+							
+					    }
 					}
 				}
 			 }
