@@ -84,10 +84,32 @@ public:
     inline bool hasNext() {
         return this->next!=NULL;
     }
+	inline SequenceEventNode * getNextWithoutGap(){
+		
+		if(this->hasNext() && this->getNext()->getGap()==0) {
+			return this->getNext();
+		}	
+		return NULL;
+	}
+	inline SequenceEventNode * getNextWithGap(){
+		
+		if(this->hasNext()){
+			if(this->getNext()->getGap()==0) {
+				return this->getNext()->getNextWithGap();
+			}else{
+				return this->getNext();
+			}
+		}else{
+			return NULL;
+		}
+	}
     ///Return gap with previous event in sequence
     inline const double& getGap() {
         return this->gap;
     }
+	inline void setGap(const double& newgap) {
+		this->gap=newgap;
+	}
     ///Type of this event
     inline const int& getType() {
         return this->type;

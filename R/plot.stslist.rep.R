@@ -15,7 +15,7 @@ plot.stslist.rep <- function(x, cpal=NULL,
 	statl <- attr(x,"alphabet")
 	nbstat <- length(statl)
 	criterion <- attr(x,"criterion")
-	Quality <- attr(x,"Quality")
+	Statistics <- attr(x,"Statistics")
 	Distances <- attr(x,"Distances")
 	freq <- attr(x,"Frequencies")
 
@@ -44,7 +44,7 @@ plot.stslist.rep <- function(x, cpal=NULL,
 
 	## 
 	if (pbarw) 
-		barw <- Quality$pctcapt[1:nbrep]/100
+		barw <- Statistics$"na(%)"[1:nbrep]/100
 	else barw=1
 
 	seqbar <- apply(x, 1, seqgbar, seql=seql, statl=statl)
@@ -68,7 +68,7 @@ plot.stslist.rep <- function(x, cpal=NULL,
 		cex.axis=cex.plot)
 
 	## Frequency of the representative sequence
-	nbprox <- sum(Quality$nbprox[1:nbrep])
+	nbprox <- sum(Statistics$nb[1:nbrep])
 	ctfreq <- round((nbprox/n)*100,1)
 	text(seql/2, 1.3, 
 		paste("Criterion=",ctname,", ",nbprox," neighbours (", ctfreq ,"%)", sep=""), 
@@ -92,11 +92,9 @@ plot.stslist.rep <- function(x, cpal=NULL,
 
 	## Distance to representative seq.
 	for (i in 1:nbrep) {
-		lines(mean(Distances[,i],na.rm=TRUE)/dist.scaling, dist.rep.pos, 
+		lines(Statistics$MD[i]/dist.scaling, dist.rep.pos, 
 			type="b", pch=repsymb[i], lwd=3, col=repcol[i], cex=1+barw[i])
 	}
-
-	mean.central.dist <- round(mean(Distances,na.rm=TRUE),1)
 
 	legend.B <- paste("(B) Mean dist. to representative seq.", sep="")
 
@@ -114,7 +112,7 @@ plot.stslist.rep <- function(x, cpal=NULL,
 	dist.center.pos <- y.sym.pos
 
 	for (i in 1:nbrep) {
-		lines(Quality$inertia[i]/dist.scaling, 
+		lines(Statistics$V[i]/dist.scaling, 
 			y.sym.pos, 
 			type="b", pch=repsymb[i], lwd=3, col=repcol[i], cex=cex.plot+barw[i])
 	}

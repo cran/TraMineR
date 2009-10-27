@@ -1,21 +1,23 @@
 \name{seqcomp}
 \alias{seqcomp}
-\title{Compare two sequences}
+\title{Compare two state sequences}
 \description{
-Compare two sequences and return TRUE if they are equal and FALSE otherwise
+Compare two state sequences and return TRUE if they are equal and FALSE otherwise
 }
 \usage{
  seqcomp(x, y)
 }
 \arguments{
-  \item{x}{a sequence object containing one sequence (typically a subscript of a main sequence object, see \code{\link{seqdef}})}
-  \item{y}{a sequence object containing one sequence (typically a subscript of a main sequence object, see \code{\link{seqdef}})}
+  \item{x}{a state sequence object containing a single sequence (typically the row of a main sequence 
+      object, see \code{\link{seqdef}})}
+  \item{y}{a state sequence object containing a single sequence (typically the row of a main sequence 
+      object, see \code{\link{seqdef}})}
 }
 
 \value{TRUE if sequences are identical, FALSE otherwise}
 
 \seealso{
- \code{}
+ \code{\link{seqfind}, \link{seqfpos}, \link{seqpm}}
 }
 \examples{
 data(mvad)

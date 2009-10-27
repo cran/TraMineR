@@ -85,6 +85,6 @@ plot.seqdiff <- function(x, stat="PseudoR2", type="l", ylab=stat, xlab="",
 		axis(1, at=1:nrow(x$variance), labels=rownames(x$stat) )
 	}
 	else {
-		stop("Unknow statistque to plot")
+		stop("Unknow value for the 'stat' argument")
 	}
 }

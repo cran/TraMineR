@@ -1,6 +1,6 @@
 \name{seqefsub}
 \alias{seqefsub}
-\alias{[.subseqelist}
+%\alias{[.subseqelist}
 %\alias{createsubseqelist}
 %\alias{seqecreatesub}
 \alias{is.subseqelist}

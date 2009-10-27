@@ -59,22 +59,26 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	}
 	
 	#seqresult <- matrix(nrow=1, ncol=limit+1)
-	seqresult <- matrix(nrow=1, ncol=limit)
-	seqresult <- as.data.frame(seqresult)
+        # on récupère la liste des individus
+	lid <- unique(seqdata[,id])
+	#print(lid)
+	nbseq <- length(lid)
+        seqresult <- matrix(nrow=nbseq, ncol=limit)
+	#seqresult <- as.data.frame(seqresult)
+        status.orig <- seqdata[,status]
 	if (is.factor(seqdata[,status])) { 
-		for (k in 1:(limit)) { 
-			seqresult[,k] <- factor(seqresult[,k], levels=levels(seqdata[,status]), labels=levels(seqdata[,status])) 
-		} 
+          seqdata[,status] <- as.integer(seqdata[,status])
+        #	for (k in 1:(limit)) { 
+	#		seqresult[,k] <- factor(seqresult[,k], levels=levels(seqdata[,status]), labels=levels(seqdata[,status])) 
+	#	} 
 	}
-	names(seqresult) <- names.seqresult
+        
+	#names(seqresult) <- names.seqresult
 	## ================================
 	## end of creation of the dataframe
 	## ================================
 	
-	# on récupère la liste des individus
-	lid <- unique(seqdata[,id])
-	#print(lid)
-	nbseq <- length(lid)
+
 	#print(paste("nbseq = ", nbseq))
 	# si un dataframe avec les années de naissances a été donné en argument, on récupère les ID et les années
 	birthyrid1<-0
@@ -208,7 +212,8 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 									#	sstart <- sstart+1 
 									#	dur <- dur -1
 									#	} 
-									seqresult[i,sstart:sstop] <- rep(state, dur) 
+									seqresult[i,sstart:sstop] <- rep(state, dur)
+                                                                        
 								}
 							
 					    }
@@ -217,6 +222,13 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 			 }
 		}
 	}
+        seqresult <- as.data.frame(seqresult)
+        if(is.factor(status.orig)) {
+          for (k in 1:(limit)) { 
+            seqresult[,k] <- factor(seqresult[,k], levels=1:nlevels(status.orig), labels=levels(status.orig)) 
+          }
+        }
+        names(seqresult) <- names.seqresult
 
 	## setting id as rowname 
 	row.names(seqresult) <- lid

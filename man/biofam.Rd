@@ -30,18 +30,18 @@ p02r04   (religious participation) \cr
 cspfaj   (father's social status) \cr
 cspmoj   (mother's social status) \cr
 \cr
-Two additional weights variables are inserted for example ONLY (since biofam is a subsample of the original data, these weights are not adapted): \cr
+Two additional weights variables are inserted for illustrative purpose ONLY (since biofam is a subsample of the original data, these weights are not adapted): \cr
 \cr
 wp00tbgp (weights inflating to the swiss population)\cr
 wp00tbgs (weights keeping sample size) \cr
 }
 \usage{data(biofam)}
 \format{A data frame with 2000 rows, 16 state variables, 1 id variable and 7 covariates and 2 weights variables.}
-\source{Swiss Household Panel}
+\source{Swiss Household Panel \url{www.swisspanel.ch}}
 \references{
   Müller, N. S., M. Studer, G. Ritschard (2007).
   Classification de parcours de vie à l'aide de l'optimal matching.
   In \emph{XIVe Rencontre de la Société francophone de classification
-  ({SFC} 2007), Paris, 5 - 7 septembre 2007}, pp.\  157--160.
+  (SFC 2007), Paris, 5 - 7 septembre 2007}, pp.\  157--160.
 }
 \keyword{datasets}

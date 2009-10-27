@@ -2,27 +2,26 @@
 ## Methods for stsstatd objects
 ## ===========================
 
-print.stslist.rep <- function(x, ...) {
+print.diss.rep <- function(x, ...) {
 	criterion <- attr(x,"criterion")
-	nbseq <- attr(x,"nbseq")
+	n <- attr(x,"n")
 	quality <- attr(x,"Quality")
 
-	cat("\n [>] criterion:",criterion,"\n")
-	cat(" [>]", nbseq,"sequence(s) in the original data set\n")
-	cat(" [>]", nrow(x),"representative sequences\n")
-	cat(" [>] overall quality:", round(quality*100,2),"\n\n")
-	NextMethod(x,...)
+	cat(" [>] criterion:",criterion,"\n")
+	cat(" [>]", n,"objects in the original data set\n")
+	cat(" [>]", length(x),"representative(s)\n")
+	cat(" [>] overall quality:", round(quality*100,2),"\n")
+	cat(" [>] representative(s) index(es):", x[1:length(x)],"\n")
 }
 
-summary.stslist.rep <- function(object, ...) {
+summary.diss.rep <- function(object, ...) {
 	criterion <- attr(object,"criterion")
-	nbseq <- attr(object,"nbseq")
-	quality <- attr(object,"Quality")
+	n <- attr(object,"n")
+	rindex <- attr(object,"rindex")
 
-	cat("\n [>] criterion:",criterion,"\n")
-	cat(" [>]", nbseq,"sequence(s) in the original data set\n")
-	cat(" [>]", nrow(object),"representative sequences\n")
-	cat(" [>] overall quality:", quality,"\n")
+	cat(" [>] criterion:",criterion,"\n")
+	cat(" [>]", n,"objects in the original data set\n")
+	cat(" [>]", nrow(object),"representative object(s)\n")
 	cat(" [>] statistics for the representative set:\n\n")
 	print(attr(object,"Statistics"), digits=3, ...)
 	cat("\n    na: number of assigned objects\n")

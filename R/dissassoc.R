@@ -47,15 +47,15 @@ dissassoc <- function(diss, group , R=1000) {
 #	print(SCtot)
 	if (R==1) {
 		vals <- internalBootstrapCompareGroups(ind, ind, dissmatrix, indgrp, SCtot)
-		ret$stat <- data.frame(PseudoF=vals[1], PseudoR2=vals[2], 
+		ret$stat <- data.frame(PseudoF=vals[1], PseudoR2=vals[2],
 				PseudoF_Pval=NA, PseudoT=vals[3], PseudoT_Pval=NA)
 		ret$perms <- NA
 	}
 	else {
 		bts <- boot(ind, internalBootstrapCompareGroups, R, sim="permutation", stype="i",
 			dissmatrix=dissmatrix, indgrp=indgrp, SCtot=SCtot)
-		ret$stat <- data.frame(PseudoF=bts$t0[1], PseudoR2=bts$t0[2], 
-			PseudoF_Pval=sum(bts$t[, 1]>bts$t0[1])/bts$R, 
+		ret$stat <- data.frame(PseudoF=bts$t0[1], PseudoR2=bts$t0[2],
+			PseudoF_Pval=sum(bts$t[, 1]>bts$t0[1])/bts$R,
 			PseudoT=bts$t0[3], PseudoT_Pval=sum(bts$t[, 3]>bts$t0[3])/bts$R)
 		ret$perms <- bts
 	}
@@ -68,7 +68,7 @@ dissassoc <- function(diss, group , R=1000) {
 print.dissassoc <- function(x, ...) {
 	cat("Pseudo ANOVA table:\n")
 	print(x$anova.table, ...)
-	cat("\nTest values ", "(p-values based on", (x$R-1), "permutation):\n")
+	cat("\nTest values ", "(p-values based on", (x$R-1), "permutations):\n")
 	print(x$stat, ...)
 	cat("\nVariance per level:\n")
 	print(x$groups, ...)
@@ -82,10 +82,10 @@ hist.dissassoc <- function(x, test="PseudoF", breaks="FD", main=paste("Distribut
 		ti <- 3
 	}
 	else {
-		stop("test parameter should be equal to PseudoF or PseudoT")
+		stop("test argument should be one of PseudoF or PseudoT")
 	}
 	if (x$R==1) {
-		stop("Cannot plot permutation test (none detected)")
+		stop("Cannot plot permutation test distribution for R = 1")
 	}
 	testbootorder <- order(x$perms$t[, ti], decreasing=TRUE)
 	hist(x$perms$t[, ti], main=main, xlab=xlab, breaks=breaks, ...)

@@ -29,6 +29,7 @@ print.subseqelist<-function(x,...){
   if (missing(j)) {
     ret<-createsubseqelist(x$seqe,x$constraint,x$subseq[i,drop=drop],data=x$data[i,],type=x$type)
     if(!is.null(x$labels))ret$labels<-x$labels
+    if(!is.null(x$bonferroni))ret$bonferroni<-x$bonferroni
     class(ret)<-class(x)
      return(ret)
 	} else {

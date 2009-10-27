@@ -1,9 +1,9 @@
-###Based on the program written for scipy (Python) by 
+###Based on the program written for scipy (Python) by
 ###Ondrej Libiger and Matt Zapala
 ###
 ###Based on some of the methods presented in:
-###McArdle, B.H. and Anderson, M.J. (2001). 
-###Fitting multivariate models to community data: 
+###McArdle, B.H. and Anderson, M.J. (2001).
+###Fitting multivariate models to community data:
 ###a comment on distance-based redundancy analysis. Ecology, 82, 290-297.
 
 
@@ -84,7 +84,7 @@ dissmfac <- function(formula, data, R=1000, gower=FALSE,
 				stype="i", g_matrix=g_matrix, SCtot=SCtot, n=n, nterms=nterms,
 				var_list_index=var_list_index, var_list=var_list)
 		} else {
-			stop("Unknow permutation method")
+			stop("Unknown permutation method")
 		}
 		#Computing Pvalue based on permutations tests
 		p_value <- double()

@@ -1,3 +1,33 @@
+## ==========
+Version 1.4-1
+
+Bug fixes:
+  - seqecreate(): Problems with handling simultaneous events when
+    creating event sequences with data not previously sorted on
+    id, timestamp and event.
+  - seqrep() with density criterion: neigborhood diameter is now
+    correctly set to "trep*dmax" instead of "trep".
+
+New functionalities:
+  - dissrep(): extracts a set of representative objects using a
+    dissimilarity matrix. This function is used by seqrep.
+
+Changes in existing functions:
+  -  seqrep():
+     - much faster extraction of the representative set;
+     - default criterion is now "density" instead of "frequency";
+     - "trep" now sets a coverage threshold for the representative set
+       rather than a size threshold for the candidate list;
+     - in the output object, name of the attribute containing
+       statistics for the representative set changed from "Quality"
+       to "Statistics" and that of the attribute containing the
+       overall quality measure changed from "rindex" to "Quality".
+  -  seqplot(): now checks that the length of the vector given as 
+     "group" argument matches the number of sequences.
+  -  plot.stslist(): now checks that the length of the vector given as
+     "sortv" argument matches the number of sequences.
+  -  seqformat(): dramatic speed improvement in conversion from SPELL data.
+
 ## ========
 Version 1.4
 
@@ -6,8 +36,8 @@ New functionalities:
   - seqdistmc(): computes multichannel distances.
   - seqmeant(): computes mean duration in each state.
   - seqmodst(): returns the sequence of modal states.
-  - seqmsplot(): for plotting the sequence of modal states. This function is
-    a shortcut for seqplot with type="ms", see below.
+  - seqmsplot(): for plotting the sequence of modal states. This
+    function is a shortcut for seqplot with type="ms", see below.
   - seqrep(): extracts a set of representative sequences.
   - seqrplot(): for producing representative sequence plots. This function is
     a shortcut for seqplot with type="r", see below.
@@ -22,18 +52,18 @@ New functionalities:
   - seqdist(): two additional methods are now available for computing
     distances, namely "HAM" (Hamming distance) and "DHD" (Dynamic
     Hamming Distance).
-  - output produced by the seqstatd(), seqtab(), seqmeant(), seqmodst() and 
-    seqrep() can now be plotted with their plot() dedicated methods (see 
-    new classes and methods below). 
+  - output produced by the seqstatd(), seqtab(), seqmeant(), seqmodst() and
+    seqrep() can now be plotted with their plot() dedicated methods (see
+    new classes and methods below).
 
 Important changes:
   - seqplot(): is now the generic function for plotting state sequence objects with
     'type' argument. Available types are "d" for state distribution plots,
-    "f" for sequence frequency plots, "Ht" for entropy index plots, 
-    "i" for sequence index plots, "ms" for modal state sequence plots, 
-    "mt" for meant time plots, "r" for representative plots. 
+    "f" for sequence frequency plots, "Ht" for entropy index plots,
+    "i" for sequence index plots, "ms" for modal state sequence plots,
+    "mt" for meant time plots, "r" for representative plots.
     This function replaces the previous generic plot.stslist() function.
-  - plot.stslist(): now produces only a sequence index plot (see new classes and 
+  - plot.stslist(): now produces only a sequence index plot (see new classes and
     methods below).
 
 Changes in existing functions:
@@ -42,13 +72,13 @@ Changes in existing functions:
       are displayed, while with yaxis="pct" individual sequence percentages
       are shown.
     - pbarw=TRUE is now the default for the pbarw argument.
-  - seqtab(): the 'format' argument that specifies the format of the sequences 
-    displayed as rownames is now set by default to the short SPS format, 
+  - seqtab(): the 'format' argument that specifies the format of the sequences
+    displayed as rownames is now set by default to the short SPS format,
     e.g. TR/9-EM/63.
-  - seqiplot(): sequence indexes are now displayed by default on the y axis. 
+  - seqiplot(): sequence indexes are now displayed by default on the y axis.
     This can be disabled with "yaxis=FALSE".
-    
-Fixed minor bugs in seqformat(): changes concern mainly the from="SPELL" and  
+
+Fixed minor bugs in seqformat(): changes concern mainly the from="SPELL" and
     from="SPS" options.
 
 New classes and methods:

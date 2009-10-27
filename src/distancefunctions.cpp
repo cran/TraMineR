@@ -28,6 +28,10 @@ static R_INLINE double normalizeDistance(const double& rawdist, const double& ma
     case 3:
         if (maxdist==0)return 1;
         return rawdist/maxdist;
+	case 4:
+		if (maxdist==0)return 1;
+        return (2*rawdist)/(rawdist+maxdist);
+		
     }
     return rawdist;
 }
@@ -168,7 +172,7 @@ extern "C" {
         int disttype=INTEGER(disttypeS)[0];
         int* magicIndex=INTEGER(magicIndexS);
         int* magicSeq=INTEGER(magicSeqS);
-        int finalnseq=Rf_length(magicSeqS);
+        int finalnseq=length(magicSeqS);
 
         //Alocation du vecteur de distance
         //REprintf("Final seq %d\n",finalnseq);
@@ -189,6 +193,9 @@ extern "C" {
                 }
             }
             maxscost=fmin2(maxscost,2*indel);
+			if(norm==4) { //Maximum cost is thus defined as in Yujian and Bo (2007)
+				maxscost=2*indel;
+			}
             //Initialisation, peut etre fait qu'une fois
             for (i=0;i<fmatsize;i++) {
                 fmat[MINDICE(i,0,fmatsize)]=fmat[MINDICE(0,i,fmatsize)]=i*indel;

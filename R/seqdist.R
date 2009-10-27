@@ -33,7 +33,7 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
 		## Using normalization name
 		## Cast to integer for c code and normdist function
 		## Match return the position, removing 1 to start at zero
-		normIndice <- match(norm, c("none", "maxlength", "gmean", "maxdist")) -1
+		normIndice <- match(norm, c("none", "maxlength", "gmean", "maxdist", "YujianBo")) -1
 
 		if (is.na(normIndice)) {  ##Not found
 			stop(" [!] Unknown distance normalization method ", norm)
@@ -106,6 +106,10 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
         			" At least, substitution cost between indices ",triangleineq[1]," and ",triangleineq[2],
         			" does not respect the triangle inequality. It costs less to first transform ",
         			triangleineq[1], " into ",triangleineq[3])
+		}
+		if (any(sm>2*indel)) {
+			warning("Some substitution cost are greater that two times the indel cost.",
+				" Such substitution cost will thus never be used.")
 		}
 	}
 	## Checking if substitution cost matrix contains values for each state
