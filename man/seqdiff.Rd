@@ -20,15 +20,19 @@ seqdiff(seqdata, group, cmprange = c(0, 1),
   \item{seqdist_arg}{argument passed directly to seqdist as a list}
 }
 \details{
-  Analyse for each timestamp the discrepancy of a subsequence (defined by \code{cmprange}) explained by the \code{group} variable.
-  The method compute a distance matrix, using \code{\link{seqdist}} for each timestamp and then apply dissassoc to compute the discrepancy explained.
-  
-  There are print and plot method for the result returned.
+  Analyses at each timestamp the sequence discrepancy within a sliding time window (of range defined by \code{cmprange}) 
+  that is explained by the \code{group} variable.
+  The method computes a distance matrix, using \code{\link{seqdist}} at each timestamp and then derives the explained 
+  discrepancy with \code{\link{dissassoc}}.
+
+  There are print and plot methods for the result returned.
 }
 \value{
-  A \code{seqdiff} object, with the following item:
-  \item{stat}{A \code{data.frame} with tree statistics, PseudoF, PseudoR2 and PseudoT for each timestamp of the sequence, see \code{\link{dissassoc}}}
-  \item{variance}{A \code{data.frame} with the discrepancy of each \code{group} defined by the \code{group} variable and for the whole population at each timestamp}
+  A \code{seqdiff} object, with the following items:
+  \item{stat}{A \code{data.frame} with three statistics (PseudoF, PseudoR2 and PseudoT) for each timestamp of the sequence, 
+      see \code{\link{dissassoc}}}
+  \item{variance}{A \code{data.frame} with, at each time stamp, the discrepancy within each group defined by the 
+      \code{group} variable and for the whole population.}
 }
 \references{
   Studer, M., G. Ritschard, A. Gabadinho, and N. S. Müller (2009) 

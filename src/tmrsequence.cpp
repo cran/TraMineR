@@ -6,6 +6,7 @@
 #include "eventdictionary.h"
 #include "constraint.h"
 #include <Rmath.h>
+#include "TraMineR.h"
 
 /**
 	tmrsequence build a sequence obect and return an external pointer to that object
@@ -352,6 +353,63 @@ extern "C" {
         SET_VECTOR_ELT(dimnames, 1, namesubseq);
         setAttrib(ans, R_DimNamesSymbol, dimnames);
         UNPROTECT(4);
+        return ans;
+    }
+	/**Find each times an events appears, return a matrix with ncol = maximum number of the specified event
+    */
+    SEXP tmreventinseq(SEXP seqs, SEXP Sevent) {
+        int event=INTEGER(Sevent)[0];
+        Sequence *s =NULL;
+        int ns=length(seqs);
+        SEXP ans;
+        SEXP seq;
+		int nseqevent=0, maxnevent=1;
+		SequenceEventNode * sen=NULL;
+		//Start by counting the maximum number of time, the event appears in a given sequences
+		for (int i=0;i<ns;i++) {
+            seq=VECTOR_ELT(seqs,i);
+			ASSIGN_TMRSEQ_TYPE(s,seq);
+            if(s->hasEvent()){
+              sen=s->getEvent();
+              nseqevent=0;
+              while(sen!=NULL){
+				if(sen->getType()==event){
+					nseqevent++;
+				}
+                sen=sen->getNext();
+              }
+              if(nseqevent>maxnevent)maxnevent=nseqevent;
+            }
+        }
+		TMRLOG(4, "Maximum numbers of event %d is %d", event, maxnevent);
+        PROTECT(ans = allocMatrix(REALSXP, ns, maxnevent));
+        double *matrix=REAL(ans);
+		double age=0;
+		//looking up for events ages
+        for (int i=0;i<ns;i++) {
+            seq=VECTOR_ELT(seqs,i);
+			ASSIGN_TMRSEQ_TYPE(s,seq);
+			nseqevent=0;
+            if(s->hasEvent()){
+				sen=s->getEvent();
+				age=0;
+              
+				while(sen!=NULL){
+					age += sen->getGap();
+					if(sen->getType()==event){
+						matrix[MINDICE(i,nseqevent,ns)]=age;
+						nseqevent++;
+					}
+					sen=sen->getNext();
+				}
+            }
+			//Filling non used values with -1
+			while(nseqevent<maxnevent){
+				matrix[MINDICE(i,nseqevent,ns)]=-1;
+				nseqevent++;
+			}
+        }
+        UNPROTECT(1);
         return ans;
     }
 

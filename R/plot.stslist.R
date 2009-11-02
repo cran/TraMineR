@@ -19,8 +19,13 @@ plot.stslist <- function(x, tlim=NULL, sortv=NULL,
 			tlim <- 1:n
 	else if (max(tlim) > n) 
 			tlim <- 1:n
-
+	
+	## Sorting
 	if (!is.null(sortv)) {
+		if (length(sortv)!=n) {
+			stop(call.=FALSE, "sortv must contain one value for each row in the sequence object")
+		}
+
 		x <- x[order(sortv),]
 		sortlab <- paste(", sorted")
 		}
@@ -67,8 +72,13 @@ plot.stslist <- function(x, tlim=NULL, sortv=NULL,
 
 		y.lab.pos <- sp+0.5
 
-		for (p in 2:max(tlim))
-			y.lab.pos <- c(y.lab.pos, (p-1)+((p-1)*sp)+(0.5+sp))
+		idxmax <- max(tlim)
+
+		if (idxmax>1) {
+			for (p in 2:idxmax) {
+				y.lab.pos <- c(y.lab.pos, (p-1)+((p-1)*sp)+(0.5+sp))
+			}
+		}
 
 		axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=tlim, tick=FALSE, cex.axis=cex.plot)
 	}

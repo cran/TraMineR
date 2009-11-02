@@ -2,14 +2,15 @@
 #define TRAMINER_H_INCLUDED
 
 //Includes usually used
-#include<R.h>
-#include <Rinternals.h>
+/*
 #ifdef __SUNPRO_CC
 	#ifdef length
 		#undef length
 	#endif
 #endif
-
+*/
+#include<R.h>
+#include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <Rmath.h>
 

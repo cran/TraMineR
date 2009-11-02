@@ -6,14 +6,14 @@
 \description{
 This function gets or sets the color palette of a sequence object, that is, the list of colors used to represent the states.
 }
-\details{In the plot functions provided for visualizing sequence objects, each color is associated to one state of the alphabet. The color palette is defined when creating a sequence object, either automatically using the \code{brewer.pal} function provided by the \code{RColorBrewer} package or by specifying a user defined color vector. The \code{cpal} function can be used to get or set the color palette of a previously defined sequence object.}
+\details{In the plot functions provided for visualizing sequence objects, a different color is associated to each state of the alphabet. The color palette is defined when creating the sequence object, either automatically using the \code{brewer.pal} function of the \code{RColorBrewer} package or by specifying a user defined color vector. The \code{cpal} function can be used to get or set the color palette of a previously defined sequence object.}
 \usage{
 cpal(seqdata)
 cpal(seqdata) <- value
 }
 \arguments{
-  \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
-  \item{value}{a vector containing the colors, of the same length as the number of states in the alphabet. The colors can be passed as character strings representing color names such as returned by the \code{\link{colors}} function, as hexadecimal values or as RGB vectors using the \code{\link{rgb}} function. Each color is attributed to the corresponding state in the alphabet, the order being the one returned by the \code{\link{alphabet}}.}
+  \item{seqdata}{a state sequence object as defined by the \code{\link{seqdef}} function.}
+  \item{value}{a vector containing the colors, of length equal to the number of states in the alphabet. The colors can be passed as character strings representing color names such as returned by the \code{\link[grDevices]{colors}} function, as hexadecimal values or as RGB vectors using the \code{\link{rgb}} function. Each color is attributed to the corresponding state in the alphabet, the order being the one returned by the \code{\link{alphabet}}.}
 }
 \value{For 'cpal' a vector containing the colors.
 

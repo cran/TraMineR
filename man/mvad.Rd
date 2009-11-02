@@ -34,9 +34,9 @@ livboth (living arrangements at time of first sweep of survey (June 1995), 1=liv
 
 \usage{data(mvad)}
 \format{A data frame containing 712 rows, 72 state variables, 1 id variable and 13 covariates.}
-\source{McVicar, Duncan and Anyadike-Danes, Michael}
+\source{McVicar and Anyadike-Danes (2002)}
 \references{
-McVicar, Duncan and Anyadike-Danes, Michael. Predicting Successful and Unsuccessful Transitions from School to Work by Using Sequence Methods, \emph{Journal of the Royal Statistical Society. Series A (Statistics in
-	Society)}, 2002, 165, 2, pp. 317--334.
+McVicar, Duncan and Anyadike-Danes, Michael (2002). Predicting Successful and Unsuccessful Transitions from School to Work by Using Sequence Methods, 
+\emph{Journal of the Royal Statistical Society. Series A (Statistics in Society)}, 165, 2, pp. 317--334.
 }
 \keyword{datasets}

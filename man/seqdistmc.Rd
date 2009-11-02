@@ -17,7 +17,7 @@ seqdistmc(channels, method, norm=FALSE, indel=1, sm=NULL,
 
   \item{norm}{if TRUE, the computed distances are normalized to account for differences in sequence lengths. Default is FALSE. See details.}
 
-  \item{indel}{A list with an insertion/deletion cost for each channel (OM method).}
+  \item{indel}{A vector with an insertion/deletion cost for each channel (OM method).}
 
   \item{sm}{A list with a substitution-cost matrix for each channel (OM, HAM and DHD method) or a list of method names for generating the substitution-costs (see \code{\link{seqsubm}}).}
 
@@ -31,7 +31,7 @@ seqdistmc(channels, method, norm=FALSE, indel=1, sm=NULL,
 
   \item{miss.cost}{Missing values substitution cost, see \code{\link{seqsubm}}.}
 
-  \item{cweight}{A list of channel weights. Default is 1 (same weight for each channel).}
+  \item{cweight}{A vector of channel weights. Default is 1 (same weight for each channel).}
 }
 \details{
 The \code{seqdistmc} function returns a matrix of multichannel distances between sequences. The available metrics (see 'method' option) are optimal matching ("OM"), longest common subsequence ("LCS"), Hamming distance ("HAM") and Dynamic Hamming Distance ("DHD"). See \code{\link{seqdist}} for more information about distances between sequences.

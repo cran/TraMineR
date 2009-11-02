@@ -25,10 +25,9 @@ dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
 \details{
   This method is, in some way, a generalization of \code{\link{dissassoc}} that can account for several explanatory variables. This function compute the part of variance explained by a list of covariates using a decomposition of the discrepancy (variance) explained. This function is slower than \code{\link{dissassoc}} for one factor. More on that, the latter also perform a test of discrepancy homogeneity (equality of variance) using a generalization of the T statistic.
 
-  The function is based on the program written for scipy (Python) by Ondrej Libiger and Matt Zapala. See references below for a full reference.
-
-  
+  The function is based on the program written for scipy (Python) by Ondrej Libiger and Matt Zapala. See Zapala and Schork (2006) for a full reference.
 }
+
 \value{
   A \code{dissmultifactor} object with the following components:
   \item{mfac}{The part of variance explained by each variable (comparing full model to model without the specified variable) and its significance using permutation test}
@@ -37,7 +36,7 @@ dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
   \item{perm_method}{Permutation method used to compute significance}
 }
 \references{
-  Studer, M., G. Ritschard, A. Gabadinho, and N. S. Müller (2009) 
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
   Discrepancy	analysis of complex objects using dissimilarities.
   In H. Briand, F. Guillet, G. Ritschard, and D. A. Zighed (Eds.),
   \emph{Advances in Knowledge Discovery and Management},

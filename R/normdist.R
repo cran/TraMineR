@@ -3,7 +3,7 @@
 ## 1 => Abbott
 ## 2 => Elzinga
 ## 3 => Maximum possible distance normalization (divide by maxdist)
-
+## 4 => Yujian and Bo (2007) (divide by maxdist+rawdist)
 
 
 normdist <- function(rawdist, maxdist, l1, l2, norm) {
@@ -26,6 +26,9 @@ normdist <- function(rawdist, maxdist, l1, l2, norm) {
 	} else if (norm==3) { #Maximum possible distance normalization
 			if (maxdist==0) return(1)
 			return(rawdist/maxdist)
+	} else if(norm==4) { #Yujian and Bo (2007)
+			if (maxdist==0) return(1)
+			return(2*rawdist/(rawdist+maxdist))
 	}
 	stop("Unknow distance normalization used")
 }

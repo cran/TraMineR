@@ -9,12 +9,16 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 	use.layout=(!is.null(group) | withlegend!=FALSE), legend.prop=NA, rows=NA, cols=NA, ...) {
 
 	if (!inherits(seqdata,"stslist"))
-		stop("data is not a sequence object, use seqdef function to create one")
+		stop(call.=FALSE, "data is not a sequence object, use seqdef function to create one")
 
 	## ==============================
 	## Preparing if group is not null
 	## ==============================
 	if (!is.null(group)) {
+		## Check length
+		if (length(group)!=nrow(seqdata))
+			stop(call.=FALSE, "group must contain one value for each row in the sequence object")
+
 		## Eliminate the unused levels
 		group <- factor(group)
 		nplot <- length(levels(group))

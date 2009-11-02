@@ -8,13 +8,15 @@
 
 Sequence turbulence is a measure proposed by \cite{Elzinga (2007)}. It is based on the number \eqn{\phi(x)} of distinct subsequences that can be extracted from the distinct state sequence and the variance of the consecutive times \eqn{t_i} spent in the distinct states. For a sequence \eqn{x}, the formula is
 %
-\deqn{T(x)=\log_{2}(\phi(x)\,\frac{s_{t,max}^{2}(x)+1}{s_{t}(x)+1})}
+\deqn{T(x)=\log_{2}(\phi(x)\,\frac{s_{t,max}^{2}(x) + 1}{s_{t}^2(x) + 1})}{%
+      T(x) = log_2 [phi(x) (s_{t,max}^{2}(x) + 1)/(s_{t}^2(x) + 1)]}
 %
-where \eqn{s_{t}} is the variance of the state-duration for the \eqn{x} sequence and \eqn{s_{t,max}} is the maximum value that this variance can take given the total duration of the sequence. This maximum is computed as follow
+where \eqn{s_{t}^2} is the variance of the state-duration for the \eqn{x} sequence and \eqn{s_{t,max}^2} is the maximum value that this variance can take given the total duration of the sequence. This maximum is computed as follow
 %
-\deqn{s_{t,max}=(n-1)(1-\bar{t})}
+\deqn{s_{t,max}^2=(n-1)(1-\bar{t})}{%
+      s_{t,max}^2 = (n-1)(1- bar{t})}
 %
-where \eqn{\bar t} is the mean consecutive time spent in the distinct states, i.e. the sequence duration divided by the number of distinct states in the sequence.
+where \eqn{\bar{t}} is the mean consecutive time spent in the distinct states, i.e. the sequence duration divided by the number of distinct states in the sequence.
 
 }
 \usage{

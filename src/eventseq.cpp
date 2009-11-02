@@ -19,12 +19,10 @@ void finalizeSequence(SEXP ptr) {
 void SequenceEventNode::addEvent(const int &e,const double &t) {
     if (this->hasNext()){
     	if(this->next->greaterThan(e, t-this->gap)){
-			if(this->lessThan(e,t-this->gap)){ //Consistency check
-				SequenceEventNode * s= new SequenceEventNode(e,t-this->gap);
-				this->next->gap-=t-this->gap;
-				s->setNext(this->next);
-				this->next=s;
-			}
+			SequenceEventNode * s= new SequenceEventNode(e,t-this->gap);
+			this->next->gap-=t-this->gap;
+			s->setNext(this->next);
+			this->next=s;
     	}else this->next->addEvent(e,t-this->gap);
     }
     else {
@@ -35,6 +33,7 @@ void SequenceEventNode::addEvent(const int &e,const double &t) {
 void Sequence::addEvent(const int &e,const double &t) {
     if (this->hasEvent()){
     	if(this->event->greaterThan(e,t)){
+			this->event->setGap(this->event->getGap()-t);
     		SequenceEventNode * s=new SequenceEventNode(e,t);
     		s->setNext(this->event);
     		this->event=s;

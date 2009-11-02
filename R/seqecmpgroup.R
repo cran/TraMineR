@@ -71,6 +71,7 @@ seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL){
 	rownames(data)<-1:nrow(data)
 	ret<-createsubseqelist(subseq$seqe,subseq$constraint,subseq$subseq[cres],data=data,type=method)
 	ret$labels<-levels(group)
+	ret$bonferroni <- list(used=bonferroni, ntest=ntest)
 	class(ret)<-c("subseqelistchisq",class(ret))
 	return(ret)
 }
@@ -78,12 +79,17 @@ seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL){
 
 
 plot.subseqelistchisq<-function(x, ylim="uniform", rows=NA, cols=NA,
-            residlevels=c(2,4), cpal=brewer.pal(1+2*length(residlevels),"RdBu"),legendcol=NULL,legend.cex=1,ptype="freq",...){
+            residlevels=c(0.05,0.01), cpal=brewer.pal(1+2*length(residlevels),"RdBu"),legendcol=NULL,legend.cex=1,ptype="freq",...){
 
   if(!inherits(x,"subseqelistchisq"))stop("Subseq should be a result of seqecmpgroup")
   nplot<-length(x$labels)
 #  print(ylim)
-
+	pvalue.levels <- residlevels
+	if (x$bonferroni$used) {
+		residlevels <- (1- (1-residlevels)^(1/x$bonferroni$ntest))
+	}
+	residlevels <- sort(-qnorm(residlevels))
+	
   #print(cpal)
   residbreaks<-c(-Inf,-sort(residlevels),sort(residlevels),Inf)
   lout <- TraMineR.setlayout(nplot, rows, cols, TRUE, "all")
@@ -112,7 +118,7 @@ plot.subseqelistchisq<-function(x, ylim="uniform", rows=NA, cols=NA,
   else if(!is.null(legendcol)&&legendcol)legncol<-1
   legend(lout$legpos,
 			# inset=c(0,leg.inset),
-			legend=c(paste("-",rev(residlevels)),"neutral",residlevels),
+			legend=c(paste("Negative",rev(pvalue.levels)),"neutral",paste("Positive",pvalue.levels)),
 			fill=cpal,
 			ncol=legncol,
 			cex=legend.cex,

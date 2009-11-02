@@ -1,106 +1,86 @@
+seqerules <- function(fsubseq, sortv=NULL, decreasing=FALSE) {
+	
+        res <- list("rule", "support", "confidence", "lift", "slift", "jmeasure")
+        nrule <- 1
+        subseqs <- fsubseq$subseq
+	matcount <- seqeapplysub(fsubseq, method="presence")
+	ntotal <- length(fsubseq$seqe)
+        nsubseq <- 0
+        for(i in 1:length(subseqs)) {
+          #message("sseq = ", subseqs[i])
+          sseq <- subseqs[i]
+          splitted <- strsplit(as.character(sseq), "-")[[1]]
+          if(length(splitted)>1) {
+            nsubseq <- nsubseq + 1
+            for(z in 1:(length(splitted)-1)) {
+              ab <- as.character(subseqs[i])
+              a <- paste(splitted[1:z], collapse="-")
+              b <- paste(splitted[-(1:z)], collapse="-")
+            
+#              message("A=", a)
+              counta <- sum(matcount[,a])
+#              message("B=", b)
+              countb <- sum(matcount[,b])
+#              message("AB=", ab)
+              countab <- sum(matcount[,ab])
+              
+              pa <- counta/ntotal
+              pb <- countb/ntotal
+              pab <- countab/ntotal
+              confidence <- pab/pa
+                                        
+              lift <- pab/(pa*pb)
+              ## standard lift
+              lmb <- max((pa+pb-1), 1/ntotal)
+              ups <- 1/max(pa,pb)
+              slift <- (lift - lmb)/(ups - lmb)
 
-# j => i
-seqerules <- function(res, minsup, sortv=NULL, decreasing=FALSE, wcount=FALSE) {
-	
-	
-	results <- list()
-	matevent <- seqeapplysub(res, rules=TRUE)
-	matcount <- seqeapplysub(res, method="presence")
-	k<-1
-	for(i in 1:nrow(matevent)) {
-		
-		for(j in 1:ncol(matevent)) {
-			if(matevent[i,j]!=0 && as.character(res$subseq[i,])!=as.character(res$subseq[j,])) {
-				#	print(i)
-				#	print(j)
-				#	if (unlist(strsplit(as.character(res$subseq[j,]),"-")) != unlist(strsplit(as.character(res$subseq[i,]),"-"))[-1]) {
-				prelist <- unlist(strsplit(as.character(res$subseq[j,]),"-"))
-				conlist <- unlist(strsplit(as.character(res$subseq[i,]),"-"))
-				if((conlist[length(conlist)] != prelist[length(prelist)]) && (prelist[1]==conlist[1])) {
-					
-					pre <- as.character(res$subseq[j,])
-					conlist2 <- conlist[(length(prelist)+1):length(conlist)]
-					# Pour éviter le cas où pre = A-B, con=A-Z-B-C et rule = A-B=>B-C
-					if(prelist[length(prelist)] != conlist2[1]) {
-						
-						sizeofr <- length(prelist) + length(conlist2)
-						results$size <- c(results$size, sizeofr)
-						con <- paste(conlist2, collapse="-")
-						
-						precon <- res$subseq[i,]
-						
-						#conC <- 	unlist(strsplit(as.character(res$subseq[i,]), "-"))[-1]
-						#conC <- res$subseq[i,]
-						results$rules<-c(results$rules,paste(pre, "=>", con))
-						
-						#results$counta <- c(results$counta,res$data[j,2])
-						#results$countb <- c(results$countb,res$data[as.character(res$subseq)==conC,2])
-						#results$countab <- c(results$countab,res$data[i,2])
-						ntotal <- length(res$seqe)
-						results$a[k] <- pre
-						
-						c_a <- sum(matcount[,pre])
-						c_b <- sum(matcount[,con])
-						c_ab <- sum(matcount[,as.character(res$subseq[i,])])
-						p_a <- c_a/ntotal
-						p_b <- c_b/ntotal
-						p_ab <- c_ab/ntotal
-						
-						results$counta[k] <- c_a
-						results$b[k] <- con
-						results$countb[k] <- c_b
-						results$ab[k] <- as.character(res$subseq[i,])
-						#results$countab <- c(results$countab, c_ab)
-						results$countab[k] <- c_ab
-						results$dbi[k] <- i
-						results$dbj[k] <- j
-						confidence <- p_ab/p_a
-						lift <- confidence/p_b
-#print("ok4.5")
-						
-						
-						results$conf[k] <- confidence
-						results$lift[k] <- lift
-						
-						# calcul du lift standardisé
-						#lambda = max((p_a+p_b-1)/(p_a*p_b), (4*minsup)/((1+minsup)^2), minsup/(p_a*p_b), confidence/p_b)
-						lambdahaut <- max((p_a+p_b-1), (1/ntotal))
-						lambda = lambdahaut/(p_a*p_b)
-						upsilon = 1/(max(p_a,p_b))
-#						print(lambda)
-#						print(upsilon)
-						standardlift = (lift - lambda) / (upsilon - lambda)
-						results$standardlift[k] <- standardlift
-						
-						
-						icstat <- implicativestat(matcount[,pre], matcount[,con], type="indice")[2,2]
-						results$icstat[k] <- icstat
-						results$icstatp[k] <- pnorm(-icstat) 
-						
-						#print("ok5")
-						k <- k+1
-						
-					}
-				}
-			} 
-		}
-	}
-	#names(results$icstat)<-"Implicate" 
-	#resdata <- data.frame("Rules" = results$rules, "Count prequel" = results$counta, "Count sequel" = results$countb, "Count rules" = results$countab, "Rule size" = results$size, "Debug i" = results$dbi, "Debug j" = results$dbj)
-	if (wcount) {
-		resdata <- data.frame("Rules" = results$rules, "Count prequel" = results$counta, "Count sequel" = results$countb, "Count rules" = results$countab[], "Rule size" = results$size, "Conf" = results$conf, "Lift" = results$lift, "Standardlift" = results$standardlift, "ImplicStat" = results$icstat, "p-value" = results$icstatp)
-	}
-	else { 
-		resdata <- data.frame("Rules" = results$rules, "Rule size" = results$size, "Conf" = results$conf, "Lift" = results$lift, "Standardlift" = results$standardlift, "ImplicStat" = results$icstat, "p-value" = results$icstatp)
-	}
-	
+              ## j-measure
+              invconf <- 1-confidence
+              invpb <- 1-pb
+              jmeasure <- (confidence * log((confidence/pb), base=2)) + (invconf * log((invconf/invpb), base=2)) 
+
+              ## implicative stat
+              icstatmat <- TraMineR:::implicativestat(matcount[,a], matcount[,b], type="indice")
+              if(dim(icstatmat)[1]>1) {
+                icstat <- icstatmat[2,2]
+              }
+              else {
+                icstat <- NA
+              }
+              icstatp <- 1-pnorm(-icstat)
+            
+              res[["rule"]][nrule] <- paste(a, "=>", b) 
+              res[["support"]][nrule] <- countab
+              res[["confidence"]][nrule] <- confidence
+              res[["lift"]][nrule] <- lift
+              res[["slift"]][nrule]  <- slift
+              res[["implicative"]][nrule] <- icstat
+              res[["implicativep"]][nrule] <- icstatp
+              res[["jmeasure"]][nrule] <- jmeasure
+             
+	      nrule <- nrule+1
+              
+            }
+                                 
+          }
+
+       }
+
+        
+        
+        res[["implicativepb1"]] <- sapply(res[["implicativep"]], function(x) (1-(1-x)^nrule))
+        res[["implicativepb2"]] <- sapply(res[["implicativep"]], function(x) (1-(1-x)^nsubseq))
+        
+        resdata <- data.frame("Rules" = res$rule, "Support"= res$support, "Conf" = res$confidence, "Lift" = res$lift, "Standardlift" = res$slift, "JMeasure"=res$jmeasure, "ImplicStat" = res$implicative, "p-value" = res$implicativep, "p.valueB1" = res$implicativepb1, "p.valueB2"=res$implicativepb2)
+        
 	if(!is.null(sortv)) {
-		or <- order(results[[sortv]],decreasing=decreasing)
+		or <- order(res[[sortv]],decreasing=decreasing)
 		return(resdata[or,])
 	}
 	
 	return(resdata)
-	
+          
 }
 
 

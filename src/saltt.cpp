@@ -1,7 +1,7 @@
-#include "TraMineR.h"
 #include <stack>
 #include "salttseq.h"
 #include <cmath>
+#include "TraMineR.h"
 //#include <math.h>
 
 #define TMRMATRIXINDEXC(ligne, colone,len) (ligne)+(colone)*(len)
