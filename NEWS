@@ -1,4 +1,68 @@
 ## ==========
+Version 1.6
+
+New functionalities:
+  - seqIplot() and seqplot(..., type="I"): sequence index plot displaying all sequences
+    with no space (space=0) and no border (border=NA) by default.
+  - stlab(): retrieving or setting the long state labels of a sequence object.
+  - seqici(): computes the complexity index, a composite measure of sequence complexity.
+  - seqtransn(): computes the number of transitions in a sequence.
+
+Bug fixes:
+  - seqrplot() and plot.stslist.rep(): missing states are now correctly
+    plotted (reported by G. Ritschard).
+  - dissrep() (called by seqrplot() and plot.stslist.rep()): when using coverage
+    threshold, does no longer select one too many representative.
+  - seqdplot() / plot.stslist.statd(): fixed bad coloring of missing states (reported by M. Studer).
+  - seqstatd() and print.stslist.statd(): fixed error when printing seqstatd
+    output and length of the longest short state label was >2. (reported by G. Ritschard).
+  - seqdss(): (with default with.missing=FALSE value) DSS with identical
+    successive states resulted when there were missing values between two identical states.
+    For example, before: DSS of "A-A-*-A-*-A" was "A-A-A" and now "A".
+
+Changes in existing functions:
+  - summary.stslist(): added information in the output of the summary method
+    for state sequence objects.
+  - seqdist(), seqdistmc(), seqdss(), seqdur(),  seqient(), seqistatd(), seqmpos(), 
+    seqnum(), seqsubm(): 
+    "with.miss" argument replaced by "with.missing" (obsolete "with.miss" argument 
+    still works for backward compatibility)
+  - seqmeant(): added "with.missing" argument to account for missing states.
+  - seqdef():
+    - new warning when one or several sequences contain only missing values.
+    - when no weights are provided:
+      - "weights" attribute of the returned sequence object is now set to NULL
+         instead to a vector of 1's;
+      - the "[>] sum of weights" message is suppressed;
+    - new "Version" attribute with the number of the TraMineR version
+      used for creating the sequence object;
+    - message "[>] missing values in input file" changed to
+      "[>] found missing values ('...') in sequence data"
+      and displayed only if missing values are found in the input data.
+  - seqIplot(), seqiplot(), seqplot(..., type="I"), seqplot(..., type="i") and plot.stslist():
+    - new "weighted" argument. If set to TRUE sequence bar widths are set
+      proportional to weights.
+  - seqiplot() and plot.stslist(): when sequence object contains less than
+    10 sequences and tlim=NULL, only the actual sequences are plotted
+    without additional "void sequences".
+  - seqmodst(): added "weighted" and "with.missing" arguments.
+  - seqtab() and seqstatd(): attribute nbseq of the returned object is now
+    the sum of weights (if weighted=TRUE and the sequence object has weights)
+    instead of the number of sequences.
+  - seqfplot() / plot.stslist.freq() and seqdplot() / plot.stslist.statd():
+    when weights are used, i.e. when the "weighted=TRUE" argument is passed
+    and the sequence object has weights,
+    - the "n=" in the y axis legend now gives the sum of weights instead of
+      the number of sequences;
+    - "weighted" is specified in the y axis legend;
+  - seqfplot() and plot.stslist.freq(): more precise positioning of the 0 of the y axis;
+  - seqrplot() and plot.stslist.rep():
+    - new "stats" option. If set to FALSE, statistics are not plotted;
+    - label of the yaxis changed.
+  - dissrep(): name of the main argument changed from "dist.matrix" to "diss"
+    as in other "diss..." functions.
+
+## ==========
 Version 1.4-1
 
 Bug fixes:
@@ -22,7 +86,7 @@ Changes in existing functions:
        statistics for the representative set changed from "Quality"
        to "Statistics" and that of the attribute containing the
        overall quality measure changed from "rindex" to "Quality".
-  -  seqplot(): now checks that the length of the vector given as 
+  -  seqplot(): now checks that the length of the vector given as
      "group" argument matches the number of sequences.
   -  plot.stslist(): now checks that the length of the vector given as
      "sortv" argument matches the number of sequences.

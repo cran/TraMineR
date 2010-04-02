@@ -7,7 +7,7 @@ Compute multichannel pairwise distances between sequences. Several metrics are a
 }
 \usage{
 seqdistmc(channels, method, norm=FALSE, indel=1, sm=NULL,
-	with.miss=FALSE, full.matrix=TRUE, link="sum", cval=2,
+	with.missing=FALSE, full.matrix=TRUE, link="sum", cval=2,
 	miss.cost=2, cweight=NULL)
 }
 \arguments{
@@ -21,7 +21,7 @@ seqdistmc(channels, method, norm=FALSE, indel=1, sm=NULL,
 
   \item{sm}{A list with a substitution-cost matrix for each channel (OM, HAM and DHD method) or a list of method names for generating the substitution-costs (see \code{\link{seqsubm}}).}
 
-  \item{with.miss}{Must be set to TRUE when sequences contain non deleted gaps (missing values) or when channels are of different length. See details.}
+  \item{with.missing}{Must be set to TRUE when sequences contain non deleted gaps (missing values) or when channels are of different length. See details.}
 
   \item{full.matrix}{If TRUE (default), the full distance matrix is returned. If FALSE, an object of class \code{\link{dist}} is returned.}
 

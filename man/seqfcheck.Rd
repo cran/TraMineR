@@ -5,7 +5,7 @@
 \description{Check wheter \emph{seqdata} contains sequences in the compressed format (as character strings, with states separated by a separator) or in the extended format (sequences are stored in a matrix, where each state is stored in a separate column of the matrix. For a more detailed description of the compressed and extended format, see \cite{Gabadinho, 2008}.
 } 
 \details{
-Wether the sequence(s) are in compressed format is checked by counting the number of columns and searching for the \code{'-'} or \code{':'} separator. The function returns the separator if it has been found in the data. If the data contains more than one column, the data is supposed to be in the extended format, and 'X' is returned, unless some states codes contain the '-' character (eg. states coded with negative integer values), in which case \code{'-X'} is returned.
+Whether the sequence(s) are in compressed format is checked by counting the number of columns and searching for the \code{'-'} or \code{':'} separator. The function returns the separator if it has been found in the data. If the data contains more than one column, the data is supposed to be in the extended format, and 'X' is returned, unless some states codes contain the '-' character (eg. states coded with negative integer values), in which case \code{'-X'} is returned.
 
 }
 \usage{

@@ -13,14 +13,22 @@ seqtab <- function(seqdata, tlim=10, weighted=TRUE, format="SPS") {
 	## Weights
 	weights <- attr(seqdata, "weights")
 
-	if (!weighted || is.null(weights)) 
+	if (!weighted || is.null(weights)) {
 		weights <- rep(1.0, nrow(seqdata))
+	}
+	## Also takes into account that in unweighted sequence objects created with 
+	## older TraMineR versions the weights attribute is a vector of 1
+	## instead of NULL  
+	if (all(weights==1)) 
+		weighted <- FALSE
 
 	if (seqfcheck(seqdata)=="-X") 
 		warning("'-' character in states codes may cause invalid results")
 
-	if (format=="SPS")	
-		seqlist <- suppressMessages(seqformat(seqdata, from='STS', to='SPS', SPS.out=list(xfix="", sdsep="/"), compressed=TRUE))
+	if (format=="SPS") {
+		seqlist <- suppressMessages(seqformat(seqdata, from='STS', to='SPS', 
+			SPS.out=list(xfix="", sdsep="/"), compressed=TRUE))
+	}
 	else if (format=="STS")
 		seqlist <- seqconc(seqdata)
 	else 
@@ -49,7 +57,7 @@ seqtab <- function(seqdata, tlim=10, weighted=TRUE, format="SPS") {
 	attr(res, "weights") <- table$Freq
 	
 	attr(res,"freq") <- table
-	attr(res,"nbseq") <- nrow(seqdata)
+	attr(res,"nbseq") <- sum(weights)
 	attr(res,"weighted") <- weighted
 	attr(res,"tlim") <- tlim
 	attr(res,"format") <- format

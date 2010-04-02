@@ -5,13 +5,18 @@
 Plots a legend for the states in a sequence object. Useful if several graphics are plotted together and only one legend is necessary. Unless specified by the user, the \emph{cpal} and \emph{labels} attributes of the sequence object are used for the colors and text appearing in the legend (see \code{\link{seqdef}}).
 }
 \usage{
-seqlegend(seqdata, cpal=NULL, ltext=NULL, 
+seqlegend(seqdata, with.missing="auto", 
+	cpal=NULL, missing.color=NULL, ltext=NULL, 
 	position="topleft", fontsize=1, ...)
 }
 \arguments{
   \item{seqdata}{a sequence object as returned by the the \code{\link{seqdef}} function.}
+	
+  \item{with.missing}{if set to \code{"auto"} (default), a legend for the missing state is added automatically if one or more of the sequences in seqdata contains a missing state. If \code{TRUE} a legend for the missing state is added in any case. Setting to \code{FALSE} omits the legend for the missing state.}
 
   \item{cpal}{alternative color palette to use for the states. If user specified, a vector of colors with number of elements equal to the number of distinct states. By default, the 'cpal' attribute of the 'seqdata' sequence object is used (see \code{\link{seqdef}}).}
+
+	\item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the "missing.color" attribute of the sequence object being plotted.}
 
   \item{ltext}{optional description of the states to appear in the legend. Must be a vector of character strings with number of elements equal to the number of distinct states. If unspecified, the 'labels' attributes of the 'seqdata' sequence object is used (see \code{\link{seqdef}}). }
 

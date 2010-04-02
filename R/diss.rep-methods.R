@@ -17,7 +17,6 @@ print.diss.rep <- function(x, ...) {
 summary.diss.rep <- function(object, ...) {
 	criterion <- attr(object,"criterion")
 	n <- attr(object,"n")
-	rindex <- attr(object,"rindex")
 
 	cat(" [>] criterion:",criterion,"\n")
 	cat(" [>]", n,"objects in the original data set\n")

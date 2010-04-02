@@ -2,7 +2,7 @@
 ## Locate the difference in sequence between groups
 ###########################
 seqdiff <- function(seqdata, group, cmprange=c(0, 1),
-										seqdist_arg=list(method="LCS", norm=TRUE)) {
+     seqdist_arg=list(method="LCS", norm=TRUE)) {
 
 	if (!inherits(seqdata, "stslist")) {
 			stop("seqdata should be a stslist, see seqdef")
@@ -58,7 +58,8 @@ print.seqdiff <- function(x, ...) {
 ## Plot method for seqdiff
 ###########################
 plot.seqdiff <- function(x, stat="PseudoR2", type="l", ylab=stat, xlab="",
-													legendposition="top", ylim=NULL, ...) {
+	legendposition="top", ylim=NULL, ...) {
+
 	if (stat=="Variance" || stat=="Residuals") {
 		nbstates=ncol(x$variance)
 		if (nbstates <= 8) cpal <- brewer.pal(nbstates, "Accent")

@@ -6,6 +6,9 @@ plot.stslist.freq <- function(x, cpal=NULL, missing.color=NULL, pbarw=TRUE,
 	ylab=NULL, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, cex.plot=1, ...) {
 
 	n <- attr(x,"nbseq")
+	weighted <- attr(x, "weighted")
+	if (weighted) {wlab <- "weighted "}
+	else {wlab <- NULL}
 	statl <- attr(x,"alphabet")
 	nr <- attr(x,"nr")
 
@@ -26,9 +29,9 @@ plot.stslist.freq <- function(x, cpal=NULL, missing.color=NULL, pbarw=TRUE,
 
 	if (is.null(ylab)) {
 		if (yaxis==TRUE || yaxis=="cum")
-			ylab <- paste("Cum. % freq. (n=",n,")",sep="")
+			ylab <- paste("Cum. % freq. (",wlab,"n=",n,")",sep="")
 		else if (yaxis=="pct")
-			ylab <- paste("% freq. (n=",n,")",sep="")		
+			ylab <- paste("% freq. (",wlab,"n=",n,")",sep="")		
 	}
 
 	## Storing the optional parameters in a list
@@ -67,7 +70,7 @@ plot.stslist.freq <- function(x, cpal=NULL, missing.color=NULL, pbarw=TRUE,
 		if (!pbarw)
 			y.lab.pos <- c(space,(tlim+(tlim*space)))
 		else
-			y.lab.pos <- c(space,(sum(barw)+(tlim*space*mean(barw))))
+			y.lab.pos <- c(space*mean(barw),(sum(barw)+(tlim*space*mean(barw))))
 	}
 	## Percentage frequency of each sequence 
 	else if (yaxis=="pct") {

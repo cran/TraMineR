@@ -1,5 +1,5 @@
 seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
-	with.miss=FALSE, full.matrix=TRUE, link="sum", cval=2, miss.cost=2, cweight=NULL ) {
+	with.missing=FALSE, full.matrix=TRUE, link="sum", cval=2, miss.cost=2, cweight=NULL ) {
 	
 	## Checking arguments
 	nchannels <- length(channels)
@@ -72,13 +72,13 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 		}
 		alphabet_list[[i]] <- attr(channels[[i]],"alphabet")
 		## Checking missing values
-		if (with.miss) {
+		if (with.missing) {
 			alphabet_list[[i]] <- c(alphabet_list[[i]],attr(channels[[i]],"nr"))
 			message(" [>] including missing value as an additional state" )
 		}
 		else {
 			if (any(channels[[i]]==attr(channels[[i]],"nr"))) {
-				stop(" [!] found missing values in channel ", i, ", please set 'with.miss=T' to nevertheless compute distances")
+				stop(" [!] found missing values in channel ", i, ", please set 'with.missing=T' to nevertheless compute distances")
 			}
 		}
 		alphsize_list[[i]] <- length(alphabet_list[[i]])
@@ -88,7 +88,7 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 		## Substitution matrix generation method is given
 		if	(is.character(sm[[i]])) {
 			message(" [>] Computing substitution cost matrix for channel ", i)
-			substmat_list[[i]] <- seqsubm(channels[[i]], sm[[i]], with.miss=T,
+			substmat_list[[i]] <- seqsubm(channels[[i]], sm[[i]], with.missing=T,
 				time.varying=timeVarying, cval=cval, miss.cost=miss.cost)
 		}
 		## Complete matrix given Checking correct dimension
@@ -130,8 +130,8 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 	slength1 <- seqlength(channels[[1]])
 	for (i in 2:nchannels) {
 		if (sum(slength1 != seqlength(channels[[i]]))>0) {
-			if (!with.miss) {
-				stop(" [!] Some channels have sequences of different length for the same individual. Please set 'with.miss=T' to nevertheless compute distances")
+			if (!with.missing) {
+				stop(" [!] Some channels have sequences of different length for the same individual. Please set 'with.missing=T' to nevertheless compute distances")
 			} else {
 				warning(" [!] Some channels have sequences of different length for the same individual. Shorter sequences will be filled with missing values.")
 				break
@@ -234,6 +234,6 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 	message(" [>] Computing final distances")
 	## Calling seqdist
 	return(seqdist(newseqdata, method=method, norm=norm, indel=newindel,
-		sm=newsm, with.miss=FALSE, full.matrix=full.matrix))
+		sm=newsm, with.missing=FALSE, full.matrix=full.matrix))
 	
 }

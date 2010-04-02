@@ -2,20 +2,20 @@
 ## Matrix of substitution costs
 ## ============================
 
-seqsubm <- function(seqdata, method, cval=2, with.miss=FALSE, 
+seqsubm <- function(seqdata, method, cval=2, with.missing=FALSE, 
 	miss.cost=2, time.varying=FALSE, weighted=TRUE) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is NOT a sequence object, see seqdef function to create one")
 
 	metlist <- c("CONSTANT","TRATE")
-	if (!method %in% metlist)
+	if (missing(method) || !method %in% metlist)
 		stop("method must be one of: ", paste(metlist,collapse=" "))
 
 	alphabet <- attr(seqdata,"alphabet")
 
 	## Adding an entry for for missing state
-	if (with.miss) {
+	if (with.missing) {
 		message(" [>] setting ",miss.cost," as substitution cost for missing values")
 		alphabet <- c(alphabet,attr(seqdata,"nr"))
 	}
@@ -95,7 +95,7 @@ seqsubm <- function(seqdata, method, cval=2, with.miss=FALSE,
 	}
 
 	## 
-	if (with.miss) {
+	if (with.missing) {
 		if (time.varying) {
 			costs[alphsize,1:(alphsize-1),] <- miss.cost
 			costs[1:(alphsize-1),alphsize,] <- miss.cost

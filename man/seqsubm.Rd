@@ -7,41 +7,69 @@
 \title{Create a substitution-cost matrix}
 
 \description{
-The substitution-cost matrix is used when computing distances between sequences by the method of optimal matching. The function creates the substitution matrix using either a constant or the transition rates computed from the sequence data or other methods to be implemented in the future.
-}
+ The substitution-cost matrix is used when computing distances between
+sequences by the method of optimal matching. The function creates the
+substitution matrix using either a constant or the transition rates
+computed from the sequence data or other methods to be implemented in
+the future.
+ }
 
 \details{
-	The substitution-cost matrix has dimension \eqn{ns*ns}, where \eqn{ns} is the number of states in the \link{alphabet} of the sequence object. The element \eqn{(i,j)} of the matrix is the cost of substituting state \eqn{i} whith state \eqn{j}.
-	In the "constant" method, the substitution costs are the same for all the states, with a default value of 2. An alternate value can be provided by the user. When the "transition rates" method is choosen, the transition rates between all states are computed using the \link{seqtrate} function. The substitution cost between states \eqn{i} and \eqn{j} is obtained with the formula 
-\deqn{SC(i,j) = 2 -P(i,j) -P(j,i)}
-where \eqn{P(i,j)} is the transition rate between states \eqn{i} and \eqn{j}.  
-}
+ The substitution-cost matrix has dimension \eqn{ns*ns}, where
+\eqn{ns} is the number of states in the \link{alphabet} of the
+sequence object. The element \eqn{(i,j)} of the matrix is the cost of
+substituting state \eqn{i} with state \eqn{j}.
+
+ With the \code{"CONSTANT"} method, the substitution costs are the
+same for all the states, with a default value of 2. An alternative
+value can be provided by the user. When the \code{"TRATE"}
+(transition rates) method is chosen, the transition rates between all
+states are computed using the \link{seqtrate} function. The
+substitution cost between states \eqn{i} and \eqn{j} is obtained with
+the formula
+
+ \deqn{SC(i,j) = 2 -P(i,j) -P(j,i)}
+
+where \eqn{P(i,j)} is the transition rate from state \eqn{i} to
+\eqn{j}.
+ }
+
 \usage{
- seqsubm(seqdata, method, cval=2, with.miss=FALSE, 
-	miss.cost=2, time.varying=FALSE, weighted=TRUE)
-}
-\arguments{
+ seqsubm(seqdata, method, cval=2, with.missing=FALSE,
+         miss.cost=2, time.varying=FALSE, weighted=TRUE) }
+
+ \arguments{
   \item{seqdata}{a sequence object as returned by the \link{seqdef} function.}
 
-  \item{method}{method to compute transition rates. At this time, the methods available are constant value (method="CONSTANT") or substitution costs using transition rates (method="TRATE")}
-  \item{cval}{the constant substitution cost if method "CONSTANT" is choosen. Otherwise, do not specify.}
+  \item{method}{method to compute transition rates. At this time, the methods available are constant
+      value (\code{method="CONSTANT"}) or substitution costs using transition rates
+      (\code{method="TRATE"})}
+  \item{cval}{the constant substitution cost if method \code{"CONSTANT"} is chosen. Otherwise, it is
+      ignored.}
 	
-	\item{with.miss}{if \code{TRUE}, an additional entry is added in the matrix for the missing states. Hence, a new "missing" state is added to the list of "valid" states. Use this if you want to compute distances with missing values inside the sequences. See \cite{Gabadinho, 2008} for more details on the options for handling missing values when computing distances between sequences.}
+	\item{with.missing}{if \code{TRUE}, an additional entry is added in the matrix for the missing states.
+Hence, a new "missing" state is added to the list of "valid" states. Use this if you want to compute
+distances with missing values inside the sequences. See \cite{Gabadinho et al. (2008)} for more details on the
+options for handling missing values when computing distances between sequences.}
 
 	\item{miss.cost}{the substitution cost for the missing state.}
-	\item{time.varying}{Logical. If TRUE return an \code{\link{array}} containing a distinct matrix for each time unit. The time is the third dimension (subscript).}
-	\item{weighted}{Logical. If TRUE compute transition rates using weights specified in \code{seqdata}.}
+	\item{time.varying}{Logical. If \code{TRUE} return an \code{\link{array}} containing a distinct
+matrix for each time unit. The time is the third dimension (subscript).}
+	\item{weighted}{Logical. If \code{TRUE} compute transition rates using weights specified in
+\code{seqdata}.}
 }
 \seealso{
- \code{\link{seqtrate}} \code{\link{seqdef}}.
+ \code{\link{seqtrate}}, \code{\link{seqdef}}, \code{\link{seqdist}}.
 }
 
-\references{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2008). Mining Sequence Data in \code{R} with \code{TraMineR}: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
+\references{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2008). Mining Sequence Data in
+\code{R} with the \code{TraMineR} package: A user's guide. Department of Econometrics and
+Laboratory of Demography, University of Geneva.
 }
 
 \examples{
-## Defining a sequence object with columns 10 to 25 
-## in the 'biofam' example data set 
+## Defining a sequence object with columns 10 to 25
+## in the 'biofam' example data set
 data(biofam)
 biofam.seq <- seqdef(biofam,10:25)
 
@@ -65,12 +93,12 @@ data(ex1)
 ex1.seq <- seqdef(ex1,1:13, weights=ex1$weights)
 
 ## Unweighted
-subm <- seqsubm(ex1.seq, method="TRATE", with.miss=TRUE, weighted=FALSE)
-ex1.om <- seqdist(ex1.seq, method="OM", sm=subm, with.miss=TRUE)
+subm <- seqsubm(ex1.seq, method="TRATE", with.missing=TRUE, weighted=FALSE)
+ex1.om <- seqdist(ex1.seq, method="OM", sm=subm, with.missing=TRUE)
 
 ## Weighted
-subm.w <- seqsubm(ex1.seq, method="TRATE", with.miss=TRUE, weighted=TRUE)
-ex1.omw <- seqdist(ex1.seq, method="OM", sm=subm.w, with.miss=TRUE)
+subm.w <- seqsubm(ex1.seq, method="TRATE", with.missing=TRUE, weighted=TRUE)
+ex1.omw <- seqdist(ex1.seq, method="OM", sm=subm.w, with.missing=TRUE)
 
 ex1.om == ex1.omw
 }

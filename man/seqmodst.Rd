@@ -1,17 +1,24 @@
 \name{seqmodst}
 \alias{seqmodst}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{Sequence of modal states}
 \description{
 Sequence made of the modal state at each position.
 }
 \usage{
-seqmodst(seqdata, dist = FALSE, ...)
+seqmodst(seqdata, weighted=TRUE, with.missing=FALSE, dist = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{seqdata}{a state sequence object as defined by the \code{\link{seqdef}} function.}
+
+  \item{weighted}{if TRUE, distributions account for the weights assigned to the state sequence object
+  (see \code{\link{seqdef}}).
+  Set to FALSE if you want ignore the weights.}
+
+  \item{with.missing}{If FALSE (default value), returned distributions ignore missing values.}
+
   \item{dist}{experimental}
+
   \item{\dots}{experimental}
 }
 \details{
@@ -33,6 +40,14 @@ biofam.seq <- seqdef(biofam, 10:25, labels=biofam.lab)
 
 ## Modal state sequence
 seqmodst(biofam.seq)
+
+## Examples using weights and with.missing arguments
+data(ex1)
+ex1.seq <- seqdef(ex1, 1:13, weights=ex1$weights)
+
+seqmodst(ex1.seq)
+seqmodst(ex1.seq, weighted=FALSE)
+seqmodst(ex1.seq, weighted=FALSE, with.missing=TRUE)
 }
 
 

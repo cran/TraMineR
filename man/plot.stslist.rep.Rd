@@ -3,22 +3,28 @@
 \alias{plot.stslist.rep}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Plot method for representative sequence sets}
+
 \description{
-This is the plot method for output produced by the seqrep function, i.e objects of class \emph{stslist.rep}. It produces a 
+This is the plot method for output produced by the seqrep function, i.e objects of class \emph{stslist.rep}. It produces a
 representative sequence plot.
 }
+
 \usage{
-\method{plot}{stslist.rep}(x, cpal = NULL, pbarw = TRUE, dmax = NULL,
-ylab = NULL, xaxis = TRUE, xtlab = NULL, cex.plot = 1, ...)
+\method{plot}{stslist.rep}(x, cpal = NULL, missing.color=NULL, pbarw = TRUE,
+       dmax = NULL, stats=TRUE, ylab = NULL, xaxis = TRUE,
+       xtlab = NULL, cex.plot = 1, ...)
 }
+
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{an object of class \emph{stslist.rep} as produced by the \code{\link{seqrep}} function.}
-  \item{cpal}{alternative color palette to use for the states. If user specified, a vector of colors with number of 
-      elements equal to the number of states in the alphabet. By default, the 'cpal' attribute of the \code{x} object is 
+  \item{cpal}{alternative color palette to use for the states. If user specified, a vector of colors with number of
+      elements equal to the number of states in the alphabet. By default, the 'cpal' attribute of the \code{x} object is
       used.}
+	\item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the "missing.color" attribute of the sequence object being plotted.}
   \item{pbarw}{when \code{TRUE}, the bar heights are set proportional to the number of represented sequences.}
   \item{dmax}{maximal theoretical distance, used for the x axis limits.}
+  \item{stats}{if TRUE (default), mean discrepancy in each subset defined by all sequences attributed to one representative sequence and the mean distance to this representative sequence are displayed.}
   \item{ylab}{an optional label for the y axis. If set to NA, no label is drawn.}
   \item{xaxis}{controls whether a x axis is plotted.}
   \item{xtlab}{optional labels for the x axis ticks labels. If unspecified, the column names of the object being plotted.}
@@ -26,20 +32,20 @@ ylab = NULL, xaxis = TRUE, xtlab = NULL, cex.plot = 1, ...)
   \item{\dots}{further graphical parameters. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}.}
 }
 \details{
-This is the plot method for the output produced by the \code{\link{seqrep}} function, i.e. objects of class \emph{stslist.rep}. 
-It produces a plot where the representative sequences are displayed as horizontal bars with width proportional to the 
+This is the plot method for the output produced by the \code{\link{seqrep}} function, i.e. objects of class \emph{stslist.rep}.
+It produces a plot where the representative sequences are displayed as horizontal bars with width proportional to the
 number of sequences assigned to them. Sequences are plotted bottom-up according to their representativeness score. \cr
-Above the plot, two parallel series of symbols associated to each representative are displayed horizontally on a scale ranging 
-from 0 to the maximal theoretical distance \eqn{D_{max}}{D_max}. The location of the symbol associated to the representative \eqn{r_i} 
-indicates on axis \eqn{A} the (pseudo) variance (\eqn{V_i}) within the subset of sequences assigned to \eqn{r_i} and on the axis \eqn{B} 
+Above the plot, two parallel series of symbols associated to each representative are displayed horizontally on a scale ranging
+from 0 to the maximal theoretical distance \eqn{D_{max}}{D_max}. The location of the symbol associated to the representative \eqn{r_i}
+indicates on axis \eqn{A} the (pseudo) variance (\eqn{V_i}) within the subset of sequences assigned to \eqn{r_i} and on the axis \eqn{B}
 the mean distance \eqn{MD_i} to the representative.
 
-This method is called by the generic \code{\link{seqplot}} function (if \code{type="r"}) that produces more sophisticated 
-plots with group splits and automatic display of the color legend. The \code{\link{seqrplot}} function is a shortcut for 
+This method is called by the generic \code{\link{seqplot}} function (if \code{type="r"}) that produces more sophisticated
+plots with group splits and automatic display of the color legend. The \code{\link{seqrplot}} function is a shortcut for
 calling \code{seqplot} with \code{type="r"}.
 }
 
-\references{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Summarizing Sets of Categorical Sequences, 
+\references{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Summarizing Sets of Categorical Sequences,
 In \emph{International Conference on Knowledge Discovery and Information Retrieval}, Madeira, 6-8 October, INSTICC.}
 
 \examples{
@@ -52,9 +58,9 @@ mvad.seq <- seqdef(mvad, 15:86, states=mvad.scodes, labels=mvad.labels)
 
 ## Computing optimal matching distances
 submat   <- seqsubm(mvad.seq, method= "TRATE")
-dist.om1 <- seqdist(mvad.seq, method="OM", indel=1, sm=submat) 
+dist.om1 <- seqdist(mvad.seq, method="OM", indel=1, sm=submat)
 
-## Extracting a representative set using the sequence frequency 
+## Extracting a representative set using the sequence frequency
 ## as a representativeness criterion
 mvad.rep <- seqrep(mvad.seq, dist.matrix=dist.om1)
 

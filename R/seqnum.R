@@ -2,7 +2,7 @@
 ## Change the alphabet of a sequence object
 ## ========================================
 
-seqnum <- function(seqdata, with.miss=FALSE) {
+seqnum <- function(seqdata, with.missing=FALSE) {
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, see seqdef function to create one")
 
@@ -14,7 +14,7 @@ seqnum <- function(seqdata, with.miss=FALSE) {
 	alphabet.new <- 0:(nbstat-1)
 	levels.new <- alphabet.new
 
-	if (with.miss) {
+	if (with.missing) {
 		## Changing missing and void codes into numerical values
 		nr.new <- which(levels.orig==attr(seqdata,"nr"))-1
 		levels.new <- c(levels.new, nr.new)

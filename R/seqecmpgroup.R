@@ -54,7 +54,7 @@ seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL){
 		seqmatrix<-seqeapplysub(subseq, method="presence")
 		testfunc.arg<-list(group=group, bonferroni=bonferroni, 
 			ntest=ntest, seqmatrix=seqmatrix)
-		decreasing<-FALSE
+		decreasing<-TRUE
 	}
 	else {
 		stop("This method is not (yet) implemented")
@@ -66,7 +66,7 @@ seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL){
 		res<-rbind(res,stat)
 	}
 	subseqnum<-1:sum(res[,1]<=pvalue.limit)
-	cres<-order(as.double(res[,1]), decreasing =decreasing)[subseqnum]#[!is.na(as.double(res$stat))]
+	cres<-order(as.double(res[,2]), decreasing =decreasing)[subseqnum]#[!is.na(as.double(res$stat))]
 	data<-data.frame(Support=as.data.frame(subseq$data[cres,"Support"], optional=TRUE), res[cres,], check.names=FALSE)
 	rownames(data)<-1:nrow(data)
 	ret<-createsubseqelist(subseq$seqe,subseq$constraint,subseq$subseq[cres],data=data,type=method)

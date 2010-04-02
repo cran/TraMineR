@@ -6,8 +6,8 @@
 This is the plot method for objects of class stslist.meant produced by the seqmeant function.
 }
 \usage{
-\method{plot}{stslist.meant}(x, cpal = NULL, ylab = NULL, yaxis = TRUE, xaxis = TRUE, 
-	xtlab = NULL, cex.plot = 1, ylim = NULL, ...)
+\method{plot}{stslist.meant}(x, cpal = NULL, ylab = NULL, yaxis = TRUE, xaxis = TRUE,
+     xtlab = NULL, cex.plot = 1, ylim = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,7 +24,7 @@ This is the plot method for objects of class stslist.meant produced by the seqme
 
   \item{\dots}{further graphical parameters. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}.}
 }
-\details{This is the plot method for the output produced by the \code{\link{seqmeant}} function, i.e. objects of class \emph{stslist.meant}. It produces a plot showing the mean times spent in each state of the alphabet. 
+\details{This is the plot method for the output produced by the \code{\link{seqmeant}} function, i.e. objects of class \emph{stslist.meant}. It produces a plot showing the mean times spent in each state of the alphabet.
 
 This method is called by the generic \code{\link{seqplot}} function (if \code{type="mt"}) that produces more sophisticated plots, allowing grouping and automatic display of the states legend. The \code{\link{seqmtplot}} function is a shortcut for calling \code{seqplot} with \code{type="mt"}.
 }
@@ -44,7 +44,7 @@ mvad.meant <- seqmeant(mvad.seq)
 plot(mvad.meant, main="Mean durations in each state of the alphabet")
 
 ## Changing the y axis limits
-plot(mvad.meant, main="Mean durations in each state of the alphabet", 
+plot(mvad.meant, main="Mean durations in each state of the alphabet",
  ylim=c(0,40))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -7,13 +7,16 @@
 ## ====================================================
 
 seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE, 
-	indel=1, sm=NA,	with.miss=FALSE, full.matrix=TRUE) {
+	indel=1, sm=NA,	with.missing=FALSE, full.matrix=TRUE) {
 	debut <- Sys.time()
 	## Checking correct arguments
 	if (!inherits(seqdata,"stslist")) {
 		stop(" [!] data is not a state sequence object, use 'seqdef' function to create one", call.=FALSE)
 	}
 	metlist <- c("OM","LCP", "LCS", "RLCP", "DHD", "HAM")
+	if (missing(method)) {
+		stop(" [!] You should specify a method to compute the distances. It must be one of: ", paste(metlist,collapse=" "))
+	}
 	if (!method %in% metlist) {
 		stop(" [!] Method must be one of: ", paste(metlist,collapse=" "), call.=FALSE)
 	}
@@ -43,12 +46,12 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
 		stop(" [!] Unknown distance normalization method ", norm)
 	}
 	## Checking missing values
-	if (!with.miss && any(seqdata==attr(seqdata,"nr"))) {
-		stop("found missing values in sequences, please set 'with.miss=TRUE' to nevertheless compute distances")
+	if (!with.missing && any(seqdata==attr(seqdata,"nr"))) {
+		stop("found missing values in sequences, please set 'with.missing=TRUE' to nevertheless compute distances")
 	}
 	if (method == "OM" && is.character(sm)) {
 		if (sm == "TRATE" || sm =="CONSTANT") {
-			sm <- seqsubm(seqdata, method=sm, cval=2, with.miss=with.miss, miss.cost=2)
+			sm <- seqsubm(seqdata, method=sm, cval=2, with.missing=with.missing, miss.cost=2)
 		} else {
 			stop(" [!] Unknown method ", sm, " to compute substitution costs")
 		}
@@ -57,11 +60,11 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
 	methodname <- method
 	if (method == "LCS") {
 		method <- "OM"
-		sm <- suppressMessages(seqsubm(seqdata, method="CONSTANT", cval=2, with.miss=with.miss, miss.cost=2))
+		sm <- suppressMessages(seqsubm(seqdata, method="CONSTANT", cval=2, with.missing=with.missing, miss.cost=2))
 		indel <- 1
 	} else if (method == "HAM") {
 		method <- "DHD"
-		sm <- seqsubm(seqdata, "CONSTANT", cval=1, with.miss=with.miss,
+		sm <- seqsubm(seqdata, "CONSTANT", cval=1, with.missing=with.missing,
 			miss.cost=1, time.varying=TRUE)
 	}
 
@@ -74,7 +77,7 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
 	alphsize <- length(alphabet)
 	message(" [>] ",n," sequences with ", alphsize, " distinct events/states")
 	## Gaps in sequences
-	if (with.miss) {
+	if (with.missing) {
 		alphabet <- c(alphabet,attr(seqdata,"nr"))
 		alphsize <- length(alphabet)
 		message(" [>] including missing value as additional state" )
@@ -124,7 +127,7 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
 			}
 		}
 		else {
-			sm <- seqsubm(seqdata, "TRATE", cval=1, with.miss=with.miss,
+			sm <- seqsubm(seqdata, "TRATE", cval=1, with.missing=with.missing,
 					miss.cost=1, time.varying=TRUE)
 		}
 	}
@@ -133,7 +136,7 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
 	## ==============
 	## Preparing data
 	## ==============
-	seqdata <- seqnum(seqdata, with.miss=with.miss)
+	seqdata <- seqnum(seqdata, with.missing=with.missing)
 
 	## Selecting distinct sequences only and saving the indexes
 	dseq <- unique(seqdata)
@@ -144,7 +147,7 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
 
 	slength <- seqlength(dseq)
 
-	dseq <- seqasnum(dseq, with.miss=with.miss)
+	dseq <- seqasnum(dseq, with.missing=with.missing)
 
 	message(" [>] min/max sequence length: ",min(slength),"/",max(slength))
 

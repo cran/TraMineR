@@ -5,12 +5,12 @@
 Returns the number of common elements, ie same states appearing at the same position in the two sequences.
 }
 \usage{
- seqmpos(seq1, seq2, with.miss=FALSE)
+ seqmpos(seq1, seq2, with.missing=FALSE)
 }
 \arguments{
   \item{seq1}{a sequence from a sequence object.}
   \item{seq2}{a sequence from a sequence object.}
-  \item{with.miss}{if \code{TRUE}, gaps appearing at the same position in both sequences are also considedered as common elements}.
+  \item{with.missing}{if \code{TRUE}, gaps appearing at the same position in both sequences are also considedered as common elements}.
 }
 \seealso{
  \code{}.
@@ -29,7 +29,7 @@ b <- c(NA,"C",NA,"B","C")
 ex1.seq <- seqdef(rbind(a,b))
 
 seqmpos(ex1.seq[1,], ex1.seq[2,])
-seqmpos(ex1.seq[1,], ex1.seq[2,], with.miss=TRUE)
+seqmpos(ex1.seq[1,], ex1.seq[2,], with.missing=TRUE)
 
 }
 \keyword{misc}

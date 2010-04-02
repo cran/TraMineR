@@ -2,18 +2,17 @@
 ## Modal state sequence
 ## ====================
 
-seqmodst <- function(seqdata, dist=FALSE, ...) {
+seqmodst <- function(seqdata, weighted=TRUE, with.missing=FALSE, dist=FALSE, ...) {
 
 	if (!inherits(seqdata,"stslist")) 
 		stop("data is not a sequence object, see seqdef function to create one", call.=FALSE)
 
 	slength <- ncol(seqdata)
 	statelist <- alphabet(seqdata)
-	nbseq <- nrow(seqdata)
 	cnames <- colnames(seqdata)
 
 	## State distribution
-	freq <- seqstatd(seqdata)$Frequencies
+	freq <- seqstatd(seqdata, weighted, with.missing)$Frequencies
 
 	ctype <- matrix(nrow=1, ncol=slength)
 	stfreq <- matrix(nrow=1, ncol=slength)

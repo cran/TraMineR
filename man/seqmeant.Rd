@@ -6,12 +6,14 @@
 Compute the mean durations spent in each state of the alphabet for the set of sequences given as input.
 }
 \usage{
-seqmeant(seqdata, weighted = TRUE)
+seqmeant(seqdata, weighted=TRUE, with.missing=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
   \item{weighted}{if \code{TRUE}, the weights (weights attribute) attached to the sequence object are used for computing weighted mean durations.}
+  \item{with.missing}{if set to TRUE, cumulated durations are also computed for the missing status (gaps in the sequences). See \link{seqdef} on options for handling missing values when creating sequence objects.} 
+
 }
 %\details{}
 
@@ -30,6 +32,9 @@ actcal.seq <- seqdef(actcal,13:24,labels=actcal.lab)
 
 ## Computing the mean durations
 seqmeant(actcal.seq)
+
+## Example with weights
+
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -3,69 +3,159 @@
 \alias{seqdef}
 \alias{print.stslist}
 \title{Create a state sequence object}
+
 \description{
-Create a state sequence object with attributes such as alphabet, color palette and state labels. Most TraMineR functions for state sequences require such a state sequence object as input argument. There are specific methods for plotting, summarizing and printing state sequence objects.
-}
+Create a state sequence object with attributes such as
+alphabet, color palette and state labels. Most TraMineR functions for
+state sequences require such a state sequence object as input
+argument. There are specific methods for plotting, summarizing and
+printing state sequence objects.
+ }
 
 \usage{
 seqdef(data, var=NULL, informat="STS", stsep=NULL,
-	alphabet=NULL, states=NULL, id=NULL, weights=NULL, start=1,
-	left=NA, right="DEL", gaps=NA, missing=NA, void="\%", nr="*",
-	cnames=NULL, cpal=NULL, missing.color="darkgrey", 
-	labels=NULL, ...)
+    alphabet=NULL, states=NULL, id=NULL, weights=NULL, start=1,
+    left=NA, right="DEL", gaps=NA, missing=NA, void="\%", nr="*",
+    cnames=NULL, cpal=NULL, missing.color="darkgrey",
+    labels=NULL, ...)
 }
 
 \arguments{
   \item{data}{a data frame or matrix containing sequence data.}
 
-  \item{var}{the list of columns containing the sequences. Defaut to \code{NULL}, ie all the columns. Whether the sequences are in the compressed (successive states in a character string) or extended format is automatically detected.}
+  \item{var}{the list of columns containing the sequences. Default is
+\code{NULL}, i.e. all the columns. The function detects automatically
+whether the sequences are in the compressed (successive states in a
+character string) or extended format.}
 
-   \item{informat}{format of the original data. Default is 'STS'. Avalaible formats are: STS, SPS, SPELL. See TraMineR user's manual (\cite{Gabadinho et al., 2008}) for a description of the formats.}
+   \item{informat}{format of the original data. Default is \code{"STS"}.
+Available formats are: \code{"STS"}, \code{"SPS"}, \code{"SPELL"}.
+See TraMineR user's manual (\cite{Gabadinho et al., 2008}) for a
+description of the formats.}
 
-   \item{stsep}{the character used as separator in the original data if input format is successive states in a character string. If \code{NULL} (default value), the \code{\link{seqfcheck}} function is called for detecting automatically a separator among "-" and ":". Other separators must be specified explicitely.}
+   \item{stsep}{the character used as separator in the original
+data if input format is successive states in a character string. If
+\code{NULL} (default value), the \code{\link{seqfcheck}} function is
+called for detecting automatically a separator among "-" and ":".
+Other separators must be specified explicitly.}
 
-  \item{alphabet}{optional vector containing the alphabet (the list of all possible states). Use this option if some states in the alphabet don't appear in the data or if you want to reorder the states. The specified vector MUST contain AT LEAST all the states appearing in the data. It may possibly contain additional states not appearing in the data. If NULL, the alphabet is set to the distinct states appearing in the data as returned by the \code{\link{seqstatl}} function.}
+  \item{alphabet}{optional vector containing the alphabet
+(the list of all possible states). Use this option if some states in
+the alphabet don't appear in the data or if you want to reorder the
+states. The specified vector MUST contain AT LEAST all the states
+appearing in the data. It may possibly contain additional states not
+appearing in the data. If NULL, the alphabet is set to the distinct
+states appearing in the data as returned by the
+\code{\link{seqstatl}} function. See details.}
 
-  \item{states}{an optional vector containing the labels for the states. Must have a length equal to the number of states in the data, and the labels must be ordered accordingly with the values returned by the \code{\link{seqstatl}} function.}
+  \item{states}{an optional vector containing the labels for the states.
+Must have a length equal to the number of states in the data, and the
+labels must be ordered accordingly with the values returned by the
+\code{\link{seqstatl}} function.}
 
-  \item{id}{optional argument for setting the rownames of the sequence object. If NULL (default), the rownames are taken from the input data. If set to "auto", sequences are number 1 to number of sequences. A vector containing the rownames of length equal to number of sequences may be specified as well.}
+  \item{id}{optional argument for setting the rownames of the sequence object.
+If \code{NULL} (default), the rownames are taken from the input data.
+If set to "auto", sequences are number 1 to number of sequences. A
+vector containing the rownames of length equal to number of sequences
+may be specified as well.}
 
-  \item{weights}{optional numerical vector containing weights, which may be used by some functions to compute weighted statistics. EXPERIMENTAL.}
+  \item{weights}{optional numerical vector containing weights, which
+may be used by some functions to compute weighted statistics.
+EXPERIMENTAL.}
 
-	\item{start}{starting time. For instance, if your sequences begin at age 15, you can specify 15. At this stage, used only for labelling column names.}
+	\item{start}{starting time. For instance, if your sequences begin
+at age 15, you can specify 15. At this stage, used only for labelling column names.}
 
-	\item{left}{the behavior for missing values appearing before the first (leftmost) valid state in each sequence. See \cite{Gabadinho et al. (2008)} for more details on the options for handling missing values when defining sequence objects. By default, left missing values are treated as 'real' missing values and converted to the internal missing value code defined by the \code{nr} option. Other options are "DEL" to delete the positions containing missing values or a state code (belonging to the alphabet or not) to replace the missing values.}
+	\item{left}{the behavior for missing values appearing before the
+first (leftmost) valid state in each sequence. See \cite{Gabadinho et
+al. (2008)} for more details on the options for handling missing
+values when defining sequence objects. By default, left missing
+values are treated as 'real' missing values and converted to the
+internal missing value code defined by the \code{nr} option. Other
+options are "DEL" to delete the positions containing missing values
+or a state code (belonging to the alphabet or not) to replace the
+missing values.}
 
-	\item{right}{the behavior for missing values appearing after the last (rightmost) valid state in each sequence. Same options as for the \code{left} argument.}
+	\item{right}{the behavior for missing values appearing after the
+last (rightmost) valid state in each sequence. Same options as for
+the \code{left} argument.}
 
-	\item{gaps}{the behavior for missing values appearing inside the sequences, i.e. after the first (leftmost) valid state and before the last (rightmost) valid state of each sequence. Same options as for the \code{left} argument.}
+	\item{gaps}{the behavior for missing values appearing inside the
+sequences, i.e. after the first (leftmost) valid state and before the
+last (rightmost) valid state of each sequence. Same options as for
+the \code{left} argument.}
 
-	\item{missing}{the code used for missing values in the input data. When specified, all cells containing this value will be replaced by NA's, the internal R code for missing values. If 'missing' is not specified, cells containing NA's are considered to be missing values.}
-	\item{void}{the internal code used by TraMineR for representing void elements in the sequences. Default is "\code{\%}".}
+	\item{missing}{the code used for missing values in the input
+data. When specified, all cells containing this value will be
+replaced by NA's, the internal R code for missing values. If
+'\code{missing}' is not specified, cells containing NA's are
+considered as missing values.}
+ 	
+    \item{void}{the internal
+code used by TraMineR for representing void elements in the
+sequences. Default is "\code{\%}".}
 
-	\item{nr}{the internal code used by TraMineR for representing real missing elements in the sequences. Default is "\code{*}".}
+	\item{nr}{the internal code used by TraMineR for representing real
+missing elements in the sequences. Default is "\code{*}".}
 
-	\item{cnames}{optional names for the columns composing the sequence data. Those names will be used by default in the graphics as axis labels. If NULL (default), names are taken from the original column names in the data.}
+	\item{cnames}{optional names for the columns composing the
+sequence data. Those names will be used by default in the graphics as
+axis labels. If \code{NULL} (default), names are taken from the
+original column names in the data.}
 
-	\item{cpal}{an optional color palette for representing the states in the graphics. If \code{NULL} (default), a color palette is created by calling the \code{brewer.pal} function of the \code{RColorBrewer} package. If number of states is less or equal than 8, the \code{"Accent"} palette is used. If number of states is between 8 and 12, the \code{"Set3"} palette is used. If the number of states in the data is greater than 12, you have to specify your own palette. The list of available colors is displayed by the \code{\link{colors}} function. You can also use alternatively some other palettes from the RColorBrewer package.}
+	\item{cpal}{an optional color palette for representing the states
+in the graphics. If \code{NULL} (default), a color palette is created
+by calling the \code{brewer.pal} function of the \code{RColorBrewer}
+package. If number of states is less or equal than 8, the
+\code{"Accent"} palette is used. If number of states is between 8 and
+12, the \code{"Set3"} palette is used. If the number of states in the
+data is greater than 12 you have to specify your own palette. The
+list of available colors is displayed by the \code{\link{colors}}
+function. You can also use alternatively some other palettes from the
+RColorBrewer package.}
 
-	\item{missing.color}{alternative color for representing missing values inside the sequences. Defaults to "darkgrey".}
+	\item{missing.color}{alternative color for representing missing
+values inside the sequences. Defaults to \code{"darkgrey"}.}
 
-	\item{labels}{optional state labels used for the color legend of TraMineR's graphics. If \code{NULL} (default), the state names in the alphabet are used as state labels as well.}
+	\item{labels}{optional state labels used for the color legend of
+TraMineR's graphics. If \code{NULL} (default), the state names in the
+alphabet are used as state labels as well.}
 
-	\item{...}{options passed to the \code{\link{seqformat}} function for handling input data that is not in STS format.}
+	\item{...}{options passed to the \code{\link{seqformat}} function
+for handling input data that is not in STS format.}
 }
 
-\details{Applying subscripts to sequence objects (eg. \code{seq[,1:5] or seq[1:10,]}) returns a state sequence object with some attributes preserved (alphabet, missing) and some others (start, column names) adapted to the selected column or row subset. If only one column is specified, a factor is returned.}
+\details{Applying subscripts to sequence objects (eg. \code{seq[,1:5]
+or seq[1:10,]}) returns a state sequence object with some attributes
+preserved (alphabet, missing) and some others (start, column names)
+adapted to the selected column or row subset. If only one column is
+specified, a factor is returned. \cr
+
+For reordering the states use the \code{alphabet} argument. This may
+for instance be of interest when you want to compare data from
+different sources with different codings of similar states. Using
+\code{alphabet} permits to order the states conformably in all
+sequence objects. Otherwise, the default state order is the
+alpha-numeric order returned by the \code{\link{seqstatl}} function
+which may differ when you have different original codings. }
 
 \seealso{
- \code{\link{plot.stslist}} to plot state sequence objects, \code{\link{seqplot}} for high level plots of state sequence objects, \code{\link{seqecreate}} to create an event sequence object, \code{\link{seqformat}} for options to handle several longitudinal data formats.
-}
+ \code{\link{plot.stslist}} to plot state sequence objects,\cr
+ \code{\link{seqplot}} for high level plots of state sequence objects,\cr
+ \code{\link{seqecreate}} to create an event sequence object,\cr
+ \code{\link{seqformat}} for converting between various longitudinal data formats. }
 
-\value{An object of class \code{stslist}. There are \code{print}, \code{plot} and \code{summary} methods for such objects. State sequence objects are required as argument to other functions such as plotting functions (seqdplot, seqiplot or seqfplot), functions to compute distances (seqdist), etc...}
+\value{An object of class \code{stslist}. There are \code{print},
+\code{plot} and \code{summary} methods for such objects. State
+sequence objects are required as argument to other functions such as
+plotting functions (\code{seqdplot}, \code{seqiplot} or
+\code{seqfplot}), functions to compute distances (\code{seqdist}),
+etc...}
 
-\references{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2008). Mining Sequence Data in \code{R} with \code{TraMineR}: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
-}
+\references{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller
+(2008). Mining Sequence Data in \code{R} with the \code{TraMineR}
+package: A user's guide. \emph{Department of Econometrics and
+Laboratory of Demography, University of Geneva}. }
 
 \examples{
 ## Creating a sequence object with the columns 13 to 24
@@ -102,7 +192,7 @@ alphabet(actcal.seq)
 actcal.seq[1:10,]
 
 ## ============================
-## Example with missings values
+## Example with missing values
 ## ============================
 data(ex1)
 

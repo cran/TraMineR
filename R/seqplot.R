@@ -66,12 +66,18 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 	## Ploting
 	## =======
 	for (np in 1:nplot) {
-		## Storing ... arguments in a list 
+		## Storing ... arguments in a list
 		olist <- list(...)
-		if ("sortv" %in% names(olist)) sortv <- olist[["sortv"]]
-		if ("dist.matrix" %in% names(olist)) dist.matrix <- olist[["dist.matrix"]]
+		if ("sortv" %in% names(olist)) {sortv <- olist[["sortv"]]}
+		if ("dist.matrix" %in% names(olist)) {dist.matrix <- olist[["dist.matrix"]]}
+		if ("with.miss" %in% names(olist)) {
+			missidx <- which(names(olist)=="with.miss")
+			names(olist)[missidx] <- "with.missing"
+			message(" [i] argument 'with.miss' is obsolete and replaced by 'with.missing'")
+		}
 
-		plist <- list(main=title[np], cpal=cpal, missing.color=missing.color, ylab=ylab, yaxis=yaxis, xaxis=xaxis[np], 
+		plist <- list(main=title[np], cpal=cpal, missing.color=missing.color, 
+			ylab=ylab, yaxis=yaxis, xaxis=xaxis[np], 
 			xtlab=xtlab, cex.plot=cex.plot)
 
 		## Selecting sub sample for x
@@ -94,13 +100,19 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 		else if (type=="f")
 			f <- seqtab
 		## Sequence index plot
-		else if (type=="i") {
+		else if (type=="i" || type=="I") {
 			f <- function(seqdata) return(seqdata)
 
 			## Selecting sub sample for sort variable
 			## according to 'group'
 			if ("sortv" %in% names(olist))
 				olist[["sortv"]] <- sortv[gindex[[np]]]
+
+			if (type=="I") {
+				if (!"tlim" %in% names(olist)) {olist <- c(olist, list(tlim=0))}
+				if (!"space" %in% names(olist)) {olist <- c(olist, list(space=0))}
+				if (!"border" %in% names(olist)) {olist <- c(olist, list(border=NA))}
+			}
 		}
 		## Mean times
 		else if (type=="mt")
