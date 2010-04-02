@@ -34,7 +34,7 @@ seqST <- function(seqdata) {
 	states <- seqdss(seqdata)
 	dur <- seqdur(seqdata)
 
-	message(" [>] computing turbulence for ",seqdim(seqdata)[1]," sequences, please wait...")
+	message(" [>] computing turbulence for ",nrow(seqdata)," sequences ...")
 	phi <- seqsubsn(states, DSS=FALSE)
 	s2.tx <- apply(dur, 1, realvar)
 	mean.tx <- rowMeans(dur, na.rm=TRUE)

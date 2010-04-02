@@ -5,6 +5,10 @@
 plot.stslist.statd <- function(x, type="d", cpal=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, cex.plot=1, space=0, ...) {
 
 	n <- attr(x,"nbseq")
+	weighted <- attr(x, "weighted")
+	if (weighted) {wlab <- "weighted "}
+	else {wlab <- NULL}
+
 	if (is.null(xtlab))
 		xtlab <- attr(x,"xtlab")
 	seql <- length(xtlab)
@@ -15,7 +19,7 @@ plot.stslist.statd <- function(x, type="d", cpal=NULL, ylab=NULL, yaxis=TRUE, xa
 			cpal <- attr(x,"cpal")
 
 		if (is.null(ylab)) 
-			ylab <- paste("Freq. (n=",n,")",sep="")
+			ylab <- paste("Freq. (",wlab,"n=",n,")",sep="")
 
 		barplot(x$Frequencies,
 			space=space,
@@ -28,13 +32,20 @@ plot.stslist.statd <- function(x, type="d", cpal=NULL, ylab=NULL, yaxis=TRUE, xa
 			...)
 
 		## Plotting the x axis
-		if (xaxis)
-			axis(1, at=1:seql-0.5, labels=xtlab, pos=-0.02, cex.axis=cex.plot)
+		x.lab.pos <- space+0.5
+
+		for (p in 2:length(xtlab)) {
+			x.lab.pos <- c(x.lab.pos, (p-1)+((p-1)*space)+(0.5+space))
+		}
+
+		if (xaxis) {
+			axis(1, at=x.lab.pos, labels=xtlab, pos=-0.02, cex.axis=cex.plot)
+		}
 	}
 	## Entropy index plot
 	else if (type=="Ht") {
 		if (is.null(ylab)) 
-			ylab <- paste("Entropy index (n=",n,")",sep="")
+			ylab <- paste("Entropy index (",wlab,"n=",n,")",sep="")
 	
 		plot(x$Entropy, 
 			col="blue",

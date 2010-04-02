@@ -2,7 +2,8 @@
 ## Representative sequence of a set of sequences
 ## =============================================
 
-seqrep <- function(seqdata, criterion="density", score=NULL, decreasing=TRUE, trep=0.25, nrep=NULL, tsim=0.10, 
+seqrep <- function(seqdata, criterion="density", score=NULL, decreasing=TRUE, 
+	trep=0.25, nrep=NULL, tsim=0.10, 
 	dmax=NULL, dist.matrix=NULL, ...) {
 
 	if (!inherits(seqdata,"stslist")) 
@@ -10,7 +11,6 @@ seqrep <- function(seqdata, criterion="density", score=NULL, decreasing=TRUE, tr
 
 	slength <- ncol(seqdata)
 	statelist <- alphabet(seqdata)
-	nbseq <- nrow(seqdata)
 
 	## Distance matrix
 	if (missing(dist.matrix) || is.null(dist.matrix))

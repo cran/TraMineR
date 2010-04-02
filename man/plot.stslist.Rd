@@ -5,14 +5,17 @@
 This is the plot method for state sequence objects of class \emph{stslist} created by the seqdef function. It produces a sequence index plot.
 }
 \usage{
-\method{plot}{stslist}(x, tlim=NULL, sortv=NULL,
-	cpal=NULL, missing.color=NULL,
-	ylab, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, cex.plot=1, ...)
+\method{plot}{stslist}(x, tlim=NULL, weighted=TRUE, sortv=NULL,
+    cpal=NULL, missing.color=NULL,
+    ylab, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, cex.plot=1, ...)
 }
 \arguments{
 	\item{x}{a state sequence object created with the \code{\link{seqdef}} function.}
 
 	\item{tlim}{indexes of the sequences to be plotted (default value is 1:10), for instance 20:50 to plot sequences 20 to 50, c(2,8,12,25) to plot sequences 2,8,12 and 25 in \code{seqdata}. If set to 0, all sequences in \code{seqdata} are plotted.}
+
+     \item{weighted}{if TRUE and weigths are assigned to sequences (see \code{\link{seqdef}}),
+		the width of the bar representing each sequence is proportional to its weight.}
 
 	\item{sortv}{name of an optional variable used to sort the sequences before plotting.}
 
@@ -34,9 +37,9 @@ This is the plot method for state sequence objects of class \emph{stslist} creat
 }
 
 \details{
-This is the default plot method for state sequence objects (produced by the \code{\link{seqdef}} function), i.e. objects of class \emph{stslist}. It produces a sequence index plot, where individual sequences are rendered with stacked bars depicting the statuses over time. 
+This is the default plot method for state sequence objects (produced by the \code{\link{seqdef}} function), i.e. objects of class \emph{stslist}. It produces a sequence index plot, where individual sequences are rendered with stacked bars depicting the statuses over time.
 
-This method is called by the generic \code{\link{seqplot}} function (if \code{type="i"}) that produces more sophisticated plots, allowing grouping and automatic display of the states legend. The \code{seqiplot} function is a shortcut for calling \code{seqplot} with \code{type="i"}. 
+This method is called by the generic \code{\link{seqplot}} function (if \code{type="i"}) that produces more sophisticated plots, allowing grouping and automatic display of the states legend. The \code{seqiplot} function is a shortcut for calling \code{seqplot} with \code{type="i"}.
 
 The interest of sequence index plots has for instance been stressed by \cite{Scherer (2001)}, \cite{Brzinsky-Fay et al. (2006)} and \cite{Gauthier (2007)}. Notice that such index plots for thousands of sequences result in very heavy graphic files if they are stored in PDF or POSTSCRIPT format. To reduce the size, we suggest saving the figures in bitmap format by using for instance \code{\link{png}} instead of \code{\link{postscript}} or \code{\link{pdf}}.
 }
@@ -49,12 +52,20 @@ biofam.lab <- c("Parent", "Left", "Married", "Left+Marr",
 "Child", "Left+Child", "Left+Marr+Child", "Divorced")
 biofam.seq <- seqdef(biofam, 10:25, labels=biofam.lab)
 
-## Plot of the 10 most frequent sequences 
+## Plot of the 10 most frequent sequences
 ## with bar width proportional to the frequency
 plot(biofam.seq)
 
 ## Plotting the all data set
 ## with no borders
 plot(biofam.seq, tlim=0, space=0, border=NA)
+
+## =======
+## Weights
+## =======
+data(ex1)
+ex1.seq <- seqdef(ex1, 1:13, weights=ex1$weights)
+plot(ex1.seq)
+plot(ex1.seq, weighted=FALSE)
 }
 \keyword{hplot}

@@ -5,11 +5,11 @@
 Extracts states durations from a sequence object. Returns a matrix containing the states durations for the sequences. The states durations in 'D-D-D-D-A-A-A-A-A-A-A-D' are 4,7,1. Distinct states can be extracted with the \code{\link{seqdss}} function.
  }
 \usage{
-seqdur(seqdata, with.miss=FALSE)
+seqdur(seqdata, with.missing=FALSE)
 }
 \arguments{
    \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
-	\item{with.miss}{if set to TRUE, durations are also computed for missing statuses (gaps in sequences). See \link{seqdef} on options for handling missing values when creating sequence objects.}
+	\item{with.missing}{if set to TRUE, durations are also computed for missing statuses (gaps in sequences). See \link{seqdef} on options for handling missing values when creating sequence objects.}
 
 }
 

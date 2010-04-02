@@ -6,9 +6,9 @@ Plot the result of \code{\link{seqecmpgroup}}
 }
 \usage{
 \method{plot}{subseqelistchisq}(x, ylim = "uniform", rows = NA, cols = NA,
-	residlevels = c(0.05,0.01),
-	cpal = brewer.pal(1 + 2 * length(residlevels), "RdBu"),
-	legendcol = NULL, legend.cex = 1, ptype="freq", ...)
+    residlevels = c(0.05,0.01),
+    cpal = brewer.pal(1 + 2 * length(residlevels), "RdBu"),
+    legendcol = NULL, legend.cex = 1, ptype="freq", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

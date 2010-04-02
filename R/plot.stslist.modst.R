@@ -16,8 +16,6 @@ plot.stslist.modst <- function(x, cpal=NULL,
 
 	if (is.null(ylab)) ylab <- paste("State freq. (n=",n,")",sep="")
 
-	dist <- attr(x,"Distances")
-
 	## ============================
 	## Max distance for axis limits
 	## ============================

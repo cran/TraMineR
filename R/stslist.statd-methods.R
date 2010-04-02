@@ -9,17 +9,20 @@ print.stslist.statd <- function(x, digits=2, ...) {
 	rl <- max(nchar(rownames(x$Frequencies)))
 	## width <- max(nchar(colnames(x$Frequencies)), 4)	
 
-	cat(rep(" ",rl),"[State frequencies]\n")
+	ident1 <- rep(" ",rl)
+	ident2 <- paste(rep(" ",rl-1), collapse="")
+
+	cat(ident1,"[State frequencies]\n")
 	print(x$Frequencies, digits=digits)
 
 	VS <- t(as.matrix(x$ValidStates))
-	rownames(VS) <- paste("N",rep(" ",rl-1),sep="")
-	cat("\n", rep(" ",rl),"[Valid states]\n")
+	rownames(VS) <- paste("N",ident2,sep="")
+	cat("\n", ident1,"[Valid states]\n")
 	print(VS, digits=digits)
 	
 	H <- t(as.matrix(x$Entropy))	
-	rownames(H) <- paste("H",rep(" ",rl-1),sep="")
-	cat("\n", rep(" ",rl),"[Entropy index]\n")
+	rownames(H) <- paste("H",ident2,sep="")
+	cat("\n", ident1,"[Entropy index]\n")
 	print(H, digits=digits)
 }
 

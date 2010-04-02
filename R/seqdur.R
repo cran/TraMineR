@@ -2,7 +2,7 @@
 ## Extracts states durations from sequences
 ## ========================================
 
-seqdur <- function(seqdata, with.miss=FALSE) {
+seqdur <- function(seqdata, with.missing=FALSE) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, see seqdef function to create one")
@@ -15,8 +15,8 @@ seqdur <- function(seqdata, with.miss=FALSE) {
 	rownames(trans) <- rownames(seqdata)
 	colnames(trans) <- paste("DUR",1:maxsl, sep="")
 
-	seqdatanum <- TraMineR:::seqasnum(seqdata, with.miss)
-	if (!with.miss)
+	seqdatanum <- TraMineR:::seqasnum(seqdata, with.missing=with.missing)
+	if (!with.missing)
 		seqdatanum[is.na(seqdatanum)] <- -99
 
 

@@ -7,9 +7,12 @@ seqstatd <- function(seqdata, weighted=TRUE, with.missing=FALSE, norm=TRUE) {
 	
 	## Retrieving the alphabet
 	statl <- attr(seqdata,"alphabet")
+	col <- cpal(seqdata)
 
-	if (with.missing)
+	if (with.missing) {
 		statl <- c(statl, attr(seqdata,"nr"))
+		col <- c(col, attr(seqdata,"missing.color"))
+	}
 
 	nbstat <- length(statl)
 
@@ -22,8 +25,14 @@ seqstatd <- function(seqdata, weighted=TRUE, with.missing=FALSE, norm=TRUE) {
 	## Weights
 	weights <- attr(seqdata, "weights")
 
-	if (!weighted || is.null(weights)) 
-		weights <- rep(1, nrow(seqdata))
+	if (!weighted || is.null(weights)) {
+		weights <- rep(1.0, nrow(seqdata))
+	}
+	## Also takes into account that in unweighted sequence objects created with 
+	## older TraMineR versions the weights attribute is a vector of 1
+	## instead of NULL  
+	if (all(weights==1)) 
+		weighted <- FALSE
 
 	for (i in 1:nbstat)
 		for (j in 1:seql)
@@ -45,8 +54,8 @@ seqstatd <- function(seqdata, weighted=TRUE, with.missing=FALSE, norm=TRUE) {
 	
 	class(res) <- c("stslist.statd","list")
 
-	attr(res,"nbseq") <- nrow(seqdata)
-	attr(res,"cpal") <- cpal(seqdata)
+	attr(res,"nbseq") <- sum(weights)
+	attr(res,"cpal") <- col
 	attr(res,"xtlab") <- colnames(seqdata)
 	attr(res,"weighted") <- weighted
 

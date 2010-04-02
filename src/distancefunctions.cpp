@@ -137,7 +137,7 @@ static R_INLINE double DHDdistance(int* slen,const int &is,const int &js, const 
         cost += scost[ARINDICE(sequences[MINDICE(is,i,nseq)], sequences[MINDICE(js,i,nseq)], i, alphasize)];
     }
     TMRLOG(5, "DHD distance");
-    return normalizeDistance(cost, (double)minimum * maxscost, m, n, norm);
+    return normalizeDistance(cost, maxscost, m, n, norm);
 }
 
 

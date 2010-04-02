@@ -2,7 +2,7 @@
 ## Extracts distinct states from sequences
 ## =======================================
 
-seqdss <- function(seqdata, with.miss=FALSE) {
+seqdss <- function(seqdata, with.missing=FALSE) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is NOT a sequence object, see seqdef function to create one")
@@ -15,9 +15,9 @@ seqdss <- function(seqdata, with.miss=FALSE) {
 	trans <- matrix(nrow=nbseq, ncol=maxsl)
 	statl <- attr(seqdata,"alphabet")
 
-	seqdatanum <- TraMineR:::seqasnum(seqdata, with.miss)
+	seqdatanum <- TraMineR:::seqasnum(seqdata, with.missing=with.missing)
 
-	if (!with.miss)
+	if (!with.missing)
 		seqdatanum[is.na(seqdatanum)] <- -99
 
 	for (i in 1:nbseq) {
@@ -29,7 +29,7 @@ seqdss <- function(seqdata, with.miss=FALSE) {
 		while (idx <= sl[i]) {
 			iseq <- tmpseq[idx]
 
-			while (idx < sl[i] & tmpseq[idx+1]==iseq) { 
+			while (idx < sl[i] & (tmpseq[idx+1]==iseq || tmpseq[idx+1]==-99)) { 
 				idx <- idx+1
 			}
 

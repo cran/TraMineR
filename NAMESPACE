@@ -24,8 +24,10 @@ export(
 	seqfpos,
 	seqgen,
 	seqHtplot,
+     seqici,
 	seqient,
 	seqiplot,
+     seqIplot,
 	seqistatd,
 	seqlegend,
 	seqlength,
@@ -50,7 +52,10 @@ export(
 	seqsubm,
 	seqsubsn,
 	seqtab,
+	seqtransn,
 	seqtrate,
+	stlab,
+	"stlab<-",
 	TraMineR.checkupdates
   )
 
@@ -92,6 +97,7 @@ export(
 	dissrep,
 	dissmfac,
 	disstree2dot,
+	disstree2dotp,
 	disstreeleaf,
 	disstree,
 	dissvar,
@@ -103,6 +109,7 @@ S3method(print,dissassoc)
 S3method(print,dissregression)
 S3method(print,dissmultifactor)
 S3method(print,disstree)
+## S3method(print,seqtree)
 S3method(print,seqdiff)
 S3method(plot,seqdiff)
 S3method(print,diss.rep)

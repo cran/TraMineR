@@ -2,7 +2,7 @@
 ## State distribution for each individual
 ## ======================================
 
-seqistatd <- function(seqdata, with.miss=FALSE) {
+seqistatd <- function(seqdata, with.missing=FALSE) {
 
 	if (!inherits(seqdata,"stslist")) {
 		stop("data is not a sequence object, see seqdef function to create one")
@@ -10,7 +10,7 @@ seqistatd <- function(seqdata, with.miss=FALSE) {
 	}
 
 	statl <- alphabet(seqdata)
-	if (with.miss) 
+	if (with.missing) 
 		statl <- c(statl, attr(seqdata,"nr"))
 
 	nbstat <- length(statl)
