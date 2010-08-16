@@ -7,14 +7,26 @@ plot.stslist.modst <- function(x, cpal=NULL,
 
 	seql <- ncol(x)
 	statl <- attr(x,"alphabet")
-	nbstat <- length(statl)
 	n <- attr(x, "nbseq")
+	nr <- attr(x,"nr")
 
 	if (is.null(cpal)) cpal <- attr(x,"cpal")
 
+	## Adding an entry for missing in the legend
+	if (any(x==nr)) {
+		missing.color <- attr(x,"missing.color")
+		cpal <- c(cpal, missing.color)
+		statl <- c(statl, nr)
+	}
+	nbstat <- length(statl)
+
+	weighted <- attr(x, "weighted")
+	if (weighted) {wlab <- "weighted "}
+	else {wlab <- NULL}
+
 	if (is.null(xtlab)) xtlab <- colnames(x)
 
-	if (is.null(ylab)) ylab <- paste("State freq. (n=",n,")",sep="")
+	if (is.null(ylab)) ylab <- paste("State freq. (",wlab,"n=",round(n,2),")",sep="")
 
 	## ============================
 	## Max distance for axis limits

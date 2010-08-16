@@ -1,6 +1,6 @@
-## =============================================
-## Representative sequence of a set of sequences
-## =============================================
+## ====================================
+## Extracting a set of representatives
+## ====================================
 
 dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep=0.25, nrep=NULL, tsim=0.10, 
 	dmax=NULL) {
@@ -131,7 +131,7 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 		SD <- colSums(dist.repseq, na.rm=TRUE)
 
 		## Number of similar sequences dist.repsequred by each representative
-		nb <- colSums(dist.repseq < (dmax*0.10), na.rm=TRUE)
+		nb <- colSums(dist.repseq < tsim, na.rm=TRUE)
 		
 		## Sum of distances to global center
 		DC <- matrix(nrow=nbkeep,ncol=1)

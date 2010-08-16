@@ -1,4 +1,52 @@
 ## ==========
+Version 1.6-1
+
+New functionalities:
+  - Added a startup message when loading the TraMineR library.
+
+Changes in existing functions:
+  - seqtab() and seqfplot(): tlim argument now allows to select any frequent sequences,
+    in the same way as the tlim argument used in plot.stslist() and seqiplot() (Requested
+    by G. Ritschard).
+    For example, tlim=3:6 returns the third to sixth most frequent sequences
+    in the set. Default for tlim is now 1:10 instead of 10.
+  - seqsubsn() and seqST(): added detection of missing states in the sequences. The
+    values returned by those two functions (number of subsequences and turbulence)
+    now account for the missing state which is considered as a state of the alphabet.
+    (Requested by G. Ritschard).
+  - seqrplot() now accepts "half" matrices ("dist" objects) as produced by seqdist()
+    with the "full.matrix=FALSE" option (Requested by L. Lesnard).
+  - seqiplot() and plot.stslist(): new "ytlab" option allowing to display sequence labels
+    on the Y-axis in sequence index plots (if set to "id", the sequence ids are displayed).
+    An additional "ylas" option sets the orientation of the labels (Requested by Andrew ?
+    and P. Jeuniaux).
+  - seqsubm():
+    - When method="TRATE", the substitution costs are now based on the value of "cval":
+      SC(i,j) = cval -P(i,j) -P(j,i) where P(i,j) is the transition rate from state i to j.
+    - added a new "transition" argument for controlling on which positions transition rates
+      are estimated when "time.varying" is TRUE. Can be set to "previous" or "next" position
+      instead of the default "both" from previous and to next positions.
+    - Now, "cval" equals 2 by default, unless "transition" is set to "both" and
+      "time.varying" is TRUE in which case "cval" defaults to 4.
+  - plot.stslist.meant(), seqmtplot(), plot.stslist.freq(), seqfplot(), plot.stslist.modst(),
+    seqmsplot(): added display of weighted n instead of n in axis label if weighted=TRUE
+  - seqdplot(): disabled plot of missing state legend when 'with.missing=FALSE' (Requested by
+    M. Studer and G. Ritschard).
+  - seqplot(), plot.stslist(), plot.stslist.statd(), plot.stslist.modst(), plot.stslist.freq(),
+    plot.stslist.meant(): when 'weighted=TRUE', weighted n displayed in the axis label rounded to
+    2 digits (Requested by M. Studer).
+
+Bug fixes:
+  - plot.stslist.modst(), seqmsplot(): fixed bad display of missing states if 'with.missing=TRUE'
+  - seqmeant(): added color for missing state to color palette when using 'with.missing=TRUE'.
+  - dissrep(), seqrep(), seqrplot(): fixed bad coverage statistics when tsim set to other
+     than default value of 0.10 (Reported by G. Ritschard).
+  - seqdist(): Bad handling of missing values in DHD distance (wrong default substitution costs
+     with missing values, set to one instead of four).
+  - seqdist(): Fixed an error in seqdist when using refseq with missing values (Reported by an
+     anonymous user).
+
+## ==========
 Version 1.6
 
 New functionalities:
@@ -23,9 +71,9 @@ Bug fixes:
 Changes in existing functions:
   - summary.stslist(): added information in the output of the summary method
     for state sequence objects.
-  - seqdist(), seqdistmc(), seqdss(), seqdur(),  seqient(), seqistatd(), seqmpos(), 
-    seqnum(), seqsubm(): 
-    "with.miss" argument replaced by "with.missing" (obsolete "with.miss" argument 
+  - seqdist(), seqdistmc(), seqdss(), seqdur(),  seqient(), seqistatd(), seqmpos(),
+    seqnum(), seqsubm():
+    "with.miss" argument replaced by "with.missing" (obsolete "with.miss" argument
     still works for backward compatibility)
   - seqmeant(): added "with.missing" argument to account for missing states.
   - seqdef():

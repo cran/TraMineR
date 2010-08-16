@@ -2,8 +2,8 @@
 ## Matrix of substitution costs
 ## ============================
 
-seqsubm <- function(seqdata, method, cval=2, with.missing=FALSE, 
-	miss.cost=2, time.varying=FALSE, weighted=TRUE) {
+seqsubm <- function(seqdata, method, cval=NULL, with.missing=FALSE, 
+	miss.cost=NULL, time.varying=FALSE, weighted=TRUE, transition="both") {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is NOT a sequence object, see seqdef function to create one")
@@ -11,9 +11,20 @@ seqsubm <- function(seqdata, method, cval=2, with.missing=FALSE,
 	metlist <- c("CONSTANT","TRATE")
 	if (missing(method) || !method %in% metlist)
 		stop("method must be one of: ", paste(metlist,collapse=" "))
+	
+	transitionlist <- c("previous", "next","both")
+	if (!transition %in% transitionlist)
+		stop("method must be one of: ", paste(transitionlist,collapse=" "))
 
 	alphabet <- attr(seqdata,"alphabet")
-
+	
+	cval4cond <- time.varying && method=="TRATE" && transition=="both"
+	if (is.null(cval)) {
+		cval <- ifelse(cval4cond, 4, 2)
+	}
+	if (is.null(miss.cost)) {
+		miss.cost <- cval
+	}
 	## Adding an entry for for missing state
 	if (with.missing) {
 		message(" [>] setting ",miss.cost," as substitution cost for missing values")
@@ -21,7 +32,7 @@ seqsubm <- function(seqdata, method, cval=2, with.missing=FALSE,
 	}
 
 	alphsize <- length(alphabet)
-
+	
 	if (method=="CONSTANT") {
 		if (is.na(cval)){
 			stop("no value for the constant substitution-cost")
@@ -54,7 +65,7 @@ seqsubm <- function(seqdata, method, cval=2, with.missing=FALSE,
 			time <- ncol(seqdata)
 			costs <- array(0, dim=c(alphsize, alphsize, time))
 			## Function to compute the cost according to transition rates
-			tratecost <- function(trate, time, state1, state2, debut, fin){
+			tratecostBoth <- function(trate, time, state1, state2, debut, fin){
 				cost <- 0
 				if (!debut) { ## Premier état
 					cost <- cost - trate[state1,state2, time-1] - trate[state2, state1, time-1]
@@ -63,16 +74,40 @@ seqsubm <- function(seqdata, method, cval=2, with.missing=FALSE,
 					cost <- cost - trate[state1,state2, time] - trate[state2, state1, time]
 				}
 				if (!debut && !fin) {
-					return(cost + 4)
+					return(cost + cval)
 				}
 				else{
-					return(4 + 2*cost)
+					return(cval + 2*cost)
 				}
 			}
+			tratecostPrevious <- function(trate, time, state1, state2, debut, fin){
+				cost <- 0
+				if (!debut) { ## Premier état
+					cost <- cost - trate[state1,state2, time-1] - trate[state2, state1, time-1]
+				}
+				return(cval + cost)
+			}
+			tratecostNext <- function(trate, time, state1, state2, debut, fin){
+				cost <- 0
+				if (!fin) { ##Dernier Etat
+					cost <- cost - trate[state1,state2, time] - trate[state2, state1, time]
+				}
+				return(cval + cost)
+			}
+			if(transition=="previous")	{
+				tratecost <- tratecostPrevious
+			}
+			else if (transition=="next") {
+				tratecost <- tratecostNext
+			}
+			else {
+				tratecost <- tratecostBoth
+			}
+			
 			for (t in 1:time) {
 				for (i in 1:(tmat-1)) {
 					for (j in (i+1):tmat) {
-						cost <- tratecost(tr, t, i, j, t==1, t==time)
+						cost <- max(0,tratecost(tr, t, i, j, t==1, t==time))
 						costs[i, j, t] <- cost
 						costs[j, i, t] <- cost
 					}

@@ -55,8 +55,8 @@ dissassoc <- function(diss, group , R=1000) {
 		bts <- boot(ind, internalBootstrapCompareGroups, R, sim="permutation", stype="i",
 			dissmatrix=dissmatrix, indgrp=indgrp, SCtot=SCtot)
 		ret$stat <- data.frame(PseudoF=bts$t0[1], PseudoR2=bts$t0[2],
-			PseudoF_Pval=sum(bts$t[, 1]>bts$t0[1])/bts$R,
-			PseudoT=bts$t0[3], PseudoT_Pval=sum(bts$t[, 3]>bts$t0[3])/bts$R)
+			PseudoF_Pval=sum(bts$t[, 1]>=bts$t0[1])/bts$R,
+			PseudoT=bts$t0[3], PseudoT_Pval=sum(bts$t[, 3]>=bts$t0[3])/bts$R)
 		ret$perms <- bts
 	}
 	rownames(ret$stat) <- c("")

@@ -73,7 +73,7 @@ DTNdissassoc <- function(dmat, grp, indiv, R) {
 	}
 	bts <- boot(grp, internalDTNdissassoc, R=R, sim="permutation", stype="i",
 			dmat=dmat, indiv=indiv, grp2=(!grp), use.sort=(length(grp)>750))
-	return(sum(bts$t[, 1]>bts$t0[1])/bts$R)
+	return(sum(bts$t[, 1]>=bts$t0[1])/bts$R)
 }
 
 ###########################

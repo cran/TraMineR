@@ -26,10 +26,23 @@ seqsubsn <- function(seqdata, DSS=TRUE) {
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, see seqdef function to create one")
 
-	if (DSS==TRUE) seqdata <- suppressMessages(seqdss(seqdata))
+	with.missing=FALSE
+	nr <- attr(seqdata,"nr")
+	if (any(seqdata==nr)) {
+		message(" [!] found missing state in the sequence(s), adding missing state to the alphabet")
+		with.missing=TRUE
+	}
+
+	if (DSS==TRUE) {
+		seqdata <- suppressMessages(seqdss(seqdata, with.missing=with.missing))
+	}
 
 	## alphabet
 	sl <- attr(seqdata,"alphabet")
+	if (with.missing) {
+		sl <- c(sl, nr)
+	}
+
 	ns <- length(sl)
 
 	void <- attr(seqdata,"void")

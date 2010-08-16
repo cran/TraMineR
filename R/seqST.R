@@ -30,12 +30,20 @@ seqST <- function(seqdata) {
 	if (!inherits(seqdata,"stslist"))
 		stop("data is NOT a sequence object, see 'seqdef' function to create one")
 
-	message(" [>] extracting symbols and durations...")
-	states <- seqdss(seqdata)
-	dur <- seqdur(seqdata)
+	nr <- attr(seqdata,"nr")
+	with.missing=FALSE
+	if (any(seqdata==nr)) {
+		message(" [!] found missing state in one or more sequences")
+		message("     [>] adding missing state to the alphabet")
+		with.missing=TRUE
+	}
+
+	message(" [>] extracting symbols and durations ...")
+	states <- seqdss(seqdata, with.missing=with.missing)
+	dur <- seqdur(seqdata, with.missing=with.missing)
 
 	message(" [>] computing turbulence for ",nrow(seqdata)," sequences ...")
-	phi <- seqsubsn(states, DSS=FALSE)
+	phi <- suppressMessages(seqsubsn(states, DSS=FALSE))
 	s2.tx <- apply(dur, 1, realvar)
 	mean.tx <- rowMeans(dur, na.rm=TRUE)
 	## sum.tx <- apply(dur, 1, sum, na.rm=TRUE)

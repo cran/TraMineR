@@ -2,14 +2,21 @@
 ## Modal state sequence
 ## ====================
 
-seqmodst <- function(seqdata, weighted=TRUE, with.missing=FALSE, dist=FALSE, ...) {
+seqmodst <- function(seqdata, weighted=TRUE, with.missing=FALSE) {
 
 	if (!inherits(seqdata,"stslist")) 
 		stop("data is not a sequence object, see seqdef function to create one", call.=FALSE)
 
 	slength <- ncol(seqdata)
-	statelist <- alphabet(seqdata)
+	statl <- alphabet(seqdata)
+	col <- cpal(seqdata)
+	lab <- attr(seqdata,"labels")
+
 	cnames <- colnames(seqdata)
+
+	if (with.missing) {
+		statl <- c(statl, attr(seqdata,"nr"))
+	}
 
 	## State distribution
 	freq <- seqstatd(seqdata, weighted, with.missing)$Frequencies
@@ -24,26 +31,40 @@ seqmodst <- function(seqdata, weighted=TRUE, with.missing=FALSE, dist=FALSE, ...
 	for (i in 1:slength) {
 		smax <- which(freq[,i]==max(freq[,i]))[1]
 		stfreq[,i] <- freq[smax,i]
-		ctype[,i] <- statelist[smax]
+		ctype[,i] <- statl[smax]
 	}
 	
-	res <- suppressMessages(seqdef(ctype, alphabet=alphabet(seqdata), 
-		labels=attr(seqdata,"labels"), cpal=cpal(seqdata)))
+	res <- suppressMessages(seqdef(ctype, alphabet=alphabet(seqdata),
+		missing=attr(seqdata,"nr"), nr=attr(seqdata,"nr"), 
+		left=NA, gaps=NA, right=NA,
+		labels=stlab(seqdata), 
+		cpal=cpal(seqdata), missing.color=attr(seqdata,"missing.color")))
 
 	nbocc <- length(seqfind(res, seqdata))
 
 	## Distance to modal state sequence
-	if (dist)
-		dist.modst <- seqdist(seqdata, refseq=res, ...)
-	else 
-		dist.modst <- NULL
+	## if (dist)
+	##	dist.modst <- seqdist(seqdata, refseq=res, ...)
+	## else 
+	##	dist.modst <- NULL
 
 	class(res) <- c("stslist.modst", class(res))
 
 	attr(res, "Frequencies") <- stfreq
-	attr(res, "nbseq") <- nrow(seqdata)
-	attr(res, "Distances") <- dist.modst
+	## attr(res, "Distances") <- dist.modst
 	attr(res, "Occurences") <- nbocc
+
+	## Weights
+	weights <- attr(seqdata, "weights")
+
+	if (!weighted || is.null(weights)) {
+		weights <- rep(1.0, nrow(seqdata))
+	}
+	if (all(weights==1)) 
+		weighted <- FALSE
+
+	attr(res, "nbseq") <- sum(weights)
+	attr(res,"weighted") <- weighted
 
 	return(res)
  } 

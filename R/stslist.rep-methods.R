@@ -9,7 +9,7 @@ print.stslist.rep <- function(x, ...) {
 
 	cat("\n [>] criterion:",criterion,"\n")
 	cat(" [>]", nbseq,"sequence(s) in the original data set\n")
-	cat(" [>]", nrow(x),"representative sequences\n")
+	cat(" [>]", nrow(x),"representative sequence(s)\n")
 	cat(" [>] overall quality:", round(quality*100,2),"\n\n")
 	NextMethod(x,...)
 }

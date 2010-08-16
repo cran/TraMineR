@@ -7,7 +7,7 @@
 
 
 TraMineR.seqdist.refseq <- function(seqdata, method, refseq,
-	norm, indel, sm, alphsize, nd, dseq, slength, mcorr){
+	norm, indel, sm, alphsize, nd, dseq, slength, mcorr,with.missing){
 	
 	## Getting refseq
 	##User specified
@@ -37,7 +37,7 @@ TraMineR.seqdist.refseq <- function(seqdata, method, refseq,
 	lcompseq <- seqlength(compseq)
 	## Vector of distance
 	m <- vector(mode="numeric", length=nd)
-	compseq <- seqasnum(seqnum(compseq))
+	compseq <- seqasnum(seqnum(compseq), with.missing=with.missing)
 	if (method=="OM") {
 		for (i in 1:nd) {
 			m[i] <- levenshtein(dseq[i,], slength[i], compseq, lcompseq, indel,sm,alphsize,norm)
@@ -70,7 +70,7 @@ TraMineR.seqdist.refseq <- function(seqdata, method, refseq,
 
 
 TraMineR.seqdist.all <- function(seqdata, method, 
-	norm, indel, sm, alphsize, nd, dseq, slength, mcorr){
+	norm, indel, sm, alphsize, nd, dseq, slength, mcorr, optimized){
 	
 	magicSeq <- order(mcorr)
 	magicIndex <- c(unique(rank(mcorr, ties.method="min")), nrow(seqdata)+1)-1
@@ -78,6 +78,9 @@ TraMineR.seqdist.all <- function(seqdata, method,
 	if (method=="OM") {
 		## One for OM, 2 for LCP
    		disttype <- as.integer(1)
+		if (optimized) {
+			disttype <- as.integer(0)
+		}
 	}
 	else if (method=="LCP") {
 		disttype <- as.integer(2) ## One for OM, 2 for LCP

@@ -28,8 +28,13 @@ seqmeant <- function(seqdata, weighted=TRUE, with.missing=FALSE) {
 
 	class(res) <- c("stslist.meant", "matrix")
 
-	attr(res,"nbseq") <- nrow(seqdata)
-	attr(res,"cpal") <- cpal(seqdata)
+	col <- cpal(seqdata)
+	if (with.missing) {
+		col <- c(col, attr(seqdata,"missing.color"))
+	}
+
+	attr(res,"nbseq") <- sum(weights)
+	attr(res,"cpal") <- col
 	attr(res,"xtlab") <- colnames(seqdata)
 	attr(res,"weighted") <- weighted
 

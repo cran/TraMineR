@@ -7,8 +7,8 @@
   Function used to set time constraints in event sequence methods (seqe..) such as \code{\link{seqefsub}} for searching frequent subsequences or \code{\link{seqeapplysub}} for checking occurrences of subsequences.
 }
 \usage{
-seqeconstraint(maxGap = -1, windowSize = -1, 
-  ageMin = -1, ageMax = -1, ageMaxEnd = -1, countMethod = 1)
+seqeconstraint(maxGap = -1, windowSize = -1, ageMin = -1,
+     ageMax = -1, ageMaxEnd = -1, countMethod = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,7 +21,7 @@ seqeconstraint(maxGap = -1, windowSize = -1,
 }
 \details{
  \code{maxGap}, \code{windowSize}, \code{ageMin}, \code{ageMax} and \code{ageMaxEnd}. If so, two events should not be separated by more than \code{maxGap} and the whole subsequence should not exceed a \code{windowSize}  time span.
-  The other parameters specify the start and end age of the subsequence, it should start between \code{ageMin} and \code{ageMax} and finish before \code{ageMaxEnd}. 
+  The other parameters specify the start and end age of the subsequence, it should start between \code{ageMin} and \code{ageMax} and finish before \code{ageMaxEnd}.
   Parameters \code{ageMin}, \code{ageMax} and \code{ageMaxEnd} are interpreted as the number of positions (time units) from the beginning of the sequence.
 }
 \value{

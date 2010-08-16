@@ -2,8 +2,13 @@
 \alias{seqdss}
 \title{Extract distinct states sequence from a sequence object}
 \description{
-Extract distinct states sequence from a sequence object. Returns a sequence object containing the distinct states sequences, ie the durations are not taken into account. The DSS contained in 'D-D-D-D-A-A-A-A-A-A-A-D' is 'D-A-D'. Durations can be extracted with the 'seqdur' function.
- }
+Extract distinct states sequence from a sequence object. 
+}
+\details{
+Returns a sequence object containing the distinct states sequences, ie the durations are not taken into account. The DSS contained in 'D-D-D-D-A-A-A-A-A-A-A-D' is 'D-A-D'. Associated durations can be extracted with the \code{\link{seqdur}} function.
+
+If called with the \code{{with.missing=TRUE}} argument, a missing state in a sequence is considered as the occurence of an additional symbol of the alphabet, and two or more consecutive missing states are considered as two or more occurences of the same state. Hence the DSS of \code{A-A-*-*-*-B-B-C-C-D} is \code{A-*-B-C-D}.
+}
 \usage{
 seqdss(seqdata, with.missing=FALSE)
 }

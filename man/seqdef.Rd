@@ -5,11 +5,7 @@
 \title{Create a state sequence object}
 
 \description{
-Create a state sequence object with attributes such as
-alphabet, color palette and state labels. Most TraMineR functions for
-state sequences require such a state sequence object as input
-argument. There are specific methods for plotting, summarizing and
-printing state sequence objects.
+Create a state sequence object with attributes such as alphabet, color palette and state labels. Most TraMineR functions for state sequences require such a state sequence object as input argument. There are specific methods for plotting,  summarizing and printing state sequence objects.
  }
 
 \usage{
@@ -39,29 +35,13 @@ data if input format is successive states in a character string. If
 called for detecting automatically a separator among "-" and ":".
 Other separators must be specified explicitly.}
 
-  \item{alphabet}{optional vector containing the alphabet
-(the list of all possible states). Use this option if some states in
-the alphabet don't appear in the data or if you want to reorder the
-states. The specified vector MUST contain AT LEAST all the states
-appearing in the data. It may possibly contain additional states not
-appearing in the data. If NULL, the alphabet is set to the distinct
-states appearing in the data as returned by the
-\code{\link{seqstatl}} function. See details.}
+  \item{alphabet}{optional vector containing the alphabet (the list of all possible states). Use this option if some states in the alphabet don't appear in the data or if you want to reorder the states. The specified vector MUST contain AT LEAST all the states appearing in the data. It may possibly contain additional states not appearing in the data. If \code{NULL}, the alphabet is set to the distinct states appearing in the data as returned by the \code{\link{seqstatl}} function. See details.}
 
-  \item{states}{an optional vector containing the labels for the states.
-Must have a length equal to the number of states in the data, and the
-labels must be ordered accordingly with the values returned by the
-\code{\link{seqstatl}} function.}
+  \item{states}{an optional vector containing the short state labels. Must have a length equal to the size of the alphabet and the labels must be ordered conformably with alpha-numeric ordered values returned by the \code{\link{seqstatl}} function, or, when \code{alphabet=} is set, with the thus newly defined alphabet.}
 
-  \item{id}{optional argument for setting the rownames of the sequence object.
-If \code{NULL} (default), the rownames are taken from the input data.
-If set to "auto", sequences are number 1 to number of sequences. A
-vector containing the rownames of length equal to number of sequences
-may be specified as well.}
+  \item{id}{optional argument for setting the rownames of the sequence object. If \code{NULL} (default), the rownames are taken from the input data. If set to "auto", sequences are number 1 to number of sequences. A vector containing the rownames of length equal to number of sequences may be specified as well.}
 
-  \item{weights}{optional numerical vector containing weights, which
-may be used by some functions to compute weighted statistics.
-EXPERIMENTAL.}
+  \item{weights}{optional numerical vector containing weights, which may be used by some functions to compute weighted statistics. EXPERIMENTAL.}
 
 	\item{start}{starting time. For instance, if your sequences begin
 at age 15, you can specify 15. At this stage, used only for labelling column names.}

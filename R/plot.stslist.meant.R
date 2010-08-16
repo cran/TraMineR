@@ -2,19 +2,20 @@
 ## Mean times plot
 ## ====================
 
-plot.stslist.meant <- function(x, cpal=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, cex.plot=1, ylim=NULL, ...) {
+plot.stslist.meant <- function(x, cpal=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, cex.plot=1, ylim=NULL, ...) {
 
 	n <- attr(x,"nbseq")
 	seql <- length(attr(x,"xtlab"))
 
+	weighted <- attr(x, "weighted")
+	if (weighted) {wlab <- "weighted "}
+	else {wlab <- NULL}
+
 	if (is.null(ylab)) 
-		ylab <- paste("Mean time (n=",n,")",sep="")
+		ylab <- paste("Mean time (", wlab, "n=",round(n,2),")",sep="")
 
 	if (is.null(ylim))
 		ylim <- c(0,seql)
-
-	if (is.null(xtlab))
-		xtlab <- attr(x,"xtlab")
 
 	if (is.null(cpal))
 		cpal <- attr(x,"cpal")

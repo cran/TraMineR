@@ -15,7 +15,7 @@ dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
 }
 
 \arguments{
-  \item{formula}{A regression-like formula. The left hand side should be a dissimilarity matrix or a dist object.}
+  \item{formula}{A regression-like formula. The left hand side should be a dissimilarity matrix or a \code{dist} object.}
   \item{data}{data to search for variables in formula}
   \item{R}{Number of permutations to assess significance}
   \item{gower}{Logical: Is the dissimilarity matrix already a Gower matrix?}
@@ -23,9 +23,9 @@ dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
   \item{permutation}{if equal to \code{dissmatrix}, permutations are done on the dissimilarity matrix, else if equal to "model" permutations are done on the variable matrix. Depending on the number of observation, "model" can be quicker.}
 }
 \details{
-  This method is, in some way, a generalization of \code{\link{dissassoc}} that can account for several explanatory variables. This function compute the part of variance explained by a list of covariates using a decomposition of the discrepancy (variance) explained. This function is slower than \code{\link{dissassoc}} for one factor. More on that, the latter also perform a test of discrepancy homogeneity (equality of variance) using a generalization of the T statistic.
+  This method is, in some way, a generalization of \code{\link{dissassoc}} to account for several explanatory variables. The function computes the part of discrepancy explained by a list of covariates. It provides for each covariate Type-II effect, i.e. the effect of removing the variable from the full model with all variables included.  For a single factor \code{dissmfac} is slower than \code{\link{dissassoc}}. Moreover, the latter performs also tests of homogeneity in within group discrepancy (equality of variances) using generalization of Bratlett statistics.
 
-  The function is based on the program written for scipy (Python) by Ondrej Libiger and Matt Zapala. See Zapala and Schork (2006) for a full reference.
+  The function is based on the program written for scipy (Python) by Ondrej Libiger and Matt Zapala. See \cite{Zapala and Schork (2006)} for a full reference.
 }
 
 \value{
@@ -38,9 +38,9 @@ dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
 \references{
   Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
   Discrepancy	analysis of complex objects using dissimilarities.
-  In H. Briand, F. Guillet, G. Ritschard, and D. A. Zighed (Eds.),
+  In F. Guillet, G. Ritschard, D. A. Zighed and H. Briand (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
-  Studies in Computational Intelligence. Berlin: Springer.
+  Studies in Computational Intelligence, Volume 292, pp. 3-19. Berlin: Springer.
 	
   Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009).
   Analyse de dissimilarités par arbre d'induction. In EGC 2009,
@@ -49,10 +49,10 @@ dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
   Anderson, M. J. (2001). A new method for non-parametric multivariate analysis of variance.
 \emph{Austral Ecology} 26, 32-46.
 
-  McArdle, B. H. et M. J. Anderson (2001). Fitting multivariate models to community data: A
+  McArdle, B. H. and M. J. Anderson (2001). Fitting multivariate models to community data: A
 comment on distance-based redundancy analysis. \emph{Ecology} 82(1), 290-297.
 
-  Zapala, M. A. et N. J. Schork (2006). Multivariate regression analysis of distance matrices for
+  Zapala, M. A. and N. J. Schork (2006). Multivariate regression analysis of distance matrices for
   testing associations between gene expression patterns and related variables. \emph{Proceedings of
 the National Academy of Sciences of the United States of America} 103(51), 19430-19435.
 }
