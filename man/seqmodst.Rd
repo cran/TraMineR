@@ -5,7 +5,7 @@
 Sequence made of the modal state at each position.
 }
 \usage{
-seqmodst(seqdata, weighted=TRUE, with.missing=FALSE, dist = FALSE, ...)
+seqmodst(seqdata, weighted=TRUE, with.missing=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -16,10 +16,6 @@ seqmodst(seqdata, weighted=TRUE, with.missing=FALSE, dist = FALSE, ...)
   Set to FALSE if you want ignore the weights.}
 
   \item{with.missing}{If FALSE (default value), returned distributions ignore missing values.}
-
-  \item{dist}{experimental}
-
-  \item{\dots}{experimental}
 }
 \details{
 In case of multiple modal states at a given position, the first one is taken. Hence, the result may vary with the alphabet order.

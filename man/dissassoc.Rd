@@ -6,7 +6,7 @@
 \title{Analysis of discrepancy based on dissimilarity measure}
 
 \description{
-Compute the discrepancy (defined by a dissimilarity measure) explained by a categorical variable.
+Compute and test the share of discrepancy (defined from a dissimilarity matrix) explained by a categorical variable.
 }
 
 \usage{
@@ -22,27 +22,31 @@ dissassoc(diss, group, R = 1000)
 }
 
 \details{
-The association is based on a generalization of the ANOVA principle to any kind of distance metric. The test returns a 
-pseudo R-squared that can be interpreted as a usual R-squared. The statistical significance of the association is computed 
-by means of permutation tests.
-This function also performs a test of discrepancy homogeneity (equality of variance) using a generalization of the T 
-statistic.
-\cr
-There are \code{print} and \code{hist} methods (the latter producing an histogram of the significance values).
+The \code{dissassoc} function assesses the association 
+between objects characterized by their dissimilarity matrix and a 
+discrete covariate. It provides a generalization of the ANOVA 
+principle to any kind of distance metric. The function returns a 
+pseudo R-square that can be interpreted as a usual R-square. The 
+statistical significance of the association is computed by means of 
+permutation tests. The function performs also a test of discrepancy 
+homogeneity (equality of within variances) using a generalization of 
+the Bartlett's statistics. \cr There are 
+\code{print} and \code{hist} methods (the latter producing an 
+histogram of the permuted values used for testing the significance). 
 }
 \value{
 Returns an object of class \code{dissassoc} with the following components:
-  \item{groups}{A data frame containing the number of cases and the discrepancy of each group}
+  \item{groups}{A data frame with the number of cases and the discrepancy of each group}
   \item{anova.table}{The pseudo ANOVA table}
   \item{stat}{The value of the statistics and their p-values}
   \item{perms}{The permutation object, see \code{\link{boot}}}
 }
 \references{
-  Studer, M., G. Ritschard, A. Gabadinho, and N. S. Müller (2009) 
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
   Discrepancy	analysis of complex objects using dissimilarities.
-  In H. Briand, F. Guillet, G. Ritschard, and D. A. Zighed (Eds.),
+  In F. Guillet, G. Ritschard, H. Briand, and D. A. Zighed (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
-  Studies in Computational Intelligence. Berlin: Springer.
+  Studies in Computational Intelligence, Volume 292, pp. 3-19. Berlin: Springer.
 	
   Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009).
   Analyse de dissimilarités par arbre d'induction. In EGC 2009,

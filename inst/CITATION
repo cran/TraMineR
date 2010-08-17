@@ -6,11 +6,76 @@ p3 <- person("Matthias", "Studer", email = "matthias.studer@unige.ch")
 p4 <- person("Nicolas S.", "M\\\"uller", email = "nicolas.muller@unige.ch")
 
 citEntry(entry="techreport",
-          title = "Mining Sequence Data in {R} with {T}ra{M}ine{R}: {A} User's Guide",
+          title = "Mining Sequence Data in {R} with the {T}ra{M}ine{R} package: {A} User's Guide",
           author = personList(p1, p2, p3, p4),
           institution = "Department of Econometrics and Laboratory of Demography, University of Geneva",
           year = "2009",
           address = "Geneva",
-          textVersion = "Gabadinho, A., G. Ritschard, M. Studer and N.S. Muller (2009). Mining sequence data in R with the TraMineR package: A User's Guide. University of Geneva"
+          textVersion = "Gabadinho, A., G. Ritschard, M. Studer and N.S. Müller (2009). Mining sequence data in R with the TraMineR package: A User's Guide. University of Geneva",
+		  header="For state sequences:\n"
 )
 
+
+citEntry(entry="incollection",
+		author = personList(p3, p2, p1, p4),
+		title = "Discrepancy analysis of complex objects using dissimilarities",
+		booktitle = "Advances in Knowledge Discovery and Management",
+		publisher = "Springer",
+		year = "2010",
+		editor = "Fabrice Guillet and Gilbert Ritschard and Djamel A. Zighed and Henri Briand",
+		series = "Studies in Computational Intelligence",
+		address = "Berlin",
+		note = "292",
+		pages = "3-19",
+		textVersion="Studer, M., Ritschard, G., Gabadinho, A. & Müller, N.S. (2010), Discrepancy analysis of complex objects using dissimilarities, In Guillet, F., Ritschard, G., Zighed, D.A. & Briand, H. (eds) Advances in Knowledge Discovery and Management. Series: Studies in Computational Intelligence. Volume 292, pp. 3-19. Berlin: Springer.",
+		header="For dissimilarity analysis:\n"
+)
+
+
+citEntry(entry="article",
+  author = personList(p4, p3, p2, p1),
+  title = "Extraction de règles d'association séquentielle à l'aide de modèles semi-paramétriques à risques proportionnels",
+  journal = "Revue des nouvelles technologies de l'information (RNTI)",
+  year = "2010",
+  volume = "E-19",
+  pages = "25-36",
+  booktitle = "Extraction et gestion des connaissances (EGC 2010)",
+  textVersion="Müller, N.S., Studer, M., Gabadinho, A. & Ritschard, G. (2010), Extraction de règles d'association séquentielle a l'aide	de modèles semi-paramétriques a risques proportionnels, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 25-36. ",
+  header="For event sequences:\n"
+)
+citEntry(entry="article",
+  author = personList(p3, p4, p2, p1),
+  title = "Classer, discriminer et visualiser des séquences d'événements",
+  journal = "Revue des nouvelles technologies de l'information (RNTI)",
+  year = "2010",
+  volume = "E-19",
+  pages = "37-48",
+  textVersion="Studer, M., Müller, N.S., Ritschard, G. & Gabadinho, A. (2010), Classer, discriminer et visualiser des séquences d'événements, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 37-48. ",
+  booktitle = "Extraction et gestion des connaissances (EGC 2010)"
+)
+
+citEntry(entry="incollection",
+  author = personList(p1, p2, p3, p4),
+  title = "Summarizing Sets of Categorical Sequences",
+  booktitle = "International Conference on Knowledge Discovery and Information Retrieval, Madeira, 6-8 October, 2009",
+  publisher = "INSTICC",
+  year = "2009",
+  pages = "62-69",
+  note = "(Received the Best Paper Award)",
+  textVersion="Gabadinho, A., Ritschard, G., Studer, M. & Müller, N.S. (2009), Summarizing Sets of Categorical Sequences, In International Conference on Knowledge Discovery and Information Retrieval, Madeira, 6-8 October, 2009, pp. 62-69. INSTICC. (Received the Best Paper Award).",
+  header="For representative sequences:"
+)
+citEntry(entry="article",
+  author = personList(p1, p2, p3, p4),
+  title = "Indice de complexité pour le tri et la comparaison de séquences catégorielles",
+  booktitle = "Extraction et gestion des connaissances (EGC 2010)",
+  journal = "Revue des nouvelles technologies de l'information (RNTI)",
+  year = "2010",
+  volume = "E-19",
+  booktitle = "Extraction et gestion des connaissances (EGC 2010)",
+  pages = "61-66",
+  textVersion="Gabadinho, A., Ritschard, G., Studer, M. & Müller, N.S. (2010), Indice de complexité pour le tri et la comparaison de séquences catégorielles, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 61-66.",
+  header="For longitudinal charcateristics and the complexity index:"
+)
+
+citFooter("See",sQuote("citation()"),"for citing R itself.")

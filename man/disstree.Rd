@@ -14,13 +14,13 @@ disstree(formula, data= NULL, minSize = 0.05, maxdepth = 5,
 \arguments{
   \item{formula}{A formula where the left hand side is a dissimilarity matrix and the right hand specifies the candidate partitioning variables to partition the population}
   \item{data}{a data frame where arguments in formula will be searched}
-  \item{minSize}{minimum number of cases in a node, in percentage if less than 1.}
+  \item{minSize}{minimum number of cases in a node, will be treated as a proportion if less than 1.}
   \item{maxdepth}{maximum depth of the tree}
   \item{R}{Number of permutations used to assess the significance of the split.}
   \item{pval}{Maximum p-value, in percent}
 }
 \details{
-  The procedure iteratively splits the data. At each step, the procedure selects the variable and split that explains the biggest part of the discrepancy, 
+  The procedure iteratively splits the data. At each step, the procedure selects the variable and split that explains the greatest part of the discrepancy, 
   i.e. the split for which we get the highest pseudo R2. 
   The significance of the retained split is assessed through a permutation test.
 }
@@ -62,7 +62,7 @@ algorithm. \emph{Journal of the Royal Statistical Society A} \bold{170}(4), 1061
 }
 %\author{}
 \seealso{
-   \code{\link{seqtree2dot}} to generate graphic representation of disstree objects when analyzing state sequences.
+   \code{\link{seqtree2dot}} to generate graphic representation of \code{disstree} objects when analyzing state sequences.
    \cr
    \code{\link{disstree2dot}} is a more general interface to generate such representation.
    \cr

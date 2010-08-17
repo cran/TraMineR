@@ -2,24 +2,25 @@
 \alias{plot.stslist}
 \title{Plot method for state sequence objects}
 \description{
-This is the plot method for state sequence objects of class \emph{stslist} created by the seqdef function. It produces a sequence index plot.
+This is the plot method for state sequence objects of class \emph{stslist} created by the \code{seqdef} function. It produces a sequence index plot.
 }
 \usage{
 \method{plot}{stslist}(x, tlim=NULL, weighted=TRUE, sortv=NULL,
     cpal=NULL, missing.color=NULL,
-    ylab, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, cex.plot=1, ...)
+    ylab, yaxis=TRUE, xaxis=TRUE, ytlab=NULL, ylas=0, 
+    xtlab=NULL, cex.plot=1, ...)
 }
 \arguments{
 	\item{x}{a state sequence object created with the \code{\link{seqdef}} function.}
 
 	\item{tlim}{indexes of the sequences to be plotted (default value is 1:10), for instance 20:50 to plot sequences 20 to 50, c(2,8,12,25) to plot sequences 2,8,12 and 25 in \code{seqdata}. If set to 0, all sequences in \code{seqdata} are plotted.}
 
-     \item{weighted}{if TRUE and weigths are assigned to sequences (see \code{\link{seqdef}}),
+     \item{weighted}{if \code{TRUE} and weights are assigned to sequences (see \code{\link{seqdef}}),
 		the width of the bar representing each sequence is proportional to its weight.}
 
 	\item{sortv}{name of an optional variable used to sort the sequences before plotting.}
 
-	\item{cpal}{alternative color palette to use for the states. If user specified, a vector of colors with number of elements equal to the number of states in the alphabet. By default, the 'cpal' attribute of the 'seqdata' sequence object is used (see \code{\link{seqdef}}).}
+	\item{cpal}{alternative color palette to use for the states. If user specified, a vector of colors with number of elements equal to the number of states in the alphabet. By default, the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}).}
 
 	\item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the "missing.color" attribute of the sequence object being plotted.}
 
@@ -29,7 +30,20 @@ This is the plot method for state sequence objects of class \emph{stslist} creat
 
 	\item{xaxis}{if \code{TRUE} (default), the x (time) axis is plotted.}
 
-  \item{xtlab}{optional labels for the x axis ticks labels. If unspecified, the column names of the 'seqdata' sequence object are used (see \code{\link{seqdef}}).}
+	\item{ytlab}{the labels of the sequences being plotted to appear on the y axis. Default is the indexes of the sequences as defined by the \code{tlim} argument. Can be set to \code{"id"} which plots the row names (id) of the sequences instead, as defined by the \code{id} argument of the \code{\link{seqdef}} function or with \code{\link{rownames}} afterwards. Otherwise must be a vector containing as many values as the number of sequences being plotted.}
+
+  \item{ylas}{sets the orientation of the sequence labels appearing on the y axis. Accepted values are the same as for the standard \code{las} option
+
+0: always parallel to the axis (default),
+
+1: always horizontal,
+
+2: always perpendicular to the axis,
+
+3: always vertical.
+}
+
+  \item{xtlab}{optional labels for the x axis ticks labels. If unspecified, the column names of the \code{seqdata} sequence object are used (see \code{\link{seqdef}}).}
 
 	\item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase it.}
 

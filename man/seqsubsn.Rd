@@ -4,6 +4,9 @@
 \description{
 Computes the number of distinct subsequences in a sequence using Elzinga's algorithm.
 }
+\details{
+The function searches for missing states in the sequences and if found, adds the missing state to the alphabet for the extraction of the distinct subsequences. A missing state in a sequence is considered as the occurence of an additional symbol of the alphabet, and two or more consecutive missing states are considered as two or more occurences of the same state. The \code{with.missing=TRUE} argument is used for calling the \code{\link{seqdss}} function when \code{DSS=TRUE}.
+}
 \usage{
  seqsubsn(seqdata, DSS=TRUE)
 }

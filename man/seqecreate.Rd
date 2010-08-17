@@ -5,15 +5,15 @@
   Create an event sequence object from the given input.
 }
 \details{
-  There are several ways to create an event sequence object. The first one is by providing the events in TSE format (see \code{\link{seqformat}}), i.e. by providing three paired lists: id, timestamp and event, such that each triplet (id, timestamp, event) defines the event that occurs at time timestamp for case id. Several events at the same time for a same id are allowed. The lists can be provided with the arguments \code{id}, \code{timestamp} and \code{event}. An alternative is by providing a data frame as \code{data} argument in which case the function takes the required information from the "id", "timestamp" and "event" columns of that data frame. 
-  
-  The other way is to pass a state sequence object (as \code{data} argument) and to perfom an automatic state-to-event conversion. The simplest way to make a conversion is by means of a predefined method (see \code{\link{seqetm}}), such as "transition" (one distinct event per possible transition), "state" (one event when entering a new state) and "period" (a pair of events, one start-state event and one end-state event for each found transition).  For a more customized conversion, you can specify a transition matrix in the same way as in \code{\link{seqformat}}. Function \code{\link{seqetm}} can help you in creating your transition matrix. 
-   
+  There are several ways to create an event sequence object. The first one is by providing the events in TSE format (see \code{\link{seqformat}}), i.e. by providing three paired lists: id, timestamp and event, such that each triplet (id, timestamp, event) defines the event that occurs at time timestamp for case id. Several events at the same time for a same id are allowed. The lists can be provided with the arguments \code{id}, \code{timestamp} and \code{event}. An alternative is by providing a data frame as \code{data} argument in which case the function takes the required information from the "id", "timestamp" and "event" columns of that data frame.
+
+  The other way is to pass a state sequence object (as \code{data} argument) and to perfom an automatic state-to-event conversion. The simplest way to make a conversion is by means of a predefined method (see \code{\link{seqetm}}), such as "transition" (one distinct event per possible transition), "state" (one event when entering a new state) and "period" (a pair of events, one start-state event and one end-state event for each found transition).  For a more customized conversion, you can specify a transition matrix in the same way as in \code{\link{seqformat}}. Function \code{\link{seqetm}} can help you in creating your transition matrix.
+
   The resulting event sequence object can then be used in other 'seqe' methods, such as \code{\link{seqefsub}} or \code{\link{seqeapplysub}}.
 %  A subsequence can be created using seqecreatesub, in this case, timestamp are only used to detect simultaneous events (same time).
 }
 \usage{
-  seqecreate(data = NULL, id = NULL, timestamp = NULL, event = NULL, 
+seqecreate(data = NULL, id = NULL, timestamp = NULL, event = NULL,
     endEvent = NULL, tevent =  "transition", use.labels=TRUE)
 %  seqecreatesub(timestamp, event)
 }

@@ -6,8 +6,9 @@
 This is the plot method for output produced by the \code{\link{seqstatd}} function, i.e objects of class \emph{stslist.statd}.
 }
 \usage{
-\method{plot}{stslist.statd}(x, type = "d", cpal = NULL, ylab = NULL, 
-  yaxis = TRUE, xaxis = TRUE, xtlab = NULL, cex.plot = 1, space=0, ...)
+\method{plot}{stslist.statd}(x, type = "d", cpal = NULL, ylab = NULL,
+    yaxis = TRUE, xaxis = TRUE, xtlab = NULL, cex.plot = 1, 
+    space=0, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -40,7 +41,7 @@ biofam.lab <- c("Parent", "Left", "Married", "Left+Marr",
 "Child", "Left+Child", "Left+Marr+Child", "Divorced")
 biofam.seq <- seqdef(biofam, 10:25, labels=biofam.lab)
 
-## State distribution    
+## State distribution
 biofam.statd <- seqstatd(biofam.seq)
 
 ## State distribution plot (default type="d" option)

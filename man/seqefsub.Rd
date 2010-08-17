@@ -23,8 +23,8 @@
   Subsets of the returned \code{subseqelist} can be accessed with the [] operator (see example). There are print and plot methods for \code{subsequelist}.
 }
 \usage{
-seqefsub(seq, strsubseq = NULL, minSupport = NULL, 
-	pMinSupport = NULL, constraint = seqeconstraint(), maxK = -1)
+seqefsub(seq, strsubseq = NULL, minSupport = NULL,
+    pMinSupport = NULL, constraint = seqeconstraint(), maxK = -1)
 }
 
 \arguments{

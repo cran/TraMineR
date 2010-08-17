@@ -2,7 +2,7 @@
 ## Sequences frequency table
 ## =========================
 
-seqtab <- function(seqdata, tlim=10, weighted=TRUE, format="SPS") {
+seqtab <- function(seqdata, tlim=1:10, weighted=TRUE, format="SPS") {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use seqdef function to create one")
@@ -40,13 +40,13 @@ seqtab <- function(seqdata, tlim=10, weighted=TRUE, format="SPS") {
 	Percent <- Freq/sum(Freq)*100
 
 	nbuseq <- length(Freq)
-	if (tlim==0 || tlim>nbuseq) {
-		tlim <- nbuseq
+	if (tlim==0 || max(tlim)>nbuseq) {
+		tlim <- 1:nbuseq
 	}	
 
-	res <- seqdata[match(rownames(Freq), seqlist)[1:tlim],]
+	res <- seqdata[match(rownames(Freq), seqlist)[tlim],]
 
-	table <- data.frame(Freq, Percent)[1:tlim,]
+	table <- data.frame(Freq, Percent)[tlim,]
 	
 	## ==================================
 	## DEFINING CLASS AND SOME ATTRIBUTES

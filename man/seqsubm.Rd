@@ -28,15 +28,17 @@ states are computed using the \link{seqtrate} function. The
 substitution cost between states \eqn{i} and \eqn{j} is obtained with
 the formula
 
- \deqn{SC(i,j) = 2 -P(i,j) -P(j,i)}
+ \deqn{SC(i,j) = cval -P(i,j) -P(j,i)}
 
 where \eqn{P(i,j)} is the transition rate from state \eqn{i} to
 \eqn{j}.
  }
 
 \usage{
- seqsubm(seqdata, method, cval=2, with.missing=FALSE,
-         miss.cost=2, time.varying=FALSE, weighted=TRUE) }
+ seqsubm(seqdata, method, cval=NULL, with.missing=FALSE,
+         miss.cost=NULL, time.varying=FALSE, weighted=TRUE,
+		 transition="both") 
+}
 
  \arguments{
   \item{seqdata}{a sequence object as returned by the \link{seqdef} function.}
@@ -44,19 +46,24 @@ where \eqn{P(i,j)} is the transition rate from state \eqn{i} to
   \item{method}{method to compute transition rates. At this time, the methods available are constant
       value (\code{method="CONSTANT"}) or substitution costs using transition rates
       (\code{method="TRATE"})}
-  \item{cval}{the constant substitution cost if method \code{"CONSTANT"} is chosen. Otherwise, it is
-      ignored.}
+  \item{cval}{the constant substitution cost if method \code{"CONSTANT"} is chosen. For method \code{"TRATE"},
+  the base value from which transition probabilities are substracted. If \code{NULL}, \code{cval=2}, unless \code{transition} 
+  is set to \code{"both"} and \code{time.varying} is \code{TRUE} in which case \code{cval=4}.}
 	
 	\item{with.missing}{if \code{TRUE}, an additional entry is added in the matrix for the missing states.
 Hence, a new "missing" state is added to the list of "valid" states. Use this if you want to compute
 distances with missing values inside the sequences. See \cite{Gabadinho et al. (2008)} for more details on the
 options for handling missing values when computing distances between sequences.}
 
-	\item{miss.cost}{the substitution cost for the missing state.}
+	\item{miss.cost}{the substitution cost for the missing state. The default set it to \code{cval}}
 	\item{time.varying}{Logical. If \code{TRUE} return an \code{\link{array}} containing a distinct
 matrix for each time unit. The time is the third dimension (subscript).}
 	\item{weighted}{Logical. If \code{TRUE} compute transition rates using weights specified in
 \code{seqdata}.}
+	\item{transition}{Only used if \code{time.varying=TRUE}. If \code{transition="both"}, it uses the transition 
+	rates from previous and next state. It can also be set to \code{"previous"} or \code{"next"}.
+	}
+	
 }
 \seealso{
  \code{\link{seqtrate}}, \code{\link{seqdef}}, \code{\link{seqdist}}.

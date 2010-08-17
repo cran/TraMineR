@@ -7,7 +7,7 @@ This is the plot method for objects of class stslist.meant produced by the seqme
 }
 \usage{
 \method{plot}{stslist.meant}(x, cpal = NULL, ylab = NULL, yaxis = TRUE, xaxis = TRUE,
-     xtlab = NULL, cex.plot = 1, ylim = NULL, ...)
+     cex.plot = 1, ylim = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -16,7 +16,6 @@ This is the plot method for objects of class stslist.meant produced by the seqme
   \item{ylab}{an optional label for the y axis. If set to NA, no label is drawn.}
   \item{yaxis}{controls whether the y axis is plotted. Default to TRUE.}
   \item{xaxis}{if TRUE (default) the xaxis is plotted.}
-  \item{xtlab}{optional labels for the x axis ticks. If unspecified, the \code{names} attribute of the \code{x} object is used.}
 
   \item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase the size.}
 

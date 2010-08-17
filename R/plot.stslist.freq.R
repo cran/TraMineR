@@ -29,7 +29,7 @@ plot.stslist.freq <- function(x, cpal=NULL, missing.color=NULL, pbarw=TRUE,
 
 	if (is.null(ylab)) {
 		if (yaxis==TRUE || yaxis=="cum")
-			ylab <- paste("Cum. % freq. (",wlab,"n=",n,")",sep="")
+			ylab <- paste("Cum. % freq. (",wlab,"n=",round(n,2),")",sep="")
 		else if (yaxis=="pct")
 			ylab <- paste("% freq. (",wlab,"n=",n,")",sep="")		
 	}
