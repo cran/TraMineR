@@ -7,6 +7,9 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	left=NA, right="DEL", gaps=NA, missing=NA, void="%", nr="*",
 	cnames=NULL, cpal=NULL, missing.color="darkgrey", labels=NULL, ...) {
 
+	## Parameters
+	maxstatedisplay <- 12
+
 	## ===================
 	## Extracting the data
 	## ===================
@@ -20,7 +23,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 			sf <- seqfcheck(seqdata)
 			if (sf %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=sf)
 			else if (sf=="-X") 
-				message(" [!] found '-' character in states codes, not recommended.")
+				message(" [!] found '-' character in states codes, not recommended")
 		}
 		else {
 			seqdata <- seqdecomp(seqdata,sep=stsep)
@@ -47,8 +50,14 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	if (!is.na(missing)) seqdata[seqdata==missing] <- NA
 
 	statl <- seqstatl(seqdata)
-	if (is.null(alphabet)) plevels <- statl
-	else plevels <- alphabet
+	if (is.null(alphabet)) {
+		plevels <- statl
+	} else {
+		if (any(statl %in% alphabet==FALSE)) {
+			stop("\n [!] one or more states appearing in the data not included in 'alphabet'", call.=FALSE)
+		}
+		plevels <- alphabet
+	}
 
 	seqdata <- as.matrix(seqdata)
 
@@ -77,7 +86,13 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	## SETTING THE ALPHABET
 	## ====================
 	if (missing(states)) {
-		message(" [>] distinct states appearing in the data: ",paste(statl,collapse="/"))
+		nbdatastat <- length(statl)
+		message(" [>] ", nbdatastat," distinct states appear in the data: ")
+		for (i in 1:min(nbdatastat,maxstatedisplay)) {
+			message("     ",i, " = ", statl[i])
+		}		
+		if (nbdatastat>maxstatedisplay) message("      ...")
+
 		A <- plevels
 	} else {
 		## plevels <- states
@@ -106,9 +121,9 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	nbstates <- length(A)
 
 	if (nbstates==1) 
-		stop("alphabet has only one state!")
+		stop("\n [!] alphabet contains only one state", call.=FALSE)
 	else if (nbstates>12 && missing(cpal)) 
-		warning("No automatic color palete attributed, number of states too high. You may specify one using 'cpal' option!", call.=FALSE)
+		warning(" [!] no automatic color palete attributed, number of states too high. \n     Use 'cpal' argument to define one.", call.=FALSE)
 
 	## Converting each column to a factor
 	for (i in 1:ncol(seqdata)) {
@@ -120,8 +135,9 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 
 	## STATES LABELS
 	if (!is.null(labels)) {
-		if (length(labels) != nbstates)
-			stop("Number of labels must equal number of states in the alphabet")
+		if (length(labels) != nbstates) {
+			stop("\n [!] number of labels must equal number of states in the alphabet", call.=FALSE)
+		}
 	} else 
 		labels <- A
 	
@@ -129,11 +145,12 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 
 	## Displaying the alphabet
 	message(" [>] alphabet (state labels): ")
-	maxstatedisplay <- 12
 	for (i in 1:min(nbstates,maxstatedisplay))
-		message("     ",i, "=", A[i], " (", labels[i], ")")
+		message("     ",i, " = ", A[i], " (", labels[i], ")")
 
-	if (nbstates>12) message("      ...")
+	if (nbstates>12) {
+		message("      ... (", nbstates, " states)")
+	}
 
 	## message(" [>] labels: ",paste(1:nbstates,collapse=" ",sep="="))
 
@@ -142,7 +159,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	## =======
 	if (!is.null(weights)) {
 		if (length(weights) != nrow(seqdata))
-			stop("Number of weights must equal number of sequences")
+			stop("\n [!] number of weights must equal number of sequences", call.=FALSE)
 		message(" [>] sum of weights: ", round(sum(weights),2), " - min/max: ",
 			min(weights),"/",max(weights))
 	}
@@ -165,7 +182,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	else {
 		## Controling if number of colors = number of states
 		if (length(cpal)!=nbstates) 
-			stop("number of colors in cpal != length of alphabet")
+			stop("\n [!] number of colors in 'cpal' must equal length of alphabet", call.=FALSE)
 		else 
 			attr(seqdata,"cpal") <- cpal
 	}

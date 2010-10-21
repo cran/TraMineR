@@ -19,7 +19,7 @@ plot.stslist.statd <- function(x, type="d", cpal=NULL, ylab=NULL, yaxis=TRUE, xa
 			cpal <- attr(x,"cpal")
 
 		if (is.null(ylab)) 
-			ylab <- paste("Freq. (",wlab,"n=",n,")",sep="")
+			ylab <- paste("Freq. (",wlab,"n=",round(n,2),")",sep="")
 
 		barplot(x$Frequencies,
 			space=space,

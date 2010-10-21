@@ -122,6 +122,7 @@ int TreeEventNode::countSubsequence(int minSup) {
 }
 void TreeEventNode::clearSupport() {
     this->support=0;
+	this->lastID = -1;
     this->child.clearSupport();
     this->brother.clearSupport();
 }

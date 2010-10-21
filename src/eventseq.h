@@ -4,6 +4,7 @@
 #include <R.h>
 #include <Rinternals.h>
 #include "eventdictionary.h"
+#include "TraMineR.h"
 //using namespace std;
 //Déclaration des types (définitions ci-après)
 class SequenceEventNode;
