@@ -23,7 +23,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		if (is.null(pdata)) frmoption <- "year2year"
 		else frmoption <- "age2year"
 	}
-
+	
 	## =========================
 	## creation of the dataframe
 	## =========================
@@ -72,7 +72,9 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	#		seqresult[,k] <- factor(seqresult[,k], levels=levels(seqdata[,status]), labels=levels(seqdata[,status])) 
 	#	} 
 	}
-        
+    if (!is.null(fillblanks)) {
+		fillblanksv <- nlevels(status.orig)+1
+	}    
 	#names(seqresult) <- names.seqresult
 	## ================================
 	## end of creation of the dataframe
@@ -171,6 +173,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 					# fillblanks option
 					# if fillblanks is not null, the gaps between episodes is filled with its value
 					if (!is.null(fillblanks)) {
+						
 						if (j>1) {
 							# for every episode after the first one, we check if there is a gap between the one before and this one
 							if(frmoption=="age2age" || frmoption=="age2year") {
@@ -185,7 +188,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 							if (sstart != previousend && sstart != (previousend+1)) {
 								dur <- sstart - (previousend+1)
 								if (dur>0 & (sstart-1 < limit) && sstart > 0 && spell[j-1,end] > 0) {
-									seqresult[i,(previousend+1):(sstart-1)] <- rep(fillblanks, dur)
+									seqresult[i,(previousend+1):(sstart-1)] <- rep(fillblanksv, dur)
 								}
 							}
 
@@ -225,8 +228,13 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
         seqresult <- as.data.frame(seqresult)
         if(is.factor(status.orig)) {
           for (k in 1:(limit)) { 
-            seqresult[,k] <- factor(seqresult[,k], levels=1:nlevels(status.orig), labels=levels(status.orig)) 
-          }
+            if(is.null(fillblanks)) {
+				seqresult[,k] <- factor(seqresult[,k], levels=1:nlevels(status.orig), labels=levels(status.orig)) 
+			}
+			else {
+				seqresult[,k] <- factor(seqresult[,k], levels=1:(nlevels(status.orig)+1), labels=c(levels(status.orig), fillblanks)) 
+			}
+		  }
         }
         names(seqresult) <- names.seqresult
 

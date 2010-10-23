@@ -263,6 +263,7 @@ extern "C" {
             //return ScalarLogical(TRUE);
             //Simplify tree
             root->simplifyTree(mSupport);
+			//root->print();
             //REprintf((char*)"     Tree simplified (size: %i [added: %i])\n",TreeEventNode::getNodeCount(), (TreeEventNode::getNodeCount()-lastNodeCount));
             if (TreeEventNode::getNodeCount()-lastNodeCount==0)break;
         }

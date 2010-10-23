@@ -9,6 +9,11 @@
 	#endif
 #endif
 */
+#ifdef __cplusplus
+	#include <cstdio>
+	#include <cstdarg>
+	using std::sprintf;
+#endif	//#ifdef __cplusplus
 #include<R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>

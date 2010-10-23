@@ -4,7 +4,7 @@
 #include <set>
 #include <string>
 #include <Rinternals.h>
-
+#include "TraMineR.h"
 
 
 class EventDictionary: public std::map<int,std::string> {
