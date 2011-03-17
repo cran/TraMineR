@@ -10,7 +10,8 @@ Compute and test the share of discrepancy (defined from a dissimilarity matrix) 
 }
 
 \usage{
-dissassoc(diss, group, R = 1000)
+dissassoc(diss, group, weights=NULL, R=1000,
+          weight.permutation="replicate", squared=FALSE)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -18,11 +19,14 @@ dissassoc(diss, group, R = 1000)
 \arguments{
   \item{diss}{A dissimilarity matrix or a dist object (see \code{\link{dist}})}
   \item{group}{The grouping variable}
+  \item{weights}{optional numerical vector containing weights.}
   \item{R}{Number of permutations for computing the p-value. If equal to 1, no permutation test is performed.}
+  \item{weight.permutation}{Weights permutation method: \code{"diss"} 
+  (attach weigths to the dissimilarity matrix), \code{"replicate"} (replicate case according to the \code{weights} arguments), \code{"rounded-replicate"} (replicate case according to the rounded \code{weights} arguments), \code{"random-sampling"} (random assignment of covariate profiles to the objects using distributions defined by the weights.)}
+  \item{squared}{Logical. If \code{TRUE} the dissimilarities \code{diss} are squared.}
 }
 
-\details{
-The \code{dissassoc} function assesses the association 
+\details{ The \code{dissassoc} function assesses the association 
 between objects characterized by their dissimilarity matrix and a 
 discrete covariate. It provides a generalization of the ANOVA 
 principle to any kind of distance metric. The function returns a 
@@ -30,16 +34,17 @@ pseudo R-square that can be interpreted as a usual R-square. The
 statistical significance of the association is computed by means of 
 permutation tests. The function performs also a test of discrepancy 
 homogeneity (equality of within variances) using a generalization of 
-the Bartlett's statistics. \cr There are 
+the Levene statistic and Bartlett's statistics. \cr There are 
 \code{print} and \code{hist} methods (the latter producing an 
 histogram of the permuted values used for testing the significance). 
-}
-\value{
-Returns an object of class \code{dissassoc} with the following components:
+} 
+
+\value{ Returns an object of class \code{dissassoc} with the 
+following components: 
   \item{groups}{A data frame with the number of cases and the discrepancy of each group}
   \item{anova.table}{The pseudo ANOVA table}
   \item{stat}{The value of the statistics and their p-values}
-  \item{perms}{The permutation object, see \code{\link{boot}}}
+  \item{perms}{The permutation object, containing the values computed for each permutation}
 }
 \references{
   Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
@@ -47,22 +52,22 @@ Returns an object of class \code{dissassoc} with the following components:
   In F. Guillet, G. Ritschard, H. Briand, and D. A. Zighed (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
   Studies in Computational Intelligence, Volume 292, pp. 3-19. Berlin: Springer.
-	
+
   Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009).
   Analyse de dissimilarités par arbre d'induction. In EGC 2009,
   \emph{Revue des Nouvelles Technologies de l'Information}, Vol. E-15, pp. 7--18.
 
-  Batagelj, V. (1988) Generalized Ward and related clustering problems. In H. Bock (Ed.),
-  \emph{Classification and related methods of data analysis}, Amsterdam: North-Holland, pp. 67--74.
-
   Anderson, M. J. (2001) A new method for non-parametric multivariate analysis of variance.
 \emph{Austral Ecology} \bold{26}, 32--46.
+
+  Batagelj, V. (1988) Generalized Ward and related clustering problems. In H. Bock (Ed.),
+  \emph{Classification and related methods of data analysis}, Amsterdam: North-Holland, pp. 67--74.
 }
 %\author{ ~~who you are~~ }
 %\note{ ~~further notes~~ }
 
 \seealso{
-\code{\link{dissvar}} to compute the pseudo variance from dissimilarities and for a basic introduction to concepts of 
+\code{\link{dissvar}} to compute the pseudo variance from dissimilarities and for a basic introduction to concepts of
 pseudo variance analysis.
 \cr
 \code{\link{disstree}} for an induction tree analyse of objects characterized by a dissimilarity matrix.

@@ -7,33 +7,35 @@
 \alias{print.subseqelist}
 \title{Searching for frequent subsequences}
 \description{
-  Returns the list of frequent subsequences satisfying the specified minimum support. Several time constraints can be set to restrict the search to specific time periods or subsequences durations.
+  Returns the list of subsequences with minimal support sorted in decreasing order of support. Various time constraints can be set to restrict the search to specific time periods or subsequence durations. The function permits also to get information on specified subsequences.
 }
 \details{
   There are two usages of this function. The first is for searching subsequences satisfying a support condition.
-  The support is counted per sequence and not per occurrence, i.e. when a sequence contains twice a same subsequence it is counted only once. The support can be set through \code{pMinSupport} as a percentage (between 0 and 1 and it will be rounded), or through minSupport as a number of sequences.
+  By default, the support is counted per sequence and not per occurrence, i.e. when a sequence contains twice a same subsequence it is counted only once. Use the \code{countMethod} argument of \code{\link{seqeconstraint}} to change that. The minimal required support can be set with \code{pMinSupport} as a proportion (between 0 and 1) in which case it will be rounded, or through minSupport as a number of sequences.
   Time constraints can also be imposed with the \code{constraint} argument, which must be the outcome of a call to the \code{\link{seqeconstraint}} function).
 
-  The second possibility is for searching sequences that contain specified subsequences. This is done by passing the list of subsequences with the \code{strsubseq} argument. The subsequences must be formatted as the one used to display subsequences (see \code{\link{str.seqelist}}).
-  Each group of events should be enclosed in parentheses () and separated with commas, and the succession of events should be denoted by a '-' that indicates a time gap.
-  For instance "(FullTime)-(PartTime, Children)" stands for the subsequence "FullTime" followed by the group of the two simultaneously occurring events "PartTime" and "Children".
+  The second possibility is for searching sequences that contain specified subsequences. This is done by passing the list of subsequences with the \code{strsubseq} argument. The subsequences must be in the same format as that used to display subsequences (see \code{\link{str.seqelist}}).
+  Each transition (group of events) should be enclosed in parentheses () and separated with commas, and the succession of transitions should be denoted by a '-' indicating a time gap.
+  For instance "(FullTime)-(PartTime, Children)" stands for the subsequence "FullTime" followed by the transition defined by the two simultaneously occurring events "PartTime" and "Children".
 
   Information about the sequences that contain the subsequences can then be obtained with the \code{\link{seqeapplysub}} function.
 
-  Subsets of the returned \code{subseqelist} can be accessed with the [] operator (see example). There are print and plot methods for \code{subsequelist}.
+  Subsets of the returned \code{subseqelist} can be accessed with the \code{[]} operator (see example). There are print and plot methods for \code{subsequelist}.
 }
 \usage{
 seqefsub(seq, strsubseq = NULL, minSupport = NULL,
-    pMinSupport = NULL, constraint = seqeconstraint(), maxK = -1)
+    pMinSupport = NULL, constraint = seqeconstraint(), maxK = -1,
+    weighted = TRUE)
 }
 
 \arguments{
   \item{seq}{A list of event sequences}
-  \item{strsubseq}{Can be used to look for specific subsequences. See details.}
+  \item{strsubseq}{A list of specific subsequences to look for. See details.}
   \item{minSupport}{The minimum support (in number of sequences)}
   \item{pMinSupport}{The minimum support (in percentage, will be rounded)}
-  \item{constraint}{Time constraint object, i.e the result of a call to \code{\link{seqeconstraint}}}
+  \item{constraint}{A time constraint object as returned by \code{\link{seqeconstraint}}}
   \item{maxK}{The maximum number of events allowed in a subsequence}
+  \item{weighted}{Logical. If \code{TRUE}, \code{seqefsub} use the weights specified in \code{seq} (see \code{\link{seqeweight}}).}
 }
 \value{
 A \code{subseqelist} object which contain at least the following objects:

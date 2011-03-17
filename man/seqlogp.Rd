@@ -3,13 +3,14 @@
 \alias{seqlogp}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Computing the logarithm of sequences probabilities
+Compute the logarithm of sequences probabilities
 }
 \description{
 Compute the logarithm of probability of each sequence using a state transition model. The probability of a sequence is equal to the product of each state probability of the sequence. There are several method to compute a state probability.
 }
 \usage{
-seqlogp(seqdata, prob="trate", time.varying=TRUE, begin="freq", weighted=TRUE)
+seqlogp(seqdata, prob="trate", time.varying=TRUE, begin="freq", 
+    weighted=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

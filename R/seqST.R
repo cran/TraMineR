@@ -42,7 +42,7 @@ seqST <- function(seqdata) {
 	states <- seqdss(seqdata, with.missing=with.missing)
 	dur <- seqdur(seqdata, with.missing=with.missing)
 
-	message(" [>] computing turbulence for ",nrow(seqdata)," sequences ...")
+	message(" [>] computing turbulence for ",nrow(seqdata)," sequence(s) ...")
 	phi <- suppressMessages(seqsubsn(states, DSS=FALSE))
 	s2.tx <- apply(dur, 1, realvar)
 	mean.tx <- rowMeans(dur, na.rm=TRUE)

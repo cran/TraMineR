@@ -2,35 +2,37 @@
 \alias{plot.stslist.statd}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Plot method for objects produced by the seqstatd function}
+
 \description{
-This is the plot method for output produced by the \code{\link{seqstatd}} function, i.e objects of class \emph{stslist.statd}.
+This is the plot method for output produced by the \code{\link{seqstatd}} function, i.e for objects of class \emph{stslist.statd}.
 }
 \usage{
 \method{plot}{stslist.statd}(x, type = "d", cpal = NULL, ylab = NULL,
-    yaxis = TRUE, xaxis = TRUE, xtlab = NULL, cex.plot = 1, 
-    space=0, ...)
+     yaxis = TRUE, xaxis = TRUE, xtlab = NULL, xtstep = NULL, cex.plot = 1,
+     space=0, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{an object of class \code{stslist.statd} as produced by the \code{\link{seqstatd}} function.}
   \item{type}{if \code{"d"} (default), a state distribution plot is produced. If \code{"Ht"} an entropy index plot is produced.}
-  \item{cpal}{alternative color palette to use for the states. If user specified, a vector of colors with number of elements equal to the number of states in the alphabet. By default, the 'cpal' attribute of the \code{x} object is used.}
+  \item{cpal}{alternative color palette to be used for the states. If user specified, a vector of colors with number of elements equal to the number of states in the alphabet. By default, the 'cpal' attribute of the \code{x} object is used.}
   \item{ylab}{an optional label for the y axis. If set to NA, no label is drawn.}
-  \item{yaxis}{if TRUE or "cum", the y axis is plotted with a label showing the cumulated percentage frequency of the displayed sequences. If "pct", the percentage value for each sequence is displayed.}
+  \item{yaxis}{if \code{TRUE} or \code{"cum"}, the y axis is plotted with a label showing the cumulated percentage frequency of the displayed sequences. If \code{"pct"}, the percentage value for each sequence is displayed.}
 
-  \item{xaxis}{if TRUE (default) the xaxis is plotted.}
+  \item{xaxis}{if \code{TRUE} (default) the x-axis is plotted.}
 
-  \item{xtlab}{optional labels for the x axis ticks. If unspecified, the \code{names} attribute of the input object is used.}
+  \item{xtlab}{optional labels for the ticks of the x-axis. If unspecified, the \code{names} attribute of the input \code{x} object is used.}
+  \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with xtstep=3 a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
 
-  \item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase the size.}
+  \item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values smaller than 1 will reduce the size of the font, values greater than 1 will increase the size.}
 
-  \item{space}{the space between the stacked bars. Default to 0, i.e. no space.}
+  \item{space}{the space between the stacked bars. Default is 0, i.e. no space.}
 
-  \item{\dots}{further graphical parameters. For example \code{border=NA} to remove the bars borders, \code{space=0} to remove space between sequences. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}.}
+  \item{\dots}{further graphical parameters such as \code{border=NA} to remove the borders of the bars. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}.}
 }
-\details{This is the plot method for the output produced by the \code{\link{seqstatd}} function, i.e. objects of class \emph{stslist.statd}. If \code{type="d"}it produces a state distribution plot presenting the sequence of the states frequencies for each time point, as computed by the \code{\link{seqstatd}} function. If \code{type="Ht"}, the series of state distribution entropies is plotted.
+\details{This is the plot method for the output produced by the \code{\link{seqstatd}} function, i.e. for objects of class \emph{stslist.statd}. If \code{type="d"} it produces a state distribution plot presenting the sequence of the transversal state frequencies at each successive (time) position, as computed by the \code{\link{seqstatd}} function. With \code{type="Ht"}, the series of entropies of the transversal state distributions is plotted.
 
-This method is called by the generic \code{\link{seqplot}} function (if \code{type="d"} or \code{type="Ht"}) that produces more sophisticated plots, allowing grouping and automatic display of the states legend. The \code{seqdplot} and \code{seqHtplot} functions are shortcuts for calling \code{seqplot} with \code{type="d"} or \code{type="Ht"} respectively.
+This method is called by the generic \code{\link{seqplot}} function (if \code{type="d"} or \code{type="Ht"}) that produces more sophisticated plots, allowing grouping and automatic display of the state color legend. The \code{seqdplot} and \code{seqHtplot} functions are shortcuts for calling \code{seqplot} with \code{type="d"} or \code{type="Ht"} respectively.
 }
 
 \examples{

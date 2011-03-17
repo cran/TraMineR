@@ -9,9 +9,6 @@ seqmodst <- function(seqdata, weighted=TRUE, with.missing=FALSE) {
 
 	slength <- ncol(seqdata)
 	statl <- alphabet(seqdata)
-	col <- cpal(seqdata)
-	lab <- attr(seqdata,"labels")
-
 	cnames <- colnames(seqdata)
 
 	if (with.missing) {
@@ -38,7 +35,8 @@ seqmodst <- function(seqdata, weighted=TRUE, with.missing=FALSE) {
 		missing=attr(seqdata,"nr"), nr=attr(seqdata,"nr"), 
 		left=NA, gaps=NA, right=NA,
 		labels=stlab(seqdata), 
-		cpal=cpal(seqdata), missing.color=attr(seqdata,"missing.color")))
+		cpal=cpal(seqdata), missing.color=attr(seqdata,"missing.color"), 
+		xtstep=attr(seqdata, "xtstep")))
 
 	nbocc <- length(seqfind(res, seqdata))
 

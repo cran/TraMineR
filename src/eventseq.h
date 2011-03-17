@@ -193,6 +193,8 @@ public:
     double getObsTime(){return this->obsTime;}
     void setObsTime(const double &t){this->obsTime=t;}
     bool contain(const EventSet& es, const bool &exclude);
+	double getWeight(){return this->weight;}
+	void setWeight(const double& w){this->weight=w;}
     //bool notContain(const EventSet& es);
 private:
     ///Unique ID, may be -1 for generic subsequences
@@ -203,6 +205,7 @@ private:
     //Ref counted
     EventDictionary * dict;
     double obsTime;
+	double weight;
 
 };
 

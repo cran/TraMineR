@@ -1,5 +1,6 @@
 \name{dissmfac}
 \alias{dissmfac}
+\alias{dissmfacw}
 \alias{dissreg}
 \alias{gower_matrix}
 \alias{print.dissregression}
@@ -10,22 +11,29 @@
   Perform a multi-factor analysis of variance from a dissimilarity matrix.
 }
 \usage{
+dissmfacw(formula, data, R=1000, gower=FALSE, squared=FALSE,
+          weights=NULL)
 dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
- permutation = "dissmatrix")
+         permutation = "dissmatrix")
 }
 
 \arguments{
-  \item{formula}{A regression-like formula. The left hand side should be a dissimilarity matrix or a \code{dist} object.}
-  \item{data}{data to search for variables in formula}
-  \item{R}{Number of permutations to assess significance}
+  \item{formula}{A regression-like formula. The left hand side term should be a dissimilarity matrix or a \code{dist} object.}
+  \item{data}{A data frame from which the variables in \code{formula} should be taken.}
+  \item{R}{Number of permutations used to assess significance.}
   \item{gower}{Logical: Is the dissimilarity matrix already a Gower matrix?}
-  \item{squared}{Logical: should we square the dissimilarity matrix?}
-  \item{permutation}{if equal to \code{dissmatrix}, permutations are done on the dissimilarity matrix, else if equal to "model" permutations are done on the variable matrix. Depending on the number of observation, "model" can be quicker.}
+  \item{squared}{Logical: Should we square the provided dissimilarities?}
+  \item{weights}{Optional numerical vector of case weights.}
+  \item{permutation}{Deprecated. Kept for backward compatibility.}
 }
 \details{
-  This method is, in some way, a generalization of \code{\link{dissassoc}} to account for several explanatory variables. The function computes the part of discrepancy explained by a list of covariates. It provides for each covariate Type-II effect, i.e. the effect of removing the variable from the full model with all variables included.  For a single factor \code{dissmfac} is slower than \code{\link{dissassoc}}. Moreover, the latter performs also tests of homogeneity in within group discrepancy (equality of variances) using generalization of Bratlett statistics.
+  This method is, in some way, a generalization of \code{\link{dissassoc}} to account for several explanatory variables.
+  The function computes the part of discrepancy explained by the list of covariates specified in the \code{formula}.
+  It provides for each covariate the Type-II effect, i.e. the effect measured when removing the covariate from the full model with all variables included.
+  For a single factor \code{dissmfac} is slower than \code{\link{dissassoc}}.
+  Moreover, the latter performs also tests for homogeneity in within-group discrepancies (equality of variances) with a generalization of Levene's and Bratlett's statistics.
 
-  The function is based on the program written for scipy (Python) by Ondrej Libiger and Matt Zapala. See \cite{Zapala and Schork (2006)} for a full reference.
+  Part of the function is based on the Multivariate Matrix Regression with qr decomposition algorithm written in SciPy-Python by Ondrej Libiger and Matt Zapala (See \cite{Zapala and Schork}, 2006, for a full reference.)  The algorithm has been adapted for Type-II effects and extended to account for case weights.
 }
 
 \value{
@@ -33,10 +41,9 @@ dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
   \item{mfac}{The part of variance explained by each variable (comparing full model to model without the specified variable) and its significance using permutation test}
   \item{call}{Function call}
   \item{perms}{Permutation values as a \code{boot} object}
-  \item{perm_method}{Permutation method used to compute significance}
 }
 \references{
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2010)
   Discrepancy	analysis of complex objects using dissimilarities.
   In F. Guillet, G. Ritschard, D. A. Zighed and H. Briand (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
@@ -57,21 +64,23 @@ comment on distance-based redundancy analysis. \emph{Ecology} 82(1), 290-297.
 the National Academy of Sciences of the United States of America} 103(51), 19430-19435.
 }
 \seealso{
-\code{\link{dissvar}} to compute the pseudo variance from dissimilarities and for a basic introduction to concepts of pseudo variance analysis.
+\code{\link{dissvar}} to compute a pseudo variance from dissimilarities and for a basic introduction to concepts of discrepancy analysis.
    \cr
    \code{\link{dissassoc}} to test association between objects represented by their dissimilarities and a covariate.
 \cr
-\code{\link{disstree}} for an induction tree analyse of objects characterized by a dissimilarity matrix.
+\code{\link{disstree}} for an induction tree analysis of objects characterized by a dissimilarity matrix.
 \cr
 \code{\link{disscenter}} to compute the distance of each object to its group center from pairwise dissimilarities.
 }
 \examples{
-## Defining a state sequence object
+## Define the state sequence object
 data(mvad)
 mvad.seq <- seqdef(mvad[, 17:86])
 
-## Building dissimilarities
+## Compute dissimilarities
 mvad.lcs <- seqdist(mvad.seq, method="LCS")
+
+## And now the multi-factor analysis
 print(dissmfac(mvad.lcs ~ male + Grammar + funemp +
 	gcse5eq + fmpr + livboth, data=mvad, R=10))
 }

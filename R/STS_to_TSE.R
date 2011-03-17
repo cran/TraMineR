@@ -24,14 +24,18 @@ STS_to_TSE <- function(seqdata, id=NULL, tevent) {
 	nc <- ncol(tevent)
 
 	## Storing the cells of tevent in a list
-	for (i in 1:nc)
-		for (j in 1:nl)
-			if (is.character(tevent[j,i]))
+	for (i in 1:nc){
+		for (j in 1:nl) {
+			if (is.character(tevent[j,i])){
 				levent[[paste(rownames(tevent)[j],">",colnames(tevent)[i],sep="")]] <- strsplit(tevent[j,i],",")[[1]]
-
+			} else {
+				levent[[paste(rownames(tevent)[j],">",colnames(tevent)[i],sep="")]] <- as.character(tevent[j,i])
+			}
+		}
+	}
 	for (i in 1:nseq) {
 		## First status=> entrance event (diagonal of tevent)
-          s1 <- seqdata[i,1]
+        s1 <- seqdata[i,1]
 		e1 <- levent[[paste(s1,">",s1,sep="")]]
 
 		if (!is.null(e1) && !is.na(e1)) { ## if NA, we don't generate an event

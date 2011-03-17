@@ -165,6 +165,11 @@ extern "C" {
         ASSIGN_TMRSEQ_TYPE(s,seq);
         return ScalarReal(s->getObsTime());
     }
+	SEXP tmrsequencegetweight(SEXP seq) {
+        Sequence *s =NULL;
+        ASSIGN_TMRSEQ_TYPE(s,seq);
+        return ScalarReal(s->getWeight());
+    }
     SEXP tmrsequencesetlength(SEXP seqs, SEXP time) {
     	 double * t=REAL(time);
         //events and ids
@@ -177,6 +182,22 @@ extern "C" {
                 seq=VECTOR_ELT(seqs,i);
                 ASSIGN_TMRSEQ_TYPE(s,seq);
                 s->setObsTime(t[i]);
+                //Rprintf((char*)"Added %i seq, node=%i\n",i,TreeEventNode::getNodeCount());
+		}
+        return R_NilValue;
+    }
+	SEXP tmrsequencesetweight(SEXP seqs, SEXP weight) {
+    	 double * w=REAL(weight);
+        //events and ids
+        int numseq=length(seqs);
+        SEXP seq;
+        Sequence *s =NULL;
+        //lengthes
+        if (length(weight)!=numseq) error("Weight and seq vector should have the same size");
+		for (int i=0;i<numseq;i++) {
+                seq=VECTOR_ELT(seqs,i);
+                ASSIGN_TMRSEQ_TYPE(s,seq);
+                s->setWeight(w[i]);
                 //Rprintf((char*)"Added %i seq, node=%i\n",i,TreeEventNode::getNodeCount());
 		}
         return R_NilValue;
@@ -228,7 +249,8 @@ extern "C" {
     	REprintf((char*)"aMax = %f\n", aMax);
     	REprintf((char*)"aMaxEnd = %f\n", aMaxEnd);
 	 */
-        int mSupport=INTEGER(minSupport)[0], maxK=INTEGER(maxSubseqSize)[0],k=1;
+        int maxK=INTEGER(maxSubseqSize)[0],k=1;
+		double mSupport=REAL(minSupport)[0];
 
         //Default values implies no limit (actually biggest possible limit)
         // MOVED TO CONSTRAINT OBJ
@@ -263,7 +285,6 @@ extern "C" {
             //return ScalarLogical(TRUE);
             //Simplify tree
             root->simplifyTree(mSupport);
-			//root->print();
             //REprintf((char*)"     Tree simplified (size: %i [added: %i])\n",TreeEventNode::getNodeCount(), (TreeEventNode::getNodeCount()-lastNodeCount));
             if (TreeEventNode::getNodeCount()-lastNodeCount==0)break;
         }
@@ -275,11 +296,11 @@ extern "C" {
         //Rprintf((char*)"Counting subseq (%i)\n",returnsize);
         SEXP ans, supp,subseq;
         PROTECT(ans=allocVector(VECSXP, 2)); //Allocate memory
-        PROTECT(supp=allocVector(INTSXP, returnsize)); //Allocate memory
+        PROTECT(supp=allocVector(REALSXP, returnsize)); //Allocate memory
         PROTECT(subseq=allocVector(VECSXP, returnsize)); //Allocate memory
         int index=0;
         //REprintf((char*)"(%i)\nRetrieving subsequences...",returnsize);
-        root->getSubsequences(subseq,INTEGER(supp),&index,classname, ed); //Extracting all subsequences
+        root->getSubsequences(subseq,REAL(supp),&index,classname, ed); //Extracting all subsequences
         //REprintf((char*)"OK\n");
         SET_VECTOR_ELT(ans,0,supp);
         SET_VECTOR_ELT(ans,1,subseq);

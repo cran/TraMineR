@@ -1,0 +1,9 @@
+"P1","P2","P3","P4","P5","P6","P7","P8","P9","P10","P11","P12","P13","weights"
+NA,NA,NA,"A","A","A","A","A","A","A","A","A","A",17.7
+"D","D","D","B","B","B","B","B","B","B",NA,NA,NA,4.9
+NA,"D","D","D","D","D","D","D","D","D","D",NA,NA,5.1
+"A","A",NA,NA,"B","B","B","B","D","D",NA,NA,NA,29.3
+"A",NA,"A","A","A","A",NA,"A","A","A",NA,NA,NA,0.7
+NA,NA,NA,"C","C","C","C","C","C","C",NA,NA,NA,2.3
+NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0
+

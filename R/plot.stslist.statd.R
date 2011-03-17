@@ -2,15 +2,22 @@
 ## PLot of the state distribution
 ## ==============================
 
-plot.stslist.statd <- function(x, type="d", cpal=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, cex.plot=1, space=0, ...) {
+plot.stslist.statd <- function(x, type="d", cpal=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, xtstep=NULL, 
+	cex.plot=1, space=0, ...) {
 
 	n <- attr(x,"nbseq")
 	weighted <- attr(x, "weighted")
 	if (weighted) {wlab <- "weighted "}
 	else {wlab <- NULL}
 
-	if (is.null(xtlab))
-		xtlab <- attr(x,"xtlab")
+	if (is.null(xtlab)) {xtlab <- attr(x,"xtlab")}
+
+	if (is.null(xtstep)) {
+		if (!is.null(attr(x,"xtstep"))) {xtstep <- attr(x,"xtstep")} 
+		## For sequence objects created with previous versions
+		else {xtstep <- 1}
+	}
+
 	seql <- length(xtlab)
 
 	## State distribution plot	
@@ -32,14 +39,15 @@ plot.stslist.statd <- function(x, type="d", cpal=NULL, ylab=NULL, yaxis=TRUE, xa
 			...)
 
 		## Plotting the x axis
-		x.lab.pos <- space+0.5
+		x.lab.pos <- NULL
+		tpos <- seq(1,seql, xtstep)
 
-		for (p in 2:length(xtlab)) {
+		for (p in tpos) {
 			x.lab.pos <- c(x.lab.pos, (p-1)+((p-1)*space)+(0.5+space))
 		}
 
 		if (xaxis) {
-			axis(1, at=x.lab.pos, labels=xtlab, pos=-0.02, cex.axis=cex.plot)
+			axis(1, at=x.lab.pos, labels=xtlab[tpos], pos=-0.02, cex.axis=cex.plot)
 		}
 	}
 	## Entropy index plot
@@ -60,8 +68,10 @@ plot.stslist.statd <- function(x, type="d", cpal=NULL, ylab=NULL, yaxis=TRUE, xa
 			...)
 
 		## Plotting the x axis
-		if (xaxis)
-			axis(1, at=1:seql, labels=xtlab, pos=-0.02, cex.axis=cex.plot)
+		if (xaxis) {
+			tpos <- seq(1,seql, xtstep)
+			axis(1, at=tpos, labels=xtlab[tpos], pos=-0.02, cex.axis=cex.plot)
+		}
 	}
 
 	##

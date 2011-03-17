@@ -14,10 +14,13 @@
 	#include <cstdarg>
 	using std::sprintf;
 #endif	//#ifdef __cplusplus
+
 #include<R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <Rmath.h>
+
+
 
 //Macros for matrix indices
 //Using C indices

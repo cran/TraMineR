@@ -1,6 +1,6 @@
 \name{seqdim}
 \alias{seqdim}
-\title{Returns the dimension of a set of sequences}
+\title{Dimension of a set of sequences}
 \description{
 Returns the number of sequences (rows) and the maximum length of a set of sequences.
 }

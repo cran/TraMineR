@@ -19,7 +19,7 @@ seqdur <- function(seqdata, with.missing=FALSE) {
 	if (!with.missing)
 		seqdatanum[is.na(seqdatanum)] <- -99
 
-
+	maxcol <- 0 
 	for (i in 1:nbseq) {
 		idx <- 1
 		j <- 1
@@ -30,7 +30,7 @@ seqdur <- function(seqdata, with.missing=FALSE) {
 			iseq <- tmpseq[idx]
 			dur <- 1
 
-			while (idx < sl[i] && tmpseq[idx+1]==iseq) { 
+			while (idx < sl[i] && (tmpseq[idx+1]==iseq || tmpseq[idx+1]==-99)) { 
 					idx <- idx+1
 					dur <- dur+1
 			}
@@ -44,7 +44,10 @@ seqdur <- function(seqdata, with.missing=FALSE) {
 
 			idx <- idx+1
 		}
+		if (j>maxcol) {maxcol <- j}
 	}
+	## drop=FALSE ensures that the result is a matrix even if trans has only one row
+	trans <- trans[,1:(maxcol-1), drop=FALSE]
 
 	return(trans)
 }

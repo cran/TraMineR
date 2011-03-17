@@ -18,10 +18,10 @@ class TreeEventMap: public std::map<int,TreeEventNode*> {
 public:
 TreeEventMap():std::map<int,TreeEventNode*>() {}
     ~TreeEventMap() {}
-    void simplifyTreeMap(const int &minSup);
+    void simplifyTreeMap(const double &minSup);
     void print(const int & prof, const bool& isbrother);
-    int countSubsequence(int minSup);
-    void getSubsequences(SEXP result,int * support, Sequence *s2, int *index,const double &step, SEXP classname,EventDictionary * ed);
+    int countSubsequence(double minSup);
+    void getSubsequences(SEXP result,double * support, Sequence *s2, int *index,const double &step, SEXP classname,EventDictionary * ed);
     void clearAllPointers();
     void clearSupport();
 

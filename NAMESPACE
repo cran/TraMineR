@@ -6,6 +6,7 @@ export(
 	cpal,
 	"cpal<-",
 	read.tda.mdist,
+	recodef,
 	seqcomp,
 	seqconc,
 	seqdecomp,
@@ -42,6 +43,7 @@ export(
 	seqnum,
 	seqplot,
 	seqpm,
+	seqrecode,
 	seqrep,
 	seqrplot,
 	seqsep,
@@ -89,6 +91,11 @@ S3method(plot, stslist.modst)
 S3method(print, stslist.modst)
 S3method("[", stslist.modst)
 
+## TraMineRPermut methods
+S3method(print ,TraMineRPermut)
+S3method(summary ,TraMineRPermut)
+S3method(hist ,TraMineRPermut)
+
 ## diss module
 export(
 	dissassoc,
@@ -96,20 +103,23 @@ export(
 	dissreg,
 	dissrep,
 	dissmfac,
+	dissmfacw,
 	disstree2dot,
 	disstree2dotp,
 	disstreeleaf,
 	disstree,
 	dissvar,
 	gower_matrix,
-	seqtree2dot
+	seqtree2dot,
+	seqtree,
+	seqtreedisplay
 )
 S3method(hist,dissassoc)
 S3method(print,dissassoc)
 S3method(print,dissregression)
 S3method(print,dissmultifactor)
 S3method(print,disstree)
-## S3method(print,seqtree)
+S3method(print,seqtree)
 S3method(print,seqdiff)
 S3method(plot,seqdiff)
 S3method(print,diss.rep)
@@ -148,6 +158,9 @@ export(
 	seqeid,
 	seqelength,
 	seqesetlength,
+	"seqelength<-",
+	seqeweight,
+	"seqeweight<-",
 	is.seqe,
 	is.seqelist,
   seqetm

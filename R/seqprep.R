@@ -20,7 +20,7 @@ seqprep <- function(seqdata, left=NA, right="DEL", gaps=NA,
 
 	allmiss <- NULL
 	for (i in 1:nbseq) {
-		nbmiss <- sum(mstate[i,])
+		nbmiss <- sum(mstate[i,], na.rm=TRUE)
 		if (nbmiss>0 && nbmiss<sl) {
 			seqdata[i,] <- TraMineR.trunc(seq=seqdata[i,], mstate=mstate[i,], sl=sl,
 				left=left, right=right, gaps=gaps, 
@@ -32,7 +32,7 @@ seqprep <- function(seqdata, left=NA, right="DEL", gaps=NA,
 	}
 
 	if (length(allmiss)>0) {
-		message(" [!] sequence with index: ", paste(allmiss, collapse=" "), " contains only missing values.\n     This may produce inconsistent results.")
+		message(" [!] sequence with index: ", paste(allmiss, collapse=","), " contains only missing values.\n     This may produce inconsistent results.")
 	}
 
 	## Setting a new code for missing statuses

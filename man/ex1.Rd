@@ -10,10 +10,10 @@ The state column (variable) names are `[P1]' ... `[P13]'
 The alphabet is made of four possible states: A, B, C and D.
 \cr
 
-The data set contains also the `weights' covariate which contains case weights. The sum of weights is 60.
+The data set contains also case weights (variable \code{weights}) . The sum of the weights is 60.
 }
 \usage{data(ex1)}
-\format{A data frame with 6 rows, 13 state variables, 1 covariate.}
+\format{A data frame with 7 rows, 13 state variables, 1 weight variable.}
 
 \source{The brain of the TraMineR package maintainer.}
 

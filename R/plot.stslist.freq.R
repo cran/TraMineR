@@ -3,7 +3,7 @@
 ## ================================
 
 plot.stslist.freq <- function(x, cpal=NULL, missing.color=NULL, pbarw=TRUE, 
-	ylab=NULL, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, cex.plot=1, ...) {
+	ylab=NULL, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, xtstep=NULL, cex.plot=1, ...) {
 
 	n <- attr(x,"nbseq")
 	weighted <- attr(x, "weighted")
@@ -14,6 +14,12 @@ plot.stslist.freq <- function(x, cpal=NULL, missing.color=NULL, pbarw=TRUE,
 
 	if (is.null(xtlab))
 		xtlab <- attr(x,"names")
+
+	if (is.null(xtstep)) {
+		if (!is.null(attr(x,"xtstep"))) {xtstep <- attr(x,"xtstep")} 
+		## For sequence objects created with previous versions
+		else {xtstep <- 1}
+	}
 
 	seql <- length(xtlab)
 
@@ -56,8 +62,10 @@ plot.stslist.freq <- function(x, cpal=NULL, missing.color=NULL, pbarw=TRUE,
 		...)
 	
 	## Plotting the x axis
-	if (xaxis) 
-		axis(1, at=1:seql-0.5, labels=xtlab, cex.axis=cex.plot)
+	if (xaxis) {
+		tpos <- seq(1, seql, xtstep)
+		axis(1, at=tpos-0.5, labels=xtlab[tpos], cex.axis=cex.plot)
+	}
 
 	## Plotting the y axis
 	if ("space" %in% names(olist)) space <- olist[["space"]]

@@ -7,7 +7,7 @@ int TreeEventNode::getNodeCount() {
     return nodeCount;
 }
 
-void TreeEventNode::getSubsequences(SEXP result,int *  isupport, Sequence *s, int *index,const double &step, SEXP classname,EventDictionary * ed) {
+void TreeEventNode::getSubsequences(SEXP result, double *  isupport, Sequence *s, int *index,const double &step, SEXP classname,EventDictionary * ed) {
     this->brother.getSubsequences(result,isupport,s,index,step, classname,ed);
     this->child.getSubsequences(result,isupport,s,index,step+1, classname,ed);
 
@@ -46,7 +46,7 @@ void TreeEventNode::addSequenceInternal(Sequence *s, SequenceEventNode * en, Con
 
 	// If we count several by sequences, or the last element added was from another sequence, we had this element to support.
 	if (cst->getcountMethod()==2 || this->lastID!=s->getIDpers()) {
-        this->support++;//
+        this->support+=s->getWeight();//
         this->lastID=s->getIDpers();
 	}
     if (!en->hasNext())return;
@@ -96,7 +96,7 @@ void TreeEventNode::addSequenceInternal(Sequence *s, SequenceEventNode * en, Con
     }//end while(hasNext())
 }
 
-void TreeEventNode::simplifyTree(int minSup) {
+void TreeEventNode::simplifyTree(double minSup) {
     this->brother.simplifyTreeMap(minSup);
     this->child.simplifyTreeMap(minSup);
 }
@@ -106,9 +106,9 @@ void TreeEventNode::print(const int & prof, const bool& isbrother) {
         Rprintf((char*)"   ");
     }
     if (isbrother) {
-        Rprintf((char*)"|--(%i:%i)[%i]\n",this->type,this->support,this->lastID);
+        Rprintf((char*)"|--(%i:%f)[%i]\n",this->type,this->support,this->lastID);
     } else {
-        Rprintf((char*)"|__(%i:%i)[%i]\n",this->type,this->support,this->lastID);
+        Rprintf((char*)"|__(%i:%f)[%i]\n",this->type,this->support,this->lastID);
     }
     this->brother.print(prof+1,isbrother);
     //print each child branches
@@ -116,7 +116,7 @@ void TreeEventNode::print(const int & prof, const bool& isbrother) {
 
 }
 
-int TreeEventNode::countSubsequence(int minSup) {
+int TreeEventNode::countSubsequence(double minSup) {
 
     return 1+this->brother.countSubsequence(minSup)+this->child.countSubsequence(minSup);
 }

@@ -2,29 +2,31 @@
 \alias{seqecmpgroup}
 \title{Identifying discriminating subsequences}
 \description{
-  Identify and order the most discriminating subsequences according to a given statistical test.
+  Identify and sort the most discriminating subsequences by their discriminating power.
 }
 \usage{
-seqecmpgroup(subseq, group, method="chisq", pvalue.limit=NULL)
+seqecmpgroup(subseq, group, method="chisq", pvalue.limit=NULL, 
+             weighted = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{subseq}{A \code{subseqelist} object (list of subsequences) such as produced by \code{\link{seqefsub}}}
-  \item{group}{Variable or factor defining the membership to the groups to discriminate}
-  \item{method}{The required test, one of \code{bonferroni} or \code{chisq}}
-  \item{pvalue.limit}{Can be used to filter the results. Only subsequences with a p-value lower than the value set for this parameter will be selected. If NULL all subsequences are returned (regardless their p-values).}
+  \item{group}{Group membership, i.e., a variable or factor defining the groups which we want to discriminate}
+  \item{method}{The discrimination method; one of \code{"bonferroni"} or \code{"chisq"}}
+  \item{pvalue.limit}{Can be used to filter the results. Only subsequences with a p-value lower than this parameter are selected. If \code{NULL} all subsequences are returned (regardless of their p-values).}
+  \item{weighted}{Logical. If \code{TRUE}, \code{seqecmpgroup} uses the weights specified in \code{subseq}, (see \code{\link{seqefsub}}).}
 }
 \details{
-The following test functions are implemented
-  \code{chisq} Pearson Independence Chi squared test.
-  \code{bonferroni} Pearson Independence Chi squared test with Bonferroni correction.
+The following discrimination test functions are implemented:
+  \code{chisq}, the Pearson Independence Chi-squared test, and
+  \code{bonferroni}, the Pearson Independence Chi-squared test with Bonferroni correction.
 }
 \value{
-  An objet of type \code{subseqelistchisq} (subtype of \code{subseqelist}) with the following elements 
+  An objet of type \code{subseqelistchisq} (subtype of \code{subseqelist}) with the following elements
   \item{subseq}{Sorted list of found discriminating subsequences}
   \item{seqe}{The event sequence object on which the tests were computed}
-  \item{constraint}{time constraints used for searching the subsequences (see \code{\link{seqeconstraint}})}
-  \item{labels}{levels (value labels) of the target group variable}
+  \item{constraint}{Time constraints used for searching the subsequences (see \code{\link{seqeconstraint}})}
+  \item{labels}{Levels (value labels) of the target group variable}
   \item{type}{Type of test used}
   \item{data}{A data frame with columns support, index (original order of the subsequence) and a pair of frequency and Pearson residual columns for each group}
 }

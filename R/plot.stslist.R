@@ -3,7 +3,7 @@
 ## =============================
 
 plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL, 
-	cpal=NULL, missing.color=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, ytlab=NULL, ylas=0, xtlab=NULL, cex.plot=1, ...) {
+	cpal=NULL, missing.color=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, ytlab=NULL, ylas=0, xtlab=NULL, xtstep=NULL, cex.plot=1, ...) {
 
 	n <- nrow(x)
 	seql <- ncol(x)
@@ -12,6 +12,12 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 
 	if (is.null(xtlab))
 		xtlab <- colnames(x)
+
+	if (is.null(xtstep)) {
+		if (!is.null(attr(x,"xtstep"))) {xtstep <- attr(x,"xtstep")} 
+		## For sequence objects created with previous versions
+		else {xtstep <- 1}
+	}
 
 	## Range 
 	if (is.null(tlim)) {
@@ -67,9 +73,10 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 	if (weighted) {wlab <- "weighted "}
 	else {wlab <- NULL}
 
-	if (is.null(ylab))
+	if (is.null(ylab)) {
 		ylab <- paste(length(tlim)," seq. ", "(", wlab,"n=", round(sum(weights),2),")", 
 			sortlab, sep="")
+	}
 
 	## The PLot
 	barplot(seqbar,col=cpal, width=weights,
@@ -77,15 +84,17 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 		horiz=TRUE,
 		yaxt="n",
 		axes=FALSE,
-		las=1, 
+		las=1,
 		...
 	)
 
 	## Plotting the x axis
-	if (xaxis) 
-		axis(1, at=1:seql-0.5, labels=xtlab, 
+	if (xaxis) {
+		tpos <- seq(1,seql, xtstep)
+		axis(1, at=tpos-0.5, labels=xtlab[tpos], 
 		# mgp=c(3,0.5,0), 
 		cex.axis=cex.plot)
+	}
 
 	## Plotting the y axis
 	if (is.null(yaxis) || yaxis) {

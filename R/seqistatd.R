@@ -21,7 +21,7 @@ seqistatd <- function(seqdata, with.missing=FALSE) {
 	colnames(iseqtab) <- statl
 	rownames(iseqtab) <- rownames(seqdata)
 
-	message(" [>] Computing state distribution for ", nbseq," sequences ...")
+	message(" [>] computing state distribution for ", nbseq," sequences ...")
 
 	for (i in 1:nbstat) {
 		iseqtab[,i] <- apply(seqdata,1,function(x) sum(x==statl[i],na.rm=TRUE))
