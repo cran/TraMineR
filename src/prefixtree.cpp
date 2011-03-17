@@ -47,7 +47,7 @@ void PrefixTree::addSequence(Sequence *s,Constraint * cst, const int& k) {
 
 
 
-void PrefixTree::simplifyTree(int minSup) {
+void PrefixTree::simplifyTree(double minSup) {
 
     this->child.simplifyTreeMap(minSup);
 }
@@ -59,12 +59,12 @@ void PrefixTree::print() {
 
 
 
-int PrefixTree::countSubsequence(int minSup) {
+int PrefixTree::countSubsequence(double minSup) {
     return this->child.countSubsequence(minSup);
 }
 
 
-void PrefixTree::getSubsequences(SEXP result,int * support, int *index, SEXP classname,EventDictionary * ed) {
+void PrefixTree::getSubsequences(SEXP result,double * support, int *index, SEXP classname,EventDictionary * ed) {
     this->child.getSubsequences(result,support,NULL,index,0,classname,ed);
 }
 

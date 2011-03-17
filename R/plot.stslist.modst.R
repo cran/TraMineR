@@ -3,14 +3,14 @@
 ## =============================
 
 plot.stslist.modst <- function(x, cpal=NULL,
-	ylab=NULL, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, cex.plot=1, ...) {
+	ylab=NULL, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, xtstep=NULL, cex.plot=1, ...) {
 
 	seql <- ncol(x)
 	statl <- attr(x,"alphabet")
 	n <- attr(x, "nbseq")
 	nr <- attr(x,"nr")
 
-	if (is.null(cpal)) cpal <- attr(x,"cpal")
+	if (is.null(cpal)) {cpal <- attr(x,"cpal")}
 
 	## Adding an entry for missing in the legend
 	if (any(x==nr)) {
@@ -24,7 +24,12 @@ plot.stslist.modst <- function(x, cpal=NULL,
 	if (weighted) {wlab <- "weighted "}
 	else {wlab <- NULL}
 
-	if (is.null(xtlab)) xtlab <- colnames(x)
+	if (is.null(xtlab)) {xtlab <- colnames(x)}
+	if (is.null(xtstep)) {
+		if (!is.null(attr(x,"xtstep"))) {xtstep <- attr(x,"xtstep")} 
+		## For sequence objects created with previous versions
+		else {xtstep <- 1}
+	}
 
 	if (is.null(ylab)) ylab <- paste("State freq. (",wlab,"n=",round(n,2),")",sep="")
 
@@ -61,10 +66,12 @@ plot.stslist.modst <- function(x, cpal=NULL,
 		cex=cex.plot)
 
 	## Plotting the x axis
-	if (xaxis) 
-		axis(1, at=1:seql-0.5, labels=xtlab, pos=-0.02,
+	if (xaxis) {
+		tpos <- seq(1,seql, xtstep)
+		axis(1, at=tpos-0.5, labels=xtlab[tpos], pos=-0.02,
 		# mgp=c(3,0.5,0), 
 		cex.axis=cex.plot)
+	}
 
 	## Axis for the state frequencies
 	if (yaxis)

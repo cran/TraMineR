@@ -7,6 +7,7 @@
 #include "TraMineR.h"
 
 
+
 class EventDictionary: public std::map<int,std::string> {
     int numseq;
 public:

@@ -14,7 +14,7 @@ void TreeEventMap::clearSupport() {
         it->second->clearSupport();
     }
 }
-void TreeEventMap::simplifyTreeMap(const int &minSup) {
+void TreeEventMap::simplifyTreeMap(const double &minSup) {
     TreeEventMapIterator it=this->begin(), it2;
     TreeEventNode * n=NULL;
     while (it!=this->end()) {
@@ -47,7 +47,7 @@ void TreeEventMap::print(const int & prof, const bool& isbrother) {
     }
 }
 
-void TreeEventMap::getSubsequences(SEXP result,int * support, Sequence *s2, int *index,const double &step, SEXP classname,EventDictionary * ed) {
+void TreeEventMap::getSubsequences(SEXP result,double * support, Sequence *s2, int *index,const double &step, SEXP classname,EventDictionary * ed) {
     SEXP tmpseq;
     TreeEventMapIterator it;
     Sequence * s=NULL;
@@ -63,7 +63,7 @@ void TreeEventMap::getSubsequences(SEXP result,int * support, Sequence *s2, int 
         it->second->getSubsequences(result,support,s,index,step,classname,ed);
     }
 }
-int TreeEventMap::countSubsequence(int minSup) {
+int TreeEventMap::countSubsequence(double minSup) {
     TreeEventMapIterator it;
     int count=0;
     for (it = this->begin();it != this->end();it++) {

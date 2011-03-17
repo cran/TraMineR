@@ -2,7 +2,10 @@
 ## Compute distance to center for a group
 ############################
 
-dissassoc <- function(diss, group , R=1000) {
+dissassoc <- function(diss, group, weights=NULL, R=1000, weight.permutation="replicate", squared=FALSE){
+	return(dissassocweighted(diss, group, weights, R, weight.permutation, squared))
+}
+olddissassoc <- function(diss, group , R=1000) {
 	#Notation comme pour l'ANOVA, SC=Inertia dans le sens du criète de Ward
 	if (inherits(diss, "dist")) {
 		diss <- dist2matrix(diss)
@@ -55,17 +58,17 @@ dissassoc <- function(diss, group , R=1000) {
 		bts <- boot(ind, internalBootstrapCompareGroups, R, sim="permutation", stype="i",
 			dissmatrix=dissmatrix, indgrp=indgrp, SCtot=SCtot)
 		ret$stat <- data.frame(PseudoF=bts$t0[1], PseudoR2=bts$t0[2],
-			PseudoF_Pval=sum(bts$t[, 1]>=bts$t0[1])/bts$R,
-			PseudoT=bts$t0[3], PseudoT_Pval=sum(bts$t[, 3]>=bts$t0[3])/bts$R)
+			PseudoF_Pval=sum(bts$t[, 1]>bts$t0[1])/bts$R,
+			PseudoT=bts$t0[3], PseudoT_Pval=sum(bts$t[, 3]>bts$t0[3])/bts$R)
 		ret$perms <- bts
 	}
 	rownames(ret$stat) <- c("")
 	ret$call <- match.call()
 	ret$R <- R
-	class(ret) <- "dissassoc"
+	class(ret) <- "olddissassoc"
 	return(ret)
 }
-print.dissassoc <- function(x, ...) {
+print.olddissassoc <- function(x, ...) {
 	cat("Pseudo ANOVA table:\n")
 	print(x$anova.table, ...)
 	cat("\nTest values ", "(p-values based on", (x$R-1), "permutations):\n")
@@ -74,7 +77,7 @@ print.dissassoc <- function(x, ...) {
 	print(x$groups, ...)
 }
 
-hist.dissassoc <- function(x, test="PseudoF", breaks="FD", main=paste("Distribution of", test), xlab=test, pvalue.limit=NULL, freq=FALSE, ...) {
+hist.olddissassoc <- function(x, test="PseudoF", breaks="FD", main=paste("Distribution of", test), xlab=test, pvalue.limit=NULL, freq=FALSE, ...) {
 	if (test=="PseudoF") {
 		ti <- 1
 	}
@@ -88,7 +91,7 @@ hist.dissassoc <- function(x, test="PseudoF", breaks="FD", main=paste("Distribut
 		stop("Cannot plot permutation test distribution for R = 1")
 	}
 	testbootorder <- order(x$perms$t[, ti], decreasing=TRUE)
-	hist(x$perms$t[, ti], main=main, xlab=xlab, breaks=breaks, ...)
+	hist(x$perms$t[, ti], main=main, xlab=xlab, breaks=breaks, freq=freq, ...)
 	if (!is.null(pvalue.limit)) {
 		abline(v=x$perms$t[testbootorder[round(pvalue.limit*x$R)], ti], col="blue")
 	}

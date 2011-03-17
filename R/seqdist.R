@@ -8,7 +8,9 @@
 
 seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE, 
 	indel=1, sm=NA,	with.missing=FALSE, full.matrix=TRUE) {
-	debut <- Sys.time()
+	gc(FALSE)
+	debut <- proc.time()
+
 	## Checking correct arguments
 	if (!inherits(seqdata,"stslist")) {
 		stop(" [!] data is not a state sequence object, use 'seqdef' function to create one", call.=FALSE)
@@ -67,18 +69,7 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
 			stop(" [!] Unknown method ", sm, " to compute substitution costs")
 		}
 	}
-	## Checking methods that are treated the same
-	methodname <- method
-	if (method == "LCS") {
-		method <- "OM"
-		sm <- suppressMessages(seqsubm(seqdata, method="CONSTANT", cval=2, with.missing=with.missing, miss.cost=2))
-		indel <- 1
-	} else if (method == "HAM") {
-		method <- "DHD"
-		sm <- seqsubm(seqdata, "CONSTANT", cval=1, with.missing=with.missing,
-			miss.cost=1, time.varying=TRUE)
-	}
-
+	
 	## =====================
 	## Base information
 	## =====================
@@ -93,6 +84,31 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
 		alphsize <- length(alphabet)
 		message(" [>] including missing value as additional state" )
 	}
+	
+	## Checking methods that are treated the same
+	methodname <- method
+	if (method == "LCS") {
+		method <- "OM"
+		sm <- suppressMessages(seqsubm(seqdata, method="CONSTANT", cval=2, with.missing=with.missing, miss.cost=2))
+		indel <- 1
+	} else if (method == "HAM") {
+		method <- "DHD"
+		
+		if (!is.null(dim(sm))) {
+			TraMineR.checkcost(sma=sm, seqdata=seqdata, with.missing=with.missing)
+			if(is.matrix(sm)){
+				costs <- array(0, dim=c(alphsize, alphsize, ncol(seqdata)))
+				for(i in 1:ncol(seqdata)){
+					costs[,,i] <- sm
+				}
+				sm <- costs
+			}
+		} else {
+			sm <- suppressMessages(seqsubm(seqdata, "CONSTANT", cval=1, with.missing=with.missing,
+				miss.cost=1, time.varying=TRUE))
+		}
+	}
+
 
 	## ===========================
 	## Checking correct size of sm
@@ -101,41 +117,14 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
 	## Checking if substitution cost matrix contains values for each state
 	## and if the triangle inequality is respected
 	if (method=="OM") {
-		if (nrow(sm)!=alphsize | ncol(sm)!=alphsize) {
-			stop(" [!] size of substitution cost matrix must be ", alphsize,"x", alphsize)
-		}
-		if (any(sm<0)) {
-			stop(" [!] Negative substitution costs are not allowed")
-		}
-		if (any(diag(sm)!=0)) {
-			stop(" [!] All element on the diagonal of sm (substitution cost) should be equal to zero")
-		}
-		if (indel <= 0) {
-			stop(" [!] indel cost should be positive")
-		}
-		triangleineq <- checktriangleineq(sm, warn=FALSE, indices=TRUE)
-		## triangleineq contain a vector of problematic indices.
-		if (!is.logical(triangleineq)) {
-			warning("The substitution cost matrix doesn't respect the triangle inequality.\n",
-        			" At least, substitution cost between indices ",triangleineq[1]," and ",triangleineq[2],
-        			" does not respect the triangle inequality. It costs less to first transform ",
-        			triangleineq[1], " into ",triangleineq[3])
-		}
-		if (any(sm>2*indel)) {
-			warning("Some substitution cost are greater that two times the indel cost.",
-				" Such substitution cost will thus never be used.")
-		}
+		TraMineR.checkcost(sma=sm, seqdata=seqdata, with.missing=with.missing, indel=indel)
 	}
 	## Checking if substitution cost matrix contains values for each state
 	## and if the triangle inequality is respected
-	if(method== "DHD"){
+	if(methodname == "DHD"){
 		## User entered substitution cost
-		if(is.array(sm)){
-			## checking correct dimension
-			smdim <- dim(sm)
-			if(!is.array(sm) || sum(smdim==c(alphsize, alphsize, ncol(seqdata)))!=3){
-				stop(" [!] size of substitution cost matrix must be ", alphsize,"x", alphsize, "x", ncol(seqdata))
-			}
+		if(length(sm)>1){
+			TraMineR.checkcost(sma=sm, seqdata=seqdata, with.missing=with.missing)
 		}
 		else {
 			sm <- seqsubm(seqdata, "TRATE", cval=4, with.missing=with.missing,
@@ -190,8 +179,9 @@ seqdist <- function(seqdata, method, refseq=NULL, norm=FALSE,
 			norm, indel, sm, alphsize, nd, dseq, slength, mcorr, optimized)
 	}
 
-	fin <- Sys.time()
-	message(" [>] Total time: ", format(round(fin-debut, 3)))
+	fin <- proc.time()
+	totaltime <- format(round(difftime(as.POSIXct(sum(fin[1:2]), origin="1960-01-01"), as.POSIXct(sum(debut[1:2]), origin="1960-01-01")), 3))
+	message(" [>] total time: ", totaltime)
 
 	if (full.matrix && inherits(distances, "dist")) {
 		return(dist2matrix(distances))

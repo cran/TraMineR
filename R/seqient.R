@@ -2,7 +2,7 @@
 ## Within Sequence Entropy
 ## =======================
 
-seqient <- function(seqdata, norm=TRUE, with.missing=FALSE) {
+seqient <- function(seqdata, norm=TRUE, base=exp(1), with.missing=FALSE) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is NOT a sequence object, see seqdef function to create one")
@@ -19,10 +19,10 @@ seqient <- function(seqdata, norm=TRUE, with.missing=FALSE) {
 
 	iseqtab <- seqistatd(seqdata, with.missing=with.missing)
 	
-	ient <- apply(iseqtab,1,entropy)
+	ient <- apply(iseqtab,1,entropy, base=base)
 	ient <- as.matrix(ient)
 	if (norm==TRUE) {
-		emax <- entropy(rep(1/nbstat,nbstat)) 
+		emax <- entropy(rep(1/nbstat,nbstat), base=base) 
 		ient <- ient/emax
 		}
 

@@ -6,7 +6,8 @@
 Checks occurrences of the subsequences \code{subseq} among the event sequences and returns the result according to the selected \code{method}.
 }
 \usage{
-seqeapplysub(subseq, method = "count", constraint = NULL, rules=FALSE)
+seqeapplysub(subseq, method = "count", constraint = NULL,
+            rules=FALSE)
 }
 \arguments{
  \item{subseq}{list of subsequences (an event subsequence object) such as created by \code{\link{seqefsub}}}
@@ -14,7 +15,7 @@ seqeapplysub(subseq, method = "count", constraint = NULL, rules=FALSE)
  \item{constraint}{
 	Time constraints overriding those used to compute subseq. See \code{\link{seqeconstraint}}
 	}
- \item{rules}{If set to TRUE, instead of checking occurences of the subsequences among the event sequences, check the occurence of the subsequences inside the subsequences (internally used by \code{seqerules})}
+ \item{rules}{If set to \code{TRUE}, instead of checking occurences of the subsequences among the event sequences, check the occurence of the subsequences inside the subsequences (internally used by \code{seqerules})}
 }
 \details{
   There are three methods implemented:
@@ -32,7 +33,7 @@ The cells of the matrix contain the requested values (count, presence-absence in
 \seealso{\code{\link{seqecreate}} for more information on event sequence object and \cite{Gabadinho et al. (2009)} on how to use the event sequence analysis module.}
 
 \references{
-Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with \code{TraMineR}: A user's guide for version 1.1. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
+Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
 }
 
 

@@ -23,11 +23,13 @@ distribution and the number of transitions in the sequence.}
 \details{
  The \emph{complexity index} \eqn{C(s)} of a sequence
 \eqn{s} is
- \deqn{ C(s)= \sqrt{\frac{\ell_d(s)}{\ell(s)} \,\frac{h(s)}{h_{max}}} }{%
- C(s) = ([l_d(s) h(s)]/[l(s) h_\{max\}])^(.5)}
+ \deqn{ C(s)= \sqrt{\frac{q(s)}{q_{max}} \,\frac{h(s)}{h_{max}}} }{%
+ C(s) = ([q(s) h(s)]/[q_\{max\} h_\{max\}])^(.5)}
 
-where \eqn{h(s)} is the entropy and \eqn{h_{max}} its theoretical
-maximum which is \eqn{h_{max} = -\log 1/|A|}{h_max = -log 1/|A|}.
+where \eqn{q(s)} is the number of transitions in the sequence, 
+\eqn{q_{max}} the maximum number of transitions,  
+\eqn{h(s)} the within entropy, and \eqn{h_{max}} the theoretical maximum 
+entropy which is \eqn{h_{max} = -\log 1/|A|}{h_max = -log 1/|A|}.
 
 The index \eqn{C(s)} is the geometric mean of its two components
 which are normalized. The minimum value of 0 can only be reached by a

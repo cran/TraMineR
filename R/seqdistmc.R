@@ -1,34 +1,36 @@
+## multichannel distances
+
 seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 	with.missing=FALSE, full.matrix=TRUE, link="sum", cval=2, miss.cost=2, cweight=NULL ) {
 	
 	## Checking arguments
 	nchannels <- length(channels)
 	if (nchannels < 2) {
-		stop("[!] You should specify at least two channels")
+		stop("[!] please specify at least two channels")
 	}
 	if (is.null(cweight)) {
 		cweight <- rep(1, nchannels)
 	}
-	message(" [>] Computing multichannel distances on ", nchannels, " channels")
 	numseq <- sapply(channels,nrow)
 	if(any(numseq!=numseq[1])) {
-		stop("[!] All channels must have the same number of individuals")
+		stop(" [!] sequence objects have different numbers of rows")
 	}
 	numseq <- numseq[1]
+	message(" [>] ", nchannels, " channels with ", numseq, " sequences")
 	## Actually LCP and RLCP are not included
 	metlist <- c("OM", "LCS", "DHD", "HAM")
 	if (!method %in% metlist) {
-		stop(" [!] Method must be one of: ", paste(metlist,collapse=" "), call.=FALSE)
+		stop(" [!] method must be one of: ", paste(metlist, collapse=" "), call.=FALSE)
 	}
 	## We handle LCS as OM
-	if (method=="LCP") {
+	if (method=="LCS") {
 		method <- "OM"
 		sm <- "CONSTANT"
 		indel <- 1
 		cval <- 2
 		miss.cost <- 2
 	}
-	timeVarying <- method %in% c("DHD", "HAM")
+	timeVarying <- method %in% c("DHD")
 	## Indels and sm only apply for OM
 	## Correct number of arguments
 	## Generating default substitution arguments for DHD and HAM
@@ -87,41 +89,21 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 		indel_list[i] <- indel[i]
 		## Substitution matrix generation method is given
 		if	(is.character(sm[[i]])) {
-			message(" [>] Computing substitution cost matrix for channel ", i)
-			substmat_list[[i]] <- seqsubm(channels[[i]], sm[[i]], with.missing=T,
+			message(" [>] computing substitution cost matrix for channel ", i)
+			substmat_list[[i]] <- seqsubm(channels[[i]], sm[[i]], with.missing=with.missing,
 				time.varying=timeVarying, cval=cval, miss.cost=miss.cost)
 		}
-		## Complete matrix given Checking correct dimension
-		else if(is.array(sm[[i]])) {
+		## Checking correct dimension cost matrix
+		else {
 			if (method=="OM") {
-				if (nrow(sm[[i]])!=alphsize_list[[i]] | ncol(sm[[i]])!=alphsize_list[[i]]) {
-					stop(" [!] size of substitution cost matrix for channel ", i," must be ",
-						alphsize_list[[i]],"x", alphsize_list[[i]])
-				}
-				triangleineq <- checktriangleineq(sm[[i]], warn=FALSE, indices=TRUE)
-				## triangleineq contain a vector of problematic indices.
-				if (!is.logical(triangleineq)) {
-					warning("The substitution cost matrix for channel ", i," doesn't respect the triangle inequality.\n",
-							" At least, substitution cost between indices ",triangleineq[1]," and ",triangleineq[2],
-							" does not respect the triangle inequality.\n It costs less to first transform ",
-							triangleineq[1], " into ",triangleineq[3])
-				}
-				message(" [>] Using user specified substitution cost matrix for channel ", i)
+				TraMineR.checkcost(sm[[i]], channels[[i]], with.missing=with.missing, indel=indel[i])
+			} else {
+				TraMineR.checkcost(sm[[i]], channels[[i]], with.missing=with.missing)
 			}
-			else if(method== "DHD" || method=="HAM"){
-				## User entered substitution cost
-				## checking correct dimension
-				smdim <- dim(sm[[i]])
-				if(!is.array(sm[[i]]) ||
-					!all.equal(smdim, c(alphsize_list[[i]], alphsize_list[[i]], ncol(channels[[i]])))){							 
-					stop(" [!] size of substitution cost matrix must be ",
-							alphsize_list[[i]],"x", alphsize_list[[i]], "x", ncol(channels[[i]]))
-				}
-			}
-			
 			substmat_list[[i]] <- sm[[i]]
-			
 		}
+		
+
 		## Mutliply by channel weight
 		substmat_list[[i]] <- cweight[i]* substmat_list[[i]]
 	}
@@ -131,9 +113,9 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 	for (i in 2:nchannels) {
 		if (sum(slength1 != seqlength(channels[[i]]))>0) {
 			if (!with.missing) {
-				stop(" [!] Some channels have sequences of different length for the same individual. Please set 'with.missing=T' to nevertheless compute distances")
+				stop(" [!] some channels have sequences of different length for the same individual. Please set 'with.missing=TRUE' to nevertheless compute distances")
 			} else {
-				warning(" [!] Some channels have sequences of different length for the same individual. Shorter sequences will be filled with missing values.")
+				warning(" [!] some channels have sequences of different length for the same individual. Shorter sequences will be filled with missing values.")
 				break
 			}
 		}
@@ -141,7 +123,7 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 	## ================================
 	## Building the new sequence object
 	## ================================
-	message(" [>] Building interaction sequences...", appendLF=F)
+	message(" [>] building combined sequences...", appendLF=F)
 	## Complex separator to ensure (hahem) unicity
 	sep <- "@@@@TraMineRSep@@@@"
 	maxlength=max(maxlength_list)
@@ -177,12 +159,12 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 	
 	alphabet_size <- length(unique(as.character(newseqdata))) - as.integer(sum(is.na(newseqdata))>0)
 	suppressMessages(newseqdata <- seqdef(newseqdata, cpal=rep("blue", alphabet_size)))
-	message("OK")
+	message(" OK")
 	
 	## =========================================
 	## Building the new substitution cost matrix
 	## =========================================
-	message(" [>] Building new substitution cost matrix and indel...", appendLF=FALSE)
+	message(" [>] computing combined substitution and indel costs...", appendLF=FALSE)
 	## Build subsitution matrix and new alphabet
 	alphabet <- attr(newseqdata,"alphabet")
 	alphabet_size <- length(alphabet)
@@ -223,7 +205,7 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 			}
 		}
 	}
-	message("OK")
+	message(" OK")
 	## Indel as sum
 	newindel <- sum(indel_list*cweight)
 	## If we want the mean of cost..
@@ -231,7 +213,7 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 		newindel <- newindel / sum(cweight)
 		newsm <- newsm / sum(cweight)
 	}
-	message(" [>] Computing final distances")
+	message(" [>] computing distances ...")
 	## Calling seqdist
 	return(seqdist(newseqdata, method=method, norm=norm, indel=newindel,
 		sm=newsm, with.missing=FALSE, full.matrix=full.matrix))

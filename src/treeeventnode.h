@@ -12,7 +12,7 @@ class TreeEventNode {
     //type of the event
     int type;
     //CurrentSupport
-    int support;
+    double support;
     //Last sequence that has incremented the support of this subsequence
     int lastID;
     //Next event at same time (but event bigger!)
@@ -33,7 +33,7 @@ public:
     void addSequenceInternal(Sequence *s, SequenceEventNode * en, Constraint * cst, const double &gapConsumed,  const double& currentAge, const int& k, const int&currentK);
 
     //Simplifie l'arbre pour enlever l'ensemble des sous-s�quences qui ne satisfont pas le support minimum (nb occurrences)
-    void simplifyTree(int minSup);
+    void simplifyTree(double minSup);
     //Give an overview of this tree (param�tre prof==profondeur, interne)
     void print(const int & prof=0, const bool& isbrother=true);
     //Type of this event
@@ -41,11 +41,11 @@ public:
         return this->type;
     }
     //Actual support of this event
-    const int& getSupport() {
+    const double& getSupport() {
         return this->support;
     }
-    int countSubsequence(int minSup);
-    void getSubsequences(SEXP result,int * support, Sequence *s, int *index,const double &step, SEXP classname,EventDictionary * ed);
+    int countSubsequence(double minSup);
+    void getSubsequences(SEXP result,double * isupport, Sequence *s, int *index,const double &step, SEXP classname,EventDictionary * ed);
     void clearSupport();
 };
 #endif // TREEEVENTNODE_H

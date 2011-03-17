@@ -4,13 +4,19 @@
 
 plot.stslist.rep <- function(x, cpal=NULL, missing.color=NULL,
 	pbarw=TRUE, dmax=NULL, stats=TRUE,
-	ylab=NULL, xaxis=TRUE, xtlab=NULL, cex.plot=1, ...) {
+	ylab=NULL, xaxis=TRUE, xtlab=NULL, xtstep=NULL, cex.plot=1, ...) {
 
 	## Extracting attributes
 	n <- attr(x,"nbseq")
 	
-	if (is.null(xtlab))
-		xtlab <- colnames(x)
+	if (is.null(xtlab)) {xtlab <- colnames(x)}
+
+	if (is.null(xtstep)) {
+		if (!is.null(attr(x,"xtstep"))) {xtstep <- attr(x,"xtstep")} 
+		## For sequence objects created with previous versions
+		else {xtstep <- 1}
+	}
+
 	seql <- length(xtlab)
 	statl <- attr(x,"alphabet")
 	nr <- attr(x,"nr")
@@ -66,8 +72,12 @@ plot.stslist.rep <- function(x, cpal=NULL, missing.color=NULL,
 	if (stats) ymax <- 2.5
 	else ymax <- 1.3
 
+	if (is.null(ylab)) {
+		ylab <- paste(nbrep, " representative(s) (n=",n,")",sep="")
+	}
+
 	barplot(seqbar,col=cpal, width=barw,
-		ylab=paste(nbrep, " representative(s) (n=",n,")",sep=""),
+		ylab=ylab,
 		xlim=c(-2,seql),
 		ylim=c(0,ymax),
 		horiz=TRUE,
@@ -76,10 +86,14 @@ plot.stslist.rep <- function(x, cpal=NULL, missing.color=NULL,
 		...)
 
 	## Time axis for the sequence
-	axis(1, at=1:seql-0.5, labels=xtlab, 
-		pos=-0.04, 
-		## mgp=c(.5,.5,0), 
-		cex.axis=cex.plot)
+	if (xaxis) {
+		tpos <- seq(1,seql, xtstep)
+
+		axis(1, at=tpos-0.5, labels=xtlab[tpos], 
+			pos=-0.04, 
+			## mgp=c(.5,.5,0), 
+			cex.axis=cex.plot)
+	}
 
 	## y (percents) axis
 

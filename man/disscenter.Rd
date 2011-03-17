@@ -9,7 +9,7 @@
 
 \usage{
 disscenter(diss, group=NULL, medoids.index=NULL,
-           allcenter = FALSE)
+           allcenter = FALSE, weights=NULL, squared=FALSE)
 }
 
 \arguments{
@@ -28,6 +28,9 @@ most central sequence. If \code{group} is set, an index is returned per group. W
    \item{allcenter}{logical. If \code{TRUE}, returns a \code{data.frame}
 containing the dissimilarity between each object and its group
 center, each column corresponding to a group.}
+
+    \item{weights}{optional numerical vector containing weights.}
+	\item{squared}{Logical. If \code{TRUE} \code{diss} is squared.}
 
 % \item{max.iter}{maximum number of iteration to trim the outliers}
  }

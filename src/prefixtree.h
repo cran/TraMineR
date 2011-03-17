@@ -25,12 +25,12 @@ public:
     virtual ~PrefixTree();
    // void addSequence(Sequence *s,const double &maxGap,const double &windowSize, const double & ageMin, const double & ageMax,const double & ageMaxEnd, const int& k);
     void addSequence(Sequence *s, Constraint *cst, const int& k);
-    void simplifyTree(int minSup);
-    int countSubsequence(int minSup);
+    void simplifyTree(double minSup);
+    int countSubsequence(double minSup);
     //Give an overview of this tree (param�tre prof==profondeur, interne)
     void print();
     //Type of this event
-    void getSubsequences(SEXP result,int * support, int *index, SEXP classname, EventDictionary * ed);
+    void getSubsequences(SEXP result,double * support, int *index, SEXP classname, EventDictionary * ed);
     void clearSupport() {
         this->child.clearSupport();
     }

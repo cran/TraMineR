@@ -5,7 +5,7 @@
 seqdef <- function(data, var=NULL, informat="STS", stsep=NULL, 
 	alphabet=NULL, states=NULL, id=NULL, weights=NULL, start=1, 
 	left=NA, right="DEL", gaps=NA, missing=NA, void="%", nr="*",
-	cnames=NULL, cpal=NULL, missing.color="darkgrey", labels=NULL, ...) {
+	cnames=NULL, xtstep=1, cpal=NULL, missing.color="darkgrey", labels=NULL, ...) {
 
 	## Parameters
 	maxstatedisplay <- 12
@@ -47,9 +47,13 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	## ===================
 
 	## Turning missing values to NA's
-	if (!is.na(missing)) seqdata[seqdata==missing] <- NA
+	## if (!is.na(missing)) seqdata[seqdata==missing] <- NA
 
 	statl <- seqstatl(seqdata)
+	if (!is.na(missing)) {
+		statl <- statl[!statl==missing & !statl==void]
+	}
+
 	if (is.null(alphabet)) {
 		plevels <- statl
 	} else {
@@ -67,9 +71,9 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		}
 	}
 
-	if (any(is.na(seqdata))) {
+	if ((is.na(missing) && any(is.na(seqdata))) || ((!is.na(missing)) && any(seqdata==missing, na.rm=TRUE))) {
 		message(" [>] found missing values ('",missing,"') in sequence data") 
-		seqdata <- seqprep(seqdata, left=left, gaps=gaps, right=right, void=void, nr=nr)
+		seqdata <- seqprep(seqdata, left=left, gaps=gaps, right=right, missing=missing, void=void, nr=nr)
 	}
 
 	## DEFINING THE CLASS AND SOME ATTRIBUTES
@@ -123,7 +127,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	if (nbstates==1) 
 		stop("\n [!] alphabet contains only one state", call.=FALSE)
 	else if (nbstates>12 && missing(cpal)) 
-		warning(" [!] no automatic color palete attributed, number of states too high. \n     Use 'cpal' argument to define one.", call.=FALSE)
+		warning(" [!] no automatic color palete attributed, number of states>12. \n     Use 'cpal' argument to define one.", call.=FALSE)
 
 	## Converting each column to a factor
 	for (i in 1:ncol(seqdata)) {
@@ -201,7 +205,9 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	## ======================
 	## Rows and columns names
 	## ======================
-	if (!is.null(cnames)) colnames(seqdata) <- cnames
+	if (!is.null(cnames)) {
+		colnames(seqdata) <- cnames
+	}
 	else {
 		if (is.null(cntmp)) 
 			colnames(seqdata) <- paste("T",start:(max(seql)+start-1),sep="")
@@ -209,6 +215,8 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 			colnames(seqdata) <- cntmp
 		else colnames(seqdata) <- paste("T",start:(max(seql)+start-1),sep="")
 	}
+
+	attr(seqdata,"xtstep") <- xtstep
 
 	if (!is.null(id))
 		rownames(seqdata) <- if (length(id)==1 && id=="auto") paste("[",1:nbseq,"]",sep="") else id

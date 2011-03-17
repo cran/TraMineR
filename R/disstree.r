@@ -15,16 +15,31 @@
 # label: label du noeud (valeurs du predicteur
 # R2: R2 du split, (NULL pour noeux terminaux)
 #
-DTNInit <- function(ind, vardis, depth, label) {
-	node <- list()
-	node$label <- label
-	node$children <- NULL
-	node$split <- NULL
-	node$ind <- ind
-	node$depth <- depth
-	node$vardis <- vardis
-	class(node) <- c("DissTreeNode", "list")
+#source("disstree.dissassoc.R")
+.localstuffDissTree <- new.env()
+.localstuffDissTree$DTNnodeCounter <- as.integer(1)
+DTNInit <- function(ind, vardis, depth, dmat, weights) {
+	##cat("Disscenter\n")
+	dc <- .Call("tmrWeightedInertiaContrib", dmat, as.integer(ind),as.double(weights), PACKAGE="TraMineR")
+	#dc <- .Call("tmrinertiacontrib", dmat, as.integer(ind), PACKAGE="TraMineR")
+	medoid <- ind[which.min(dc)]
+	info <- list(depth=depth, vardis=vardis, n=sum(weights[ind]), medoid=medoid)
+	info[["ind"]] <- ind
+	node <- list(id=.localstuffDissTree$DTNnodeCounter, split = NULL, kids = NULL, info = info)
+	.localstuffDissTree$DTNnodeCounter <- as.integer(.localstuffDissTree$DTNnodeCounter + 1)
+	class(node) <- c("DissTreeNode", class(node))
 	return(node)
+}
+
+DTNsplit <- function(varindex, index,  prob, info, labels=NULL, breaks=NULL, naGroup=NULL){
+	if(is.null(labels)){
+		if(is.null(breaks)){
+			stop(" [!] Programming error!!!!!")
+		}
+	}
+	retsplit <- list(varindex=varindex, index=index, prob=prob, info=info, breaks=breaks, naGroup=naGroup, labels=labels)
+	class(retsplit) <- c("DissTreeSplit", class(retsplit))
+	return(retsplit)
 }
 
 ###########################
@@ -32,76 +47,112 @@ DTNInit <- function(ind, vardis, depth, label) {
 ###########################
 
 disstreeleaf <- function(tree) {
-	if (!inherits(tree, "disstree"))stop("tree should be a disstree object")
-	categorie <- numeric(length(tree$root$ind))
+	if (!inherits(tree, "DissTreeNode"))stop("tree should be a DissTreeNode object")
+	categorie <- numeric(length(tree$ind))
 	categorie[] <- -1
-	counter <- 0
-	catobject <- list(categorie=categorie, counter=counter)
-	return(factor(DTNdisstreeleaf(tree$root, catobject)$categorie))
+	return(DTNdisstreeleaf(tree, categorie))
 }
 
 ###########################
 ## Internal recursion
 ###########################
 DTNdisstreeleaf <- function(node, co) {
-	if (is.null(node$children)) {
-		co$categorie[node$ind] <- (co$counter+1)
-		catobject <- list(categorie=co$categorie, counter=co$counter+1)
-		return(catobject)
+	if (is.null(node$kids)) {
+		co[node$info$ind] <- node$id
+		return(co)
 	} else {
-		co1 <- DTNdisstreeleaf(node$children$left, co)
-		return(DTNdisstreeleaf(node$children$right, co1))
+		co1 <- DTNdisstreeleaf(node$kids[[1]], co)
+		return(DTNdisstreeleaf(node$kids[[2]], co1))
 	}
 }
 
-###########################
-## Internal test for computing association
-###########################
-DTNdissassoc <- function(dmat, grp, indiv, R) {
-	## Significativity can be computed comparing only SCres, sort only starting at 750 indiv
-	internalDTNdissassoc <- function(grp, ind, indiv, dmat, grp2, use.sort) {
-		 if (use.sort) {
-				groupe1 <- sort.int(indiv[ind[grp]], method="quick")
-				groupe2 <- sort.int(indiv[ind[grp2]], method="quick")
-		 } else {
-			 groupe1 <- indiv[ind[grp]]
-			 groupe2 <- indiv[ind[grp2]]
-		 }
-		 r1 <- .Call("tmrsubmatrixinertia", dmat, as.integer(groupe1), PACKAGE="TraMineR")
-		 r2 <- .Call("tmrsubmatrixinertia", dmat, as.integer(groupe2), PACKAGE="TraMineR")
-		 return(-(r1+r2))
-	}
-	bts <- boot(grp, internalDTNdissassoc, R=R, sim="permutation", stype="i",
-			dmat=dmat, indiv=indiv, grp2=(!grp), use.sort=(length(grp)>750))
-	return(sum(bts$t[, 1]>=bts$t0[1])/bts$R)
-}
+
+
 
 ###########################
 ## disstree main function
 ###########################
-disstree <- function(formula, data=NULL, minSize=0.05, maxdepth=5, R=1000, pval=0.01) {
+disstree <- function(formula, data=NULL, weights=NULL, minSize=0.05, maxdepth=5, R=1000, pval=0.01, object =NULL, weight.permutation="replicate", squared=FALSE, first=NULL) {
+	
 	formula.call <- formula
 	dissmatrix <- eval(formula[[2]], data, parent.frame()) # to force evaluation
 	if (inherits(dissmatrix, "dist")) {
 		dissmatrix <- as.matrix(dissmatrix)
  	}
+	if (squared) {
+		dissmatrix <- dissmatrix^2
+	}
 	formula[[2]] <- NULL
 	## Model matrix from forumla
-	predictor <- model.frame(formula, data, drop.unused.levels = TRUE, na.action=NULL)
-
-	pop <- nrow(dissmatrix)
+	predictor <- as.data.frame(model.frame(formula, data, drop.unused.levels = TRUE, na.action=NULL))
+	nobs= nrow(dissmatrix)
+	if (nobs!=nrow(predictor)) {
+		stop(" [!] dissimilarity matrix and data should be of the same size")
+	}
+	
+	## Allow integer weights for replicates
+	if(is.null(weights)) {
+		weights <- as.double(rep(1,nobs))
+		weight.permutation <- "none"
+	}
+	if(weight.permutation %in% c("replicate", "rounded-replicate")) {
+		rounderror <- sum(abs(round(weights, 0) - weights))
+		if(rounderror>0){
+			if (weight.permutation=="replicate") {
+				stop(" [!] To permute replicate, you should specify integer weights")
+			}
+			message(" [>] Weigths loss : ", rounderror, " (", (rounderror/sum(weights)), ")")
+			weights <- round(weights, 0)
+		}
+		weights <- as.integer(weights)
+	}
+	else {
+		weights <- as.double(weights)
+	}
+	
+	if(!is.null(first)){
+		if(is.character(first)){
+			message("[>] Using ", first, " as primary split")
+			first <- which(names(predictor)==first)
+			if(!(first>0&&first<=ncol(predictor))){
+				stop(" [!] Unknow ", first, " variable. It should be a character string appearing in the formula")
+			}
+		}
+		else{
+			stop(" [!] Unknow ", first, " variable. It should be a character string appearing in the formula")
+		}
+	}
+	pop <- sum(weights)
 	if (minSize<1) {
-		minSize <- round(pop*minSize)
+		minSize <- pop*minSize
 	}
-	if (pop!=nrow(predictor)) {
-		stop("dissimilarity matrix and data should be of the same size")
+	if(pval<(1/sum(R))){
+		warning(" [!] Minimum possible p-value using ", R, " permutations is ", 1/sum(R), ". Parameter pval (=", pval, ") changed to ",1/sum(R))
+		pval <- 1/sum(R)
 	}
-	vardis <- sum(dissmatrix)/(2*pop*pop)
-	tree <- list(formula=formula.call)
-	tree$root <- DTNBuildNode(dissmatrix, as.data.frame(predictor), minSize, 1:pop,
-			vardis, 1, "Root", R, pval, maxdepth)
-	class(tree) <- c("disstree", "list")
-	tree$adjustment <- dissassoc(dissmatrix, disstreeleaf(tree), R=R)
+	.localstuffDissTree$DTNnodeCounter <- as.integer(1)
+	
+	vardis <- dissvar(dissmatrix, weights=weights)
+	root <- DTNBuildNode(dmat=dissmatrix, pred=predictor, minSize=minSize, ind=1:nobs,
+			vardis=vardis, depth=1, nbperm=R, pval=pval, maxdepth=maxdepth, 
+			weights=weights, weight.permutation=weight.permutation, first=first)
+	tree <- list()
+	tree$fitted <- data.frame(disstreeleaf(root))
+	names(tree$fitted) <- "(fitted)"
+	tree$info <- list(method="disstree", n=pop, parameters= list(minSize=minSize, maxdepth=maxdepth, R=R, pval=pval), object=object, weight.permutation=weight.permutation)
+	if(weight.permutation=="none") {
+		tree$info$adjustment <- dissassoc(dissmatrix, tree$fitted[,1], R=R, weights=NULL)
+	}
+	else {
+		tree$info$adjustment <- dissassoc(dissmatrix, tree$fitted[,1], R=R, weights=weights, weight.permutation=weight.permutation)
+	}
+	tree$data <- predictor
+	tree$terms <- terms(formula.call)
+	tree$weights <- weights
+	##tree <- party(root, data=predictor, fitted =fitted, terms = terms(formula.call),  info = info)
+	tree$root <- root
+	
+	class(tree) <- c("disstree", class(tree))
 	return(tree)
 }
 
@@ -109,54 +160,71 @@ disstree <- function(formula, data=NULL, minSize=0.05, maxdepth=5, R=1000, pval=
 ## Building node and finding predictor
 ###########################
 DTNBuildNode <- function(dmat, pred, minSize, ind, vardis,
-													depth, label, nbperm, pval, maxdepth) {
-	node <- DTNInit(ind, vardis, depth, label)
-	SCtot <- node$vardis*length(node$ind)
+							depth, nbperm, pval, maxdepth, weights, weight.permutation, first=NULL) {
+	node <- DTNInit(ind=ind, vardis=vardis, depth=depth, dmat=dmat, weights=weights)
+	SCtot <- vardis*node$info$n
 	SCres <- SCtot
 	bestSpl <- NULL
-	varnames <- colnames(pred)
+	## print(SCtot)
+	#varnames <- colnames(pred)
 	if (depth>=maxdepth) {
 			return(node)
 	}
-	for (p in 1:ncol(pred)) {
-		## cat("Checking", varnames[[p]], "...\n")
-		spl <- DTNGroupFactorBinary(dmat, SCres, pred[, p], minSize, varnames[[p]], ind)
-		if (!is.null(spl) && (is.null(bestSpl) || spl$SCres<bestSpl$SCres)) {
-			bestSpl <- spl
-			SCres <- spl$SCres
-			## cat(varnames[[p]], " Ok", "\n")
+	if(!is.null(first)){
+		bestSpl <-  DTNGroupFactorBinary(dissmatrix=dmat, currentSCres=SCres, pred=pred[, first], minSize=minSize, varindex=first, ind=ind, weights=weights)
+		SCres <- bestSpl$spl$info$SCres
+	}
+	else {
+		for (p in 1:ncol(pred)) {
+			## cat("Checking", varnames[[p]], "...\n")
+			spl <- DTNGroupFactorBinary(dissmatrix=dmat, currentSCres=SCres, pred=pred[, p], minSize=minSize, varindex=p, ind=ind, weights=weights)
+			## print(str(spl))
+			if (!is.null(spl) && (is.null(bestSpl) || spl$spl$info$SCres<bestSpl$spl$info$SCres)) {
+				bestSpl <- spl
+				SCres <- spl$spl$info$SCres
+				## cat(varnames[[p]], " Ok", "\n")
+			}
 		}
 	}
 	if (is.null(bestSpl)) {
 		return(node)
 	}
 	if (nbperm>1) {
-		spval <- DTNdissassoc(dmat, bestSpl$variable, ind, R=nbperm)
+		spval <- DTNdissassocweighted(dmat=dmat, grp=bestSpl$variable, indiv=ind, weights=weights, R=nbperm, weight.permutation=weight.permutation)
 		## print(paste(label, bestSpl$varname, spval))
-		if (spval>pval)return(node)
+		if (spval>pval){
+			return(node)
+		}
+		bestSpl$spl$info$pval <- spval
+		
 	}
 
-	node$split <- bestSpl
-	node$children <- list()
-	node$children$left <- DTNBuildNode(dmat, as.data.frame(pred[bestSpl$variable, ]),
-			minSize, ind[bestSpl$variable], vardis=bestSpl$lvar, depth=depth+1,
-			label=paste(bestSpl$llabels, collapse="/"), nbperm, pval, maxdepth)
-	node$children$right <- DTNBuildNode(dmat, as.data.frame(pred[!bestSpl$variable, ]),
-			minSize, ind[!bestSpl$variable], vardis=bestSpl$rvar, depth=depth+1,
-			label=paste(bestSpl$rlabels, collapse="/"), nbperm, pval, maxdepth)
-	node$R2 <- 1-(SCres/SCtot)
+	node$split <- bestSpl$spl
+	node$split$info$R2 <- 1-(SCres/SCtot)
+	node$surrogates <- bestSpl$sur
+	left <- DTNBuildNode(dmat=dmat, pred=as.data.frame(pred[bestSpl$variable, ]),
+			minSize=minSize, ind=ind[bestSpl$variable], vardis=bestSpl$spl$info$lvar, depth=depth+1,
+			nbperm=nbperm, pval=pval, maxdepth=maxdepth, weights=weights, weight.permutation=weight.permutation)
+	
+	right <- DTNBuildNode(dmat=dmat, pred=as.data.frame(pred[!bestSpl$variable, ]),
+			minSize=minSize, ind=ind[!bestSpl$variable], vardis=bestSpl$spl$info$rvar, depth=depth+1,
+			nbperm=nbperm, pval=pval, maxdepth=maxdepth, weights=weights, weight.permutation=weight.permutation)
+	
+	node$kids <- list(left, right)
 	return(node)
 }
 
 ###########################
 ## Find best binary partition
 ###########################
-DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varname, ind) {
-	totpop <- length(ind)
+DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varindex, ind, weights) {
+	totpop <- sum(weights[ind])
 	grp <- factor(pred, ordered=(is.ordered(pred) || is.numeric(pred)))
 	lgrp <- levels(grp)
-	if (length(lgrp)<=1)return(NULL)
-	grpint <- as.integer(grp)
+	if (length(lgrp)<=1) {
+		#print("Small group return")
+		return(NULL)
+	}
 	nbGrp <- length(lgrp)
 	has.na <- FALSE
 	llgrp <- lgrp
@@ -166,40 +234,56 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varnam
 		has.na <- TRUE
 		llgrp[nbGrp] <- "<Missing>"
 	}
+
 	grpCond <- list()
 	grpSize <- numeric(length=nbGrp)
 	grpSize[] <- 0
 	for (i in 1:length(lgrp)) {
 		## on crée le groupe en question
-		grpCond[[i]] <- (grpint==i)
+		grpCond[[i]] <- (grp==lgrp[i])
 		grpCond[[i]][is.na(grpCond[[i]])] <- FALSE
-		grpSize[i] <- sum(grpCond[[i]])
+		grpSize[i] <- sum(weights[ind[grpCond[[i]]]])
 	}
 	## Treating missing values
 	if (has.na) {
 		grpCond[[nbGrp]] <- is.na(grp)
-		grpSize[nbGrp] <- sum(grpCond[[nbGrp]])
+		grpSize[nbGrp] <- sum(weights[ind[grpCond[[nbGrp]]]])
 	}
 	inertiaMat <- matrix(0, nrow=nbGrp, ncol=nbGrp)
 	for (i in 1:(nbGrp-1)) {
 		grpindiv1 <- ind[grpCond[[i]]]
 		for (j in (i+1):nbGrp) {
-				grpindiv2 <- ind[grpCond[[j]]]
-				r <- .Call("tmrinterinertia", dissmatrix, as.integer(grpindiv1),
-						as.integer(grpindiv2), PACKAGE="TraMineR")
+			grpindiv2 <- ind[grpCond[[j]]]
+			#cat("Inter Inertia", i, "  ", j, "\n")
+			r <- .Call("tmrWeightedInterInertia", dissmatrix, as.integer(grpindiv1),
+						as.integer(grpindiv2), as.double(weights),PACKAGE="TraMineR")
 				## using only one half of the matrix
-				inertiaMat[j, i] <- r
-			}
-		r <- .Call("tmrsubmatrixinertia", dissmatrix,
-				as.integer(grpindiv1), PACKAGE="TraMineR")*sum(grpCond[[i]])
-		inertiaMat[i, i] <- r
+			inertiaMat[j, i] <- r
+		}
+		#cat("Inertia", i,"\n")
+		r <- .Call("tmrWeightedInertiaDist", dissmatrix, as.integer(nrow(dissmatrix)), 
+					as.integer(FALSE), as.integer(grpindiv1), as.double(weights), 
+					as.integer(FALSE), PACKAGE="TraMineR")
+		
+		inertiaMat[i, i] <- r*grpSize[i]
 	}
 	## FIXME This step is missing in the loop
-	inertiaMat[nbGrp, nbGrp] <- .Call("tmrsubmatrixinertia", dissmatrix,
-			as.integer(ind[grpCond[[nbGrp]]]), PACKAGE="TraMineR")*sum(grpCond[[nbGrp]])
+	#cat("Inertia", nbGrp,"\n")
+	r <- .Call("tmrWeightedInertiaDist", dissmatrix, as.integer(nrow(dissmatrix)), 
+					as.integer(FALSE), as.integer(ind[grpCond[[nbGrp]]]), as.double(weights), 
+					as.integer(FALSE), PACKAGE="TraMineR")
+	inertiaMat[nbGrp, nbGrp] <- r*grpSize[nbGrp]
 	## Computing residuals
+	#print(inertiaMat)
 	SCres <- sum(diag(inertiaMat)/grpSize)
-	if (SCres>currentSCres)return(NULL)
+	## cat("SCres max: ", SCres)
+	if (SCres>currentSCres){
+		## print("Unsplittable")
+		## print(SCres)
+		## print(currentSCres)
+		
+		return(NULL)
+	}
 	## Fonction to comput inertia based on inertiaMat
 	inertiaFunction <- function(inertiaMat, co, pop) {
 		## Take care to add one
@@ -226,14 +310,17 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varnam
 			 combi <- combn(nbGrp, p, simplify=FALSE)
 		}
 		for (co in combi) {
+			
 			 popc <- sum(grpSize[co])
 			 popothc <- totpop-popc
+			 ## cat("CO:", co, "\n")
+			 ## cat("totpop", totpop, popc, popothc, minSize,"\n")
 			 if (popc>minSize && popothc>minSize) {
 					othc <- allgroups[!(allgroups %in% co)]
 					ico <- inertiaFunction(inertiaMat, co, popc)
 					iothc <- inertiaFunction(inertiaMat, othc, popothc)
 					SCres <- ico+iothc
-
+					## cat("SCres, ", SCres, co, "\n")
 					if (SCres<bestSCres) {
 						bestSCres <- SCres
 						bestRegroup <- list(co=co, othc=othc, ico=ico,
@@ -243,68 +330,37 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varnam
 		}
 	}
 	if (is.null(bestRegroup)){
+		## print("No split found")
 		return(NULL)
 	}
-	ret <- list(
+	prob <- c(bestRegroup$popc, bestRegroup$popothc)/totpop
+	
+	ret <- list()
+	info <- list(
 			lpop=bestRegroup$popc,
 			rpop=bestRegroup$popothc,
 			lvar=bestRegroup$ico/bestRegroup$popc,
 			rvar=bestRegroup$iothc/bestRegroup$popothc,
-			SCres=bestSCres,
-			varname=varname)
-	ret$variable <- (grpint %in% bestRegroup$co)
+			SCres=bestSCres
+	)
+	ret$variable <- (grp %in% lgrp[bestRegroup$co])
+	if(is.numeric(pred)){
+		breaks <- as.numeric(c(llgrp[max(bestRegroup$co[bestRegroup$co<nbGrp])]))
+		ret$spl <- DTNsplit(varindex, breaks = breaks, index = as.integer(1:2),  
+             prob = prob, info = info)
+	}
+	else{
+		allgroups <- 1:length(lgrp)
+		index <- as.integer(ifelse(allgroups %in% bestRegroup$co, 1, 2))
+		ret$spl <- DTNsplit(varindex, index = index,  
+             prob = prob, info = info, labels=lgrp)
+	}
 	if (has.na) {
+		#index <- ifelse(nbGrp %in% bestRegroup$co, 1, 2)
+		#index <- as.integer(c(index, index))
+		
 		ret$variable[is.na(grp)] <- (nbGrp %in% bestRegroup$co)
-	}
-	if (is.ordered(grp)) {
-		if (has.na) {
-			ret$llabels <- paste("<=", llgrp[max(bestRegroup$co[bestRegroup$co<nbGrp])], sep="")
-			ret$rlabels=paste(">", llgrp[max(bestRegroup$co[bestRegroup$co<nbGrp])], sep="")
-			if (nbGrp %in% bestRegroup$co) {
-				ret$llabels <- paste(ret$llabels, ", ", llgrp[nbGrp], sep="")
-			}
-			else {
-				ret$rlabels <- paste(ret$rlabels, ", ", llgrp[nbGrp], sep="")
-			}
-		}
-		else {
-			ret$llabels <- paste("<=", llgrp[max(bestRegroup$co)], sep="")
-			ret$rlabels=paste(">", llgrp[max(bestRegroup$co)], sep="")
-		}
-	}
-	else {
-		ret$llabels=llgrp[bestRegroup$co]
-		ret$rlabels=llgrp[bestRegroup$othc]
+		ret$spl$naGroup <- ifelse(nbGrp %in% bestRegroup$co, 1, 2)
 	}
 	return(ret)
 }
-
-###########################
-## Print method for disstree
-###########################
-print.disstree <- function(x, quote=FALSE, digits=3, ...) {
-	cat("Dissimilarity tree\n")
-	cat(paste("Global R2:", format(x$adjustment$stat$PseudoR2, digits =digits),"\n"))
-	print(x$root, quote=quote, digits=digits, ...)
-
-}
-###########################
-## Internal print method for disstree
-###########################
-print.DissTreeNode <- function(x, quote=FALSE, digits=3, ...) {
-	gap <- character(x$depth)
-	gap[] <- "      "
-	string <- paste(paste(gap, collapse=" "), "|--", x$label, "[", length(x$ind), "] var:",
-	format(x$vardis, digits =digits), collapse="")
-	cat(paste(string,"\n"))
-	if (!is.null(x$split)) {
-		cat(paste(paste(gap, collapse=" "), " ", "|->", x$split$varname, " R2:",
-			format(x$R2, digits=digits), "\n", collapse=""))
-		for (i in x$children) {
-			print(i, quote=quote, digits=digits, ...)
-		}
-	}
-}
-
-
-

@@ -11,6 +11,9 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 	if (!inherits(seqdata,"stslist"))
 		stop(call.=FALSE, "data is not a sequence object, use seqdef function to create one")
 
+	## Storing original optional arguments list
+	oolist <- list(...)
+
 	## ==============================
 	## Preparing if group is not null
 	## ==============================
@@ -42,7 +45,16 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 	## ===================
 	## Defining the layout
 	## ===================
-	if (type=="Ht") withlegend=FALSE
+	if (type=="Ht") {withlegend=FALSE}
+
+	## IF xaxis argument is provided 
+	## it interferes with axes argument 
+	if ("xaxis" %in% names(oolist)) {
+		tmpxaxis <- oolist[["xaxis"]]
+		if (tmpxaxis==TRUE) {axes="all"}
+		else if (tmpxaxis==FALSE) {axes=FALSE}
+		oolist <- oolist[!names(oolist) %in% "xaxis"]
+	}
 
 	if (use.layout | !is.null(group) ) {
 		## Saving graphical parameters
@@ -57,8 +69,8 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 		legpos <- lout$legpos
 	}
 	else {
-		if(axes!=FALSE) xaxis <- TRUE
-		else xaxis <- FALSE
+		if (axes!=FALSE) {xaxis <- TRUE}
+		else {xaxis <- FALSE}
 		legpos <- NULL
 	}
 
@@ -67,7 +79,7 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 	## =======
 	for (np in 1:nplot) {
 		## Storing ... arguments in a list
-		olist <- list(...)
+		olist <- oolist
 		if ("sortv" %in% names(olist)) {sortv <- olist[["sortv"]]}
 		if ("dist.matrix" %in% names(olist)) {dist.matrix <- olist[["dist.matrix"]]}
 		if ("with.miss" %in% names(olist)) {
@@ -102,13 +114,14 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 		}
 		## Sequence index plot
 		else if (type=="i" || type=="I") {
-			f <- function(seqdata) return(seqdata)
+			f <- function(seqdata) {return(seqdata)}
 			with.missing <- TRUE
 
 			## Selecting sub sample for sort variable
 			## according to 'group'
-			if ("sortv" %in% names(olist))
+			if ("sortv" %in% names(olist)) {
 				olist[["sortv"]] <- sortv[gindex[[np]]]
+			}
 
 			if (type=="I") {
 				if (!"tlim" %in% names(olist)) {olist <- c(olist, list(tlim=0))}
@@ -159,6 +172,13 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 			with.missing <- formals(f)$with.missing
 		}
 
+		## Xlim when plotting individual sequences
+		if (type %in% c("i", "I", "f")) {
+			if (!"xlim" %in% names(olist)) {
+				olist <- c(olist, list(xlim=c(0, ncol(seqdata))))
+			}
+		}
+
 		match.args <- names(olist) %in% flist
 		fargs <- olist[match.args]
 		fargs <- c(list(seqdata=subdata), fargs)
@@ -192,6 +212,5 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 	}
 
 	## Restoring graphical parameters
-	if (use.layout | !is.null(group) ) 
-		par(savepar)
+	if (use.layout | !is.null(group)) {par(savepar)}
 }

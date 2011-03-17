@@ -1,6 +1,6 @@
 \name{seqdur}
 \alias{seqdur}
-\title{Extracts states durations from a sequence object.}
+\title{Extract state durations from a sequence object.}
 \description{
 Extracts states durations from a sequence object. Returns a matrix containing the states durations for the sequences. The states durations in 'D-D-D-D-A-A-A-A-A-A-A-D' are 4,7,1. Distinct states can be extracted with the \code{\link{seqdss}} function.
  }

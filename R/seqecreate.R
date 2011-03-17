@@ -6,17 +6,17 @@
 #tmrsequence<-function(id,timestamp,event){
 #  .Call("tmrsequence",as.integer(id),as.double(timestamp),as.integer(event), PACKAGE="TraMineR")
 #}
-seqecreate <- function(data=NULL, id=NULL,timestamp=NULL, event=NULL, endEvent=NULL, tevent="transition", use.labels=TRUE){
-	return(seqecreate.internal(data=data, id=id, timestamp=timestamp, event=event, endEvent=endEvent, tevent=tevent, use.labels=use.labels, order.before=TRUE))
+seqecreate <- function(data=NULL, id=NULL,timestamp=NULL, event=NULL, endEvent=NULL, tevent="transition", use.labels=TRUE, weighted=TRUE){
+	return(seqecreate.internal(data=data, id=id, timestamp=timestamp, event=event, endEvent=endEvent, tevent=tevent, use.labels=use.labels, order.before=FALSE, weighted=weighted))
 }
-seqecreate.internal <- function(data, id,timestamp, event, endEvent, tevent, use.labels, order.before){
+seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent, use.labels, order.before, weighted){
 	if (!is.null(data)) {
 		if (inherits(data,"stslist")) {
 			if (!is.matrix(tevent)) {
 				if (is.character(tevent)) {
-					tevent<-seqetm(data, method=tevent, use.labels=use.labels)
+					tevent <- seqetm(data, method=tevent, use.labels=use.labels)
 				}else{
-					tevent<-seqetm(data, use.labels=use.labels)
+					tevent <- seqetm(data, use.labels=use.labels)
 				}
 			}
 			data.tse <- suppressMessages(seqformat(data, from='STS',to='TSE', tevent=tevent))
@@ -37,16 +37,16 @@ seqecreate.internal <- function(data, id,timestamp, event, endEvent, tevent, use
 		}
 	}
 	if (is.null(id)) {
-		stop("Could not find an id argument")
+		stop(" [!] Could not find an id argument")
 	}
 	if(is.null(timestamp))	{
-		stop("Could not find a timestamp argument")
+		stop(" [!] Could not find a timestamp argument")
 	}
 	if(is.null(event)) {
-		stop("Could not find an event argument")
+		stop(" [!] Could not find an event argument")
 	}
 	if (any(is.na(id)) || any(is.na(timestamp)) || any(is.na(event))) {
-		stop("Missing values not supported")
+		stop(" [!] Missing values not supported")
 	}
 	#  warning("Event sequence analysis module is still experimental", call.=FALSE)
 	classname <- c("seqe")
@@ -63,7 +63,7 @@ seqecreate.internal <- function(data, id,timestamp, event, endEvent, tevent, use
 				}
 			}
 			if (is.null(intEvent)) {
-				stop("endEvent not found in event dictionary")
+				stop(" [!] endEvent not found in event dictionary")
 				return(invisible())
 			}
 		}
@@ -73,26 +73,26 @@ seqecreate.internal <- function(data, id,timestamp, event, endEvent, tevent, use
 	id <- as.integer(id)
 	timestamp <- as.double(timestamp) 
 	event <- as.integer(event)
-	if (order.before) {
-		sortedindex <- order(id, timestamp, event)
-	}
-	else {
-		sortedindex <- 1:length(id)
-	}
-	ret <- .Call("tmrsequenceseveral", as.integer(id[sortedindex]), 
-		as.double(timestamp[sortedindex]), as.integer(event[sortedindex]),
+
+	
+	ret <- .Call("tmrsequenceseveral", as.integer(id), 
+		as.double(timestamp), as.integer(event),
 		as.integer(c(intEvent)), classname, as.character(dictionnary), 
 		PACKAGE="TraMineR")
 
 	class(ret) <- c("seqelist","list")
 	if(inherits(data,"stslist")){
-		seqesetlength(ret,seqlength(data))
+		seqelength(ret) <- seqlength(data)
+		ww <- attr(data, "weights")
+		if(!is.null(ww) && weighted){
+			seqeweight(ret) <- ww
+		}
 	}
 	return(ret)
 }
 #SEXP tmrsequence(SEXP idpers, SEXP time, SEXP event, SEXP classname, SEXP seq)
 
-seqecreatesub<-function(subseq,seqe){
+seqecreatesub<-function(subseq, seqe){
 #  warning("Event sequence analysis module is still experimental", call.=FALSE)
 	if (!is.seqelist(seqe)) {
 		stop("seqe should be a seqelist. See help on seqecreate.")

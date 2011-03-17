@@ -57,7 +57,7 @@ Sequence * Sequence::copy() {
 ///CLASS Sequence
 ///Represent an individual sequence
 ///CTor
-Sequence::Sequence(const int&id, EventDictionary* ed):dict(ed),obsTime(-1) { //personnal time 0, type =0 (root)
+Sequence::Sequence(const int&id, EventDictionary* ed):dict(ed), obsTime(-1), weight(1) { //personnal time 0, type =0 (root)
 //    this->ns=NULL;
 	this->dict->addSequence();
     this->idpers=id;

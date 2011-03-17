@@ -12,14 +12,22 @@ seqdss <- function(seqdata, with.missing=FALSE) {
 	sl <- seqlength(seqdata) 
 	maxsl <- max(sl)
 
-	trans <- matrix(nrow=nbseq, ncol=maxsl)
+	void <- attr(seqdata, "void")
 	statl <- attr(seqdata,"alphabet")
+	nr <- attr(seqdata, "nr")
+
+	trans <- matrix(void, nrow=nbseq, ncol=maxsl)
+
+	if (with.missing) {
+		statl <- c(statl, nr)
+	}
 
 	seqdatanum <- TraMineR:::seqasnum(seqdata, with.missing=with.missing)
 
 	if (!with.missing)
 		seqdatanum[is.na(seqdatanum)] <- -99
 
+	maxcol <- 0 
 	for (i in 1:nbseq) {
 		idx <- 1
 		j <- 1
@@ -41,13 +49,18 @@ seqdss <- function(seqdata, with.missing=FALSE) {
 			}
 			idx <- idx+1
 		}
+		if (j>maxcol) {maxcol <- j}
+
 	}
-	
+	## drop=FALSE ensures that the result is a matrix even if trans has only one row
+	trans <- trans[,1:(maxcol-1), drop=FALSE]
+
 	trans <- suppressMessages(
-		seqdef(trans, alphabet=statl, 
-		cnames=paste("ST",seq(1:maxsl),sep=""), 
+		seqdef(trans, alphabet=alphabet(seqdata),
+		missing=nr, right=NA,
+		cnames=paste("ST",seq(1:(maxcol-1)),sep=""), 
 		cpal=cpal(seqdata),
-		id=rownames(seqdata)))
+		id=rownames(seqdata), weights=attr(seqdata, "weights")))
 
 	return(trans)
 }

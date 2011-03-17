@@ -9,7 +9,7 @@ print.stslist.modst <- function(x, digits=2, ...) {
 	print.stslist(x,...)	
 
 	cat("\n  [State frequencies]\n")
-	print(attr(x,"Frequencies"), digits=2)
+	print(attr(x,"Frequencies"), digits=digits)
 }
 
 "[.stslist.modst" <- function(x,i,j,drop=FALSE) {

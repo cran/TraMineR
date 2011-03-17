@@ -8,8 +8,8 @@ Plot method for output produced by the \code{seqtab} function, i.e objects of cl
 }
 \usage{
 \method{plot}{stslist.freq}(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
-  ylab = NULL, yaxis = TRUE, xaxis = TRUE,
-  xtlab = NULL, cex.plot = 1, ...)
+    ylab = NULL, yaxis = TRUE, xaxis = TRUE,
+    xtlab = NULL, xtstep = NULL, cex.plot = 1, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,6 +28,8 @@ Plot method for output produced by the \code{seqtab} function, i.e objects of cl
   \item{xaxis}{if \code{TRUE} (default) the x-axis is plotted.}
 
   \item{xtlab}{optional labels for the ticks of the x-axis. If unspecified, the \code{names} attribute of the \code{x} object is used.}
+
+  \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with xtstep=3 a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
 
   \item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values smaller than 1 will reduce the size of the font, values greater than 1 will increase the size.}
 

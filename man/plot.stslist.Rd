@@ -2,18 +2,18 @@
 \alias{plot.stslist}
 \title{Plot method for state sequence objects}
 \description{
-This is the plot method for state sequence objects of class \emph{stslist} created by the \code{seqdef} function. It produces a sequence index plot.
+This is the plot method for state sequence objects of class \code{stslist} created by the \code{seqdef} function. It produces a sequence index plot.
 }
 \usage{
 \method{plot}{stslist}(x, tlim=NULL, weighted=TRUE, sortv=NULL,
     cpal=NULL, missing.color=NULL,
-    ylab, yaxis=TRUE, xaxis=TRUE, ytlab=NULL, ylas=0, 
-    xtlab=NULL, cex.plot=1, ...)
+    ylab, yaxis = TRUE, xaxis = TRUE, ytlab = NULL, ylas=0,
+    xtlab = NULL, xtstep = NULL, cex.plot=1, ...)
 }
 \arguments{
 	\item{x}{a state sequence object created with the \code{\link{seqdef}} function.}
 
-	\item{tlim}{indexes of the sequences to be plotted (default value is 1:10), for instance 20:50 to plot sequences 20 to 50, c(2,8,12,25) to plot sequences 2,8,12 and 25 in \code{seqdata}. If set to 0, all sequences in \code{seqdata} are plotted.}
+	\item{tlim}{indexes of the sequences to be plotted (default value is \code{1:10}), for instance \code{20:50} to plot sequences 20 to 50, \code{c(2,8,12,25)} to plot sequences 2,8,12 and 25 in \code{seqdata}. If set to \code{0}, all sequences in \code{seqdata} are plotted.}
 
      \item{weighted}{if \code{TRUE} and weights are assigned to sequences (see \code{\link{seqdef}}),
 		the width of the bar representing each sequence is proportional to its weight.}
@@ -22,17 +22,17 @@ This is the plot method for state sequence objects of class \emph{stslist} creat
 
 	\item{cpal}{alternative color palette to use for the states. If user specified, a vector of colors with number of elements equal to the number of states in the alphabet. By default, the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}).}
 
-	\item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the "missing.color" attribute of the sequence object being plotted.}
+	\item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the "missing.color" attribute of the \code{x} sequence  object.}
 
-	\item{ylab}{An optional label for the y axis. If set to NA, no label is drawn.}
+	\item{ylab}{An optional label for the y axis. If set to \code{NA}, no label is drawn.}
 
 	\item{yaxis}{Controls whether the y axis is plotted or not. When set to \code{TRUE}, sequence indexes are displayed. }
 
 	\item{xaxis}{if \code{TRUE} (default), the x (time) axis is plotted.}
 
-	\item{ytlab}{the labels of the sequences being plotted to appear on the y axis. Default is the indexes of the sequences as defined by the \code{tlim} argument. Can be set to \code{"id"} which plots the row names (id) of the sequences instead, as defined by the \code{id} argument of the \code{\link{seqdef}} function or with \code{\link{rownames}} afterwards. Otherwise must be a vector containing as many values as the number of sequences being plotted.}
+	\item{ytlab}{the labels of the plotted sequences to display on the y axis. Default is the indexes of the sequences as defined by the \code{tlim} argument. Can be set to \code{"id"} for displaying the row names (id) of the sequences instead of their indexes; row names can be assigned to the sequence object with the  \code{id} argument of the \code{\link{seqdef}} function or afterwards with \code{\link{rownames}}. Otherwise \code{ytlab} can be set to a vector of length equal to the number of  sequences to be plotted.}
 
-  \item{ylas}{sets the orientation of the sequence labels appearing on the y axis. Accepted values are the same as for the standard \code{las} option
+  \item{ylas}{sets the orientation of the sequence labels appearing on the y axis. Accepted values are the same as for the \code{las} standard option
 
 0: always parallel to the axis (default),
 
@@ -45,17 +45,22 @@ This is the plot method for state sequence objects of class \emph{stslist} creat
 
   \item{xtlab}{optional labels for the x axis ticks labels. If unspecified, the column names of the \code{seqdata} sequence object are used (see \code{\link{seqdef}}).}
 
-	\item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase it.}
+  \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with xtstep=3 a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
+
+	\item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names of the axes. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase it.}
 
  \item{...}{arguments to be passed to the plot function or other graphical parameters.}
 }
 
 \details{
-This is the default plot method for state sequence objects (produced by the \code{\link{seqdef}} function), i.e. objects of class \emph{stslist}. It produces a sequence index plot, where individual sequences are rendered with stacked bars depicting the statuses over time.
+This is the default plot method for state sequence objects (produced by the \code{\link{seqdef}} function), i.e. for objects of class \emph{stslist}. It produces a sequence index plot, where individual sequences are rendered with stacked bars depicting the states over time.
 
-This method is called by the generic \code{\link{seqplot}} function (if \code{type="i"}) that produces more sophisticated plots, allowing grouping and automatic display of the states legend. The \code{seqiplot} function is a shortcut for calling \code{seqplot} with \code{type="i"}.
+This method is called by the generic \code{\link{seqplot}} function (if \code{type="i"}). The latter produces more sophisticated plots, allowing grouping and automatic display of the state color legend. The \code{seqiplot} function is a shortcut for calling \code{seqplot} with \code{type="i"}.
 
 The interest of sequence index plots has for instance been stressed by \cite{Scherer (2001)}, \cite{Brzinsky-Fay et al. (2006)} and \cite{Gauthier (2007)}. Notice that such index plots for thousands of sequences result in very heavy graphic files if they are stored in PDF or POSTSCRIPT format. To reduce the size, we suggest saving the figures in bitmap format by using for instance \code{\link{png}} instead of \code{\link{postscript}} or \code{\link{pdf}}.
+}
+
+\seealso{\code{\link{seqplot}}
 }
 
 \examples{

@@ -11,8 +11,8 @@ representative sequence plot.
 
 \usage{
 \method{plot}{stslist.rep}(x, cpal = NULL, missing.color=NULL, pbarw = TRUE,
-       dmax = NULL, stats=TRUE, ylab = NULL, xaxis = TRUE,
-       xtlab = NULL, cex.plot = 1, ...)
+    dmax = NULL, stats=TRUE, ylab = NULL, xaxis = TRUE,
+    xtlab = NULL, xtstep = NULL, cex.plot = 1, ...)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -21,13 +21,14 @@ representative sequence plot.
   \item{cpal}{alternative color palette to use for the states. If user specified, a vector of colors with number of
       elements equal to the number of states in the alphabet. By default, the 'cpal' attribute of the \code{x} object is
       used.}
-	\item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the "missing.color" attribute of the sequence object being plotted.}
+  \item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the "missing.color" attribute of the sequence object being plotted.}
   \item{pbarw}{when \code{TRUE}, the bar heights are set proportional to the number of represented sequences.}
   \item{dmax}{maximal theoretical distance, used for the x axis limits.}
   \item{stats}{if TRUE (default), mean discrepancy in each subset defined by all sequences attributed to one representative sequence and the mean distance to this representative sequence are displayed.}
   \item{ylab}{an optional label for the y axis. If set to NA, no label is drawn.}
   \item{xaxis}{controls whether a x axis is plotted.}
   \item{xtlab}{optional labels for the x axis ticks labels. If unspecified, the column names of the object being plotted.}
+  \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with xtstep=3 a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
   \item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase the size.}
   \item{\dots}{further graphical parameters. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}.}
 }

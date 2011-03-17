@@ -1,4 +1,5 @@
 #include<R.h>
+#include<Rmath.h>
 
 void cLEVEN(int *seq1, int *seq2, double *param, double *scost, double *result) {
 
@@ -126,22 +127,14 @@ void cLCS(int *iseq, int *jseq , double *length, int *result) {
 
 void cLCP(int *iseq, int *jseq , double *length, int *result) {
 
-    int clength, isym, i, n, m;
-    n = (int)length[1];
-    m = (int)length[0];
+	int minlength=imin2(length[0], length[1]);
+    int i=0;
+ 
 
-    // Computing min length
-    if (n<m) clength = n;
-    else clength = m;
-
-    i=1;
-    isym=0;
-
-    while (iseq[i-1]==jseq[i-1] && i<=clength) {
-        isym = i;
-        i = i+1;
+    while (i<minlength && iseq[i]==jseq[i]) {
+		i++;
     }
 
-    *result = isym;
+    *result = i;
 }
 

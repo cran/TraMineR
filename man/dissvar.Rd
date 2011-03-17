@@ -6,10 +6,12 @@
   Compute the discrepancy from the pairwise dissimilarities between objects. The discrepancy is a measure of dispersion of the set of objects.
 }
 \usage{
-dissvar(diss)
+dissvar(diss, weights=NULL, squared = FALSE)
 }
 \arguments{
   \item{diss}{A dissimilarity matrix or a \code{dist} object (see \code{\link{dist}})}
+  \item{weights}{optional numerical vector containing weights.}
+  \item{squared}{Logical. If \code{TRUE} \code{diss} is squared.}
 }
 \details{
 The discrepancy is an extension of the concept of variance to any kind of objects for which we can compute pairwise dissimilarities.
@@ -23,11 +25,10 @@ In the Euclidean case, the sum of squares can be expressed as:
   The concept of discrepancy generalizes the equation by allowing to replace the  \eqn{(y_i - y_j)^2} term with any  measure of dissimilarity \eqn{d_{ij}}.
 }
 
-\value{
-The pseudo variance.}
+\value{The discrepancy.}
 
 \references{
-Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
   Discrepancy	analysis of complex objects using dissimilarities.
   In F. Guillet, G. Ritschard, D. A. Zighed and H. Briand  (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
@@ -37,11 +38,11 @@ Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
   Analyse de dissimilarités par arbre d'induction. In EGC 2009,
   \emph{Revue des Nouvelles Technologies de l'Information}, Vol. E-15, pp. 7-18.
 
-  Batagelj, V. (1988) Generalized ward and related clustering problems. In H. Bock (Ed.),
-  \emph{Classification and related methods of data analysis}, Amsterdam: North-Holland, pp. 67-74.
-
   Anderson, M. J. (2001) A new method for non-parametric multivariate analysis of variance.
 \emph{Austral Ecology} \bold{26}, 32-46.
+
+  Batagelj, V. (1988) Generalized ward and related clustering problems. In H. Bock (Ed.),
+  \emph{Classification and related methods of data analysis}, Amsterdam: North-Holland, pp. 67-74.
 
 }
 \seealso{

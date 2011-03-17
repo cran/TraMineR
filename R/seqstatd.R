@@ -57,6 +57,7 @@ seqstatd <- function(seqdata, weighted=TRUE, with.missing=FALSE, norm=TRUE) {
 	attr(res,"nbseq") <- sum(weights)
 	attr(res,"cpal") <- col
 	attr(res,"xtlab") <- colnames(seqdata)
+	attr(res,"xtstep") <- attr(seqdata,"xtstep")
 	attr(res,"weighted") <- weighted
 
 	return(res)
