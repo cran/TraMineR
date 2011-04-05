@@ -26,6 +26,11 @@ an object of class \emph{stslist.modst}. This is actually a state sequence objec
 
 \seealso{\code{\link{plot.stslist.modst}} for default plot method, \code{\link{seqplot}} for higher level plots.}
 
+
+\references{
+Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+}
+
 \examples{
 ## Defining a sequence object with the data in columns 10 to 25
 ## (family status from age 15 to 30) in the biofam data set

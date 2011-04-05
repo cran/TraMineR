@@ -1,3 +1,4 @@
+\encoding{latin1}
 \name{seqtransn}
 \alias{seqtransn}
 \title{Number of transitions in a sequence}
@@ -31,6 +32,10 @@ Distinct Successive State (DSS) sequence. }
 
 \value{a state sequence object containing the number of transitions
 of each sequence in the object given as argument.}
+
+\references{
+Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+}
 
 \seealso{
  \code{\link{seqdss}}.

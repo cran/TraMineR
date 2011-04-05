@@ -23,6 +23,10 @@ An object of class \emph{stslist.meant}. There are \code{print} and \code{plot} 
 
 \seealso{\code{\link{plot.stslist.meant}} for basic plots of \emph{stslist.meant} objects and \code{\link{seqplot}} with \code{type="mt"} argument for more sophisticated plots of the mean durations allowing grouping and legend.}
 
+\references{
+Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+}
+
 \examples{
 ## Defining a sequence object with columns 13 to 24
 ## in the actcal example data set 

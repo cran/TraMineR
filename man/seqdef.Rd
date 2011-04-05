@@ -26,7 +26,7 @@ character string) or extended format.}
 
    \item{informat}{format of the original data. Default is \code{"STS"}.
 Available formats are: \code{"STS"}, \code{"SPS"}, \code{"SPELL"}.
-See TraMineR user's manual (\cite{Gabadinho et al., 2008}) for a
+See TraMineR user's manual (\cite{Gabadinho et al., 2010}) for a
 description of the formats.}
 
    \item{stsep}{the character used as separator in the original
@@ -135,8 +135,10 @@ plotting functions (\code{seqdplot}, \code{seqiplot} or
 \code{seqfplot}), functions to compute distances (\code{seqdist}),
 etc...}
 
-\references{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller
-(2008). Mining Sequence Data in \code{R} with the \code{TraMineR}
+\references{
+Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+
+Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2010). Mining Sequence Data in \code{R} with the \code{TraMineR}
 package: A user's guide. \emph{Department of Econometrics and
 Laboratory of Demography, University of Geneva}. }
 

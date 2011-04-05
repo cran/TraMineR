@@ -1,3 +1,4 @@
+\encoding{latin1}
 \name{seqtab}
 \alias{seqtab}
 \title{Frequency table of the sequences}
@@ -21,6 +22,10 @@ seqtab(seqdata, tlim=1:10, weighted=TRUE, format="SPS")
 \details{The \code{weighted} argument has no effect when no weights were assigned to the state sequence object since weights default in that case to 1.}
 
 \value{An object of class \code{stslist.freq}. This is actually a state sequence object (containing a list of state sequences) with added attributes, among others the \code{freq} attribute containing the frequency table. There are \code{print} and \code{plot} methods for such objects. More sophisticated plots can be produced with the \code{seqplot} function.}
+
+\references{
+Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+}
 
 \seealso{
  \code{\link{seqplot}, \link{plot.stslist.freq}}.
