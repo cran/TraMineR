@@ -16,7 +16,7 @@ seqLLCS(seq1, seq2)
 
 \references{
 Elzinga, Cees H. (2008). Sequence analysis: Metric representations of categorical time
-series. \emph{Sociological Methods and Research}, forthcoming.
+series. \emph{Technical Report}, Department of Social Science Research Methods, Vrije Universiteit, Amsterdam.
 }
 
 \seealso{\code{\link{seqdist}}}

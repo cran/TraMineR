@@ -28,7 +28,7 @@ representative sequence plot.
   \item{ylab}{an optional label for the y axis. If set to NA, no label is drawn.}
   \item{xaxis}{controls whether a x axis is plotted.}
   \item{xtlab}{optional labels for the x axis ticks labels. If unspecified, the column names of the object being plotted.}
-  \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with xtstep=3 a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
+  \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with \code{xtstep=3} a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
   \item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase the size.}
   \item{\dots}{further graphical parameters. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}.}
 }
@@ -45,9 +45,6 @@ This method is called by the generic \code{\link{seqplot}} function (if \code{ty
 plots with group splits and automatic display of the color legend. The \code{\link{seqrplot}} function is a shortcut for
 calling \code{seqplot} with \code{type="r"}.
 }
-
-\references{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Summarizing Sets of Categorical Sequences,
-In \emph{International Conference on Knowledge Discovery and Information Retrieval}, Madeira, 6-8 October, INSTICC.}
 
 \examples{
 ## Loading the mvad data set and creating a sequence object

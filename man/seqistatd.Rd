@@ -11,7 +11,13 @@
   \item{seqdata}{a sequence object (see \code{\link{seqdef}} function).}
   \item{with.missing}{if set to TRUE, total durations are also computed for the missing status (gaps in the sequences). See \link{seqdef} on options for handling missing values when creating sequence objects.} 
 }
+
+\references{
+Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+}
+
 %\seealso{}
+
 \examples{
 data(actcal)
 actcal.seq <- seqdef(actcal,13:24)

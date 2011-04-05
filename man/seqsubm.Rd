@@ -52,7 +52,7 @@ where \eqn{P(i,j)} is the transition rate from state \eqn{i} to
 	
 	\item{with.missing}{if \code{TRUE}, an additional entry is added in the matrix for the missing states.
 Hence, a new "missing" state is added to the list of "valid" states. Use this if you want to compute
-distances with missing values inside the sequences. See \cite{Gabadinho et al. (2008)} for more details on the
+distances with missing values inside the sequences. See \cite{Gabadinho et al. (2010)} for more details on the
 options for handling missing values when computing distances between sequences.}
 
 	\item{miss.cost}{the substitution cost for the missing state. The default set it to \code{cval}}
@@ -69,7 +69,10 @@ matrix for each time unit. The time is the third dimension (subscript).}
  \code{\link{seqtrate}}, \code{\link{seqdef}}, \code{\link{seqdist}}.
 }
 
-\references{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2008). Mining Sequence Data in
+\references{
+Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+
+Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2010). Mining Sequence Data in
 \code{R} with the \code{TraMineR} package: A user's guide. Department of Econometrics and
 Laboratory of Demography, University of Geneva.
 }

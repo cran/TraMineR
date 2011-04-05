@@ -50,6 +50,9 @@ sequence.
  }
 
 \references{
+
+Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+
  Gabadinho, A., Ritschard, G., Studer, M. and Müller,
 N.S. (2010). "Indice de complexité pour le tri et la comparaison de
 séquences catégorielles", In \emph{Extraction et gestion des

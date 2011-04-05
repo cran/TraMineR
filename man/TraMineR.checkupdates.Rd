@@ -2,12 +2,12 @@
 % \Rdversion{1.1}
 \alias{TraMineR.checkupdates}
 \title{
-Check for updates
+Check for TraMineR updates
 }
 
 \description{ Check if the installed version of TraMineR is
 up-to-date. This function only prints a message and does not need any
-argument. It connects to the TraMineR webserver
+argument. It connects to the TraMineR webserver 
 (\url{http://mephisto.unige.ch/TraMineR}). }
 
 \value{

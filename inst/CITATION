@@ -5,16 +5,27 @@ p2 <- person("Gilbert", "Ritschard", email = "gilbert.ritschard@unige.ch")
 p3 <- person("Matthias", "Studer", email = "matthias.studer@unige.ch")
 p4 <- person("Nicolas S.", "M\\\"uller", email = "nicolas.muller@unige.ch")
 
-citEntry(entry="techreport",
-          title = "Mining Sequence Data in {R} with the {T}ra{M}ine{R} package: {A} User's Guide",
-          author = personList(p1, p2, p3, p4),
-          institution = "Department of Econometrics and Laboratory of Demography, University of Geneva",
-          year = "2009",
-          address = "Geneva",
-          textVersion = "Gabadinho, A., G. Ritschard, M. Studer and N.S. Müller (2009). Mining sequence data in R with the TraMineR package: A User's Guide. University of Geneva",
-		  header="For state sequences:\n"
-)
 
+citEntry(entry = "Article",
+  title        = "Analyzing and Visualizing State Sequences in {R} with {TraMineR}",
+  author       = personList(as.person("Alexis Gabadinho"),
+                   as.person("Gilbert Ritschard"),
+                   as.person("Nicolas S. M\\\"uller"),
+                   as.person("Matthias Studer")),
+  journal      = "Journal of Statistical Software",
+  year         = "2011",
+  volume       = "40",
+  number       = "4",
+  pages        = "1--37",
+  url          = "http://www.jstatsoft.org/v40/i04/",
+
+  textVersion  =
+  paste("Alexis Gabadinho, Gilbert Ritschard, Nicolas S. Mueller, Matthias Studer (2011).",
+        "Analyzing and Visualizing State Sequences in R with TraMineR.",
+        "Journal of Statistical Software, 40(4), 1-37.",
+        "URL http://www.jstatsoft.org/v40/i04/."),
+		header="For state sequences:\n"
+)
 
 citEntry(entry="incollection",
 		author = personList(p3, p2, p1, p4),
@@ -40,7 +51,7 @@ citEntry(entry="article",
   volume = "E-19",
   pages = "25-36",
   booktitle = "Extraction et gestion des connaissances (EGC 2010)",
-  textVersion="Müller, N.S., Studer, M., Gabadinho, A. & Ritschard, G. (2010), Extraction de règles d'association séquentielle a l'aide	de modèles semi-paramétriques a risques proportionnels, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 25-36. ",
+  textVersion="Müller, N.S., Studer, M., Gabadinho, A. & Ritschard, G. (2010), Extraction de règles d'association séquentielle à l'aide	de modèles semi-paramétriques à risques proportionnels, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 25-36. ",
   header="For event sequences:\n"
 )
 citEntry(entry="article",
@@ -56,13 +67,14 @@ citEntry(entry="article",
 
 citEntry(entry="incollection",
   author = personList(p1, p2, p3, p4),
-  title = "Summarizing Sets of Categorical Sequences",
-  booktitle = "International Conference on Knowledge Discovery and Information Retrieval, Madeira, 6-8 October, 2009",
-  publisher = "INSTICC",
-  year = "2009",
-  pages = "62-69",
-  note = "(Received the Best Paper Award)",
-  textVersion="Gabadinho, A., Ritschard, G., Studer, M. & Müller, N.S. (2009), Summarizing Sets of Categorical Sequences, In International Conference on Knowledge Discovery and Information Retrieval, Madeira, 6-8 October, 2009, pp. 62-69. INSTICC. (Received the Best Paper Award).",
+  title = "Extracting and Rendering Representative Sequences",
+  booktitle = "Knowledge Discovery, Knowledge Engineering and Knowledge Management",
+  publisher = "Springer-Verlag",
+  year = "2011",
+  editor = "A. Fred, J.L.G. Dietz, K. Liu, J. Filipe",
+  pages = "94-106",
+  note = "128",
+  textVersion="Gabadinho, A., Ritschard, G., Studer, M. & Müller, N.S. (2011), Extracting and Rendering Representative Sequences, In A. Fred, J.L.G. Dietz, K. Liu, J. Filipe (eds.), Knowledge Discovery, Knowledge Engineering and Knowledge Management. Series: Communications in Computer and Information Science (CCIS), Vol. 128, pp. 94-106. Springer-Verlag.",
   header="For representative sequences:"
 )
 citEntry(entry="article",
@@ -75,7 +87,7 @@ citEntry(entry="article",
   booktitle = "Extraction et gestion des connaissances (EGC 2010)",
   pages = "61-66",
   textVersion="Gabadinho, A., Ritschard, G., Studer, M. & Müller, N.S. (2010), Indice de complexité pour le tri et la comparaison de séquences catégorielles, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 61-66.",
-  header="For longitudinal charcateristics and the complexity index:"
+  header="For longitudinal characteristics and the complexity index:"
 )
 
 citFooter("See",sQuote("citation()"),"for citing R itself.")
