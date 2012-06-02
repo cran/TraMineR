@@ -11,14 +11,14 @@ seqstatf(seqdata, weighted = TRUE)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
-  \item{weighted}{if TRUE, frequencies account for the weights assigned to the state sequence object 
-  (see \code{\link{seqdef}}). Set to FALSE if you want ignore the weights. If no weights were assigned during the creation of the sequence object, \code{weighted=TRUE} will yield the same result as \code{weighted=FALSE} since each sequence is allowed a weight of 1.}
+  \item{weighted}{Logical. Should frequencies account for weights when present in the state sequence object
+  (see \code{\link{seqdef}}). Default is \code{TRUE}.  If no weights were assigned during the creation of the sequence object, \code{weighted=TRUE} will yield the same result as \code{weighted=FALSE} since each sequence is allowed a weight of 1.}
 }
 \details{
-The \code{seqstatf} function computes the (weighted) raw and percentage frequency of each state of the alphabet in \code{seqdata}, i.e the (weighted) sum of the occurences of a state in \code{seqdata}.  
+The \code{seqstatf} function computes the (weighted) count and frequency of each state of the alphabet in \code{seqdata}, i.e the (weighted) sum of the occurrences of a state in \code{seqdata}.
 }
 \value{
-a data.frame with as many rows as the number of states in the alphabet and two columns, one for the raw frequencies (Freq) and one for the percentage frequencies.
+A data.frame with as many rows as states in the alphabet and two columns, one for the count (Freq) and one for the percentage frequencies (Percent).
 }
 
 \seealso{

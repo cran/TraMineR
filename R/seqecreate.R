@@ -75,10 +75,9 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent, us
 	event <- as.integer(event)
 
 	
-	ret <- .Call("tmrsequenceseveral", as.integer(id), 
+	ret <- .Call(TMR_tmrsequenceseveral, as.integer(id), 
 		as.double(timestamp), as.integer(event),
-		as.integer(c(intEvent)), classname, as.character(dictionnary), 
-		PACKAGE="TraMineR")
+		as.integer(c(intEvent)), classname, as.character(dictionnary))
 
 	class(ret) <- c("seqelist","list")
 	if(inherits(data,"stslist")){
@@ -127,9 +126,9 @@ seqecreatesub<-function(subseq, seqe){
 		events <- as.integer(events)
 		sortedindex <- order(timestamp, events)
 		
-		ret[[iseq]]<-.Call("tmrsequence", as.integer(-1),
+		ret[[iseq]]<-.Call(TMR_tmrsequence, as.integer(-1),
 			as.double(timestamp[sortedindex]), as.integer(events[sortedindex]),
-			classname, seqe[[1]], PACKAGE="TraMineR")
+			classname, seqe[[1]])
 			iseq <- iseq + 1
 	}
 #  e<-factor(event,levels=levels(seq))

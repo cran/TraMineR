@@ -8,13 +8,13 @@ Compare two state sequences and return TRUE if they are equal and FALSE otherwis
  seqcomp(x, y)
 }
 \arguments{
-  \item{x}{a state sequence object containing a single sequence (typically the row of a main sequence 
+  \item{x}{a state sequence object containing a single sequence (typically the row of a main sequence
       object, see \code{\link{seqdef}})}
-  \item{y}{a state sequence object containing a single sequence (typically the row of a main sequence 
+  \item{y}{a state sequence object containing a single sequence (typically the row of a main sequence
       object, see \code{\link{seqdef}})}
 }
 
-\value{TRUE if sequences are identical, FALSE otherwise}
+\value{\code{TRUE} if sequences are identical, \code{FALSE} otherwise}
 
 \seealso{
  \code{\link{seqfind}, \link{seqfpos}, \link{seqpm}}

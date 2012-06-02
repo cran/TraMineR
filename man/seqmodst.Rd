@@ -11,11 +11,11 @@ seqmodst(seqdata, weighted=TRUE, with.missing=FALSE)
 \arguments{
   \item{seqdata}{a state sequence object as defined by the \code{\link{seqdef}} function.}
 
-  \item{weighted}{if TRUE, distributions account for the weights assigned to the state sequence object
+  \item{weighted}{if \code{TRUE}, distributions account for the weights assigned to the state sequence object
   (see \code{\link{seqdef}}).
-  Set to FALSE if you want ignore the weights.}
+  Set as \code{FALSE} if you want ignore the weights.}
 
-  \item{with.missing}{If FALSE (default value), returned distributions ignore missing values.}
+  \item{with.missing}{If \code{FALSE} (default value), returned distributions ignore missing values.}
 }
 \details{
 In case of multiple modal states at a given position, the first one is taken. Hence, the result may vary with the alphabet order.
@@ -28,7 +28,7 @@ an object of class \emph{stslist.modst}. This is actually a state sequence objec
 
 
 \references{
-Gabadinho, A., G. Ritschard, N. S. MÃ¼ller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
 }
 
 \examples{

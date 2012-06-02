@@ -13,12 +13,16 @@
 	#include <cstdio>
 	#include <cstdarg>
 	using std::sprintf;
+	extern "C" {
 #endif	//#ifdef __cplusplus
 
-#include<R.h>
+#include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <Rmath.h>
+#ifdef __cplusplus
+	} //end extern "C" {
+#endif	//#ifdef __cplusplus
 
 
 
@@ -35,6 +39,7 @@
 #define ARINDICE(ligne, colone, last, len) ((ligne)+(colone)*(len)+(len)*(len)*(last))
 
 #define TMRDISTINDEX(i,j,n) ((n)*((i)-1) - (i)*((i)-1)/2 + (j)-(i)-1)
+
 
 #ifdef TRAMINER_DEBUG_LEVEL_0
 	#define TRAMINER_DEBUG_LEVEL_DEFAULT 0
@@ -68,9 +73,22 @@ extern int TRAMINER_DEBUG_LEVEL;
 			error("TMRASSERT(%s) failed in %s %d", #exp, __FILE__, __LINE__);\
 		}\
 		}while(false)
+	#define TMRLOGMATRIX(level,  mat, row, col, matsize) do{\
+			if(level<TRAMINER_DEBUG_LEVEL){\
+				REprintf("%s %d: ", __FILE__, __LINE__);\
+				REprintf("Row: %d, Col:%d\n", row, col);\
+				for(int i=0; i<row; i++){\
+					for(int j=0; j<col; j++){\
+						REprintf("%g\t", mat[MINDICE(i,j,matsize)]);\
+					}\
+					REprintf("\n");\
+				}\
+			}\
+		}while(false)
 #else
 	#define TMRLOG(level,...) do{}while(false)
 	#define TMRASSERT(exp) do{}while(false)
+	#define TMRLOGMATRIX(level,  mat, row, col, matsize) do{}while(false)
 #endif
 
 

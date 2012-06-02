@@ -5,7 +5,7 @@
 seqelength<-function(s){
 	seqelength.internal<-function(s){
 		if(is.seqe(s)){
-			return(.Call("tmrsequencegetlength",s, PACKAGE="TraMineR"))
+			return(.Call(TMR_tmrsequencegetlength, s))
 		}
 		return(-1)
 	}
@@ -25,7 +25,7 @@ seqelength<-function(s){
 	if(length(s)!=length(value)) {
 		stop("s and len should be of the same size.")
 	}
-	.Call("tmrsequencesetlength", s, as.double(value), PACKAGE="TraMineR")
+	.Call(TMR_tmrsequencesetlength, s, as.double(value))
 	return(s)
 }
 seqesetlength<-function(s, len){
@@ -36,6 +36,6 @@ seqesetlength<-function(s, len){
 	if(length(s)!=length(len)) {
 		stop("s and len should be of the same size.")
 	}
-	return(invisible(.Call("tmrsequencesetlength", s, as.double(len), PACKAGE="TraMineR")))
+	return(invisible(.Call(TMR_tmrsequencesetlength, s, as.double(len))))
 }
 

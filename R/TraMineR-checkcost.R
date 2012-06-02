@@ -1,5 +1,12 @@
 
-TraMineR.checkcost <- function(sma, seqdata, with.missing, indel) {
+TraMineR.checkcost <- function(sma, seqdata, with.missing, indel, tol = NULL) {
+	if(is.null(tol)){
+		if(!missing(indel)){
+			tol <- 1e-7*indel
+		}else{
+			tol <- 1e-7
+		}
+	}
 	alphabet <- attr(seqdata,"alphabet")
 	## Gaps in sequences
 	if (with.missing) {
@@ -30,7 +37,7 @@ TraMineR.checkcost <- function(sma, seqdata, with.missing, indel) {
 		if (any(diag(sm)!=0)) {
 			stop(" [!] All element on the diagonal of sm (substitution cost) should be equal to zero")
 		}
-		triangleineq <- checktriangleineq(sm, warn=FALSE, indices=TRUE)
+		triangleineq <- checktriangleineq(sm, warn=FALSE, indices=TRUE, tol=tol)
 		## triangleineq contain a vector of problematic indices.
 		if (!is.logical(triangleineq)) {
 			
@@ -52,7 +59,7 @@ TraMineR.checkcost <- function(sma, seqdata, with.missing, indel) {
 		}
 		
 		## Testing for symmetric matrix
-		if (any((sm-t(sm))!=0)) {
+		if (any((sm-t(sm))>tol)) {
 			warning("The substitution cost matrix is not symmetric.", call. = FALSE)
 		}
 	}

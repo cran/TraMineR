@@ -4,14 +4,14 @@
 \title{Extracting sets of representative sequences}
 
 \description{ The function attempts to find an optimal (as small as
-possible while assuring a large coverage) set of representative
+possible for a required coverage) set of representative
 sequences that exhibits the key features of the whole sequence data
-set, the goal being to get easy sounded interpretation of the latter.
+set, the goal being to easily get sounded interpretation of the set of sequences.
 }
 
 \usage{ seqrep(seqdata, criterion="density", score=NULL,
     decreasing=TRUE, trep=0.25, nrep=NULL,
-    tsim=0.1, dmax=NULL, dist.matrix=NULL, ...)
+    tsim=0.1, dmax=NULL, dist.matrix=NULL, weighted=TRUE, ...)
 }
 
 \arguments{
@@ -47,6 +47,9 @@ neighborhood diameter is thus twice this threshold.}
   \item{dist.matrix}{a matrix containing the pairwise distances between sequences in \code{seqdata}. If \code{NULL}, the
       matrix is computed by calling the \code{\link{seqdist}} function. In that case, optional arguments to be passed to
       the \code{seqdist} function (see ... hereafter) should also be provided.}
+
+  \item{weighted}{logical: Should weights assigned to the state sequence object be accounted for? (See \code{\link{seqdef}}.)
+  Set as \code{FALSE} to ignore the weights.}
 
   \item{...}{optional arguments to be passed to the \code{seqdist} function, mainly \code{dist.method} specifying the
       metric for computing the distance matrix, \code{norm} for normalizing the distances, \code{indel} and \code{sm} for

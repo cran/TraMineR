@@ -9,7 +9,7 @@ The function extracts a set of representative objects that exhibits the key feat
 \usage{
 dissrep(diss, criterion="density",
     score=NULL, decreasing=TRUE,
-    trep=0.25, nrep=NULL, tsim=0.1, dmax=NULL)
+    trep=0.25, nrep=NULL, tsim=0.1, dmax=NULL, weights=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 
@@ -43,14 +43,16 @@ representative set.}
 
  \item{tsim}{threshold for setting the redundancy and neighborhood
 radius. Defined as a percentage of the maximum (theoretical)
-distance. Defaults to 0.1 (10\%). Object $y$ is considered as
-redundant to/in the neighborhood of object $x$ if the distance from
-$y$ to $x$ is less than \code{tsim}*\code{dmax}. The neighborhood
+distance. Defaults to 0.1 (10\%). Object \eqn{y} is considered as
+redundant to/in the neighborhood of object \eqn{x} if the distance from
+\eqn{y} to \eqn{x} is less than \code{tsim}*\code{dmax}. The neighborhood
 diameter is thus twice this threshold. }
 
   \item{dmax}{maximum theoretical distance. Redundancy and neighborhood
 diameters are defined as a proportion of this maximum theoretical
 distance. If \code{NULL}, it is derived from the distance matrix.}
+
+    \item{weights}{vector of weights of length equal to the number of rows of the dissimilarity matrix. If \code{NULL}, equal weights are assigned.}
  }
 
 \details{

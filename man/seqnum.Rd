@@ -1,18 +1,24 @@
 \name{seqnum}
 \alias{seqnum}
-\title{Translate a sequence object's alphabet into numerical alphabet, ranging 0-(nbstates-1).}
+\title{Transform into a sequence object with numerical alphabet.}
+
 \description{
-  If the alphabet (the list of possible states or events in a set of sequences) is composed of characters, this function converts the sequence data using a numerical alphabet. The first state (for exemple 'A') is coded with the value '0', the second state (for exemple 'B') is coded with the value '1', etc... The function returns a sequence object containing the original sequences coded with the new numerical alphabet. 
+  The function \code{seqnum} transforms the provided state sequence object into an equivalent sequence object in which the original alphabet is replaced with an alphabet of numbers ranging from \code{0} to \code{(nbstates-1)}.
 }
 \usage{
  seqnum(seqdata, with.missing=FALSE)
 }
 \arguments{
-	\item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
+	\item{seqdata}{a state sequence object as defined by the \code{\link{seqdef}} function.}
 
-	\item{with.missing}{if TRUE, missing elements in the sequences are turned into numerical values as well. The code for missing values in the sequences is retrieved as the 'nr' attribute of \code{seqdata}.}
+	\item{with.missing}{logical: Should missing elements in the sequences be turned into numerical values as well?  The code for missing values in the sequences is retrieved from the \code{'nr'} attribute of \code{seqdata}.}
 }
-%\seealso{}
+
+\details{
+The first state (for example \code{'A'}) is coded with the value \code{0}, the second state (for example \code{'B'}) is coded with the value \code{1}, etc... The function returns a sequence object containing the original sequences coded with the new numerical alphabet
+ranging from \code{0} to \code{(nbstates-1)}} 
+
+\seealso{\code{\link{seqdef}}, \code{\link{alphabet} } }
 
 \examples{
 data(actcal)

@@ -22,7 +22,7 @@ seqmathenikoff <- function(seqdata, with.miss=FALSE, full.matrix=TRUE, logoddmod
 	## ==============
 	## Preparing data
 	## ==============
-	seqdata <- seqnum(seqdata, with.miss=with.miss)
+	seqdata <- seqnum(seqdata, with.missing=with.miss)
 
 
 #	dseq <- unique(seqdata)
@@ -35,7 +35,7 @@ seqmathenikoff <- function(seqdata, with.miss=FALSE, full.matrix=TRUE, logoddmod
 	l <- ncol(dseq)
 	slength <- seqlength(dseq)
 
-	dseq <- seqasnum(dseq, with.miss=with.miss)
+	dseq <- seqasnum(dseq, with.missing=with.miss)
 
 	message(" [>] min/max sequence length: ",min(slength),"/",max(slength))
 
@@ -130,7 +130,7 @@ seqmatsaltt <- function(seqdata, norm=FALSE, indel=2, sm=NULL,
 	## ==============
 	## Preparing data
 	## ==============
-	seqdata <- seqnum(seqdata, with.miss=with.miss)
+	seqdata <- seqnum(seqdata, with.missing=with.miss)
 
 
 #	dseq <- unique(seqdata)
@@ -143,7 +143,7 @@ seqmatsaltt <- function(seqdata, norm=FALSE, indel=2, sm=NULL,
 	l <- ncol(dseq)
 	slength <- seqlength(dseq)
 
-	dseq <- seqasnum(dseq, with.miss=with.miss)
+	dseq <- seqasnum(dseq, with.missing=with.miss)
 
 	message(" [>] min/max sequence length: ",min(slength),"/",max(slength))
 

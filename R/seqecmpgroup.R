@@ -38,7 +38,7 @@ seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL, weighte
 			names(resid) <- paste("Resid", names(chi$residuals[, "1"]), sep=".")
 			freq <- as.list(chi$observed[, "1"]/rowSums(chi$observed))
 			names(freq) <- paste("Freq", names(chi$residuals[, "1"]), sep=".")
-			return(data.frame(p.value=chi$p.value, statistic=chi$statistic, 
+			return(data.frame(p.value=chi$p.value, statistic=chi$statistic,
 				index=index, freq, resid, check.names=FALSE))
 			#return(data.frame(p.value=chi$p.value,statistic=chi$statistic,index=index))
 		} else {
@@ -48,7 +48,7 @@ seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL, weighte
 			names(resid) <- paste("Resid", levels(group), sep=".")
 			
 			freq[] <- sp/length(group)
-			return(data.frame(p.value=1.0, statistic=0, index=index, 
+			return(data.frame(p.value=1.0, statistic=0, index=index,
 				as.list(freq), as.list(resid), check.names=FALSE))
 		}
 #    return(data.frame(p.value=NA,statistic=NA,index=index))
@@ -71,7 +71,7 @@ seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL, weighte
 		testfunc <- seqecmpgroup.chisq
 		ntest <- length(subseq$subseq)
 		seqmatrix <- seqeapplysub(subseq, method="presence")
-		testfunc.arg <- list(group=group, bonferroni=bonferroni, 
+		testfunc.arg <- list(group=group, bonferroni=bonferroni,
 			ntest=ntest, seqmatrix=seqmatrix)
 		decreasing<-TRUE
 	}
@@ -103,7 +103,9 @@ seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL, weighte
 
 
 plot.subseqelistchisq<-function(x, ylim="uniform", rows=NA, cols=NA,
-            residlevels=c(0.05,0.01), cpal=brewer.pal(1+2*length(residlevels),"RdBu"),legendcol=NULL,legend.cex=1,ptype="freq",...){
+            residlevels=c(0.05,0.01), cpal=brewer.pal(1+2*length(residlevels),"RdBu"),legendcol=NULL,
+            legend.cex=1,ptype="freq",
+            legend.title=NULL,...){
 
 	if(!inherits(x,"subseqelistchisq")) {
 		stop(" [!] x should be a result of seqecmpgroup")
@@ -123,7 +125,7 @@ plot.subseqelistchisq<-function(x, ylim="uniform", rows=NA, cols=NA,
 	savepar <- par(no.readonly = TRUE)
 	on.exit(par(savepar))
 	layout(lout$laymat, heights=lout$heights, widths=lout$widths)
- 
+
 	if(ptype=="resid"){
 		baseIndex <- 4 + nplot
 	} else {
@@ -137,9 +139,12 @@ plot.subseqelistchisq<-function(x, ylim="uniform", rows=NA, cols=NA,
 		plot.subseqelist(x, freq=x$data[,baseIndex+i], col=ccol, main=x$labels[i], ylim=ylim, ...)
 	}
 	par(mar = c(1, 1, 0.5, 1) + 0.1, xpd=FALSE)
+    if (is.null(legend.title)){
+       legend.title <- "Color by sign and significance of Pearson's residual"
+       }
 	#on.exit(par(savepar))
 	plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
-	title(main="Pearson residuals", cex=legend.cex)
+	title(main=legend.title, cex=legend.cex)
 	legncol <- length(c(paste("-", rev(residlevels)), "neutral", residlevels))
 	if(is.null(legendcol) && lout$legpos=="center"){
 		legncol <- 1
@@ -155,4 +160,4 @@ plot.subseqelistchisq<-function(x, ylim="uniform", rows=NA, cols=NA,
 			cex=legend.cex,
 			bty="o"
 		)
-}
+} 

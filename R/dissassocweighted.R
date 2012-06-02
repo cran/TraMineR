@@ -81,18 +81,18 @@ dissassocweighted.permgroup <- function(diss, grpint, weights, R, ret, randomWei
 			ww <- weights[ind]
 		}
 		
-		SCtot <- .Call("tmrWeightedInertiaDist", diss, as.integer(n), 
+		SCtot <- .Call(TMR_tmrWeightedInertiaDist, diss, as.integer(n), 
 			as.integer(FALSE), allindiv, as.double(ww), 
-			as.integer(FALSE), PACKAGE="TraMineR")
+			as.integer(FALSE))
 		dissc <- disscenter(diss, group=grpint[ind], weights=ww)
 		disscSCtot <- WeightedResidualsZ(dissc, ww)
 		
 		SCresiNoReplicate <- function(allindiv, ind, i, ww){
 			wind <- sort.int(ind[as.integer(indgrp[[i]])], method="quick")
 			ni <- sum(ww[as.integer(indgrp[[i]])])
-			SCresi <- .Call("tmrWeightedInertiaDist", diss, as.integer(n), 
+			SCresi <- .Call(TMR_tmrWeightedInertiaDist, diss, as.integer(n), 
 				as.integer(FALSE), as.integer(wind), as.double(ww), 
-				as.integer(FALSE), PACKAGE="TraMineR")
+				as.integer(FALSE))
 			wind <- indgrp[[i]]
 			wwi <- ww[wind]
 			return(c(ni, SCresi, WeightedResidualsZ(dissc[wind], wwi)))
@@ -118,9 +118,9 @@ dissassocweighted.permdiss <- function(diss, grpint, weights, R, ret) {
 		SCresiNoReplicate <- function(allindiv, ind, i, ww){
 			wind <- sort.int(ind[as.integer(indgrp[[i]])], method="quick")
 			ni <- sum(ww[as.integer(indgrp[[i]])])
-			SCresi <- .Call("tmrWeightedInertiaDist", diss, as.integer(n), 
+			SCresi <- .Call(TMR_tmrWeightedInertiaDist, diss, as.integer(n), 
 				as.integer(FALSE), as.integer(wind), as.double(ww), 
-				as.integer(FALSE), PACKAGE="TraMineR")
+				as.integer(FALSE))
 			wwi <- ww[wind]
 			return(c(ni, SCresi, WeightedResidualsZ(dissc[wind], wwi)))
 		}
@@ -147,8 +147,8 @@ dissassocweighted.unweighted <- function(diss, grpint, weights, R, ret) {
 			##all indiv is indrep
 			wind <- sort.int(ind[as.integer(indgrp[[i]])], method="quick")
 			ni <- length(wind)
-			SCresi <- .Call("tmrsubmatrixinertia", diss, 
-				wind, PACKAGE="TraMineR")
+			SCresi <- .Call(TMR_tmrsubmatrixinertia, diss, 
+				wind)
 			return(c(ni, SCresi, UnweightedResidualsZ( dissc[wind])))
 		}
 		return(ComputeWeightedTestValues(allindiv=allindiv, ind=ind, 
@@ -179,9 +179,9 @@ dissassocweighted.replicate <- function(diss, grpint, weights, R, ret) {
 			wwt <- tabulate(nind)
 			wind <- which(wwt>0)
 			ni <- length(nind)
-			SCresi <- .Call("tmrWeightedInertiaDist", diss, as.integer(n), 
+			SCresi <- .Call(TMR_tmrWeightedInertiaDist, diss, as.integer(n), 
 				as.integer(FALSE), as.integer(wind), as.double(wwt), 
-				as.integer(FALSE), PACKAGE="TraMineR")
+				as.integer(FALSE))
 			wwti <- wwt[wind]
 			return(c(ni, SCresi, WeightedResidualsZ(dissc[wind], wwti)))
 		}
@@ -199,7 +199,7 @@ dissassocweighted.internaldisscenter <- function(diss, grpint, indiv, k, weights
 		cond <- grpint==i
 		if(sum(cond)>0){
 			grpindiv <- indiv[cond]
-			dc <- .Call("tmrWeightedInertiaContrib", diss, as.integer(grpindiv),weights, PACKAGE="TraMineR")
+			dc <- .Call(TMR_tmrWeightedInertiaContrib, diss, as.integer(grpindiv), weights)
 			alldc[grpindiv] <- dc-weighted.mean(dc, weights[grpindiv])/2
 		}
 	}
@@ -216,9 +216,9 @@ dissassocweighted.permbootstrap <- function(diss, grpint, weights, R, ret, sampl
 	WeightedGroupTestValues <- function(dissindiv, grpindiv){
 		##permut weights
 		grpp <- grpint[grpindiv]
-		SCtot <- .Call("tmrWeightedInertiaDist", diss, as.integer(n), 
+		SCtot <- .Call(TMR_tmrWeightedInertiaDist, diss, as.integer(n), 
 			as.integer(FALSE), dissindiv, as.double(wwall), 
-			as.integer(FALSE), PACKAGE="TraMineR")
+			as.integer(FALSE))
 		dissc <- dissassocweighted.internaldisscenter(diss, grpp, dissindiv,k, wwall)
 		disscSCtot <- UnweightedResidualsZ(dissc)
 		
@@ -226,9 +226,9 @@ dissassocweighted.permbootstrap <- function(diss, grpint, weights, R, ret, sampl
 			indgrp <- grpp==i
 			wind <- sort.int(dissindiv[indgrp], method="quick")
 			ni <- length(wind)
-			SCresi <- .Call("tmrWeightedInertiaDist", diss, as.integer(n), 
+			SCresi <- .Call(TMR_tmrWeightedInertiaDist, diss, as.integer(n), 
 				as.integer(FALSE), as.integer(wind), as.double(wwall), 
-				as.integer(FALSE), PACKAGE="TraMineR")
+				as.integer(FALSE))
 			#SCresi <- .Call("tmrWeightedInertiaDist", dissmatrix, as.integer(n), 
 			#	as.integer(FALSE), as.integer(wind), as.double(ww), 
 			#	as.integer(FALSE), PACKAGE="TraMineR")
@@ -299,9 +299,9 @@ dissassocweighted <- function(diss, group, weights, R, weight.permutation, squar
 	allindiv <- 1:n
 	## Compute basic global statistics used after
 	totweights <- sum(weights)
-	SCtot <- .Call("tmrWeightedInertiaDist", dissmatrix, as.integer(n), 
+	SCtot <- .Call(TMR_tmrWeightedInertiaDist, dissmatrix, as.integer(n), 
 		as.integer(FALSE), allindiv, as.double(weights), 
-		as.integer(FALSE), PACKAGE="TraMineR")
+		as.integer(FALSE))
 	
 	## Building return the returned object
 	ret <- list()
@@ -321,9 +321,9 @@ dissassocweighted <- function(diss, group, weights, R, weight.permutation, squar
 			ret$groups$discrepancy[i] <- 0
 		}else {
 			## Intra group residual
-			r <- .Call("tmrWeightedInertiaDist", dissmatrix, as.integer(n), 
+			r <- .Call(TMR_tmrWeightedInertiaDist, dissmatrix, as.integer(n), 
 				as.integer(FALSE), as.integer(which(cond)), as.double(weights), 
-				as.integer(FALSE), PACKAGE="TraMineR")
+				as.integer(FALSE))
 			ret$groups$discrepancy[i] <- r/ret$groups$n[i]
 			SCres <- r+SCres
 		}

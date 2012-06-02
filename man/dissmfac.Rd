@@ -11,10 +11,10 @@
   Perform a multi-factor analysis of variance from a dissimilarity matrix.
 }
 \usage{
-dissmfacw(formula, data, R=1000, gower=FALSE, squared=FALSE,
-          weights=NULL)
+dissmfacw(formula, data, R = 1000, gower = FALSE, squared = FALSE,
+    weights = NULL)
 dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
-         permutation = "dissmatrix")
+    permutation = "dissmatrix")
 }
 
 \arguments{
@@ -43,6 +43,8 @@ dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
   \item{perms}{Permutation values as a \code{boot} object}
 }
 \references{
+    Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
+
   Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2010)
   Discrepancy	analysis of complex objects using dissimilarities.
   In F. Guillet, G. Ritschard, D. A. Zighed and H. Briand (Eds.),
@@ -63,6 +65,7 @@ comment on distance-based redundancy analysis. \emph{Ecology} 82(1), 290-297.
   testing associations between gene expression patterns and related variables. \emph{Proceedings of
 the National Academy of Sciences of the United States of America} 103(51), 19430-19435.
 }
+
 \seealso{
 \code{\link{dissvar}} to compute a pseudo variance from dissimilarities and for a basic introduction to concepts of discrepancy analysis.
    \cr
@@ -77,10 +80,10 @@ the National Academy of Sciences of the United States of America} 103(51), 19430
 data(mvad)
 mvad.seq <- seqdef(mvad[, 17:86])
 
-## Compute dissimilarities
-mvad.lcs <- seqdist(mvad.seq, method="LCS")
+## Compute dissimilarities (any dissimilarity measure can be used)
+mvad.ham <- seqdist(mvad.seq, method="HAM")
 
 ## And now the multi-factor analysis
-print(dissmfac(mvad.lcs ~ male + Grammar + funemp +
+print(dissmfac(mvad.ham ~ male + Grammar + funemp +
 	gcse5eq + fmpr + livboth, data=mvad, R=10))
 }

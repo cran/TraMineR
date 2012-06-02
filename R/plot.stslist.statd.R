@@ -53,7 +53,7 @@ plot.stslist.statd <- function(x, type="d", cpal=NULL, ylab=NULL, yaxis=TRUE, xa
 	## Entropy index plot
 	else if (type=="Ht") {
 		if (is.null(ylab)) 
-			ylab <- paste("Entropy index (",wlab,"n=",n,")",sep="")
+			ylab <- paste("Entropy index (",wlab,"n=",round(n,2),")",sep="")
 	
 		plot(x$Entropy, 
 			col="blue",

@@ -20,7 +20,7 @@
 .localstuffDissTree$DTNnodeCounter <- as.integer(1)
 DTNInit <- function(ind, vardis, depth, dmat, weights) {
 	##cat("Disscenter\n")
-	dc <- .Call("tmrWeightedInertiaContrib", dmat, as.integer(ind),as.double(weights), PACKAGE="TraMineR")
+	dc <- .Call(TMR_tmrWeightedInertiaContrib, dmat, as.integer(ind),as.double(weights))
 	#dc <- .Call("tmrinertiacontrib", dmat, as.integer(ind), PACKAGE="TraMineR")
 	medoid <- ind[which.min(dc)]
 	info <- list(depth=depth, vardis=vardis, n=sum(weights[ind]), medoid=medoid)
@@ -47,7 +47,12 @@ DTNsplit <- function(varindex, index,  prob, info, labels=NULL, breaks=NULL, naG
 ###########################
 
 disstreeleaf <- function(tree) {
-	if (!inherits(tree, "DissTreeNode"))stop("tree should be a DissTreeNode object")
+	if (inherits(tree, "disstree")) {
+		tree <- tree$root
+	}
+	if (!inherits(tree, "DissTreeNode")) {
+		stop("tree should be a DissTreeNode object")
+	}
 	categorie <- numeric(length(tree$ind))
 	categorie[] <- -1
 	return(DTNdisstreeleaf(tree, categorie))
@@ -65,26 +70,75 @@ DTNdisstreeleaf <- function(node, co) {
 		return(DTNdisstreeleaf(node$kids[[2]], co1))
 	}
 }
+DTNaddCovariateSplitschedule <- function(tree) {
+	treeSize <- function(node){
+		if (is.null(node$kids)) {
 
-
+			return(1)
+		}else{
+			return( treeSize(node$kids[[1]])+ treeSize(node$kids[[2]])+1)
+		}
+	}
+	
+	trsize <- treeSize(tree$root)
+	treeEnv <- environment()
+	treeEnv$SCexpl <- numeric(trsize)
+	NodeCovariate <- function(node, parent=NULL){
+		if(is.null(parent)){ ## root node
+			treeEnv$SCexpl[as.character(node$id)] <- node$info$vardis*node$info$n
+		}
+		else{
+			SCtot <- parent$info$vardis*parent$info$n
+			SCexpl <- parent$split$info$R2*SCtot
+			treeEnv$SCexpl[as.character(node$id)] <- SCexpl
+		}
+		if (!is.null(node$kids)) {
+			NodeCovariate(node$kids[[1]], node)
+			NodeCovariate(node$kids[[2]], node)
+		}
+	}
+	NodeCovariate(tree$root)
+	treeEnv$depth <- as.integer(factor(1-rank(treeEnv$SCexpl), ordered=TRUE))
+	
+	NodeDepth <- function(node){
+		node$info$splitschedule <- treeEnv$depth[as.character(node$id)==names(treeEnv$SCexpl)]
+		if (!is.null(node$kids)) {
+			node$kids[[1]] <- NodeDepth(node$kids[[1]])
+			node$kids[[2]] <- NodeDepth(node$kids[[2]])
+		}
+		return(node)
+	}
+	tree$root <- NodeDepth(tree$root)
+	return(tree)
+}
 
 
 ###########################
 ## disstree main function
 ###########################
 disstree <- function(formula, data=NULL, weights=NULL, minSize=0.05, maxdepth=5, R=1000, pval=0.01, object =NULL, weight.permutation="replicate", squared=FALSE, first=NULL) {
-	
-	formula.call <- formula
+	##formula.call <- formula
+	tterms <- terms(formula)
 	dissmatrix <- eval(formula[[2]], data, parent.frame()) # to force evaluation
+	formula[[2]] <- NULL
+	## Model matrix from forumla
+	predictor <- as.data.frame(model.frame(formula, data, drop.unused.levels = TRUE, na.action=NULL))
+	tree <- DTNdisstree(dissmatrix=dissmatrix, predictor=predictor, terms=tterms, 
+						weights=weights, minSize=minSize, maxdepth=maxdepth, R=R, 
+						pval=pval, object =object, weight.permutation=weight.permutation, 
+						squared=squared, first=first)
+	return(tree)
+	
+}
+DTNdisstree <- function(dissmatrix, predictor, terms, weights=NULL, minSize=0.05, maxdepth=5, R=1000, pval=0.01, object =NULL, weight.permutation="replicate", squared=FALSE, first=NULL) {
+	
+	
 	if (inherits(dissmatrix, "dist")) {
 		dissmatrix <- as.matrix(dissmatrix)
  	}
 	if (squared) {
 		dissmatrix <- dissmatrix^2
 	}
-	formula[[2]] <- NULL
-	## Model matrix from forumla
-	predictor <- as.data.frame(model.frame(formula, data, drop.unused.levels = TRUE, na.action=NULL))
 	nobs= nrow(dissmatrix)
 	if (nobs!=nrow(predictor)) {
 		stop(" [!] dissimilarity matrix and data should be of the same size")
@@ -92,7 +146,7 @@ disstree <- function(formula, data=NULL, weights=NULL, minSize=0.05, maxdepth=5,
 	
 	## Allow integer weights for replicates
 	if(is.null(weights)) {
-		weights <- as.double(rep(1,nobs))
+		weights <- as.double(rep(1, nobs))
 		weight.permutation <- "none"
 	}
 	if(weight.permutation %in% c("replicate", "rounded-replicate")) {
@@ -127,7 +181,7 @@ disstree <- function(formula, data=NULL, weights=NULL, minSize=0.05, maxdepth=5,
 		minSize <- pop*minSize
 	}
 	if(pval<(1/sum(R))){
-		warning(" [!] Minimum possible p-value using ", R, " permutations is ", 1/sum(R), ". Parameter pval (=", pval, ") changed to ",1/sum(R))
+		warning(" [!] Minimum possible p-value using ", R, " permutations is ", 1/sum(R), ". Parameter pval (=", pval, ") changed to ", 1/sum(R))
 		pval <- 1/sum(R)
 	}
 	.localstuffDissTree$DTNnodeCounter <- as.integer(1)
@@ -147,12 +201,13 @@ disstree <- function(formula, data=NULL, weights=NULL, minSize=0.05, maxdepth=5,
 		tree$info$adjustment <- dissassoc(dissmatrix, tree$fitted[,1], R=R, weights=weights, weight.permutation=weight.permutation)
 	}
 	tree$data <- predictor
-	tree$terms <- terms(formula.call)
 	tree$weights <- weights
+	tree$terms <- terms
 	##tree <- party(root, data=predictor, fitted =fitted, terms = terms(formula.call),  info = info)
 	tree$root <- root
 	
 	class(tree) <- c("disstree", class(tree))
+	tree <- DTNaddCovariateSplitschedule(tree)
 	return(tree)
 }
 
@@ -255,23 +310,23 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varind
 		for (j in (i+1):nbGrp) {
 			grpindiv2 <- ind[grpCond[[j]]]
 			#cat("Inter Inertia", i, "  ", j, "\n")
-			r <- .Call("tmrWeightedInterInertia", dissmatrix, as.integer(grpindiv1),
-						as.integer(grpindiv2), as.double(weights),PACKAGE="TraMineR")
+			r <- .Call(TMR_tmrWeightedInterInertia, dissmatrix, as.integer(grpindiv1),
+						as.integer(grpindiv2), as.double(weights))
 				## using only one half of the matrix
 			inertiaMat[j, i] <- r
 		}
 		#cat("Inertia", i,"\n")
-		r <- .Call("tmrWeightedInertiaDist", dissmatrix, as.integer(nrow(dissmatrix)), 
+		r <- .Call(TMR_tmrWeightedInertiaDist, dissmatrix, as.integer(nrow(dissmatrix)), 
 					as.integer(FALSE), as.integer(grpindiv1), as.double(weights), 
-					as.integer(FALSE), PACKAGE="TraMineR")
+					as.integer(FALSE))
 		
 		inertiaMat[i, i] <- r*grpSize[i]
 	}
 	## FIXME This step is missing in the loop
 	#cat("Inertia", nbGrp,"\n")
-	r <- .Call("tmrWeightedInertiaDist", dissmatrix, as.integer(nrow(dissmatrix)), 
+	r <- .Call(TMR_tmrWeightedInertiaDist, dissmatrix, as.integer(nrow(dissmatrix)), 
 					as.integer(FALSE), as.integer(ind[grpCond[[nbGrp]]]), as.double(weights), 
-					as.integer(FALSE), PACKAGE="TraMineR")
+					as.integer(FALSE))
 	inertiaMat[nbGrp, nbGrp] <- r*grpSize[nbGrp]
 	## Computing residuals
 	#print(inertiaMat)

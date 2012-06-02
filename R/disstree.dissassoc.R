@@ -12,8 +12,8 @@ DTNdissassocweighted <- function(dmat, grp, indiv, R, weights, weight.permutatio
 				groupe1 <- sort.int(groupe1, method="quick")
 				groupe2 <- sort.int(groupe2, method="quick")
 		 }
-		 r1 <- .Call("tmrsubmatrixinertia", dmat, as.integer(groupe1), PACKAGE="TraMineR")
-		 r2 <- .Call("tmrsubmatrixinertia", dmat, as.integer(groupe2), PACKAGE="TraMineR")
+		 r1 <- .Call(TMR_tmrsubmatrixinertia, dmat, as.integer(groupe1))
+		 r2 <- .Call(TMR_tmrsubmatrixinertia, dmat, as.integer(groupe2))
 		 return(-(r1+r2))
 	}
 	internalDTNdissassocWeighted <- function(grp, ind, indiv, dmat, grp2, use.sort, weights, permutGroup) {
@@ -26,12 +26,12 @@ DTNdissassocweighted <- function(dmat, grp, indiv, R, weights, weight.permutatio
 				groupe1 <- sort.int(groupe1, method="quick")
 				groupe2 <- sort.int(groupe2, method="quick")
 		 }
-		 r1 <- .Call("tmrWeightedInertiaDist", dmat, dmatsize,
+		 r1 <- .Call(TMR_tmrWeightedInertiaDist, dmat, dmatsize,
 				as.integer(FALSE), as.integer(groupe1), as.double(weights), 
-				as.integer(FALSE), PACKAGE="TraMineR")
-		r2 <- .Call("tmrWeightedInertiaDist", dmat, dmatsize,
+				as.integer(FALSE))
+		r2 <- .Call(TMR_tmrWeightedInertiaDist, dmat, dmatsize,
 				as.integer(FALSE), as.integer(groupe2), as.double(weights), 
-				as.integer(FALSE), PACKAGE="TraMineR")
+				as.integer(FALSE))
 		 return(-(r1+r2))
 	}
 	internalDTNdissassocReplicate <- function(grp, ind, indiv, dmat, grp2) {
@@ -41,12 +41,12 @@ DTNdissassocweighted <- function(dmat, grp, indiv, R, weights, weight.permutatio
 		wwt2 <- tabulate(groupe2n)
 		groupe1<- which(wwt1>0)
 		groupe2<- which(wwt2>0)
-		r1 <- .Call("tmrWeightedInertiaDist", dmat, dmatsize,
+		r1 <- .Call(TMR_tmrWeightedInertiaDist, dmat, dmatsize,
 				as.integer(FALSE), as.integer(groupe1), as.double(wwt1), 
-				as.integer(FALSE), PACKAGE="TraMineR")
-		r2 <- .Call("tmrWeightedInertiaDist", dmat, dmatsize, 
+				as.integer(FALSE))
+		r2 <- .Call(TMR_tmrWeightedInertiaDist, dmat, dmatsize, 
 				as.integer(FALSE), as.integer(groupe2), as.double(wwt2), 
-				as.integer(FALSE), PACKAGE="TraMineR")
+				as.integer(FALSE))
 		return(-(r1+r2))
 	}
 	if ( weight.permutation %in% c("diss", "group")) {

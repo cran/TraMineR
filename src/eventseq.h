@@ -1,10 +1,15 @@
 #ifndef _EVENT_SEQ_INCLUDED_
 #define _EVENT_SEQ_INCLUDED_
 #include <map>
-#include <R.h>
-#include <Rinternals.h>
+#include <sstream>
+#include <string>
 #include "eventdictionary.h"
 #include "TraMineR.h"
+extern "C"{
+	#include <R.h>
+	#include <Rinternals.h>
+}
+
 //using namespace std;
 //Déclaration des types (définitions ci-après)
 class SequenceEventNode;
@@ -13,7 +18,7 @@ class Sequence;
 //static SEXP TMRSEQUENCE_type_tag;
 #define TMRSEQUENCE_type_tag R_NilValue
 
-#define TMR_STRING_BUFFER_SIZE 2048
+//#define TMR_STRING_BUFFER_SIZE 2048
 
 ///Macro checking for type
 
@@ -123,13 +128,29 @@ public:
     //virtual void print(const bool& start);
     ///Print a representation on a given string
     ///Return the number of char used
-    virtual int sprint(char * buffer, int index, const bool& start, const bool &printGap, const EventDictionary& ed, const double & remainingTime);
+    virtual void sprint(std::ostringstream &oss, const bool& start, const bool &printGap, const EventDictionary& ed, const double & remainingTime);
     ///Add an event at the end of the event chain
     void addEvent(const int &e,const double &t);
 
     //Subsequence functions
     ///Count the number time we found this sequence in s
     int count(SequenceEventNode * s, const double &maxGap, const double& windowSize, const double & ageMaxEnd, const double& gapConsumed, const double& currentAge);
+    // one occurence per span-window
+    int count3(SequenceEventNode *s, const double &maxGap, 
+	       const double &windowSize, const double &ageMaxEnd, 
+	       const double &gapConsumed, const double &currentAge,
+	       int *Win, double *tWin, const int &lWin);
+    // count the number of minimum windows of occurence
+    int count4(SequenceEventNode *s, const double &maxGap, 
+	       const double &windowSize, const double &ageMaxEnd, 
+	       const double &gapConsumed, const double &currentAge,
+	       double &MinWin);
+    // distinct occurences with no event-timestamp overlap
+    int count5(SequenceEventNode *s, const double &maxGap, 
+	       const double &windowSize, const double &ageMaxEnd, 
+	       const double &gapConsumed, const double &currentAge,
+	       const int *typeSen, const double *tSen, 
+	       const int &lSen, int *flagSen);
     ///Check if this can be considered equal to s
     inline bool checkTypeGap(SequenceEventNode * s,const double& passedGap) {
         return this->type==s->type&&((this->gap>0&&passedGap>0)||(this->gap==0&&passedGap==0));
@@ -168,7 +189,7 @@ public:
     ///Print event chain
     void print();
     ///Print event chain on a string buffer
-    int sprint(char * buffer);
+    std::string sprint();
     ///Return true, if generic subsequence
     bool isGeneric() {
         return this->idpers==-1;
@@ -184,7 +205,9 @@ public:
     ///Add an event to this sequence (used to build sequences)
     void addEvent(const int &eventType,const double &t);
     ///Count the number time we found this sequence in s
-    int count(Sequence * s, const double &maxGap, const double& windowSize, const double & ageMin, const double & ageMax, const double & ageMaxEnd);
+    int count(Sequence * s,const double &maxGap, const double &windowSize, 
+	      const double &ageMin, const double &ageMax, 
+	      const double &ageMaxEnd,const int &cMethod);
     ///Return age of first occurence of this sequence in sequence s
     double first_occurence(Sequence * s, const double &maxGap, const double& windowSize, const double & ageMin, const double & ageMax, const double & ageMaxEnd);
     ///Give a deep copy of this subsequence

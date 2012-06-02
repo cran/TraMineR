@@ -72,14 +72,14 @@ seqrplot(seqdata, group=NULL, title=NULL, ...)
 \details{
 \code{seqplot} is the generic function for high level plots of state sequence objects with group splits and automatic display of the color legend. Many different types of plots can be produced by means of the \code{type} argument. Except for sequence index plots, \code{seqplot} first calls the specific function producing the required statistics and then the plot method for objects produced by this function (see below). For sequence index plots, the state sequence object itself is plotted by calling the \code{\link{plot.stslist}} method. When splitting by groups and/or displaying the color legend, the \code{\link[graphics]{layout}} function is used for arranging the plots.
 
-The \code{seqdplot}, \code{seqfplot}, \code{seqiplot}, \code{seqIplot}, \code{seqHtplot}, \code{seqmsplot}, \code{seqmtplot} and \code{seqrplot} functions are aliases for calling \code{seqplot} with \code{type} argument set respectively to \code{"d", "f", "i", "I", "Ht", "ms", "mt"} or \code{"r"}.
+The \code{seqdplot}, \code{seqfplot}, \code{seqiplot}, \code{seqIplot}, \code{seqHtplot}, \code{seqmsplot}, \code{seqmtplot} and \code{seqrplot} functions are aliases for calling \code{seqplot} with \code{type} argument set respectively to \code{"d"}, \code{"f"}, \code{"i"}, \code{"I"}, \code{"Ht"}, \code{"ms"}, \code{"mt"} or \code{"r"}.
 
 State distribution plot (\code{type="d"}) represent the sequence of the transversal state frequencies by position (time point) computed by the \code{\link{seqstatd}} function.
 
 \emph{Sequence frequency plots} (\code{type="f"}) display the most frequent sequences, each one with an horizontal stack bar of its successive states. Sequences are displayed bottom-up in decreasing order of their frequencies (computed by the \code{\link{seqtab}} function). The \code{\link{plot.stslist.freq}} plot method is called for producing the plot. \cr
 The \code{tlim} optional argument may be specified for selecting the sequences to be plotted (default is 1:10, i.e. the 10 most frequent sequences). The width of the bars representing the sequences is by default proportional to their frequencies, but this can be disabled with the \code{pbarw=FALSE} optional argument. If weights have been specified when creating \code{seqdata}, weighted frequencies will be returned by \code{seqtab} since the default option is \code{weighted=TRUE}. See examples below, the \code{\link{seqtab}} and \code{\link{plot.stslist.freq}} manual pages for a complete list of optional arguments and \cite{Müller et al., (2008)} for a description of sequence frequency plots.
 
-In \emph{sequence index plots} (\code{type="i"} or \code{type="I"}), the requested individual sequences are rendered with horizontal stacked bars depicting the states over successive positions (time). Optional arguments are \code{tlim} for specifying the indexes of the sequences to be plotted (when \code{type="i"} defaults to the first ten sequences, i.e \code{tlim=1:10}). For plotting nicely a (big) whole set one can use \code{type="I"} which is the same as using \code{tlim=0} together with the additional graphical parameters \code{border=NA} and \code{space=0} to suppress bar borders and space between bars. The \code{sortv} argument can be used to pass a vector of numerical values for sorting the sequences. See \code{\link{plot.stslist}} for a complete list of optional arguments.
+In \emph{sequence index plots} (\code{type="i"} or \code{type="I"}), the requested individual sequences are rendered with horizontal stacked bars depicting the states over successive positions (time). Optional arguments are \code{tlim} for specifying the indexes of the sequences to be plotted (when \code{type="i"} defaults to the first ten sequences, i.e \code{tlim=1:10}). For plotting nicely a (big) whole set one can use \code{type="I"} which is the same as using \code{tlim=0} together with the additional graphical parameters \code{border=NA} and \code{space=0} to suppress bar borders and space between bars. The \code{sortv} argument can be used to pass a vector of numerical values for sorting the sequences or to specify a sorting method. See \code{\link{plot.stslist}} for a complete list of optional arguments and their description.
 
 The interest of sequence index plots has, for instance, been stressed by \cite{Scherer (2001)} and \cite{Brzinsky-Fay et al. (2006)}. Notice that index plots for thousands of sequences result in very heavy PDF or POSTSCRIPT graphic files. Dramatic file size reduction may be achieved by saving the figures in bitmap format with using for instance the \code{\link[grDevices]{png}} graphic device instead of \code{\link[grDevices]{postscript}} or \code{\link[grDevices]{pdf}}.
 
@@ -93,7 +93,7 @@ The \emph{representative sequence plot} (\code{type="r"}) displays a reduced, no
 }
 
 \seealso{
- \code{\link{plot.stslist.statd}} \code{\link{plot.stslist.freq}} \code{\link{plot.stslist}} \code{\link{plot.stslist.modst}} \code{\link{plot.stslist.meant}} \code{\link{plot.stslist.rep}}.
+ \code{\link{plot.stslist.statd}}, \code{\link{plot.stslist.freq}}, \code{\link{plot.stslist}}, \code{\link{plot.stslist.modst}}, \code{\link{plot.stslist.meant}}, \code{\link{plot.stslist.rep}}.
 }
 
 
@@ -103,7 +103,9 @@ the transition to adulthood. \emph{Journal of Population Research} \bold{18}(2),
 
 Brzinsky-Fay C., U. Kohler, M. Luniak (2006). Sequence Analysis with Stata. \emph{The Stata Journal}, \bold{6}(4), 435-460.
 
-Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Summarizing Sets of Categorical Sequences. In \emph{International Conference on Knowledge Discovery and Information Retrieval, Madeira, 6-8 October}. INSTICC. pp. 62-69.
+Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+
+Gabadinho A, Ritschard G, Studer M, Müller NS (2011). "Extracting and Rendering Representative Sequences", In A Fred, JLG Dietz, K Liu, J Filipe (eds.), \emph{Knowledge Discovery, Knowledge Engineering and Knowledge Management}, volume 128 of \emph{Communications in Computer and Information Science (CCIS)}, pp. 94-106. Springer-Verlag.
 
 Müller, N. S., A. Gabadinho, G. Ritschard and M. Studer (2008). Extracting knowledge from life courses: Clustering and visualization. In \emph{Data Warehousing and Knowledge Discovery, 10th International Conference  DaWaK 2008, Turin, Italy, September 2-5}, LNCS 5182, Berlin: Springer, 176-185.
 

@@ -2,7 +2,7 @@
 ## PLot of STS sequence objects
 ## =============================
 
-plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL, 
+plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 	cpal=NULL, missing.color=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, ytlab=NULL, ylas=0, xtlab=NULL, xtstep=NULL, cex.plot=1, ...) {
 
 	n <- nrow(x)
@@ -14,33 +14,40 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 		xtlab <- colnames(x)
 
 	if (is.null(xtstep)) {
-		if (!is.null(attr(x,"xtstep"))) {xtstep <- attr(x,"xtstep")} 
+		if (!is.null(attr(x,"xtstep"))) {xtstep <- attr(x,"xtstep")}
 		## For sequence objects created with previous versions
 		else {xtstep <- 1}
 	}
 
-	## Range 
+	## Range
 	if (is.null(tlim)) {
 		if (n>=10) tlim <- 1:10
 		else tlim=1:n
 	}
-	else if (tlim[1]==0) 
+	else if (tlim[1]==0)
 			tlim <- 1:n
-	else if (max(tlim) > n) 
+	else if (max(tlim) > n)
 			tlim <- 1:n
 	
 	## Sorting
 	if (!is.null(sortv)) {
-		if (length(sortv)!=n) {
+		if (length(sortv)==1 && sortv %in% c("from.start", "from.end")) {
+        		end <- if (sortv=="from.end") { max(seqlength(x)) } else { 1 }
+        		beg <- if (sortv=="from.end") { 1 } else { max(seqlength(x)) }
+
+			sortv <- do.call(order, as.data.frame(x)[,end:beg])
+			x <- x[sortv,]
+		} else if (length(sortv)!=n) {
 			stop(call.=FALSE, "sortv must contain one value for each row in the sequence object")
+		} else {
+			x <- x[order(sortv),]
 		}
 
-		x <- x[order(sortv),]
 		sortlab <- paste(", sorted")
-		}
-	else sortlab <- NULL
+		
+	} else { sortlab <- NULL }
 
-	## 
+	##
 	if (is.null(cpal))
 		cpal <- attr(x,"cpal")
 
@@ -64,17 +71,17 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 	if (!weighted || is.null(weights)) {
 		weights <- rep(1.0, nrow(x))
 	}
-	## Also takes into account that in unweighted sequence objects created with 
+	## Also takes into account that in unweighted sequence objects created with
 	## older TraMineR versions the weights attribute is a vector of 1
-	## instead of NULL  
-	if (all(weights==1)) 
+	## instead of NULL
+	if (all(weights==1))
 		weighted <- FALSE
 
 	if (weighted) {wlab <- "weighted "}
 	else {wlab <- NULL}
 
 	if (is.null(ylab)) {
-		ylab <- paste(length(tlim)," seq. ", "(", wlab,"n=", round(sum(weights),2),")", 
+		ylab <- paste(length(tlim)," seq. ", "(", wlab,"n=", round(sum(weights),2),")",
 			sortlab, sep="")
 	}
 
@@ -91,8 +98,8 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 	## Plotting the x axis
 	if (xaxis) {
 		tpos <- seq(1,seql, xtstep)
-		axis(1, at=tpos-0.5, labels=xtlab[tpos], 
-		# mgp=c(3,0.5,0), 
+		axis(1, at=tpos-0.5, labels=xtlab[tpos],
+		# mgp=c(3,0.5,0),
 		cex.axis=cex.plot)
 	}
 

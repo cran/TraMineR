@@ -27,7 +27,7 @@ dissvar <- function(diss, weights=NULL, squared=FALSE) {
 		if(is.null(weights)) {
 			weights <- rep(1, n)
 		}
-		dvar <- .Call("tmrWeightedInertiaDist", diss, as.integer(n), as.integer(isdist), as.integer(1:n), as.double(weights), as.integer(TRUE), PACKAGE="TraMineR")
+		dvar <- .Call(TMR_tmrWeightedInertiaDist, diss, as.integer(n), as.integer(isdist), as.integer(1:n), as.double(weights), as.integer(TRUE))
 		return(dvar)
 	}
 }

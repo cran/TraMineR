@@ -9,10 +9,10 @@
 }
 \arguments{
  \item{data}{a dataframe or matrix containing sequence data.}
-  \item{var}{the list of columns containing the sequences. Defaut to NULL, ie all the columns. Whether the sequences are in the compressed (character strings) or extended format is automatically detected by counting the number of columns.}
-  \item{sep}{the between states/events separator used in the input data set. Default to '-'.}
-  \item{miss}{the symbol for missing values (if any) used in the input data set. Default to 'NA'.}
-  \item{vnames}{optional names for the column/variables of the output data set. Default to NULL.}
+  \item{var}{the list of columns containing the sequences. Default is \code{NULL}, ie all the columns. Whether the sequences are in the compressed (character strings) or extended format is automatically detected by counting the number of columns.}
+  \item{sep}{the between states/events separator used in the input data set. Default to '\code{-}'.}
+  \item{miss}{the symbol for missing values (if any) used in the input data set. Default is \code{NA}.}
+  \item{vnames}{optional names for the column/variables of the output data set. Default is \code{NULL}.}
 }
 \seealso{
  \code{\link{seqconc}}.

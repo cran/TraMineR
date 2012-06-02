@@ -17,6 +17,11 @@ plot.stslist.rep <- function(x, cpal=NULL, missing.color=NULL,
 		else {xtstep <- 1}
 	}
 
+	weighted <- attr(x, "weighted")
+	if (weighted) {wlab <- "weighted "}
+	else {wlab <- NULL}
+
+
 	seql <- length(xtlab)
 	statl <- attr(x,"alphabet")
 	nr <- attr(x,"nr")
@@ -73,7 +78,7 @@ plot.stslist.rep <- function(x, cpal=NULL, missing.color=NULL,
 	else ymax <- 1.3
 
 	if (is.null(ylab)) {
-		ylab <- paste(nbrep, " representative(s) (n=",n,")",sep="")
+		ylab <- paste(nbrep, " representative(s) (", wlab, "n=", round(n,2),")",sep="")
 	}
 
 	barplot(seqbar,col=cpal, width=barw,

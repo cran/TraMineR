@@ -7,6 +7,7 @@ export(
 	"cpal<-",
 	read.tda.mdist,
 	recodef,
+    seqalign,
 	seqcomp,
 	seqconc,
 	seqdecomp,
@@ -67,6 +68,10 @@ S3method(print, stslist)
 S3method("[", stslist)
 S3method(plot, stslist)
 
+## seqalign methods
+S3method(plot, seqalign)
+S3method(print, seqalign)
+
 ## stslist.stad methods
 S3method(plot, stslist.statd)
 S3method(print, stslist.statd)
@@ -104,6 +109,7 @@ export(
 	dissrep,
 	dissmfac,
 	dissmfacw,
+	disstreedisplay,
 	disstree2dot,
 	disstree2dotp,
 	disstreeleaf,
@@ -167,5 +173,38 @@ export(
 )
 
 
-useDynLib(TraMineR)
+useDynLib(TraMineR,
+##Debug
+TMR_getTraMineRDebugLevel = getTraMineRDebugLevel,
+TMR_setTraMineRDebugLevel = setTraMineRDebugLevel,
+##Inertia
+TMR_tmrsubmatrixinertia=tmrsubmatrixinertia,
+TMR_tmrWeightedInertiaDist = tmrWeightedInertiaDist,
+TMR_tmrWeightedInertiaContrib = tmrWeightedInertiaContrib,
+TMR_tmrWeightedInertiaContribExt = tmrWeightedInertiaContribExt,
+TMR_tmrinertiacontribext = tmrinertiacontribext,
+TMR_tmrWeightedInterInertia = tmrWeightedInterInertia,
+##Distance
+TMR_cLCP = cLCP,
+TMR_dist2matrix = dist2matrix,
+TMR_checktriangleineq = checktriangleineq,
+TMR_cLCS = cLCS,
+TMR_cLEVEN = cLEVEN,
+TMR_cstringdistance = cstringdistance,
+##Seqe
+TMR_tmrsequencegetdictionary = tmrsequencegetdictionary,
+TMR_tmrsequencestring = tmrsequencestring,
+TMR_tmrmatrixsubseqinseq = tmrmatrixsubseqinseq,
+TMR_tmrsequencecontainevent = tmrsequencecontainevent,
+TMR_tmrsequenceseveral = tmrsequenceseveral,
+TMR_tmrsequence = tmrsequence,
+TMR_tmrseqedist = tmrseqedist,
+TMR_tmreventinseq = tmreventinseq,
+TMR_tmrfindsubsequences = tmrfindsubsequences,
+TMR_tmrsequencegetid = tmrsequencegetid,
+TMR_tmrsequencegetlength = tmrsequencegetlength,
+TMR_tmrsequencesetlength = tmrsequencesetlength,
+TMR_tmrsequencegetweight = tmrsequencegetweight,
+TMR_tmrsequencesetweight = tmrsequencesetweight
+)
 

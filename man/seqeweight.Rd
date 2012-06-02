@@ -37,7 +37,8 @@ seqeweight(biofam.seqe) <- biofam$wp00tbgs
 ## Now seqefsub accoounts for weights unless weighted is set to FALSE
 fsubseq <- seqefsub(biofam.seqe, pMinSupport=0.01)
 
-## Searching for weighted susbsequences which best discriminate the birth cohort
+## Searching for weighted susbsequences which best 
+## discriminate the birth cohort
 discr <- seqecmpgroup(fsubseq, group=biofam$birthyr>=1940)
 plot(discr[1:15])
 

@@ -11,13 +11,13 @@ seqtransn(seqdata, with.missing=FALSE, norm=FALSE, pweight=FALSE)
 \arguments{
 	\item{seqdata}{a state sequence object as defined by the
 \code{\link{seqdef}} function.}
-	\item{with.missing}{logical. if set to \code{TRUE}, missing states (gaps
+	\item{with.missing}{logical. if set as \code{TRUE}, missing states (gaps
 in sequences) are considered as an additional state and included in
 the DSS sequence. See \code{\link{seqdss}}.}
-	\item{norm}{logical. If set to \code{TRUE}, the number of transitions is
+	\item{norm}{logical. If set as \code{TRUE}, the number of transitions is
 divided by its theoretical maximum, the length of the sequence minus
 1. When length of the sequence is 1, normalized value is set to 0 as in the non-normalized case.}
-	\item{pweight}{logical. EXPERIMENTAL! If set to \code{TRUE}, when counting transitions 
+	\item{pweight}{logical. EXPERIMENTAL! If set as \code{TRUE}, when counting transitions
 	each transition does not account for 1 but for its probability (transition rate) as observed in the data.}
 
  }
