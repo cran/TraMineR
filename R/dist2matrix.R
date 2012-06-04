@@ -4,7 +4,7 @@
 
 dist2matrix <- function(dist) {
 	if (inherits(dist, "dist")) {
-		return(.Call("dist2matrix", dist, attr(dist, "Size")))
+		return(.Call(TMR_dist2matrix, dist, attr(dist, "Size")))
 	}
 	else if (is.matrix(dist)) {
 		return(dist)

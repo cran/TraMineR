@@ -68,7 +68,7 @@ seqdistold <- function(seqdata, method, refseq=NULL,
 	## ==============
 	## Preparing data
 	## ==============
-	seqdata <- seqnum(seqdata, with.miss=with.miss)
+	seqdata <- seqnum(seqdata, with.missing=with.miss)
 
 	## Selecting distinct sequences only and saving the indexes 
 	dseq <- unique(seqdata)
@@ -90,7 +90,7 @@ seqdistold <- function(seqdata, method, refseq=NULL,
 	## l <- ncol(dseq)
 	slength <- seqlength(dseq)
 
-	dseq <- seqasnum(dseq, with.miss=with.miss)
+	dseq <- seqasnum(dseq, with.missing=with.miss)
 
 	message(" [>] min/max sequence length: ",min(slength),"/",max(slength))
 

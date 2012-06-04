@@ -1,10 +1,10 @@
 \name{disscenter}
 \alias{disscenter}
 \encoding{latin1}
-\title{Compute distance to the center of a group}
+\title{Compute distances to the center of a group}
 
 \description{
-	Computes the dissimilarity between a objects and their group center from their pairwise dissimilarity matrix.
+Computes the dissimilarity between objects and their group center from their pairwise dissimilarity matrix.
 }
 
 \usage{
@@ -42,14 +42,16 @@ center, each column corresponding to a group.}
 
 	It can be shown that this dissimilarity is equal to (see \cite{Batagelj 1988}):
 		\deqn{d_{x\tilde{g}}=\frac{1}{n}\big(\sum_{i=1}^{n}d_{xi}-SS\big)}{d_(xg)=1/n *(sum d_xi - SS)}
-	Where \eqn{SS} is the sum of squares (see \code{\link{dissvar}}).
+	where \eqn{SS} is the sum of squares (see \code{\link{dissvar}}).
 }
 \value{
 	A vector with the dissimilarity to the group center for each object, or a list of medoid indexes.
 }
 
 \references{
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
+    Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
+
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2010)
   Discrepancy	analysis of complex objects using dissimilarities.
   In F. Guillet, G. Ritschard, D. A. Zighed and H. Briand (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
@@ -79,20 +81,20 @@ center, each column corresponding to a group.}
 data(mvad)
 mvad.seq <- seqdef(mvad[, 17:86])
 
-## Building dissimilarities
-mvad.lcs <- seqdist(mvad.seq, method="LCS")
+## Building dissimilarities (any dissimilarity measure can be used)
+mvad.ham <- seqdist(mvad.seq, method="HAM")
 
 ## Compute distance to center according to group gcse5eq
-dc <- disscenter(mvad.lcs, group=mvad$gcse5eq)
+dc <- disscenter(mvad.ham, group=mvad$gcse5eq)
 
 ## Ploting distribution of dissimilarity  to center
 boxplot(dc~mvad$gcse5eq, col="cyan")
 
 ## Retrieving index of the first medoids, one per group
-dc <- disscenter(mvad.lcs, group=mvad$Grammar, medoids.index="first")
+dc <- disscenter(mvad.ham, group=mvad$Grammar, medoids.index="first")
 print(dc)
 
 ## Retrieving index of all medoids in each group
-dc <- disscenter(mvad.lcs, group=mvad$Grammar, medoids.index="all")
+dc <- disscenter(mvad.ham, group=mvad$Grammar, medoids.index="all")
 print(dc)
 }

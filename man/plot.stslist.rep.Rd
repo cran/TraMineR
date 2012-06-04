@@ -24,8 +24,8 @@ representative sequence plot.
   \item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the "missing.color" attribute of the sequence object being plotted.}
   \item{pbarw}{when \code{TRUE}, the bar heights are set proportional to the number of represented sequences.}
   \item{dmax}{maximal theoretical distance, used for the x axis limits.}
-  \item{stats}{if TRUE (default), mean discrepancy in each subset defined by all sequences attributed to one representative sequence and the mean distance to this representative sequence are displayed.}
-  \item{ylab}{an optional label for the y axis. If set to NA, no label is drawn.}
+  \item{stats}{if \code{TRUE} (default), mean discrepancy in each subset defined by all sequences attributed to one representative sequence and the mean distance to this representative sequence are displayed.}
+  \item{ylab}{an optional label for the y axis. If set to \code{NA}, no label is drawn.}
   \item{xaxis}{controls whether a x axis is plotted.}
   \item{xtlab}{optional labels for the x axis ticks labels. If unspecified, the column names of the object being plotted.}
   \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with \code{xtstep=3} a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}

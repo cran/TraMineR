@@ -20,7 +20,7 @@ seqdist(seqdata, method, refseq=NULL, norm=FALSE,
 
   \item{refseq}{Optional baseline sequence to compute the distances from. Can be the index of a sequence in the state sequence object, 0 for the most frequent sequence, or an external sequence passed as a sequence object with 1 row.}
 
-  \item{norm}{if \code{TRUE}, the computed OM, LCP, RLCP or LCS distances are normalized to account for differences in sequence lengths, and the normalization method is automatically selected.  Default is \code{FALSE}. Can also be one of \code{"none", "maxlength", "gmean", "maxdist", "YujianBo"}. See details.}
+  \item{norm}{if \code{TRUE}, the computed OM, LCP, RLCP or LCS distances are normalized to account for differences in sequence lengths, and the normalization method is automatically selected.  Default is \code{FALSE}. Can also be one of \code{"none"}, \code{"maxlength"}, \code{"gmean"}, \code{"maxdist"}, \code{"YujianBo"}. See details.}
 
   \item{indel}{the insertion/deletion cost (OM method). Default is 1. Ignored with non OM metrics.}
 

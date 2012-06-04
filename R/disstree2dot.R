@@ -16,7 +16,11 @@ DTNplotfunc <- function(imagedata, plotfunc, plotfunc.title.cex,
 
 DTNseqplot <- function(ind, seqdata, sortv=NULL, dist.matrix=NULL, ...) {
 	if (!is.null(sortv)){
-		seqplot(seqdata[ind, ], sortv=sortv[ind], ...)
+		if(length(sortv) > 1) {
+            seqplot(seqdata[ind, ], sortv=sortv[ind], ...)
+        } else {
+            seqplot(seqdata[ind, ], sortv=sortv, ...)
+        }    
 	} else if(!is.null(dist.matrix)){
 		seqplot(seqdata[ind, ], dist.matrix=dist.matrix[ind,ind], ...)
 	}
@@ -25,35 +29,64 @@ DTNseqplot <- function(ind, seqdata, sortv=NULL, dist.matrix=NULL, ...) {
 	}
 }
 
-seqtreedisplay <- function(tree, filename=NULL, seqdata=tree$info$object, imgLeafOnly=FALSE, sortv=NULL, dist.matrix=NULL, title.cex=3, withlegend="auto", legend.fontsize=title.cex, axes=FALSE, imageformat="png", withquality=TRUE, legendtext=NULL, showtree=TRUE, ...) {
+
+DTNseqlegend <- function(filename, seqdata, legend.fontsize, withlegend, imageformat="jpg", ...) {
+	legendimage <- NULL
+	arguments <- list(...)
+	if(withlegend!=FALSE) {
+		if(imageformat!="jpg"){
+			devicefunc <- "png"
+			imageext <- "png"
+		}
+		else {
+			devicefunc <- "jpeg"
+			imageext <- "jpg"
+		}
+		
+		if (is.null(arguments[["device.arg"]])) {
+			device.arg <- list()
+		}
+		else {
+			device.arg <- arguments[["device.arg"]]
+		}
+		legendimage <- paste(filename,"legend", imageext, sep=".")
+		device.arg$file <- legendimage
+	
+		do.call(devicefunc, device.arg)
+		plot.new()
+		seqlegend(seqdata, fontsize=legend.fontsize, title="Legend", position="center",  bty="n")
+		dev.off()
+	}
+	return(legendimage)
+}
+
+disstreedisplay <- function(tree, filename=NULL, imagedata=NULL, imagefunc=plot, imgLeafOnly=FALSE, title.cex=3, imageformat="png",
+							withquality=TRUE, quality.fontsize=title.cex, legendtext=NULL, showtree=TRUE, showdepth=FALSE, ...) {
 	actualdir <- getwd()
 	tmpdir <- tempdir()
-	tmpseqtree <- basename(tempfile(pattern="tmpseqtree"))
+	tmpdisstree <- basename(tempfile(pattern="tmpdisstree"))
+	on.exit(setwd(actualdir))
 	setwd(tmpdir)
-	if(withquality){
-		
-		rowStat <- function(x, n){
-			formd <- function (x){
-				return(format(x, digits =getOption("digits")-2))
-			}
-			star <- function(val){
-				return(as.character(cut(val, c(0, 0.001, 0.01, 0.05, 1), labels=c("***", "**", "*",""))))
-			}
-			return(paste("<TR><TD ALIGN=\"LEFT\">",n,":</TD><TD ALIGN=\"LEFT\">", formd(x$info$adjustment$stat[n,1]),
-						 "</TD><TD ALIGN=\"LEFT\">", star(x$info$adjustment$stat[n,2]),"</TD></TR>", sep=""))
-		}
-		legendtext <- paste("<FONT POINT-SIZE=\"",round(title.cex*11,0),"\"><TABLE BORDER=\"0\" CELLPADDING=\"5\"><TR><TD COLSPAN=\"3\">Global quality</TD></TR>",
-							rowStat(tree, "Pseudo F"), rowStat(tree, "Pseudo R2"), rowStat(tree, "Levene"),"</TABLE></FONT>", sep="")
+	disstreedisplayInternal(tree=tree, filename=filename, tmpdisstree=tmpdisstree, imagedata=imagedata, imagefunc=imagefunc, 
+							imgLeafOnly=imgLeafOnly, title.cex=title.cex, imageformat=imageformat, withquality=withquality, 
+							quality.fontsize=quality.fontsize, legendtext=legendtext, showtree=showtree, showdepth=showdepth, ...)
+	setwd(actualdir)
+	if(!is.null(filename)){
+		file.copy(file.path(tmpdir, paste(tmpdisstree, imageformat, sep=".")), filename, overwrite=TRUE)
 	}
+
+}
+
+disstreedisplayInternal <- function(tree, filename, tmpdisstree, imagedata, imagefunc, imgLeafOnly, title.cex, imageformat,
+							withquality, quality.fontsize, legendtext, showtree, showdepth, ...) {
 	if(imageformat!="jpg"){
-		seqtree2dot(tree=tree, filename=tmpseqtree, seqdata=seqdata, imgLeafOnly=imgLeafOnly,
-			sortv=sortv, dist.matrix=dist.matrix, title.cex=title.cex, withlegend=withlegend,
-			legend.fontsize=legend.fontsize, axes=axes, devicefunc="png", imageext="png", legendtext=legendtext, ...)
+		disstree2dotp(tree=tree, filename=tmpdisstree, imagedata=imagedata, imgLeafOnly=imgLeafOnly, imagefunc=imagefunc,
+			title.cex=title.cex, devicefunc="png", imageext="png", legendtext=legendtext, 
+			withquality=withquality, quality.fontsize=quality.fontsize, showdepth=showdepth,  ...)
 	}
 	else {
-		seqtree2dot(tree=tree, filename=tmpseqtree, seqdata=seqdata, imgLeafOnly=imgLeafOnly,
-			sortv=sortv, dist.matrix=dist.matrix, title.cex=title.cex, withlegend=withlegend,
-			legend.fontsize=legend.fontsize, axes=axes, legendtext=legendtext, ...)
+		disstree2dotp(tree=tree, filename=tmpdisstree, imagedata=imagedata, imgLeafOnly=imgLeafOnly, imagefunc=imagefunc,
+			title.cex=title.cex, legendtext=legendtext, withquality=withquality, quality.fontsize=quality.fontsize, showdepth=showdepth, ...)
 	}
 	
 	myshellrun <- function(cmd, ...) {
@@ -65,32 +98,55 @@ seqtreedisplay <- function(tree, filename=NULL, seqdata=tree$info$object, imgLea
 		}
 	}
 	if(imageformat!="jpg"){
-		dotval <- myshellrun(paste("dot -Tpng -o", tmpseqtree,".png ", tmpseqtree,".dot", sep=""))
+		dotval <- myshellrun(paste("dot -Tpng -o", tmpdisstree,".png ", tmpdisstree,".dot", sep=""))
 	}else{
-		dotval <- myshellrun(paste("dot -Tjpg -o", tmpseqtree,".jpg ", tmpseqtree,".dot", sep=""))
+		dotval <- myshellrun(paste("dot -Tjpg -o", tmpdisstree,".jpg ", tmpdisstree,".dot", sep=""))
 	}
 	if (dotval==1) {
 		stop("You should install GraphViz to use this function: see http://www.graphviz.org")
 	}
 	
 	if (!(imageformat %in% c("jpg", "png"))) {
-		imagickval <- myshellrun(paste("convert ", tmpseqtree,".png ",tmpseqtree,".", imageformat, sep=""))
+		imagickval <- myshellrun(paste("convert ", tmpdisstree,".png ",tmpdisstree,".", imageformat, sep=""))
 		if (imagickval == 1) {
 			stop("To use another format than jpeg or png, you should install ImageMagick: see http://www.imagemagick.org")
 		}
 	}
     if (showtree) {
     	if (.Platform$OS.type=="windows") {
-    		myshellrun(paste("start ", tmpseqtree, ".", imageformat, sep=""), wait=FALSE)
+    		myshellrun(paste("start ", tmpdisstree, ".", imageformat, sep=""), wait=FALSE)
     	}
+    	else if(Sys.info()[1]=="Darwin"){
+			myshellrun(paste("open ", tmpdisstree, ".", imageformat, sep=""), wait=FALSE)
+		}
     	else {
-    		myshellrun(paste("display ", tmpseqtree, ".", imageformat, sep=""), wait=FALSE)
+    		myshellrun(paste("display ", tmpdisstree, ".", imageformat, sep=""), wait=FALSE)
     	}
     }
 	
+	return(invisible())
+
+}
+
+seqtreedisplay <- function(tree, filename=NULL, seqdata=tree$info$object, imgLeafOnly=FALSE, sortv=NULL, dist.matrix=NULL,
+							title.cex=3, withlegend="auto", legend.fontsize=title.cex, axes=FALSE, imageformat="png",
+							withquality=TRUE, quality.fontsize=title.cex, legendtext=NULL, showtree=TRUE, showdepth=FALSE, ...) {
+
+	actualdir <- getwd()
+	tmpdir <- tempdir()
+	tmpdisstree <- basename(tempfile(pattern="tmpseqtree"))
+	on.exit(setwd(actualdir))
+	setwd(tmpdir)
+	
+	legendimage <- DTNseqlegend(filename=tmpdisstree, seqdata=seqdata, legend.fontsize=legend.fontsize, withlegend=withlegend, imageformat=imageformat, ...)
+		
+	disstreedisplayInternal(tree=tree, filename=filename, tmpdisstree=tmpdisstree, imagedata=NULL, imagefunc=DTNseqplot, 
+							imgLeafOnly=imgLeafOnly, title.cex=title.cex, imageformat=imageformat, withquality=withquality, 
+							quality.fontsize=quality.fontsize, legendtext=legendtext, showtree=showtree, showdepth=showdepth, legendimage=legendimage, 
+							seqdata=seqdata, sortv=sortv, dist.matrix=dist.matrix, axes=axes, withlegend=FALSE, ...)
 	setwd(actualdir)
 	if(!is.null(filename)){
-		file.copy(file.path(tmpdir, paste(tmpseqtree, imageformat, sep=".")), filename)
+		file.copy(file.path(tmpdir, paste(tmpdisstree, imageformat, sep=".")), filename, overwrite=TRUE)
 	}
 	return(invisible())
 }
@@ -98,10 +154,24 @@ seqtreedisplay <- function(tree, filename=NULL, seqdata=tree$info$object, imgLea
 ###########################
 ## Shortcut to build sequences tree
 ###########################
-seqtree2dot <- function(tree, filename, seqdata=tree$info$object, imgLeafOnly=FALSE, sortv=NULL,dist.matrix=NULL, title.cex=3, withlegend="auto", legend.fontsize=title.cex, axes=FALSE, ...) {
-	legendimage <- NULL
+seqtree2dot <- function(tree, filename, seqdata=tree$info$object, imgLeafOnly=FALSE, sortv=NULL,dist.matrix=NULL, title.cex=3, withlegend="auto",
+						 legend.fontsize=title.cex, withquality=FALSE, quality.fontsize=title.cex, axes=FALSE, ...) {
+	legendimage <- DTNseqlegend(filename=filename, seqdata=seqdata, legend.fontsize=legend.fontsize, withlegend=withlegend, ...)
+	
+	disstree2dotp(tree, filename, imagedata=NULL, imgLeafOnly=imgLeafOnly, seqdata=seqdata, title.cex=title.cex,
+			sortv=sortv,dist.matrix=dist.matrix, imagefunc=DTNseqplot, withlegend=FALSE, axes=axes,
+			legendimage=legendimage, withquality=withquality, quality.fontsize=quality.fontsize, ...)
+}
+
+
+###########################
+## Generate dot file
+###########################
+disstree2dotp <- function(tree, filename, imagedata=NULL, imgLeafOnly=FALSE,
+						imagefunc=plot, title.cex=3, withquality=TRUE, quality.fontsize=title.cex, ...){
+	qualityimage <- NULL
 	arguments <- list(...)
-	if(withlegend!=FALSE) {
+	if(withquality) {
 		devicefunc <- ifelse(is.null(arguments[["devicefunc"]]), "jpeg", arguments[["devicefunc"]])
 		imageext <- ifelse(is.null(arguments[["imageext"]]), "jpg", arguments[["imageext"]])
 		if (is.null(arguments[["device.arg"]])) {
@@ -110,32 +180,32 @@ seqtree2dot <- function(tree, filename, seqdata=tree$info$object, imgLeafOnly=FA
 		else {
 			device.arg <- arguments[["device.arg"]]
 		}
-		legendimage <- paste(filename,"legend", imageext, sep=".")
-		device.arg$file <- legendimage
-		
+		qualityimage <- paste(filename,"quality", imageext, sep=".")
+		device.arg$file <- qualityimage
 		do.call(devicefunc, device.arg)
+		par(mar=rep(0.2, 4))
 		plot.new()
-		seqlegend(seqdata, fontsize=legend.fontsize, title="Legend", position="center",  bty="n")
+		plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
+		rowStat <- function(x, n){
+			formd <- function (x){
+				return(format(x, digits =getOption("digits")-2))
+			}
+			star <- function(val){
+				return(as.character(cut(val, c(0, 0.001, 0.01, 0.05, 1), labels=c("***", "**", "*",""))))
+			}
+			return(paste(n,": ", formd(x$info$adjustment$stat[n,1])," ", star(x$info$adjustment$stat[n,2]), sep=""))
+		}
+		ltext <- c(rowStat(tree, "Pseudo F"), rowStat(tree, "Pseudo R2"), rowStat(tree, "Levene"))
+		legend("center", legend = ltext, cex = quality.fontsize, title="Global quality", bty="n")
 		dev.off()
 	}
-	disstree2dotp(tree, filename, imagedata=NULL, imgLeafOnly=imgLeafOnly, seqdata=seqdata, title.cex=title.cex,
-			sortv=sortv,dist.matrix=dist.matrix, imagefunc=DTNseqplot, withlegend=FALSE, axes=axes, legendimage=legendimage, ...)
-}
-
-
-disstree2dotp <- function(tree, filename, imagedata=NULL, imgLeafOnly=FALSE,
-						imagefunc=plot, title.cex=3, ...){
 	disstree2dot(tree, filename, imagedata=imagedata, imgLeafOnly=imgLeafOnly, title.cex=title.cex, imagefunc=DTNplotfunc, plotfunc=imagefunc,
 			use.title=TRUE, label.loc="main", node.loc="main", split.loc="sub",
 			plotfunc.use.title=TRUE, plotfunc.label.loc="main", plotfunc.node.loc="main",
-			plotfunc.split.loc="sub", plotfunc.title.cex=3, ...)
+			plotfunc.split.loc="sub", plotfunc.title.cex=3, qualityimage=qualityimage, ...)
+			
 
 }
-
-
-###########################
-## Generate dot file
-###########################
 
 ###########################
 ## Generate dot file
@@ -143,7 +213,8 @@ disstree2dotp <- function(tree, filename, imagedata=NULL, imgLeafOnly=FALSE,
 disstree2dot <- function(tree, filename, digits=3, imagefunc=NULL, imagedata=NULL,
 							imgLeafOnly=FALSE, devicefunc="jpeg", imageext="jpg",
 							device.arg=list(), use.title=TRUE, label.loc="main",
-							node.loc="main", split.loc="sub", title.cex=1, legendtext=NULL, legendimage=NULL, showdepth=FALSE, ...) {
+							node.loc="main", split.loc="sub", title.cex=1, legendtext=NULL, 
+							legendimage=NULL, qualityimage=NULL, showdepth=FALSE, ...) {
 	dotfile <- paste(filename, ".dot", sep="")
 	node <- tree$root
 	cat("digraph distree{\n", file=dotfile)
@@ -151,6 +222,7 @@ disstree2dot <- function(tree, filename, digits=3, imagefunc=NULL, imagedata=NUL
 		str <- paste("\"node_legendimage\"[shape=box, image=\"", legendimage,"\", imagescale=true, label=\" \"", sep="")
 		cat(paste(str, "];\n", sep=""), file=dotfile, append=TRUE)
 	}
+	
 	
 	if (!is.null(imagefunc) && is.null(imagedata)) {
 		imagedata <- as.data.frame(node$info$ind)
@@ -161,7 +233,7 @@ disstree2dot <- function(tree, filename, digits=3, imagefunc=NULL, imagedata=NUL
 	nodedepthranking <- list()
 	DTN2DotInternal <- function(preced, node, pos, label) {
 		nodename <- paste(preced, "_", pos, sep="")
-		nodedepthranking[[nodename]] <<- node$info$depth
+		nodedepthranking[[nodename]] <<- node$info$splitschedule
 		stringcontentnode <- paste("n: ", formd(node$info$n), " s2: ",
 				formd(node$info$vardis), sep="")
 		if (!is.null(node$split)) {
@@ -253,6 +325,10 @@ disstree2dot <- function(tree, filename, digits=3, imagefunc=NULL, imagedata=NUL
 	}
 	
 	DTN2DotInternal(preced=filename, node=node, pos="none", label="Root")
+	if (!is.null(qualityimage)) {
+		str <- paste("\"node_qualityimage\"[shape=box, image=\"", qualityimage,"\", imagescale=true, label=\" \"", sep="")
+		cat(paste(str, "];\n", sep=""), file=dotfile, append=TRUE)
+	}
 	if (!is.null(legendtext)) {
 		str <- paste("\"node_legendtext\"[shape=box, label=<", legendtext, ">", sep="")
 		cat(paste(str, "];\n", sep=""), file=dotfile, append=TRUE)

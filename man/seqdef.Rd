@@ -39,20 +39,20 @@ Other separators must be specified explicitly.}
 
   \item{states}{an optional vector containing the short state labels. Must have a length equal to the size of the alphabet and the labels must be ordered conformably with alpha-numeric ordered values returned by the \code{\link{seqstatl}} function, or, when \code{alphabet=} is set, with the thus newly defined alphabet.}
 
-  \item{id}{optional argument for setting the rownames of the sequence object. If \code{NULL} (default), the rownames are taken from the input data. If set to "auto", sequences are number 1 to number of sequences. A vector containing the rownames of length equal to number of sequences may be specified as well.}
+  \item{id}{optional argument for setting the rownames of the sequence object. If \code{NULL} (default), the rownames are taken from the input data. If set to \code{"auto"}, sequences are numbered from 1 to the number of sequences. A vector of rownames of length equal to the number of sequences may be specified as well.}
 
-  \item{weights}{optional numerical vector containing weights, which may be used by some functions to compute weighted statistics. EXPERIMENTAL.}
+  \item{weights}{optional numerical vector containing weights, which are accounted for by plotting and statistical functions when applicable.}
 
-	\item{start}{starting time. For instance, if your sequences begin
+    \item{start}{starting time. For instance, if sequences begin
 at age 15, you can specify 15. At this stage, used only for labelling column names.}
 
 	\item{left}{the behavior for missing values appearing before the
 first (leftmost) valid state in each sequence. See \cite{Gabadinho et
-al. (2008)} for more details on the options for handling missing
+al. (2010)} for more details on the options for handling missing
 values when defining sequence objects. By default, left missing
 values are treated as 'real' missing values and converted to the
 internal missing value code defined by the \code{nr} option. Other
-options are "DEL" to delete the positions containing missing values
+options are \code{"DEL"} to delete the positions containing missing values
 or a state code (belonging to the alphabet or not) to replace the
 missing values.}
 
@@ -67,16 +67,16 @@ the \code{left} argument.}
 
 	\item{missing}{the code used for missing values in the input
 data. When specified, all cells containing this value will be
-replaced by NA's, the internal R code for missing values. If
-'\code{missing}' is not specified, cells containing NA's are
+replaced by \code{NA}'s, the internal R code for missing values. If
+'\code{missing}' is not specified, cells containing \code{NA}'s are
 considered as missing values.}
  	
     \item{void}{the internal
 code used by TraMineR for representing void elements in the
-sequences. Default is "\code{\%}".}
+sequences. Default is\code{"\%"}.}
 
 	\item{nr}{the internal code used by TraMineR for representing real
-missing elements in the sequences. Default is "\code{*}".}
+missing elements in the sequences. Default is\code{"*"}.}
 
 	\item{cnames}{optional names for the columns composing the
 sequence data. Those names will be used by default in the graphics as

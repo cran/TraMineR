@@ -3,7 +3,7 @@
 \alias{dissassoc}
 \alias{hist.dissassoc}
 \alias{print.dissassoc}
-\title{Analysis of discrepancy based on dissimilarity measure}
+\title{Analysis of discrepancy from dissimilarity measures}
 
 \description{
 Compute and test the share of discrepancy (defined from a dissimilarity matrix) explained by a categorical variable.
@@ -21,34 +21,36 @@ dissassoc(diss, group, weights=NULL, R=1000,
   \item{group}{The grouping variable}
   \item{weights}{optional numerical vector containing weights.}
   \item{R}{Number of permutations for computing the p-value. If equal to 1, no permutation test is performed.}
-  \item{weight.permutation}{Weights permutation method: \code{"diss"} 
-  (attach weigths to the dissimilarity matrix), \code{"replicate"} (replicate case according to the \code{weights} arguments), \code{"rounded-replicate"} (replicate case according to the rounded \code{weights} arguments), \code{"random-sampling"} (random assignment of covariate profiles to the objects using distributions defined by the weights.)}
+  \item{weight.permutation}{Weighted permutation method: \code{"diss"}
+  (attach weights to the dissimilarity matrix), \code{"replicate"} (replicate case using \code{weights}), \code{"rounded-replicate"} (replicate case using rounded \code{weights}), \code{"random-sampling"} (random assignment of covariate profiles to the objects using distributions defined by the weights.)}
   \item{squared}{Logical. If \code{TRUE} the dissimilarities \code{diss} are squared.}
 }
 
-\details{ The \code{dissassoc} function assesses the association 
-between objects characterized by their dissimilarity matrix and a 
-discrete covariate. It provides a generalization of the ANOVA 
-principle to any kind of distance metric. The function returns a 
-pseudo R-square that can be interpreted as a usual R-square. The 
-statistical significance of the association is computed by means of 
-permutation tests. The function performs also a test of discrepancy 
-homogeneity (equality of within variances) using a generalization of 
-the Levene statistic and Bartlett's statistics. \cr There are 
-\code{print} and \code{hist} methods (the latter producing an 
-histogram of the permuted values used for testing the significance). 
-} 
+\details{ The \code{dissassoc} function assesses the association
+between objects characterized by their dissimilarity matrix and a
+discrete covariate. It provides a generalization of the ANOVA
+principle to any kind of distance metric. The function returns a
+pseudo R-square that can be interpreted as a usual R-square. The
+statistical significance of the association is computed by means of
+permutation tests. The function performs also a test of discrepancy
+homogeneity (equality of within variances) using a generalization of
+the Levene statistic and Bartlett's statistics. \cr There are
+\code{print} and \code{hist} methods (the latter producing an
+histogram of the permuted values used for testing the significance).
+}
 
-\value{ Returns an object of class \code{dissassoc} with the 
-following components: 
+\value{ An object of class \code{dissassoc} with the
+following components:
   \item{groups}{A data frame with the number of cases and the discrepancy of each group}
   \item{anova.table}{The pseudo ANOVA table}
   \item{stat}{The value of the statistics and their p-values}
   \item{perms}{The permutation object, containing the values computed for each permutation}
 }
 \references{
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
-  Discrepancy	analysis of complex objects using dissimilarities.
+    Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
+
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2010)
+  Discrepancy analysis of complex objects using dissimilarities.
   In F. Guillet, G. Ritschard, H. Briand, and D. A. Zighed (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
   Studies in Computational Intelligence, Volume 292, pp. 3-19. Berlin: Springer.
@@ -82,11 +84,11 @@ pseudo variance analysis.
 data(mvad)
 mvad.seq <- seqdef(mvad[, 17:86])
 
-## Building dissimilarities
-mvad.lcs <- seqdist(mvad.seq, method="LCS")
+## Building dissimilarities (any dissimilarity measure can be used)
+mvad.ham <- seqdist(mvad.seq, method="HAM")
 
-## R=1 imply no permutation test
-da <- dissassoc(mvad.lcs, group=mvad$gcse5eq, R=10)
+## R=1 implies no permutation test
+da <- dissassoc(mvad.ham, group=mvad$gcse5eq, R=10)
 print(da)
 hist(da)
 }

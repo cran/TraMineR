@@ -67,14 +67,14 @@ disscentertrim <- function(diss, group=NULL, medoids.index=NULL, allcenter=FALSE
 		if (allcenter) {
 			ret[, i] <- 0
 			others <- sort(ind[!cond])
-			dT <- .Call("tmrWeightedInertiaContribExt", diss, grpindiv, others,weights, PACKAGE="TraMineR")
+			dT <- .Call(TMR_tmrWeightedInertiaContribExt, diss, grpindiv, others,weights)
 			dTindiv <- 1:sum(cond)
 			dT <- dT - weighted.mean(dT[dTindiv], weights[grpindiv])
 			ret[grpindiv, i] <- dT[dTindiv]
 			ret[others, i] <- dT[-(dTindiv)]
 		}
 		else {
-			dc <- .Call("tmrWeightedInertiaContrib", diss, as.integer(grpindiv),weights, PACKAGE="TraMineR")
+			dc <- .Call(TMR_tmrWeightedInertiaContrib, diss, as.integer(grpindiv),weights)
 			dc <- dc-weighted.mean(dc, weights[cond])/2
 			
 			ret[grpindiv] <- dc
@@ -82,7 +82,7 @@ disscentertrim <- function(diss, group=NULL, medoids.index=NULL, allcenter=FALSE
 			if (trim>0) {
 					maxdist <- quantile(dc, probs=keep)
 					trimmedcond <- dc<=maxdist
-					dT <- .Call("tmrinertiacontribext", diss, grpindiv[trimmedcond], grpindiv[!trimmedcond], PACKAGE="TraMineR")
+					dT <- .Call(TMR_tmrinertiacontribext, diss, grpindiv[trimmedcond], grpindiv[!trimmedcond])
 					ntrimmed <- sum(trimmedcond)
 					dT <- dT-mean(dT[1:ntrimmed])/2
 					mindc <- min(dT)

@@ -1,4 +1,63 @@
 ## ==========
+Version 1.8-2
+
+Vignettes: Slightly modified JSS article vol. 40(4) added as
+    a vignette on state sequence analysis.
+
+Misc:
+  - added 'ex2' data sets to test and illustrate the handling of weights,
+        type help(ex2) for details.
+
+New functionalities:
+  - New faster interface between C code and R.
+  - seqalign() and associated print and plot methods to see computation details
+        about the alignment of two state sequences.
+
+Changes in existing functions:
+  - seqtree(), disstree(): speed improvements.
+  - seqtm(): gives a warning when state names or state labels contain a comma.
+  - seqdef(): changed the display of alphabet, state labels and long labels when
+        creating a state sequence object.
+  - seqistatd() and seqmeant(): added 'prop' argument to calculate
+        proportions of time spent in
+        each state instead of absolute values.
+  - seqplot() and aliases: 'group' now also accepts as argument a list of
+        variables/vectors and produces a plot for each combination of the
+        values of the variables in the list.
+  - dissrep(), seqrep(), seqrplot(): now accounts for weights when present.
+  - seqtrate(), seqsubm(): added two arguments:
+        - lag: compute transition rates from (t) to (t+lag), set to one by default
+        - with.missing: If TRUE, compute transition rates to and from missing values.
+  - seqtreedisplay(): now overwrites previous file if filename is not NULL.
+        Tree quality measures displayed with R code.
+  - checktriangleineq(): internal function to check triangle inequality is now
+        in C, which allows checking much bigger distance matrices.
+  - seqIplot(), seqiplot() and seqplot() with type "I" or "i": the 'sortv' argument now
+        also accepts a sorting method, namely one of "from.start" or "from.end".
+        See the help page ?plot.stslist for explanation.
+  - seqeconstraint() and other 'seqe...' functions for event sequences: support
+        of subsequences can now be determined by means of any of
+        Joshi's 5 counting methods (see the ref manual page). The method should be
+        specified with seqeconstraint().
+  - seqeapplaysub(): when "method=NULL" is specified (now the default), the count method
+        assigned to the event sequence object is used. With method="count"
+        CDIST_O (number of distinct occurrences) is used as previously.
+  - seqrep(): attribute 'Index' of the returned object is now a vector instead of
+        an object of class 'dissrep'.
+
+Bug fixes:
+  - seqtreedisplay(): was changing current directory when an error occurred in
+        the plotting function.
+  - dissrep(), seqrep(): error when 'nrep' cannot be reached (reported by M. Studer)
+  - seqefsub(): when using strsubseq argument, countMethod of seqeconstraint
+        was not taken into account (Reported by Reto Buergin).
+  - seqeconstraint(): added consistency checks to avoid misuses (Reported by Reto Buergin).
+  - print.seqelist() and as.character.seqelist(): generated segfault when
+        converting long event sequences to character (Reported by Pierre Molinier).
+  - seqsubm(): Very small rounding errors (1e-16) were sometimes leading to non symmetric
+        substitution cost matrix (Reported by Alexandre Pollien).
+
+## ==========
 Version 1.8-1
 
 Misc:
@@ -43,7 +102,7 @@ Changes in existing functions:
   - seqdist(): enhanced check of substitution cost matrix.
       - The function can now be cleanly interrupted by the user.
       - Timing information now uses the processor time (instead of the elapsed time).
-  - seqformat() when converting from "SPELL": 
+  - seqformat() when converting from "SPELL":
       - new error message when a start time is lower than 1 and/or an end time is smaller than the start time.
       - warning message when start time of episode 1 is missing (sequence creation is skipped)
       - warning message when start/end time of an episode is missing (episode is skipped and filled with NA's)

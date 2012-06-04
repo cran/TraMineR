@@ -28,12 +28,14 @@ In the Euclidean case, the sum of squares can be expressed as:
 \value{The discrepancy.}
 
 \references{
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
-  Discrepancy	analysis of complex objects using dissimilarities.
+    Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
+
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2010)
+  Discrepancy analysis of complex objects using dissimilarities.
   In F. Guillet, G. Ritschard, D. A. Zighed and H. Briand  (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
   Studies in Computational Intelligence, Volume 292, pp. 3-19. Berlin: Springer.
-	
+
   Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
   Analyse de dissimilarités par arbre d'induction. In EGC 2009,
   \emph{Revue des Nouvelles Technologies de l'Information}, Vol. E-15, pp. 7-18.
@@ -60,9 +62,9 @@ In the Euclidean case, the sum of squares can be expressed as:
 data(mvad)
 mvad.seq <- seqdef(mvad[, 17:86])
 
-## Building dissimilarities
-mvad.lcs <- seqdist(mvad.seq, method="LCS")
+## Building dissimilarities (any dissimilarity measure can be used)
+mvad.ham <- seqdist(mvad.seq, method="HAM")
 
 ## Pseudo variance of the sequences
-print(dissvar(mvad.lcs))
+print(dissvar(mvad.ham))
 }

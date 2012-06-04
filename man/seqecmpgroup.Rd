@@ -5,7 +5,7 @@
   Identify and sort the most discriminating subsequences by their discriminating power.
 }
 \usage{
-seqecmpgroup(subseq, group, method="chisq", pvalue.limit=NULL, 
+seqecmpgroup(subseq, group, method="chisq", pvalue.limit=NULL,
              weighted = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -30,13 +30,17 @@ The following discrimination test functions are implemented:
   \item{type}{Type of test used}
   \item{data}{A data frame with columns support, index (original order of the subsequence) and a pair of frequency and Pearson residual columns for each group}
 }
-%\references{ ~put references to the literature/web site here ~ }
+
+\references{
+    Studer, M., Müller, N.S., Ritschard, G. & Gabadinho, A. (2010), "Classer, discriminer et visualiser des séquences d'événements", In Extraction et gestion des connaissances (EGC 2010), \emph{Revue des nouvelles technologies de l'information} RNTI. Vol. E-19, pp. 37-48.
+}
+
 %\author{ ~~who you are~~ }
 %\note{ ~~further notes~~
 
 % ~Make other sections like Warning with \section{Warning }{....} ~
 %}
-\seealso{See Also \code{\link{plot.subseqelistchisq}} to plot the results}
+\seealso{See also \code{\link{plot.subseqelistchisq}} to plot the results}
 \examples{
 data(actcal.tse)
 actcal.seqe <- seqecreate(actcal.tse)

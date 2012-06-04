@@ -96,7 +96,7 @@ TraMineR.seqdist.all <- function(seqdata, method,
 		disttype <- as.integer(4) ## 4 for DHD or HAM
 	}
  	
-	distances <- .Call("cstringdistance",
+	distances <- .Call(TMR_cstringdistance,
 		as.integer(dseq),
 		as.integer(dim(dseq)),
 		as.integer(slength),
@@ -106,8 +106,7 @@ TraMineR.seqdist.all <- function(seqdata, method,
 		as.integer(norm),
 		as.integer(magicIndex),
 		as.integer(magicSeq),
-		disttype,
-		PACKAGE="TraMineR")
+		disttype)
 
 	## Setting some attributes for the dist object
  	class(distances) <- "dist"

@@ -1,22 +1,27 @@
 \name{disstree2dot}
 \alias{disstree2dot}
 \alias{disstree2dotp}
+\alias{seqtree2dot}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Graphical representation of a dissimilarity tree}
 \description{
-Generate a "dot" file and associated images files that can be used in GraphViz to get a graphical representation of the tree.
+Functions to generate a "dot" file and associated images files that can be used in GraphViz to get a graphical representation of the tree.
 }
 \usage{
-disstree2dot(tree, filename, digits = 3,
-   imagefunc = NULL, imagedata = NULL, imgLeafOnly = FALSE,
-   devicefunc = "jpeg", imageext = "jpg", device.arg = list(),
-   use.title = TRUE, label.loc = "main", node.loc = "main",
-   split.loc = "sub", title.cex = 1, legendtext=NULL,
-   legendimage=NULL, showdepth = FALSE, ...)
+disstree2dot(tree, filename, digits=3, imagefunc=NULL, imagedata=NULL,
+             imgLeafOnly=FALSE, devicefunc="jpeg", imageext="jpg",
+             device.arg=list(), use.title=TRUE, label.loc="main",
+             node.loc="main", split.loc="sub", title.cex=1, legendtext=NULL,
+             legendimage=NULL, qualityimage=NULL, showdepth=FALSE, ...)
 
-disstree2dotp(tree, filename,
-   imagedata=NULL, imgLeafOnly=FALSE,
-   imagefunc=plot, title.cex = 3, ...)
+disstree2dotp(tree, filename, imagedata=NULL, imgLeafOnly=FALSE,
+              imagefunc=plot, title.cex=3, withquality=TRUE,
+			  quality.fontsize=title.cex, ...)
+
+seqtree2dot(tree, filename, seqdata=tree$info$object, imgLeafOnly=FALSE,
+            sortv=NULL, dist.matrix=NULL, title.cex=3, withlegend="auto",
+            legend.fontsize=title.cex, withquality=FALSE,
+			quality.fontsize=title.cex, axes=FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -36,27 +41,41 @@ disstree2dotp(tree, filename,
   \item{title.cex}{\code{cex} applied to all calls to \code{title} (see \code{use.title}).}
   \item{legendtext}{An optional text appearing in a distinct node.}
   \item{legendimage}{An optional image file appearing in a distinct node.}
+  \item{qualityimage}{An optional image file appearing in a distinct node.}
   \item{showdepth}{Logical. If \code{TRUE}, information about depth of the tree is added to the plot.}
-  \item{\dots}{other parameters that will be passed to \code{imagefunc}.}
+  \item{withquality}{If \code{TRUE}, a node displaying fitting measures of the tree is added to the plot.}
+  \item{quality.fontsize}{Numeric. Size of the font of the fitting measures node.}
+  \item{seqdata}{a sequence object as defined by the the \code{\link{seqdef}} function.}
+  \item{sortv}{The name of an optional variable used to sort the data before plotting, see \code{\link{seqplot}}.}
+  \item{dist.matrix}{The name of an optional dissimilarity matrix used to find representative sequences, \code{\link{seqrplot}}.}
+  \item{withlegend}{defines if and where the legend of the state colors is plotted. The default value \code{"auto"} sets the position of the legend automatically. Other possible value is \code{"right"}. Obsolete value \code{TRUE} is equivalent to \code{"auto"}.}
+  \item{legend.fontsize}{Size of the font of the legend.}
+  \item{axes}{if set to \code{"all"} (default value) x axes are drawn for each plot in the graphic. If set to \code{"bottom"} and \code{group} is used, axes are drawn only under the plots located at the bottom of the graphic area. If \code{FALSE}, no x axis is drawn.}
+    \item{\dots}{other parameters that will be passed to \code{imagefunc} or \code{\link{seqplot}} (for \code{seqtree2dot}).}
 }
 \details{
-  This function generates a "dot" file that can be used in GraphViz (\url{http://www.graphviz.org}).
+  These functions generate a "dot" file that can be used in GraphViz (\url{http://www.graphviz.org}).
 It also generates one image per node through a call to
 \code{imagefunc} passing the selected lines of \code{imagedata} if
 present or otherwise a list of indexes (of individuals belonging to a
-node).
+node). These functions are not intended to be used by end-user. See \code{\link{seqtreedisplay}}
+and \code{\link{disstreedisplay}} for a much simpler way to generate a graphical representation of a
+tree (\code{\link{seqtree}} or \code{\link{disstree}}).
 
-if \code{use.title} is \code{TRUE}, \code{imagefunc} should take care
+\code{seqtree2dot} is a shortcut for sequences objects using the plot function \code{\link{seqplot}}. For each node, it calls \code{\link{seqplot}} passing the selected lines of \code{seqdata} as argument.
+	You should at least specify the \code{type} of the plot to use (i.e. using \code{type="d"} for instance, see \code{\link{seqplot}} for more details).
+	
+	
+If \code{use.title} is \code{TRUE}, \code{imagefunc} should take care
 to leave enough space for the title.
 
 \code{disstree2dotp} is a simplified interface of
-\code{disstree2dot} which automatically leaves enough space for the title and subtitles. These functions are intended to be generic. 
+\code{disstree2dot} which automatically leaves enough space for the title and subtitles. These functions are intended to be generic.
 
-See \code{\link{seqtreedisplay}} for a much simpler way to generate a graphical representation of a \code{\link{seqtree}}; that is a \code{disstree} built using a sequence object. 
 
 }
 \value{
-  Nothing but generates a "dot" and several images files (on per node) in the current working directory (see \code{\link{setwd}}).
+  Nothing but generates a "dot" and several images files (one per node) in the current working directory (see \code{\link{getwd}} and \code{\link{setwd}}).
 }
 
-\seealso{\code{\link{seqtree}} and \code{\link{seqtreedisplay}}, \code{\link{disstree}} for an example.}
+\seealso{\code{\link{seqtree}} and \code{\link{seqtreedisplay}}, \code{\link{disstree}} and \code{\link{disstreedisplay}}.}

@@ -7,6 +7,7 @@
 #include "constraint.h"
 #include <Rmath.h>
 #include "TraMineR.h"
+#include <string>
 
 /**
 	tmrsequence build a sequence obect and return an external pointer to that object
@@ -211,10 +212,8 @@ extern "C" {
     SEXP tmrsequencestringinternal(SEXP seq) {
         Sequence *s =NULL;
         ASSIGN_TMRSEQ_TYPE(s,seq);
-        char buffer[TMR_STRING_BUFFER_SIZE];
-        buffer[0]='\0';
-        s->sprint(buffer);
-        return mkChar(buffer);
+        std::string buffer = s->sprint();
+        return mkChar(buffer.c_str());
     }
     /**Return a string representation of a sequence*/
     SEXP tmrsequencestring(SEXP seq) {
@@ -228,86 +227,139 @@ extern "C" {
 
 
     /**Main function find frequent subsequences*/
-    SEXP tmrfindsubsequences(SEXP seqs,SEXP maxGap, SEXP windowSize,SEXP ageMinBegin, SEXP ageMaxBegin, SEXP ageMaxEnd, SEXP countMethod, SEXP minSupport, SEXP maxSubseqSize, SEXP classname) {
-        //Initializing parameters
+  SEXP tmrfindsubsequences(SEXP seqs, SEXP maxGap, SEXP windowSize,
+			   SEXP ageMinBegin, SEXP ageMaxBegin, 
+			   SEXP ageMaxEnd, SEXP countMethod, 
+			   SEXP minSupport, SEXP maxSubseqSize, 
+			   SEXP classname) 
+  {
+    //Initializing parameters
+    Constraint * cst = new Constraint(REAL(maxGap)[0],REAL(windowSize)[0],
+				      REAL(ageMinBegin)[0],
+				      REAL(ageMaxBegin)[0],
+				      REAL(ageMaxEnd)[0], 
+				      REAL(countMethod)[0]);
+    //REprintf((char*)"branches/nico 1\n\n");
+    
+    double mGap = cst->getmaxGap();;
+    double wSize = cst->getwindowSize();
+    double aMin = cst->getageMinBegin();
+    double aMax = cst->getageMaxBegin();
+    double aMaxEnd = cst->getageMaxEnd();
+    int cMethod = REAL(countMethod)[0];
 
-    	Constraint * cst = new Constraint(REAL(maxGap)[0],REAL(windowSize)[0],REAL(ageMinBegin)[0],REAL(ageMaxBegin)[0],REAL(ageMaxEnd)[0], REAL(countMethod)[0]);
-    	//REprintf((char*)"branches/nico 1\n\n");
+    // REprintf((char*)"maxGap = %f\n",mGap);
+    // REprintf((char*)"windowSize = %f\n",wSize);
+    // REprintf((char*)"ageMin = %f\n",aMin);
+    // REprintf((char*)"ageMax = %f\n",aMax);
+    // REprintf((char*)"ageMaxEnd = %f\n",aMaxEnd);
+    // REprintf((char*)"countMethod = %i\n",cMethod);
 
-     // MOVED TO CONSTRAINT OBJ
-     //  double wSize=REAL(windowSize)[0],mGap=REAL(maxGap)[0];
-     //  double aMin=REAL(ageMinBegin)[0],aMax=REAL(ageMaxBegin)[0],aMaxEnd=REAL(ageMaxEnd)[0];
-	/*	double wSize = cst->getwindowSize();
-		double mGap = cst->getmaxGap();
-		//double mGap=REAL(maxGap)[0];
-		double aMin=cst->getageMinBegin();
-		double aMax=cst->getageMaxBegin();
-		double aMaxEnd=cst->getageMaxEnd();
-    	REprintf((char*)"wSize = %f\n", wSize);
-    	REprintf((char*)"maxgap = %f\n", mGap);
-    	REprintf((char*)"aMin = %f\n", aMin);
-    	REprintf((char*)"aMax = %f\n", aMax);
-    	REprintf((char*)"aMaxEnd = %f\n", aMaxEnd);
-	 */
-        int maxK=INTEGER(maxSubseqSize)[0],k=1;
-		double mSupport=REAL(minSupport)[0];
+    int maxK = INTEGER(maxSubseqSize)[0]; 
+    int k = 1;
+    double mSupport=REAL(minSupport)[0];
 
-        //Default values implies no limit (actually biggest possible limit)
-        // MOVED TO CONSTRAINT OBJ
-       // if (wSize==-1)wSize=DBL_MAX;
-      //  if (mGap==-1)mGap=DBL_MAX;
-      //  if (aMax==-1)aMax=DBL_MAX;
-       // if (aMaxEnd==-1)aMaxEnd=DBL_MAX;
-        if (maxK==-1)maxK=INT_MAX;
-        SEXP seq;
-        int numseq=length(seqs);
-        Sequence * s=NULL;
-        int lastNodeCount;
-        PrefixTree * root= new PrefixTree();
-        EventDictionary * ed=NULL;
-        //Adding one event to subseq at a time
-        for (k=1;k<=maxK;k++) {
-            //Clear support stored in tree
-            root->clearSupport();
-            lastNodeCount=TreeEventNode::getNodeCount();
-            //REprintf((char*)"Step %i:\n     Adding sequences (size: %i)\n",k,TreeEventNode::getNodeCount());
-            //Add every sequence to the tree
-            for (int i=0;i<numseq;i++) {
-                seq=VECTOR_ELT(seqs,i);
-                ASSIGN_TMRSEQ_TYPE(s,seq);
-                if(ed==NULL)ed=s->getDictionary();
-                //root->addSequence(s,mGap,wSize,aMin,aMax,aMaxEnd,k);
-                root->addSequence(s, cst, k);
-              //  Rprintf((char*)"Added %i seq, node=%i\n",i,TreeEventNode::getNodeCount());
-            }
-            //REprintf((char*)"     Simplifying tree (size: %i)\n",TreeEventNode::getNodeCount());
-            //root->print();
-            //return ScalarLogical(TRUE);
-            //Simplify tree
-            root->simplifyTree(mSupport);
-            //REprintf((char*)"     Tree simplified (size: %i [added: %i])\n",TreeEventNode::getNodeCount(), (TreeEventNode::getNodeCount()-lastNodeCount));
-            if (TreeEventNode::getNodeCount()-lastNodeCount==0)break;
-        }
-        // root->print();
-        //root->print();
-        //Tree size (number of node=number of frequent subsequences)
-        //REprintf((char*)"Counting subseq...");
-        int returnsize=root->countSubsequence(mSupport);
-        //Rprintf((char*)"Counting subseq (%i)\n",returnsize);
-        SEXP ans, supp,subseq;
-        PROTECT(ans=allocVector(VECSXP, 2)); //Allocate memory
-        PROTECT(supp=allocVector(REALSXP, returnsize)); //Allocate memory
-        PROTECT(subseq=allocVector(VECSXP, returnsize)); //Allocate memory
-        int index=0;
-        //REprintf((char*)"(%i)\nRetrieving subsequences...",returnsize);
-        root->getSubsequences(subseq,REAL(supp),&index,classname, ed); //Extracting all subsequences
-        //REprintf((char*)"OK\n");
-        SET_VECTOR_ELT(ans,0,supp);
-        SET_VECTOR_ELT(ans,1,subseq);
-        UNPROTECT(3);
-        delete root;
-        return ans;
-    }
+    if (maxK==-1) maxK=INT_MAX;
+    SEXP seq;
+    int numseq = length(seqs);
+    Sequence * s = NULL;
+    int lastNodeCount;
+    PrefixTree * root= new PrefixTree();
+    EventDictionary * ed=NULL;
+    // adding one event to subseq at a time
+        
+    for (k=1; k<=maxK; k++) 
+      {
+	// clear support stored in tree
+	root->clearSupport();
+	lastNodeCount=TreeEventNode::getNodeCount();
+	// REprintf((char*)"Step %i:\n     Adding sequences (size: %i)\n",
+	// 	 k,TreeEventNode::getNodeCount());
+	// add every sequence to the tree
+	for (int i=0; i<numseq; i++) 
+	  {
+	    seq=VECTOR_ELT(seqs,i);
+	    ASSIGN_TMRSEQ_TYPE(s,seq);
+	    if(ed==NULL)ed=s->getDictionary();
+	    // root->addSequence(s,mGap,wSize,aMin,aMax,aMaxEnd,k);
+	    root->addSequence(s,cst,k);
+	    // Rprintf((char*)"Added %i seq, node=%i\n",i,
+	    // 	    TreeEventNode::getNodeCount());
+	  }
+	// REprintf((char*)"     Simplifying tree (size: %i)\n",
+	// 	 TreeEventNode::getNodeCount());
+	// root->print();
+	// return ScalarLogical(TRUE);
+	// simplify tree
+	root->simplifyTree(mSupport);
+	// REprintf((char*)"     Tree simplified (size: %i [added: %i])\n",
+	// 	 TreeEventNode::getNodeCount(), 
+	// 	 (TreeEventNode::getNodeCount()-lastNodeCount));
+	if (TreeEventNode::getNodeCount()-lastNodeCount==0) break;
+      }
+    // root->print();
+    // root->clearSupport();
+    // tree size (number of node=number of frequent subsequences)
+    // REprintf((char*)"Counting subseq...\n");
+    int returnsize=root->countSubsequence(mSupport);
+    // Rprintf((char*)"Counting subseq (%i)\n",returnsize);
+    SEXP ans, cnt, supp, subseq;
+    PROTECT(ans=allocVector(VECSXP,3)); // allocate memory
+    PROTECT(cnt=allocVector(REALSXP,returnsize)); // allocate memory
+    PROTECT(supp=allocVector(REALSXP,returnsize)); // allocate memory
+    PROTECT(subseq=allocVector(VECSXP,returnsize)); // allocate memory
+    int index=0;
+    // REprintf((char*)"(%i)\nRetrieving subsequences...",returnsize);
+    // extracting all subsequences
+    root->getSubsequences(subseq,REAL(supp),&index,classname,ed); 
+    // REprintf((char*)"OK\n");
+
+
+    // ----------------------------------------------------- //
+    // Reto Buergin, June 2011: Counting subsequences using 
+    // different methods
+
+    double *dsupp = REAL(supp);
+    double *dcnt = REAL(cnt);
+    SEXP subseqR;
+    subseqR = VECTOR_ELT(subseq,0);
+    Sequence * subseqC = NULL;    
+    
+    for (int j=0; j<returnsize; j++)
+      {
+    	subseqR = VECTOR_ELT(subseq,j);
+    	ASSIGN_TMRSEQ_TYPE(subseqC,subseqR);
+    	TMRLOG(1,"\nSearching for: Subsequence %i\n",j);
+    	// TMRLOG(1,"%c",subseqC->print()); // TMRLOG doesn't work for this
+	dsupp[j] = 0;
+	int c = 0;
+	int sp = 0;
+    	for (int i=0; i<numseq; i++)
+    	  {
+    	    seq=VECTOR_ELT(seqs,i);
+    	    ASSIGN_TMRSEQ_TYPE(s,seq);
+    	    TMRLOG(1,"Search in: Sequence %i\n",i);
+	    // TMRLOG(1,"%c",s->print()); // TMRLOG doesn't work for this
+    	    int counting = subseqC->count(s,mGap,wSize,aMin,aMax,aMaxEnd,
+					  cMethod);
+    	    TMRLOG(1,"Counted: %i\n",counting);
+    	    c+=counting;
+	    if (counting>0) sp++;
+    	  }
+    	dcnt[j] = c;
+	dsupp[j] = sp;
+      }
+    TMRLOG(1,"\n");
+
+    // ----------------------------------------------------- //
+
+    SET_VECTOR_ELT(ans,0,supp); // list of supports (counts)
+    SET_VECTOR_ELT(ans,1,cnt); // list of supports (counts)
+    SET_VECTOR_ELT(ans,2,subseq); // list of subsequences
+    UNPROTECT(4);
+    delete root;
+    return ans;
+  }
 
 
 
@@ -318,65 +370,61 @@ extern "C" {
     		2: presence-absence
     		3: age at first occurrence
     */
-    SEXP tmrmatrixsubseqinseq(SEXP subseqs, SEXP seqs,SEXP maxGap, SEXP windowSize,SEXP ageMinBegin, SEXP ageMaxBegin,SEXP ageMaxEnd, SEXP countMethod) {
-        double wSize=REAL(windowSize)[0],mGap=REAL(maxGap)[0];
-        double aMin=REAL(ageMinBegin)[0],aMax=REAL(ageMaxBegin)[0], aMaxEnd=REAL(ageMaxEnd)[0];
-        int cMethod=INTEGER(countMethod)[0];
-        if (wSize==-1)wSize=DBL_MAX;
-        if (mGap==-1)mGap=DBL_MAX;
-        if (aMax==-1)aMax=DBL_MAX;
-        if (aMaxEnd==-1)aMaxEnd=DBL_MAX;
-        Sequence *s =NULL, *sub=NULL;
-        int nsub=length(subseqs);
-        int ns=length(seqs);
-        SEXP ans;
-        SEXP subseq,seq, namesubseq, nameseq,dimnames;
-        PROTECT(ans = allocMatrix(REALSXP, ns, nsub));
-        double *matrix=REAL(ans);
-        PROTECT(namesubseq= allocVector(STRSXP, nsub));
-        PROTECT(nameseq= allocVector(STRSXP, ns));
-        for (int j=0;j<ns;j++) {
-            seq=VECTOR_ELT(seqs,j);
-            SET_STRING_ELT(nameseq, j,tmrsequencestringinternal(seq));
-        }
-        for (int i=0;i<nsub;i++) {
-            subseq=VECTOR_ELT(subseqs,i);
-            ASSIGN_TMRSEQ_TYPE(sub,subseq);
-            SET_STRING_ELT(namesubseq, i,tmrsequencestringinternal(subseq));
-            //Rprintf("Processing ");
-            //sub->print();
-            for (int j=0;j<ns;j++) {
-                seq=VECTOR_ELT(seqs,j);
-                ASSIGN_TMRSEQ_TYPE(s,seq);
-                //Rprintf("Counting on ");
-                //s->print();
-                //int counting=sub->count(s,mGap,wSize,aMin,aMax);
-                //Rprintf("Counted %i\n",counting);
-                //matrix[j+i*ns]=counting;
-                switch (cMethod) {
-                case 1:
-                    matrix[j+i*ns]=sub->count(s,mGap,wSize,aMin,aMax, aMaxEnd);
-                    break;
-                case 2:
-                    matrix[j+i*ns]=fmin2(1.0,sub->count(s,mGap,wSize,aMin,aMax, aMaxEnd));
-                    break;
-                case 3:
-                    matrix[j+i*ns]=sub->first_occurence(s,mGap,wSize, aMin, aMax, aMaxEnd);
-                    break;
-                default:
-                    matrix[j+i*ns]=sub->count(s,mGap,wSize,aMin,aMax, aMaxEnd);
-                    break;
-                }
-
-            }
-        }
-        PROTECT(dimnames = allocVector(VECSXP, 2));
-        SET_VECTOR_ELT(dimnames, 0,nameseq);
-        SET_VECTOR_ELT(dimnames, 1, namesubseq);
-        setAttrib(ans, R_DimNamesSymbol, dimnames);
-        UNPROTECT(4);
-        return ans;
-    }
+  SEXP tmrmatrixsubseqinseq(SEXP subseqs, SEXP seqs,SEXP maxGap, 
+			    SEXP windowSize,SEXP ageMinBegin, 
+			    SEXP ageMaxBegin,SEXP ageMaxEnd, 
+			    SEXP countMethod) 
+  {
+    double wSize=REAL(windowSize)[0],mGap=REAL(maxGap)[0];
+    double aMin=REAL(ageMinBegin)[0],aMax=REAL(ageMaxBegin)[0], 
+      aMaxEnd=REAL(ageMaxEnd)[0];
+    int cMethod = REAL(countMethod)[0];
+    if (wSize==-1) wSize=DBL_MAX;
+    if (mGap==-1) mGap=DBL_MAX;
+    if (aMin==-1) aMin=-DBL_MAX;
+    if (aMax==-1) aMax=DBL_MAX;
+    if (aMaxEnd==-1)aMaxEnd=DBL_MAX;
+    Sequence *s =NULL, *sub=NULL;
+    int nsub = length(subseqs);
+    int ns = length(seqs);
+    SEXP ans;
+    SEXP subseq,seq, namesubseq, nameseq,dimnames;
+    PROTECT(ans = allocMatrix(REALSXP, ns, nsub));
+    double *matrix=REAL(ans);
+    PROTECT(namesubseq= allocVector(STRSXP, nsub));
+    PROTECT(nameseq= allocVector(STRSXP, ns));
+    for (int j=0;j<ns;j++) 
+      {
+	seq=VECTOR_ELT(seqs,j);
+	SET_STRING_ELT(nameseq, j,tmrsequencestringinternal(seq));
+      }
+    for (int i=0;i<nsub;i++) 
+      {
+	subseq=VECTOR_ELT(subseqs,i);
+	ASSIGN_TMRSEQ_TYPE(sub,subseq);
+	SET_STRING_ELT(namesubseq, i,tmrsequencestringinternal(subseq));
+	//Rprintf("Processing ");
+	//sub->print();
+	for (int j=0;j<ns;j++) 
+	  {
+	    seq=VECTOR_ELT(seqs,j);
+	    ASSIGN_TMRSEQ_TYPE(s,seq);
+	    //Rprintf("Counting on ");
+	    //s->print();
+	    //int counting=sub->count(s,mGap,wSize,aMin,aMax);
+	    //Rprintf("Counted %i\n",counting);
+	    //matrix[j+i*ns]=counting;
+	    matrix[j+i*ns]=sub->count(s,mGap,wSize,aMin,aMax,aMaxEnd,
+				      cMethod);
+	  }
+      }
+    PROTECT(dimnames = allocVector(VECSXP, 2));
+    SET_VECTOR_ELT(dimnames, 0,nameseq);
+    SET_VECTOR_ELT(dimnames, 1,namesubseq);
+    setAttrib(ans, R_DimNamesSymbol, dimnames);
+    UNPROTECT(4);
+    return ans;
+  }
 	/**Find each times an events appears, return a matrix with ncol = maximum number of the specified event
     */
     SEXP tmreventinseq(SEXP seqs, SEXP Sevent) {
@@ -392,15 +440,15 @@ extern "C" {
             seq=VECTOR_ELT(seqs,i);
 			ASSIGN_TMRSEQ_TYPE(s,seq);
             if(s->hasEvent()){
-              sen=s->getEvent();
-              nseqevent=0;
-              while(sen!=NULL){
-				if(sen->getType()==event){
-					nseqevent++;
+				sen=s->getEvent();
+				nseqevent=0;
+				while(sen!=NULL){
+					if(sen->getType()==event){
+						nseqevent++;
+					}
+					sen=sen->getNext();
 				}
-                sen=sen->getNext();
-              }
-              if(nseqevent>maxnevent)maxnevent=nseqevent;
+				if(nseqevent>maxnevent)maxnevent=nseqevent;
             }
         }
 		TMRLOG(4, "Maximum numbers of event %d is %d", event, maxnevent);

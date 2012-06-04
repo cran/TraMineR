@@ -12,11 +12,11 @@ seqecontain(seq, eventList, exclude = FALSE)
 \arguments{
   \item{seq}{A event sequence object (\code{seqelist}) or a an event subsequence object (\code{subseqelist})}
   \item{eventList}{A list of events}
-  \item{exclude}{if TRUE the search is exclusive and returns FALSE for any subsequence containing an event that is not in \code{eventList}}
+  \item{exclude}{if \code{TRUE} the search is exclusive and returns \code{FALSE} for any subsequence containing an event that is not in \code{eventList}}
 }
 \details{
   Checks, for each provided event sequence, if it contains one of the events in \code{eventList}.
-  If \code{exclude} is TRUE, \code{seqecontain} looks if all events of the subsequence are in \code{eventList}.
+  If \code{exclude} is \code{TRUE}, \code{seqecontain} looks if all events of the subsequence are in \code{eventList}.
 }
 \value{
   A logical vector.

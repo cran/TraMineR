@@ -55,7 +55,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	}
 
 	if (is.null(alphabet)) {
-		plevels <- statl
+		plevels <- as.character(statl)
 	} else {
 		if (any(statl %in% alphabet==FALSE)) {
 			stop("\n [!] one or more states appearing in the data not included in 'alphabet'", call.=FALSE)
@@ -148,13 +148,20 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	attr(seqdata,"labels") <- labels
 
 	## Displaying the alphabet
-	message(" [>] alphabet (state labels): ")
-	for (i in 1:min(nbstates,maxstatedisplay))
-		message("     ",i, " = ", A[i], " (", labels[i], ")")
+	message(" [>] state coding:")
+	nc1 <- max(nchar(plevels)+1, 12)
+	nc2 <- max(nchar(A)+1, 9)
+
+	message("       ", format("[alphabet]", width=nc1), format("[label]", width=nc2), "[long label] ")
+	for (i in 1:min(nbstates,maxstatedisplay)) {
+		message("     ",i, "  ", format(plevels[i], width=nc1),
+			format(A[i], width=nc2), labels[i])
+	}
 
 	if (nbstates>12) {
 		message("      ... (", nbstates, " states)")
 	}
+
 
 	## message(" [>] labels: ",paste(1:nbstates,collapse=" ",sep="="))
 

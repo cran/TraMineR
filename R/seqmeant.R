@@ -2,12 +2,12 @@
 ## Mean durations
 ## ==============
 
-seqmeant <- function(seqdata, weighted=TRUE, with.missing=FALSE) {
+seqmeant <- function(seqdata, weighted=TRUE, with.missing=FALSE, prop=FALSE) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use seqdef function to create one")
 
-	istatd <- suppressMessages(seqistatd(seqdata, with.missing=with.missing))
+	istatd <- suppressMessages(seqistatd(seqdata, with.missing=with.missing, prop=prop))
 
 	weights <- attr(seqdata, "weights")
 

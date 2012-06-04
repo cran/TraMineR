@@ -3,18 +3,18 @@
 ## ============================
 
 seqsubm <- function(seqdata, method, cval=NULL, with.missing=FALSE, 
-	miss.cost=NULL, time.varying=FALSE, weighted=TRUE, transition="both") {
+	miss.cost=NULL, time.varying=FALSE, weighted=TRUE, transition="both", lag=1, missing.trate=FALSE) {
 
 	if (!inherits(seqdata,"stslist"))
-		stop("data is NOT a sequence object, see seqdef function to create one")
+		stop(" [!] data is NOT a sequence object, see seqdef function to create one")
 
 	metlist <- c("CONSTANT","TRATE")
 	if (missing(method) || !method %in% metlist)
-		stop("method must be one of: ", paste(metlist,collapse=" "))
+		stop(" [!] method must be one of: ", paste(metlist,collapse=" "))
 	
-	transitionlist <- c("previous", "next","both")
+	transitionlist <- c("previous", "next", "both")
 	if (!transition %in% transitionlist)
-		stop("method must be one of: ", paste(transitionlist,collapse=" "))
+		stop(" [!] transition must be one of: ", paste(transitionlist,collapse=" "))
 
 	alphabet <- attr(seqdata,"alphabet")
 	
@@ -27,7 +27,12 @@ seqsubm <- function(seqdata, method, cval=NULL, with.missing=FALSE,
 	}
 	## Adding an entry for for missing state
 	if (with.missing) {
-		message(" [>] setting ",miss.cost," as substitution cost for missing values")
+		if(missing.trate && method == "TRATE") {
+			message(" [>] using transition rate to compute substitution cost for missing values")
+		} else {
+			message(" [>] setting ",miss.cost," as substitution cost for missing values")
+		}
+		
 		alphabet <- c(alphabet,attr(seqdata,"nr"))
 	}
 
@@ -60,7 +65,7 @@ seqsubm <- function(seqdata, method, cval=NULL, with.missing=FALSE,
 	if (method=="TRATE") {
 		if (time.varying) {
 			message(" [>] creating time varying substitution-cost matrix using transition rates ...")
-			tr <- seqtrate(seqdata, time.varying=TRUE, weighted=weighted)
+			tr <- seqtrate(seqdata, time.varying=TRUE, weighted=weighted, lag=lag, with.missing=missing.trate)
 			tmat <- nrow(tr)
 			time <- ncol(seqdata)
 			costs <- array(0, dim=c(alphsize, alphsize, time))
@@ -116,21 +121,22 @@ seqsubm <- function(seqdata, method, cval=NULL, with.missing=FALSE,
 		}
 		else {
 			message(" [>] creating substitution-cost matrix using transition rates ...")
-			tr <- seqtrate(seqdata, time.varying=FALSE, weighted=weighted)
+			tr <- seqtrate(seqdata, time.varying=FALSE, weighted=weighted, lag=lag, with.missing = missing.trate)
 			tmat <- nrow(tr)
 			costs <- matrix(nrow=alphsize,ncol=alphsize)
 			diag(costs) <- 0
-			for (i in 1:tmat) {
-				for (j in 1:tmat) {
-					if (i!=j)
-						costs[i,j] <- 2-tr[i,j]-tr[j,i]
+			for (i in 1:(tmat-1)) {
+				for (j in (i+1):tmat) {
+					cost <- cval - tr[i,j] - tr[j,i]
+					costs[i,j] <- cost
+					costs[j,i] <- cost
 				}
 			}
 		}
 	}
 
 	## 
-	if (with.missing) {
+	if (with.missing &&(method=="CONSTANT"||(method=="TRATE" && missing.trate==FALSE))) {
 		if (time.varying) {
 			costs[alphsize,1:(alphsize-1),] <- miss.cost
 			costs[1:(alphsize-1),alphsize,] <- miss.cost

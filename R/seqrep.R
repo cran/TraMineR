@@ -4,13 +4,18 @@
 
 seqrep <- function(seqdata, criterion="density", score=NULL, decreasing=TRUE, 
 	trep=0.25, nrep=NULL, tsim=0.10, 
-	dmax=NULL, dist.matrix=NULL, ...) {
+	dmax=NULL, dist.matrix=NULL, weighted=TRUE, ...) {
 
 	if (!inherits(seqdata,"stslist")) 
 		stop("data is not a sequence object, see seqdef function to create one", call.=FALSE)
 
 	slength <- ncol(seqdata)
 	statelist <- alphabet(seqdata)
+
+	weights <- attr(seqdata, "weights")
+
+	if (!weighted || is.null(weights)) { weights <- rep(1, nrow(seqdata)) }
+	if (all(weights==1)) { weighted <- FALSE }
 
 	## Distance matrix
 	if (missing(dist.matrix) || is.null(dist.matrix))
@@ -37,12 +42,12 @@ seqrep <- function(seqdata, criterion="density", score=NULL, decreasing=TRUE,
 
 			score <- TraMineR:::seqlogp(seqdata)
 			decreasing <- FALSE
-		} 
+		}
 	}
 
 	## Getting the representatives
 	rep <- dissrep(dist.matrix, criterion=criterion, score=score, 
-		decreasing=decreasing, trep=trep, nrep=nrep, tsim=tsim, dmax=dmax)
+		decreasing=decreasing, trep=trep, nrep=nrep, tsim=tsim, dmax=dmax, weights=weights)
 	
 	## Occurence of the representative sequence
 	nds <- nrow(unique(seqdata))
@@ -55,14 +60,15 @@ seqrep <- function(seqdata, criterion="density", score=NULL, decreasing=TRUE,
 	rownames(res) <- paste("[",1:nrow(res),"]", sep="")
 	class(res) <- c("stslist.rep", class(res))
 
-	attr(res, "nbseq") <- nrow(seqdata)
+	attr(res, "nbseq") <- attr(rep, "n")
 	attr(res, "criterion") <- criterion
 	attr(res, "dmax") <- attr(rep,"dmax")
-	attr(res, "Index") <- rep
+	attr(res, "Index") <- as.vector(rep)
 	attr(res, "Scores") <- attr(rep,"Scores")
 	attr(res, "Distances") <- attr(rep,"Distances")
 	attr(res, "Statistics") <- attr(rep,"Statistics")
 	attr(res, "Quality") <- attr(rep,"Quality") 
+	attr(res, "weighted") <- weighted
 
 	return(res)
 }	

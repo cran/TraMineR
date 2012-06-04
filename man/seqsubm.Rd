@@ -37,7 +37,7 @@ where \eqn{P(i,j)} is the transition rate from state \eqn{i} to
 \usage{
  seqsubm(seqdata, method, cval=NULL, with.missing=FALSE,
          miss.cost=NULL, time.varying=FALSE, weighted=TRUE,
-		 transition="both") 
+		 transition="both", lag=1, missing.trate=FALSE)
 }
 
  \arguments{
@@ -47,7 +47,7 @@ where \eqn{P(i,j)} is the transition rate from state \eqn{i} to
       value (\code{method="CONSTANT"}) or substitution costs using transition rates
       (\code{method="TRATE"})}
   \item{cval}{the constant substitution cost if method \code{"CONSTANT"} is chosen. For method \code{"TRATE"},
-  the base value from which transition probabilities are substracted. If \code{NULL}, \code{cval=2}, unless \code{transition} 
+  the base value from which transition probabilities are subtracted. If \code{NULL}, \code{cval=2}, unless \code{transition}
   is set to \code{"both"} and \code{time.varying} is \code{TRUE} in which case \code{cval=4}.}
 	
 	\item{with.missing}{if \code{TRUE}, an additional entry is added in the matrix for the missing states.
@@ -60,10 +60,14 @@ options for handling missing values when computing distances between sequences.}
 matrix for each time unit. The time is the third dimension (subscript).}
 	\item{weighted}{Logical. If \code{TRUE} compute transition rates using weights specified in
 \code{seqdata}.}
-	\item{transition}{Only used if \code{time.varying=TRUE}. If \code{transition="both"}, it uses the transition 
+	\item{transition}{Only used if \code{time.varying=TRUE}. If \code{transition="both"}, it uses the transition
 	rates from previous and next state. It can also be set to \code{"previous"} or \code{"next"}.
 	}
-	
+	\item{lag}{Integer. Only used with (\code{method="TRATE"}). Time between the two states considered to compute
+		transition rates (one by default).}
+  \item{missing.trate}{Logical.  Only used with (\code{method="TRATE"}).
+		If \code{TRUE}, substitution costs with missing state are also based on transition rates. If \code{FALSE} (default value),
+		the substitution cost for the missing state are set to \code{miss.cost}.}
 }
 \seealso{
  \code{\link{seqtrate}}, \code{\link{seqdef}}, \code{\link{seqdist}}.

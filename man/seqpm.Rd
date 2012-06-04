@@ -9,10 +9,10 @@
 }
 \arguments{
   \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
-  \item{pattern}{a character string representing the pattern (subsequence) to search for, without sperator between the states.}
+  \item{pattern}{a character string representing the pattern (subsequence) to search for, without separator between the states.}
 }
 \details{
-	This function search a pattern (a character string) into a set of sequences and returns a list containing the results. The elements of the list are 'Nbmatch', containing the number of occurences of pattern and 'MatchesIndex', containing the indexes (row numbers) of the sequences that match the pattern (see exemples below).
+	This function searches a pattern (a character string) into a set of sequences and returns the results as a list with two elements: '\code{Nbmatch}' the number of occurrences of the pattern and '\code{MatchesIndex}' the vector of indexes (row numbers) of the sequences that match the pattern (see examples below).
 	}
 
 \value{a list with two elements (see details).}
@@ -22,7 +22,7 @@
 data(actcal)
 actcal.seq <- seqdef(actcal,13:24)
 
-## search for pattern "DAAD" 
+## search for pattern "DAAD"
 ## (no work-full time work-full time work-no work)
 ## results are stored in the 'daad' object
 daad <- seqpm(actcal.seq,"DAAD")
@@ -31,7 +31,7 @@ daad <- seqpm(actcal.seq,"DAAD")
 ## containing the pattern
 actcal.seq[daad$MIndex,]
 
-## search for pattern "AD" 
+## search for pattern "AD"
 ## (full time work-no work)
 seqpm(actcal.seq,"AD")
 }

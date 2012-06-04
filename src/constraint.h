@@ -11,30 +11,41 @@ protected:
 	double ageMinBegin;
 	double ageMaxBegin;
 	double ageMaxEnd;
-	double countMethod;
+	int countMethod;
 public:
-	Constraint(const double& mg, const double& ws, const double& aminb, const double& amaxb, const double& amaxe, const double& cmethod);
-	virtual ~Constraint() {
-
+	Constraint(const double &mg, 
+		   const double &ws, 
+		   const double &aminb, 
+		   const double &amaxb, 
+		   const double &amaxe, 
+		   const int &cmethod);
+	virtual ~Constraint() 
+	  {
+	    
+	  }
+	inline double getmaxGap() 
+	{
+	  return(this->maxGap);
 	}
-	inline double getmaxGap() {
-
-		return(this->maxGap);
+	inline double getwindowSize() 
+	{
+	  return(this->windowSize);
 	}
-	inline double getwindowSize() {
-		return(this->windowSize);
+	inline double getageMinBegin() 
+	{
+	  return(this->ageMinBegin);
 	}
-	inline double getageMinBegin() {
-		return(this->ageMinBegin);
+	inline double getageMaxBegin()
+	{
+	  return(this->ageMaxBegin);
 	}
-	inline double getageMaxBegin(){
-		return(this->ageMaxBegin);
+	inline double getageMaxEnd() 
+	{
+	  return(this->ageMaxEnd);
 	}
-	inline double getageMaxEnd() {
-		return(this->ageMaxEnd);
-	}
-	inline double getcountMethod() {
-		return(this->countMethod);
+	inline int getcountMethod() 
+	{
+	  return(this->countMethod);
 	}
 };
 #endif

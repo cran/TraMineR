@@ -5,12 +5,13 @@
 	Tree structured analysis of a state sequence object.
 }
 \description{
-	Facility to produce a tree structured analysis of a sequence object.
+	Facility for growing a regression tree for a state sequence object.
 }
 \usage{
 seqtree(formula, data = NULL, weighted = TRUE, minSize = 0.05,
-     maxdepth = 5, R = 1000, pval = 0.01, weight.permutation = "replicate",
-     seqdist_arg = list(method = "LCS", norm = TRUE),
+     maxdepth = 5, R = 1000, pval = 0.01,
+	 weight.permutation = "replicate",
+	 seqdist_arg = list(method = "LCS", norm = TRUE),
      diss = NULL, squared = FALSE, first = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,7 +23,7 @@ seqtree(formula, data = NULL, weighted = TRUE, minSize = 0.05,
   \item{maxdepth}{maximum depth of the tree.}
   \item{R}{Number of permutations used to assess the significance of the split.}
   \item{pval}{Maximum p-value, in percent.}
-  \item{weight.permutation}{Weights permutation method: "diss" (attach weigths to the dissimilarity matrix), "replicate" (replicate case according to the \code{weights} arguments), "rounded-replicate" (replicate case according to the rounded \code{weights} arguments), "random-sampling" (random assignment of covariate profiles to the objects using distributions defined by the weights.)}
+  \item{weight.permutation}{Weights permutation method: "diss" (attach weights to the dissimilarity matrix), "replicate" (replicate case according to the \code{weights} arguments), "rounded-replicate" (replicate case according to the rounded \code{weights} arguments), "random-sampling" (random assignment of covariate profiles to the objects using distributions defined by the weights.)}
   \item{seqdist_arg}{list of arguments directly passed to \code{\link{seqdist}}, only used if \code{diss=NULL}}
   \item{diss}{An optional dissimilarity matrix. If not provided, a dissimilarity matrix is computed using \code{\link{seqdist}} and \code{seqdist_arg}}
   \item{squared}{Logical. If \code{TRUE}, the dissimilarity matrix is squared}
@@ -37,9 +38,15 @@ seqtree(formula, data = NULL, weighted = TRUE, minSize = 0.05,
 	a seqtree object.
 }
 
+\references{
+Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
+}
+
 \seealso{
 	\code{\link{seqtreedisplay}}, \code{\link{disstree}}
 }
+
+
 \examples{
 data(mvad)
 
@@ -47,8 +54,10 @@ data(mvad)
 mvad.seq <- seqdef(mvad[, 17:86])
 
 ## Building a seqtree using hamming distance
-## You should use much higher value for the R parameter, thus the results may be unstable.
-## R should be at least 1000 (R is keeped low to avoid too much computation in examples).
+## You should use much higher value for the R parameter,
+## thus the results may be unstable.
+## R should be at least 1000
+## (R is keeped low to avoid too much computation in examples).
 seqt <- seqtree(mvad.seq~ male + Grammar + funemp + gcse5eq + fmpr + livboth,
     data=mvad, R = 10, seqdist_arg=list(method="HAM", norm=TRUE))
 print(seqt)
@@ -61,9 +70,10 @@ print(seqt)
 
 
 ### Will only work if GraphViz is properly installed
-### Uncomment to run the examples
-# seqtreedisplay(seqt, type="d", border=NA)
-# seqtreedisplay(seqt, type="I", sortv=cmdscale(mvad.dhd, k=1))
+\dontrun{
+seqtreedisplay(seqt, type="d", border=NA)
+seqtreedisplay(seqt, type="I", sortv=cmdscale(mvad.dhd, k=1))
+}
 
 }
 
