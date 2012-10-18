@@ -8,10 +8,7 @@ p4 <- person("Nicolas S.", "M\u00FCller", email = "nicolas.muller@unige.ch")
 
 citEntry(entry = "Article",
   title        = "Analyzing and Visualizing State Sequences in {R} with {TraMineR}",
-  author       = personList(as.person("Alexis Gabadinho"),
-                   as.person("Gilbert Ritschard"),
-                   as.person("Nicolas S. M\u00FCller"),
-                   as.person("Matthias Studer")),
+  author       = personList(p1, p2, p4, p3), 
   journal      = "Journal of Statistical Software",
   year         = "2011",
   volume       = "40",
@@ -20,38 +17,50 @@ citEntry(entry = "Article",
   url          = "http://www.jstatsoft.org/v40/i04/",
 
   textVersion  =
-  paste("Alexis Gabadinho, Gilbert Ritschard, Nicolas S. M\u00FCller, Matthias Studer (2011).",
+  paste("Gabadinho, A., Ritschard, G., M\u00FCller, N. S., Studer, M. (2011).",
         "Analyzing and Visualizing State Sequences in R with TraMineR.",
         "Journal of Statistical Software, 40(4), 1-37.",
         "URL http://www.jstatsoft.org/v40/i04/."),
-		header="For state sequences:\n"
+        header="For state sequences:\n"
+)
+
+citEntry(entry="Article",
+    author = personList(p3, p2, p1, p4),
+    title = "Discrepancy analysis of state sequences",
+    journal = "Sociological Methods and Research",
+    year    = "2011",
+    volume  = "40",
+    number  = "3",
+    pages   = "471--510",
+    doi = "http://dx.doi.org/10.1177/0049124111415372",
+    
+    textVersion="Studer, M., Ritschard, G., Gabadinho, A. & M\u00FCller, N.S. (2011), Discrepancy analysis of state sequences, Sociological Methods and Research, 40(3), 471-510. DOI http://dx.doi.org/10.1177/0049124111415372",
+    header="For dissimilarity analysis:\n"
 )
 
 citEntry(entry="incollection",
-		author = personList(p3, p2, p1, p4),
-		title = "Discrepancy analysis of complex objects using dissimilarities",
-		booktitle = "Advances in Knowledge Discovery and Management",
-		publisher = "Springer",
-		year = "2010",
-		editor = "Fabrice Guillet and Gilbert Ritschard and Djamel A. Zighed and Henri Briand",
-		series = "Studies in Computational Intelligence",
-		address = "Berlin",
-		note = "292",
-		pages = "3-19",
-		textVersion="Studer, M., Ritschard, G., Gabadinho, A. & M\u00FCller, N.S. (2010), Discrepancy analysis of complex objects using dissimilarities, In Guillet, F., Ritschard, G., Zighed, D.A. & Briand, H. (eds) Advances in Knowledge Discovery and Management. Series: Studies in Computational Intelligence. Volume 292, pp. 3-19. Berlin: Springer.",
-		header="For dissimilarity analysis:\n"
+    author = personList(p3, p2, p1, p4),
+    title = "Discrepancy analysis of complex objects using dissimilarities",
+    booktitle = "Advances in Knowledge Discovery and Management",
+    publisher = "Springer",
+    year = "2010",
+    editor = "Fabrice Guillet and Gilbert Ritschard and Djamel A. Zighed and Henri Briand",
+    series = "Studies in Computational Intelligence",
+    address = "Berlin",
+    note = "292",
+    pages = "3-19",
+    textVersion="Studer, M., Ritschard, G., Gabadinho, A. & M\u00FCller, N.S. (2010), Discrepancy analysis of complex objects using dissimilarities, In Guillet, F., Ritschard, G., Zighed, D.A. & Briand, H. (eds) Advances in Knowledge Discovery and Management. Series: Studies in Computational Intelligence. Volume 292, pp. 3-19. Berlin: Springer.",
 )
-
 
 citEntry(entry="article",
   author = personList(p4, p3, p2, p1),
-  title = "Extraction de r\u00E8gles d'association s\u00E9quentielle à l'aide de mod\u00E8les semi-param\u00E9triques à risques proportionnels",
+  title = "Extraction de r\u00E8gles d'association s\u00E9quentielle \u00E0 l'aide de mod\u00E8les semi-param\u00E9triques \u00E0 risques proportionnels",
   journal = "Revue des nouvelles technologies de l'information (RNTI)",
   year = "2010",
   volume = "E-19",
   pages = "25-36",
   booktitle = "Extraction et gestion des connaissances (EGC 2010)",
-  textVersion="M\u00FCller, N.S., Studer, M., Gabadinho, A. & Ritschard, G. (2010), Extraction de r\u00E8gles d'association s\u00E9quentielle à l'aide de mod\u00E8les semi-param\u00E9triques à risques proportionnels, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 25-36. ",
+  textVersion="M\u00FCller, N.S., Studer, M., Gabadinho, A. & Ritschard, G. (2010), Extraction de r\u00E8gles d'association s\u00E9quentielle \u00E0 l'aide de mod\u00E8les semi-param\u00E9triques \u00E0 risques proportionnels, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 25-36. ",
   header="For event sequences:\n"
 )
 citEntry(entry="article",
@@ -86,7 +95,7 @@ citEntry(entry="article",
   volume = "E-19",
   booktitle = "Extraction et gestion des connaissances (EGC 2010)",
   pages = "61-66",
-  textVersion="Gabadinho, A., Ritschard, G., Studer, M. & M\u00FCller, N.S. (2010), Indice de complexité pour le tri et la comparaison de séquences catégorielles, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 61-66.",
+  textVersion="Gabadinho, A., Ritschard, G., Studer, M. & M\u00FCller, N.S. (2010), Indice de complexit\u00E9 pour le tri et la comparaison de s\u00E9quences cat\u00E9gorielles, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 61-66.",
   header="For longitudinal characteristics and the complexity index:"
 )
 

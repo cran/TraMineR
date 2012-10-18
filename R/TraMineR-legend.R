@@ -2,12 +2,9 @@
 ## Plotting the legend
 ## ====================
 
-TraMineR.legend <- function(pos, text, colors, cex=1) {
+TraMineR.legend <- function(pos, text, colors, cex=1, ... ) {
 
 	nbstat <- length(text)
-
-	## Saving graphical parameters
-	savepar <- par(no.readonly = TRUE)
 
 	## Computing some parameters for the legend's plotting
 	if (pos=="bottom") {
@@ -23,7 +20,11 @@ TraMineR.legend <- function(pos, text, colors, cex=1) {
 
 	## leg.inset <- -0.2 + ((2-leg.ncol)*0.025)
 
-	par(mar = c(1, 1, 0.5, 1) + 0.1, xpd=FALSE)
+	## Setting graphical parameters while saving them in savepar
+	savepar <- par(mar = c(1, 1, 0.5, 1) + 0.1, xpd=FALSE)
+
+	## Restoring graphical parameters
+	on.exit(par(savepar))
 
 	plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
 		## legend(position, fill = cpal, legend = ltext, cex = fontsize)
@@ -34,8 +35,7 @@ TraMineR.legend <- function(pos, text, colors, cex=1) {
 		fill=colors,
 		ncol=leg.ncol,
 		bty="o",
-		cex=cex)
+		cex=cex, 
+		...)
 
-	## Restoring graphical parameters
-	par(savepar)
 }

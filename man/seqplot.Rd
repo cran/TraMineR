@@ -36,7 +36,13 @@ seqrplot(seqdata, group=NULL, title=NULL, ...)
 
 	\item{group}{Plots one plot for each level of the factor given as argument.}
 	
-	\item{type}{the type of the plot. Available types are \code{"d"} for state distribution plots, \code{"f"} for sequence frequency plots, \code{"Ht"} for transversal entropy plots, \code{"i"} for selected sequence index plots, \code{"I"} for whole set index plots, \code{"ms"} for plotting the sequence of modal states, \code{"mt"} for mean times plots and \code{"r"} for representative sequence plots.}
+	\item{type}{the type of the plot. Available types are \code{"d"}
+	for state distribution plots, \code{"f"} for sequence frequency
+	plots, \code{"Ht"} for transversal entropy plots, \code{"i"} for
+	selected sequence index plots, \code{"I"} for whole set index
+	plots, \code{"ms"} for plotting the sequence of modal states,
+	\code{"mt"} for mean times plots, \code{"pc"} for parallel
+	coordinate plots and \code{"r"} for representative sequence plots.}
 
 	\item{title}{title for the graphic. Default is \code{NULL}.}
 
@@ -72,7 +78,12 @@ seqrplot(seqdata, group=NULL, title=NULL, ...)
 \details{
 \code{seqplot} is the generic function for high level plots of state sequence objects with group splits and automatic display of the color legend. Many different types of plots can be produced by means of the \code{type} argument. Except for sequence index plots, \code{seqplot} first calls the specific function producing the required statistics and then the plot method for objects produced by this function (see below). For sequence index plots, the state sequence object itself is plotted by calling the \code{\link{plot.stslist}} method. When splitting by groups and/or displaying the color legend, the \code{\link[graphics]{layout}} function is used for arranging the plots.
 
-The \code{seqdplot}, \code{seqfplot}, \code{seqiplot}, \code{seqIplot}, \code{seqHtplot}, \code{seqmsplot}, \code{seqmtplot} and \code{seqrplot} functions are aliases for calling \code{seqplot} with \code{type} argument set respectively to \code{"d"}, \code{"f"}, \code{"i"}, \code{"I"}, \code{"Ht"}, \code{"ms"}, \code{"mt"} or \code{"r"}.
+The \code{seqdplot}, \code{seqfplot}, \code{seqiplot}, \code{seqIplot},
+\code{seqHtplot}, \code{seqmsplot}, \code{seqmtplot}, \code{seqpcplot}
+and \code{seqrplot} functions are aliases for calling \code{seqplot}
+with \code{type} argument set respectively to \code{"d"}, \code{"f"},
+\code{"i"}, \code{"I"}, \code{"Ht"}, \code{"ms"}, \code{"mt"},
+\code{"pc"} or \code{"r"}. 
 
 State distribution plot (\code{type="d"}) represent the sequence of the transversal state frequencies by position (time point) computed by the \code{\link{seqstatd}} function.
 

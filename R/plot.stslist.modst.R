@@ -26,7 +26,7 @@ plot.stslist.modst <- function(x, cpal=NULL,
 
 	if (is.null(xtlab)) {xtlab <- colnames(x)}
 	if (is.null(xtstep)) {
-		if (!is.null(attr(x,"xtstep"))) {xtstep <- attr(x,"xtstep")} 
+		if (!is.null(attr(x,"xtstep"))) {xtstep <- attr(x,"xtstep")}
 		## For sequence objects created with previous versions
 		else {xtstep <- 1}
 	}
@@ -46,9 +46,9 @@ plot.stslist.modst <- function(x, cpal=NULL,
 	}
 
 	## Frequency of the representative sequence
-	nbrep <- attr(x,"Occurences")
+	nbrep <- attr(x,"Occurrences")
 	ctfreq <- round((nbrep/n)*100,1)
-	txt <- paste("Modal state sequence (",nbrep," occurences, freq=", ctfreq ,"%)", sep="")
+	txt <- paste("Modal state sequence (",nbrep," occurrences, freq=", ctfreq ,"%)", sep="")
 
 	barplot(prof.freq,
 		space=0,
@@ -62,21 +62,20 @@ plot.stslist.modst <- function(x, cpal=NULL,
 		axes=FALSE,
 		...)
 
-	text(seql/2, 1.1, txt, 
+	text(seql/2, 1.1, txt,
 		cex=cex.plot)
 
 	## Plotting the x axis
 	if (xaxis) {
 		tpos <- seq(1,seql, xtstep)
 		axis(1, at=tpos-0.5, labels=xtlab[tpos], pos=-0.02,
-		# mgp=c(3,0.5,0), 
+		# mgp=c(3,0.5,0),
 		cex.axis=cex.plot)
 	}
 
 	## Axis for the state frequencies
 	if (yaxis)
-		axis(2, at=seq(0,1.0,0.25), labels=c("0","0.25",".5","0.75","1"), 
+		axis(2, at=seq(0,1.0,0.25), labels=c("0","0.25",".5","0.75","1"),
 			las=2, cex.axis=cex.plot)
 
 }
-

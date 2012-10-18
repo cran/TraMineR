@@ -55,12 +55,15 @@ seqdss <- function(seqdata, with.missing=FALSE) {
 	## drop=FALSE ensures that the result is a matrix even if trans has only one row
 	trans <- trans[,1:(maxcol-1), drop=FALSE]
 
-	trans <- suppressMessages(
-		seqdef(trans, alphabet=alphabet(seqdata),
-		missing=nr, right=NA,
-		cnames=paste("ST",seq(1:(maxcol-1)),sep=""), 
-		cpal=cpal(seqdata),
-		id=rownames(seqdata), weights=attr(seqdata, "weights")))
+	trans <-
+          suppressMessages(
+                           seqdef(trans, alphabet=alphabet(seqdata),
+                                  labels=stlab(seqdata),
+                                  missing=nr, right=NA,
+                                  cnames=paste("ST",seq(1:(maxcol-1)),sep=""),
+                                  cpal=cpal(seqdata),
+                                  id=rownames(seqdata),
+                                  weights=attr(seqdata, "weights")))
 
 	return(trans)
 }

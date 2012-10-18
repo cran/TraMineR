@@ -16,8 +16,11 @@
 
 \title{Event sequence object}
 \description{
-  TraMineR uses an internal event sequence object for all its operations with event sequences such as mining frequent subsequences. 
-  The function \code{is.seqelist} checks wether the argument is an event sequence object while \code{is.seqe} checks wether the argument is a single element of an event sequence object.
+  TraMineR uses an internal event sequence object for all its operations
+  with event sequences such as mining frequent subsequences. The
+  function \code{is.seqelist} checks wether the argument is an event
+  sequence object while \code{is.seqe} checks wether the argument is a
+  single element of an event sequence object. 
   %\code{as.seqelist} transform a list of event sequences into an internal event sequence object.
 
   There is a print method that can be applied to such event sequence object.

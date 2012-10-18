@@ -1,8 +1,40 @@
+## =========
+Version 1.8-3 
+
+Information pages:
+  - Updated online help pages.
+  - Updated list of references returned by citation("TraMineR").
+
+New functionalities:
+  - seqpcplot(): parallel coordinate plot for sequence data
+
+Changes in existing functions:
+  - seqdss(): adding long state labels to returned sequence object
+  - seqplot(): new option type = "pc"
+  - seqplot(), seqdplot(), seqiplot(), seqfplot(), seqmsplot(), seqrplot(): 
+    if 'density' and/or 'angle' are used to produce shading lines 
+    instead of solid colors, the legend is plotted using the same 
+    parameters and thus corresponds to the colors/shades used in the plot.
+  - seqplot(): if group argument is a factor, the plots are
+    now ordered the same way as the factor levels.
+  - seqplot(), plot.stslist(): if sortv is a factor, the
+    sequences are now sorted according to the order of the factor levels.
+  - seqmodst() and plot.stslist.modst(): changed name of
+    attribute "occurences" of object returned by seqmodst to
+    "occurrences". Made resulting changes in plot.stslsit.modst.
+
+Bug fixes:
+  - seqdef(): When selecting subsets of sequence objects using rownames 
+    instead of row indexes, the corresponding weights were not selected. 
+    Fixed by setting (row)names of weight vector as the sequence 
+    rownames. (Alexis Gabadinho)
+    
+
 ## ==========
 Version 1.8-2
 
-Vignettes: Slightly modified JSS article vol. 40(4) added as
-    a vignette on state sequence analysis.
+Vignettes: Slightly modified JSS article vol. 40(4) added as a vignette
+    on state sequence analysis.
 
 Misc:
   - added 'ex2' data sets to test and illustrate the handling of weights,
@@ -124,7 +156,7 @@ Bug fixes:
   - seqdef(): now checks whether all states encountered in the input data are present in an optional
       user provided alphabet ('state' argument)
   - seqefsub(): The support of a subsequence with a total support of 1 was set to 0 (hence, this only
-	applies if the minimum support is 1.) This is now corrected (Reported by Anna Hera).
+    applies if the minimum support is 1.) This is now corrected (Reported by Anna Hera).
   - Corrected compilation problems under SOLARIS (Reported by Prof Brian Ripley).
   - seqformat(): when converting from SPELL to STS, the fillblank argument was not used.
 

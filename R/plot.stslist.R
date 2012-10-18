@@ -40,6 +40,7 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 		} else if (length(sortv)!=n) {
 			stop(call.=FALSE, "sortv must contain one value for each row in the sequence object")
 		} else {
+			if (is.factor(sortv)) { sortv <- as.integer(sortv) }
 			x <- x[order(sortv),]
 		}
 

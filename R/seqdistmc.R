@@ -51,7 +51,7 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 	if ((length(indel)!= nchannels) ||
 		(length(sm)!= nchannels) ||
 		(length(cweight)!= nchannels)) {
-		stop(" [!] you should supply one weight, one subsitution matrix and one indel per channel")
+		stop(" [!] you should supply one weight, one substitution matrix and one indel per channel")
 	}
 	## indels
 	indel_list <- numeric(length=nchannels)

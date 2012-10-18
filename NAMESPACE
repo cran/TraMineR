@@ -43,6 +43,7 @@ export(
 	seqmtplot,
 	seqnum,
 	seqplot,
+        seqpcplot,
 	seqpm,
 	seqrecode,
 	seqrep,
@@ -71,6 +72,10 @@ S3method(plot, stslist)
 ## seqalign methods
 S3method(plot, seqalign)
 S3method(print, seqalign)
+
+## seqpcplot methods
+S3method(plot, seqpcplot)
+S3method(summary , seqpcplot)
 
 ## stslist.stad methods
 S3method(plot, stslist.statd)
@@ -137,9 +142,11 @@ S3method(plot,subseqelist)
 S3method("[",seqelist)
 S3method(Math,seqelist)
 S3method(Ops,seqelist)
+S3method(plot,seqelist)
 S3method(Summary,seqelist)
 S3method(Math,seqe)
 S3method(Ops,seqe)
+S3method(plot,seqe)
 S3method(Summary,seqe)
 S3method(levels,seqe)
 S3method(levels,seqelist)

@@ -4,7 +4,7 @@
 
 seqmodst <- function(seqdata, weighted=TRUE, with.missing=FALSE) {
 
-	if (!inherits(seqdata,"stslist")) 
+	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, see seqdef function to create one", call.=FALSE)
 
 	slength <- ncol(seqdata)
@@ -32,10 +32,10 @@ seqmodst <- function(seqdata, weighted=TRUE, with.missing=FALSE) {
 	}
 	
 	res <- suppressMessages(seqdef(ctype, alphabet=alphabet(seqdata),
-		missing=attr(seqdata,"nr"), nr=attr(seqdata,"nr"), 
+		missing=attr(seqdata,"nr"), nr=attr(seqdata,"nr"),
 		left=NA, gaps=NA, right=NA,
-		labels=stlab(seqdata), 
-		cpal=cpal(seqdata), missing.color=attr(seqdata,"missing.color"), 
+		labels=stlab(seqdata),
+		cpal=cpal(seqdata), missing.color=attr(seqdata,"missing.color"),
 		xtstep=attr(seqdata, "xtstep")))
 
 	nbocc <- length(seqfind(res, seqdata))
@@ -43,14 +43,14 @@ seqmodst <- function(seqdata, weighted=TRUE, with.missing=FALSE) {
 	## Distance to modal state sequence
 	## if (dist)
 	##	dist.modst <- seqdist(seqdata, refseq=res, ...)
-	## else 
+	## else
 	##	dist.modst <- NULL
 
 	class(res) <- c("stslist.modst", class(res))
 
 	attr(res, "Frequencies") <- stfreq
 	## attr(res, "Distances") <- dist.modst
-	attr(res, "Occurences") <- nbocc
+	attr(res, "Occurrences") <- nbocc
 
 	## Weights
 	weights <- attr(seqdata, "weights")
@@ -58,12 +58,11 @@ seqmodst <- function(seqdata, weighted=TRUE, with.missing=FALSE) {
 	if (!weighted || is.null(weights)) {
 		weights <- rep(1.0, nrow(seqdata))
 	}
-	if (all(weights==1)) 
+	if (all(weights==1))
 		weighted <- FALSE
 
 	attr(res, "nbseq") <- sum(weights)
 	attr(res,"weighted") <- weighted
 
 	return(res)
- } 
-
+ }
