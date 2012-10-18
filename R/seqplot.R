@@ -17,38 +17,41 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 	## ==============================
 	## Preparing if group is not null
 	## ==============================
+
+        if (type == "pc") { # modification of Reto Buergin 16.08.2012
+          oolist <- append(oolist, list(group = group, rows = rows, cols = cols))
+          group <- NULL
+        }
+        
 	if (!is.null(group)) {
-		group <- group(group)
-
-		## Check length
-		if (length(group)!=nrow(seqdata))
-			stop(call.=FALSE, "group must contain one value for each row in the sequence object")
-
-		## Eliminate the unused levels
-		group <- factor(group)
-		nplot <- length(levels(group))
-		gindex <- vector("list",nplot)
-				
-		for (s in 1:nplot)
-			gindex[[s]] <- which(group==levels(group)[s])
-
-		## Title of each plot
-		if (!is.null(title)) 
-			title <- paste(title,"-",levels(group))
-		else 
-			title <- levels(group)
-	}
-	else {
-		nplot <- 1
-		gindex <- vector("list",1)
-		gindex[[1]] <- 1:nrow(seqdata)
+          group <- group(group)
+          
+          ## Check length
+          if (length(group)!=nrow(seqdata))
+            stop(call.=FALSE, "group must contain one value for each row in the sequence object")
+          
+          nplot <- length(levels(group))
+          gindex <- vector("list",nplot)
+          
+          for (s in 1:nplot)
+            gindex[[s]] <- which(group==levels(group)[s])
+          
+          ## Title of each plot
+          if (!is.null(title)) 
+            title <- paste(title,"-",levels(group))
+          else 
+            title <- levels(group)
+	} else {
+          nplot <- 1
+          gindex <- vector("list",1)
+          gindex[[1]] <- 1:nrow(seqdata)
 	}
 
 	## ===================
 	## Defining the layout
 	## ===================
-	if (type=="Ht") {withlegend=FALSE}
-
+	if (type=="Ht" | type =="pc") { withlegend=FALSE }
+        
 	## IF xaxis argument is provided 
 	## it interferes with axes argument 
 	if ("xaxis" %in% names(oolist)) {
@@ -163,7 +166,16 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 					olist <- c(olist,list(dmax=dmax))
 				}
 			}
-		}
+
+                      } else if (type == "pc") { # modification of Reto Buergin 16.08.2012 
+
+                        plist$title <- title
+                        olist <- c(olist, plist)
+                        olist$plot <- FALSE
+                        f <- seqpcplot
+                        olist <- olist[names(olist) %in% names(formals(f))]
+                        plist <- list()
+                      }
 		else 
 			stop("Unknown 'type' argument.")		
 
@@ -204,6 +216,9 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 
 		if (is.null(cpal)) cpal <- attr(seqdata,"cpal")
 
+		density <- if ("density" %in% names(oolist)) { oolist[["density"]] } else { NULL }
+		angle <- if ("angle" %in% names(oolist)) { oolist[["angle"]] } else { NULL }
+ 
 		## Adding an entry for missing in the legend
 		if (with.missing & any(seqdata==nr)) {
 			cpal <- c(cpal,missing.color)
@@ -212,7 +227,7 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 		## nbstat <- nbstat+1
 		}
 
-		TraMineR.legend(legpos, ltext, cpal, cex=cex.legend)
+		TraMineR.legend(legpos, ltext, cpal, cex=cex.legend, density=density, angle=angle)
 	}
 
 	## Restoring graphical parameters

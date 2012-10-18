@@ -15,7 +15,7 @@
 #  return(chi$statistic)
 #}
 
-seqecmpgroup<-function(subseq, group, method="chisq", pvalue.limit=NULL, weighted=TRUE){
+seqecmpgroup <- function(subseq, group, method="chisq", pvalue.limit=NULL, weighted=TRUE){
 	## If non weighted, we just change the weights to 1
 	if(!weighted) {
 		www <- seqeweight(subseq$seqe)
@@ -138,7 +138,7 @@ plot.subseqelistchisq<-function(x, ylim="uniform", rows=NA, cols=NA,
 		ccol <- as.character(cut(x$data[ , 4+nplot+i], breaks=residbreaks, labels=cpal))
 		plot.subseqelist(x, freq=x$data[,baseIndex+i], col=ccol, main=x$labels[i], ylim=ylim, ...)
 	}
-	par(mar = c(1, 1, 0.5, 1) + 0.1, xpd=FALSE)
+	par(mar = c(1, 1, 0.7, 1) + 0.1, xpd=FALSE)
     if (is.null(legend.title)){
        legend.title <- "Color by sign and significance of Pearson's residual"
        }
@@ -160,4 +160,4 @@ plot.subseqelistchisq<-function(x, ylim="uniform", rows=NA, cols=NA,
 			cex=legend.cex,
 			bty="o"
 		)
-} 
+}

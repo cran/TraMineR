@@ -13,7 +13,7 @@ Plot frequencies of subsequences.
   \item{freq}{The frequencies to plot, support if \code{NULL}}
   \item{cex}{Font size. See \code{\link{par}}.}
  %  \item{ylim}{A 2 length vector indicating minimum and maximum y values (by default to c(0,1))}
-  \item{\dots}{arguments passed to \code{\link{boxplot}}}
+  \item{\dots}{arguments passed to \code{\link{barplot}}}
 }
 %\details{}
 %\references{ ~put references to the literature/web site here ~ }

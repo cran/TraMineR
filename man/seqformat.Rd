@@ -34,107 +34,88 @@ seqformat(data, var=NULL, id=NULL,
 \arguments{
   \item{data}{a data frame or matrix containing sequence data.}
 
-  \item{var}{the list of columns containing the sequences. Default is \code{NULL}, i.e. all the columns.
-Whether the sequences are in the compressed (character strings) or
-extended format is automatically detected by counting the number of
-columns.}
+  \item{var}{List of columns with the sequence data. Default is \code{NULL}, i.e., all columns.
+Sequences are assumed to be in compressed form (character strings) when there is a single column and in extended form otherwise.}
 
-   \item{id}{column containing the identification numbers for the sequences.
-When using \code{SPELL} format as input, this identification number
-is mandatory, in order to identify all spells belonging to each
-individual in the data set.}
+   \item{id}{Column containing the 'id' of the sequences. Mandatory with \code{from="SPELL"} 
+in order to identify the spells of a same sequence.}
 
-   \item{from}{format of the original data. Available formats are: \code{"STS"}, \code{"SPS"}, \code{"SPELL"}.
-If \code{data} is a sequence object, format is automatically set to
-\code{"STS"}.}
+   \item{from}{Format of the input data. One of \code{"STS"}, \code{"SPS"}, \code{"SPELL"}.
+If \code{data} is a sequence object, format is automatically set to \code{"STS"}.}
 
-   \item{to}{format of the output data. Available formats are:
-\code{"STS"}, \code{"SPS"}, \code{"SRS"}, \code{"DSS"},
-\code{"TSE"}.}
+   \item{to}{Format for output data. One of \code{"STS"}, \code{"SPS"}, \code{"SRS"}, \code{"DSS"}, \code{"TSE"}.}
 
-   \item{compressed}{if \code{TRUE} and output format is one of
-\code{"STS"}, \code{"SPS"} or \code{"DSS"}, the output sequences are
-compressed into character strings}
+   \item{compressed}{Logical. Should \code{"STS"}, \code{"SPS"} or \code{"DSS"} output be compressed into character strings? Ignored for other output formats.}
 
-   \item{nrep}{number of previous states replicated, for the \code{"SRS"} format}
+   \item{nrep}{Number of shifted replications for output in \code{"SRS"} format.}
 
-   \item{tevent}{when converting to time-stamped-event (\code{"TSE"}) format,
-a matrix of size \eqn{d * d} where \eqn{d} is the number of distinct
-states appearing in the sequences must be given. In this matrix, the
-cell \eqn{(i,j)} contains all events associated with a transition
-from state \eqn{i} to state \eqn{j}.}
+   \item{tevent}{Transition definition matrix for converting to time-stamped-event (\code{"TSE"}) format. Should be a matrix of size \eqn{d * d} where \eqn{d} is the number of distinct
+states appearing in the sequences. In this matrix, the
+cell \eqn{(i,j)} lists the events associated with a transition from state \eqn{i} to state \eqn{j}.}
 
-  \item{stsep}{the character used as separator in the original data if input format is a vector of character strings.
+  \item{stsep}{Separator character between successive elements in compressed (character strings) input data.
 If \code{NULL} (default value), the \code{\link{seqfcheck}} function
 is called for detecting automatically a separator among "-" and ":".
 Other separators must be specified explicitly.}
 
-  \item{covar}{the list of columns containing associated covariates to be included in the output data frame.
-If to=\code{"SRS"} is chosen, the covariates are replicated across
-each row. Default is \code{NULL}. }
+  \item{covar}{When \code{from="STS"} or \code{from="SPS"}, additional column names to be included as covariates in the output data frame.
+When \code{to="SRS"} the covariates are replicated across the shifted replicated rows. Default is \code{NULL}. Ignored when \code{from="SPELL"}. }
 
-	\item{SPS.in}{a list with the characters used as prefix/suffix
-and state/duration separator for each state duration couple if input
-data contains sequences in \code{SPS} format. Set the \code{xfix}
-element of the list to \code{""} if there are no pre-suf-fixes.}
+	\item{SPS.in}{List with the \code{xfix=} and \code{sdsep=} specifications for the state-duration couples in input data in \code{SPS} form. The first specification, \code{xfix}, specifies the prefix/suffix character (use a two-character string if the prefix and suffix differ and set \code{xfix=""} when no prefix/suffix are present). The second one, \code{sdsep}, specifies the state/duration separator.}
 
-	\item{SPS.out}{a list with the characters used as prefix/suffix
-and state/duration separator to be used for each state duration
-couple if output is in \code{SPS} format. Set the \code{xfix} element
-of the list to \code{""} if there are no pre-suf-fixes.}
+	\item{SPS.out}{List with the \code{xfix} and \code{sdsep} specifications for output in \code{SPS} format. (see argument \code{SPS.in} above.)}
 
-	\item{begin}{when converting from \code{SPELL}, the column with
+
+	\item{begin}{When converting from \code{SPELL}, the column with
 the beginning position of the spell}
 
-	\item{end}{when converting from \code{SPELL}, the column with the
+	\item{end}{When converting from \code{SPELL}, the column with the
 end position of the spell}
 
-	\item{status}{when converting from \code{SPELL}, the column with
+	\item{status}{When converting from \code{SPELL}, the column with
 the status}
 
-	\item{process}{If \code{TRUE} (default) when converting from
-\code{SPELL}, sequences are created on a process time axis. If set to
-\code{FALSE}, they are created on a calendar time axis.}
+	\item{process}{Logical: When converting from
+\code{SPELL}, should sequences be created on a process time axis? Default is \code{TRUE}. Set as 
+\code{FALSE} for creating sequences on a calendar time axis.}
 
-	\item{pdata}{when converting from \code{SPELL} and
+	\item{pdata}{When converting from \code{SPELL} and
 \code{process=TRUE}, either \code{NULL}, \code{"auto"} or the name of
 the data frame containing the individual 'birth' time, that is, the
-entering time from which the process time will be computed. If set to
+initial time from which the process time will be computed. If set as
 \code{NULL} (default), the starting and ending time of each spell are
-supposed to be ages. If set to \code{"auto"}, ages are computed using
+supposed to be ages. If set as \code{"auto"}, ages are computed using
 the starting time of the first spell of each individual as her/his
-birth date. If external birth dates are provided, the data must
+birth date. If external birth dates are provided, the \code{pdata} data must
 contain two columns: an \code{id} to match the birth time with
 \code{SPELL} data and a '\code{birth}' time.}
 
-	\item{pvar}{names or numbers of the columns containing the
-individual identification number and the 'birth' time in
-\code{pdata}.}
+	\item{pvar}{When \code{pdata} is a data frame, a vector of two names or numbers, the first one specifying the column with the individual 'id', and the second one the 'birth' time.}
 
-	\item{limit}{when converting from \code{SPELL}, size of the
-resulting dataframe when creating age sequences (by default goes from
+	\item{limit}{When converting from \code{SPELL}, size of the
+resulting data frame when creating age sequences (by default ranges from
 age 1 to age 100)}
 
-	\item{overwrite}{when converting from \code{SPELL}, if
+	\item{overwrite}{When converting from \code{SPELL}, if
 \code{overwrite} is set to \code{TRUE}, the most recent episode
-overwrites the older one if they overlap each other. If set to
-\code{FALSE}, the most recent episode starts from the end of the
+overwrites the older one when they overlap each other. If set to
+\code{FALSE}, the most recent episode starts in case of overlap after the end of the
 previous one.}
 
-	\item{fillblanks}{when converting from \code{SPELL}, if
+	\item{fillblanks}{When converting from \code{SPELL}, if
 \code{fillblanks} is not \code{NULL}, gaps between episodes are
 filled with any character given as argument.}
 
-	\item{tmin}{when converting from \code{SPELL}, if sequences are
+	\item{tmin}{When converting from \code{SPELL}, if sequences are
 to be defined on a calendar time axis, it defines the starting time
 of the axis. If set to \code{NULL}, the minimum time is taken from
 the 'begin' column in the data.}
 
-	\item{tmax}{when converting from \code{SPELL}, if year sequences
-are wanted, defines the ending year of the dataframe. If set to
+	\item{tmax}{When converting from \code{SPELL}, if year sequences
+are wanted, defines the ending year. If set to
 \code{NULL}, it is guessed from the data (not so accurately!).} }
 
-\value{a data frame}
+\value{A data frame}
 
 \references{
  Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller

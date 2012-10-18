@@ -3,19 +3,18 @@
 \alias{TraMineR}
 \docType{package}
 \title{
-Trajectory miner: a toolbox for exploring and rendering sequence
-data
+Trajectory miner: a toolbox for exploring and rendering sequence data
 }
 \description{
 This package is a toolbox for sequence manipulation, description, rendering and more generally the mining of sequence data in the field of social sciences. Though it is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers its features also apply to many other kinds of categorical sequence data. It accepts many different sequence representations as input and provides tools for translating sequences from one format to another. It offers several statistical functions for describing and rendering sequences, for computing distances between sequences with different metrics among which optimal matching, the longest common prefix and the longest common subsequence, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them. A user's guide can be found on TraMineR's web page.
-
+  
 TraMineR provides tools for both state sequences and event
 sequences. The first step when using the package is to define a
 state sequence object (with \code{\link{seqdef}}) if you want to
 explore state sequences, and an event sequence object (with
 \code{\link{seqecreate}}) if you are interested in event
 sequencing.
-
+  
 State sequences are defined from a series of variables giving the
 states at the successive positions, while event sequences are
 defined from (vertical) time stamped event data. The package,
@@ -26,9 +25,9 @@ sequences and vice versa.
 \details{
 \tabular{ll}{
 Package: \tab TraMineR\cr
-Version: \tab 1.8.2\cr
-Date: \tab 2012-06-02\cr
-Depends: \tab R (>= 2.10), RColorBrewer, boot\cr
+Version: \tab 1.8-3\cr
+Date: \tab 2012-10-18\cr
+Depends: \tab R (>= 2.8.1), RColorBrewer, boot\cr
 Suggests: \tab cluster, xtable\cr
 License: \tab GPL (>= 2)\cr
 URL: \tab http://mephisto.unige.ch/traminer\cr
@@ -132,6 +131,7 @@ seqmpos                 Number of matching positions between two
                         sequences.
 seqnum                  Transform into a sequence object with numerical
                         alphabet.
+seqpcplot               Parallel coordinate plot for sequence data
 seqplot                 Plot state sequence objects
 seqpm                   Find patterns in sequences
 seqrecode               Recoding state sequence objects and factors
@@ -157,42 +157,41 @@ stlab                   Get or set the state labels of a sequence
 }
 Further information is available in the following vignettes:
 \tabular{ll}{
-\code{TraMineR-state-sequence} \tab Analyzing and Visualizing State Sequences (source, pdf)\cr
+\code{TraMineR-state-sequence} \tab Analyzing and Visualizing State Sequences (source)\cr
 }
 }
 \author{
 Alexis Gabadinho <alexis.gabadinho@unige.ch>, Matthias Studer <matthias.studer@unige.ch>, Nicolas S. Müller <nsmuller@gmail.com>, Gilbert Ritschard <gilbert.ritschard@unige.ch> and contributions from Reto Bürgin <reto.buergin@unige.ch>.
-\cr
 Maintainer: Gilbert Ritschard <gilbert.ritschard@unige.ch>
 }
-
+  
 \references{
 {Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011).
 Analyzing and Visualizing State Sequences in R with TraMineR.
 \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
 }
-
-{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009).
-Mining Sequence Data in \code{R} with the \code{TraMineR} package:
-A users guide. Department of Econometrics and Laboratory of
-Demography, University of Geneva }
+  
+{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). 
+Mining Sequence Data in \code{R} with the \code{TraMineR} package: 
+A users guide. Department of Econometrics and Laboratory of 
+Demography, University of Geneva } 
 }
-
+   
 \examples{
 ## load the mvad data
 library(TraMineR)
 data(mvad)
-
+  
 ## create a state sequence object from columns 17 to 86
 mvad.seq <- seqdef(mvad[,17:86])
-
+  
 ## distribution plot by sex (male)
 seqdplot(mvad.seq, group=mvad$male, border=NA)
-
+  
 ## compute the LCS pairwise distance matrix
 ## among the first 10 sequences
 mvad.lcs <- seqdist(mvad.seq[1:10,], method="LCS")
 }
-
+    
 \keyword{ package }
 

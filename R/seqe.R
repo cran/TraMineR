@@ -117,3 +117,19 @@ print.seqelist<-function(x,quote = FALSE,...){
   x<-as.character(x)
   print(x,quote=quote,...)
 }
+
+## ========================================
+## Plot sequences
+## ========================================
+
+plot.seqe <- function(x, type = "pc", ...) {
+  if (type == "pc") {
+    seqpcplot(x, ...)
+  }
+}
+
+plot.seqelist <- function(x, type = "pc", ...) {
+  if (type == "pc") {
+    seqpcplot(x, ...)
+  }
+}

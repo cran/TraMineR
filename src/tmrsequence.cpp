@@ -482,5 +482,57 @@ extern "C" {
         UNPROTECT(1);
         return ans;
     }
+	SEXP tmrseqetotse(SEXP seqs) {
+        Sequence *s =NULL;
+        int ns=length(seqs);
+        SEXP ans, timestamp, event, ids;
+        SEXP seq;
+		int nseqevent=0;
+		SequenceEventNode * sen=NULL;
+		//Start by counting the maximum number of time, the event appears in a given sequences
+		for (int i=0;i<ns;i++) {
+            seq=VECTOR_ELT(seqs,i);
+			ASSIGN_TMRSEQ_TYPE(s,seq);
+            if(s->hasEvent()){
+				sen=s->getEvent();
+				while(sen!=NULL){
+					nseqevent++;
+					sen=sen->getNext();
+				}
+            }
+        }
+		TMRLOG(4, "Numbers of event  is %d", nseqevent);
+		PROTECT(timestamp=allocVector(REALSXP,nseqevent)); // allocate memory
+		PROTECT(event=allocVector(INTSXP,nseqevent)); // allocate memory
+		PROTECT(ids=allocVector(INTSXP,nseqevent)); // allocate memory
+		double * tt=REAL(timestamp);
+		int * ee=INTEGER(event);
+		int * ii=INTEGER(ids);
+		int tsei=0;
+		//looking up for events ages
+        for (int i=0;i<ns;i++) {
+            seq=VECTOR_ELT(seqs,i);
+			ASSIGN_TMRSEQ_TYPE(s,seq);
+            if(s->hasEvent()){
+				sen=s->getEvent();
+				int id = s->getIDpers();
+				double age=0;
+				while(sen!=NULL){
+					age += sen->getGap();
+					tt[tsei]=age;
+					ee[tsei]=sen->getType();
+					ii[tsei]=id;
+					tsei++;
+					sen=sen->getNext();
+				}
+            }
+        }
+		PROTECT(ans=allocVector(VECSXP,3)); // allocate memory
+		SET_VECTOR_ELT(ans,0,ids); // list of ids
+		SET_VECTOR_ELT(ans,1,timestamp); // list of timestamp
+		SET_VECTOR_ELT(ans,2,event); // list of events
+		UNPROTECT(4);
+        return ans;
+    }
 
 }

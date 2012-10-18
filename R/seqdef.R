@@ -169,10 +169,12 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	## WEIGHTS
 	## =======
 	if (!is.null(weights)) {
-		if (length(weights) != nrow(seqdata))
+		if (length(weights) != nrow(seqdata)) {
 			stop("\n [!] number of weights must equal number of sequences", call.=FALSE)
+		}
 		message(" [>] sum of weights: ", round(sum(weights),2), " - min/max: ",
 			min(weights),"/",max(weights))
+		names(weights) <- rownames(seqdata)
 	}
 
 	attr(seqdata,"weights") <- weights
@@ -225,9 +227,15 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 
 	attr(seqdata,"xtstep") <- xtstep
 
-	if (!is.null(id))
-		rownames(seqdata) <- if (length(id)==1 && id=="auto") paste("[",1:nbseq,"]",sep="") else id
-
+	if (!is.null(id)) {
+		if (length(id)==1 && id=="auto") { 
+			rownames(seqdata) <- paste("[",1:nbseq,"]",sep="") } 
+		else { 
+			rownames(seqdata) <- id 
+		}
+		if (!is.null(weights)) { names(weights) <- rownames(seqdata) }
+	}
+	
 	## TraMineR Version
 	descr <- packageDescription("TraMineR")
 	attr(seqdata,"Version") <- descr$Version
