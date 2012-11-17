@@ -51,8 +51,8 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
 
   \item{grid.scale}{Expansion factor for the translation zones.}
 
-  \item{ltype}{the type of sequence that is drawn. Either "unique"
-    to render unique patterns or "non-embeddable" to render
+  \item{ltype}{the type of sequence that is drawn. Either \code{"unique"}
+    to render unique patterns or \code{"non-embeddable"} to render
     non-embeddable sequences.}
 
   \item{embedding}{The method for embedding sequences embeddable in
@@ -64,8 +64,8 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
   \code{"foreground"}.}
 
   \item{lcourse}{Method to connect simultaneous elements with the
-    preceding and following ones. Either "upwards" (default) or
-    "downwards".}
+    preceding and following ones. Either \code{"upwards"} (default) or
+    \code{"downwards"}.}
 
   \item{filter}{list of line coloring options. See details.}
 

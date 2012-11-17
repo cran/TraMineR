@@ -144,7 +144,7 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 
 		na <- colSums((!is.na(dist.repseq))*weights)
     		SD <- colSums(dist.repseq*weights, na.rm=TRUE)
-		MD <- SD/sum(weights)
+		MD <- SD/na
 
 		## Number of similar sequences attributed to each representative
 		nb <- colSums((dist.repseq < tsim)*weights, na.rm=TRUE)
@@ -157,13 +157,13 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
       			sel <- !is.na(dist.repseq[,i])
 			DC[i] <- sum(dc.tot[sel]*weights[sel])
 			tmp <- as.matrix(diss[sel, sel])
-			V[i] <- DC[i]/sum(weights[sel])
+			V[i] <- mean(disscenter(tmp, weights=weights[sel]))
 		}
 
 	} else {
 		na <- sum((!is.na(dist.repseq))*weights)
 		SD <- sum(dist.repseq*weights, na.rm=TRUE)
-    MD <- SD/sum(weights)
+    		MD <- SD/sum(weights)
 		nb <- sum((dist.repseq < tsim)*weights, na.rm=TRUE)
 		DC <- sum(dc.tot*weights)
 		V <- DC/sum(weights)
