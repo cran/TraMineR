@@ -54,7 +54,8 @@ seqdiff(seqdata, group, cmprange = c(0, 1),
 \examples{
 ## Define a state sequence object
 data(mvad)
-mvad.seq <- seqdef(mvad[, 17:86])
+## First 24 months trajectories
+mvad.seq <- seqdef(mvad[, 17:40])
 
 ## Position-wise discrepancy analysis
 mvad.diff <- seqdiff(mvad.seq, group=mvad$gcse5eq)

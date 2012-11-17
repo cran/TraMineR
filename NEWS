@@ -1,5 +1,18 @@
 ## =========
-Version 1.8-3 
+Version 1.8-4
+
+Bug fixes:
+  - seqrep(), dissrep(), seqrplot(): wrong (unweighted) "na" values were returned;
+    also quality measures "MD" (mean distance to representative) and "V" (discrepancy) were not computed properly when more than one
+    representative selected (since version 1.8-2).
+
+User invisible changes:
+  - Added an internal function to fix an issue with an internal C level 
+    function when called from other packages.
+    
+
+## =========
+Version 1.8-3
 
 Information pages:
   - Updated online help pages.
@@ -11,9 +24,9 @@ New functionalities:
 Changes in existing functions:
   - seqdss(): adding long state labels to returned sequence object
   - seqplot(): new option type = "pc"
-  - seqplot(), seqdplot(), seqiplot(), seqfplot(), seqmsplot(), seqrplot(): 
-    if 'density' and/or 'angle' are used to produce shading lines 
-    instead of solid colors, the legend is plotted using the same 
+  - seqplot(), seqdplot(), seqiplot(), seqfplot(), seqmsplot(), seqrplot():
+    if 'density' and/or 'angle' are used to produce shading lines
+    instead of solid colors, the legend is plotted using the same
     parameters and thus corresponds to the colors/shades used in the plot.
   - seqplot(): if group argument is a factor, the plots are
     now ordered the same way as the factor levels.
@@ -24,11 +37,11 @@ Changes in existing functions:
     "occurrences". Made resulting changes in plot.stslsit.modst.
 
 Bug fixes:
-  - seqdef(): When selecting subsets of sequence objects using rownames 
-    instead of row indexes, the corresponding weights were not selected. 
-    Fixed by setting (row)names of weight vector as the sequence 
+  - seqdef(): When selecting subsets of sequence objects using rownames
+    instead of row indexes, the corresponding weights were not selected.
+    Fixed by setting (row)names of weight vector as the sequence
     rownames. (Alexis Gabadinho)
-    
+
 
 ## ==========
 Version 1.8-2
