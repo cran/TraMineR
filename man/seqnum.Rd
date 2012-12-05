@@ -16,7 +16,7 @@
 
 \details{
 The first state (for example \code{'A'}) is coded with the value \code{0}, the second state (for example \code{'B'}) is coded with the value \code{1}, etc... The function returns a sequence object containing the original sequences coded with the new numerical alphabet
-ranging from \code{0} to \code{(nbstates-1)}} 
+ranging from \code{0} to \code{(nbstates-1)}}
 
 \seealso{\code{\link{seqdef}}, \code{\link{alphabet} } }
 
@@ -36,4 +36,8 @@ seqnum(actcal.seq[1:10,])
 ## states A,B,C,D are now coded 0,1,2,3
 alphabet(seqnum(actcal.seq))
 }
-\keyword{manip}
+
+\author{Alexis Gabadinho}
+
+\keyword{Data handling}
+\keyword{State sequences} 

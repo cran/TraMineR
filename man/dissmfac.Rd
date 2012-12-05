@@ -87,3 +87,7 @@ mvad.ham <- seqdist(mvad.seq, method="HAM")
 print(dissmfac(mvad.ham ~ male + Grammar + funemp +
 	gcse5eq + fmpr + livboth, data=mvad, R=10))
 }
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Dissimilarity-based analysis}

@@ -52,4 +52,8 @@ ex1.seq <- seqdef(ex1,1:13, weights=ex1$weights)
 seqtrate(ex1.seq, weighted=FALSE)
 seqtrate(ex1.seq, weighted=TRUE)
 }
-\keyword{nonparametric}
+%
+\author{Matthias Studer and Alexis Gabadinho (first version) (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Global characteristics}

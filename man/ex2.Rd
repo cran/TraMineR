@@ -1,7 +1,7 @@
 \name{ex2}
 \docType{data}
 \alias{ex2}
-\alias{ex2.weighted} 
+\alias{ex2.weighted}
 \alias{ex2.unweighted}
 
 \title{Example data sets with weighted and unweighted sequence data}
@@ -20,7 +20,7 @@ These data sets are mainly intended to test and illustrate the handling of weigh
 \usage{data(ex2)}
 \format{
 The command \code{data(ex2)} generates two data frames:
-\cr 
+\cr
 \code{ex2.weighted}: a data frame with 6 rows, 1 variable containing sequences as character strings, 1 weight variable.
 \cr
 \code{ex2.unweighted}: a data frame with 100 rows, 1 variable containing sequences as character strings.
@@ -37,4 +37,4 @@ ex2u.seq <- seqdef(ex2.unweighted)
 
 \source{The brain of the TraMineR package maintainer.}
 
-\keyword{datasets}
+\keyword{Datasets}

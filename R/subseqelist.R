@@ -3,7 +3,7 @@ is.subseqelist<-function(s){
 	return(inherits(s, "subseqelist"))
 }
 
-createsubseqelist<-function(seqe,constraint,subseq,data, type="frequent"){
+createsubseqelist<-function(seqe, constraint, subseq, data, type="frequent"){
 	if(!is.seqelist(seqe)) {
 		stop(" [!] seqe should be a seqelist")
 	}

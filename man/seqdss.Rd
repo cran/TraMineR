@@ -39,4 +39,6 @@ ex1.seq <- seqdef(ex1, 1:13)
 seqdss(ex1.seq)
 seqdss(ex1.seq, with.missing=TRUE)
 }
-\keyword{attribute}
+\author{Alexis Gabadinho}
+
+\keyword{Longitudinal characteristics}

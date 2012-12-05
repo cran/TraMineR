@@ -37,4 +37,7 @@ seqiplot(actcal.seq)
 cpal(actcal.seq) <- c("blue","red", "green", "yellow")
 seqiplot(actcal.seq)
 }
-\keyword{attribute}
+
+\author{Alexis Gabadinho}
+
+\keyword{Sequence-object attributes}

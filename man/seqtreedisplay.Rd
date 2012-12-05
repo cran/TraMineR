@@ -7,17 +7,17 @@
 Generate a graphical representation of a regression tree of state sequence data.
 }
 \usage{
-seqtreedisplay(tree, filename=NULL, seqdata=tree$info$object, 
+seqtreedisplay(tree, filename=NULL, seqdata=tree$info$object,
                imgLeafOnly=FALSE, sortv=NULL, dist.matrix=NULL,
-               title.cex=3, withlegend="auto", legend.fontsize=title.cex, 
-               axes=FALSE, imageformat="png", withquality=TRUE, 
-               quality.fontsize=title.cex, legendtext=NULL, 
+               title.cex=3, withlegend="auto", legend.fontsize=title.cex,
+               axes=FALSE, imageformat="png", withquality=TRUE,
+               quality.fontsize=title.cex, legendtext=NULL,
                showtree=TRUE, showdepth=FALSE, ...)
 
-disstreedisplay(tree, filename=NULL, imagedata=NULL, imagefunc=plot, 
+disstreedisplay(tree, filename=NULL, imagedata=NULL, imagefunc=plot,
                 imgLeafOnly=FALSE, title.cex=3, imageformat="png",
-                withquality=TRUE, quality.fontsize=title.cex, 
-                legendtext=NULL, showtree=TRUE, showdepth=FALSE, ...) 
+                withquality=TRUE, quality.fontsize=title.cex,
+                legendtext=NULL, showtree=TRUE, showdepth=FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -54,3 +54,9 @@ Conversion to image formats other than "jpeg" or "png" is done using ImageMagick
 \seealso{
 See \code{\link{seqtree}} and \code{\link{disstree}} for examples, and \code{\link{disstree2dot}} for generating "dot" files.
 }
+
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Dissimilarity-based analysis}
+\keyword{Plot} 

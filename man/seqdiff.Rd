@@ -63,3 +63,9 @@ print(mvad.diff)
 plot(mvad.diff, stat=c("Pseudo R2", "Levene"), xtstep=6)
 plot(mvad.diff, stat="discrepancy")
 }
+
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Dissimilarity-based analysis}
+%\keywords{States Sequences}

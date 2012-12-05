@@ -31,4 +31,7 @@ actcal.dur <- seqdur(actcal.seq)
 ## Displaying the durations for the first 10 sequences
 actcal.dur[1:10,]
 }
-\keyword{attribute}
+
+\author{Alexis Gabadinho}
+
+\keyword{Longitudinal characteristics}

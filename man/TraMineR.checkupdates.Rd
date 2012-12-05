@@ -22,4 +22,6 @@ TraMineR.checkupdates()
 % }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{misc}
+\keyword{package}
+
+\author{Nicolas S. Müller}

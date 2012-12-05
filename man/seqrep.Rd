@@ -1,13 +1,19 @@
 \encoding{latin1}
 \name{seqrep}
 \alias{seqrep}
+\alias{seqrplot}
 \title{Extracting sets of representative sequences}
 
-\description{ The function attempts to find an optimal (as small as
-possible for a required coverage) set of representative
-sequences that exhibits the key features of the whole sequence data
-set, the goal being to easily get sounded interpretation of the set of sequences.
+\description{
+Returns either an as small as possible set of non redundant representatives covering (having in their neighborhood) a desired percentage of all sequences, or a given number of patterns with highest coverage. Special cases are single representatives such as the medoid or the sequence pattern with densest neighborhood. See \code{\link{plot.stslist.rep}} for the plot method and \code{\link{seqplot}} for other plot options.
 }
+
+%
+%attempts to find an optimal (as small as
+%possible for a required coverage) set of representative
+%sequences that exhibits the key features of the whole sequence data
+%set, the goal being to easily get sounded interpretation of the set of sequences.
+%}
 
 \usage{ seqrep(seqdata, criterion="density", score=NULL,
     decreasing=TRUE, trep=0.25, nrep=NULL,
@@ -21,32 +27,30 @@ set, the goal being to easily get sounded interpretation of the set of sequences
       frequency), \code{"density"} (neighborhood density), \code{"mscore"} (mean state frequency), \code{"dist"}
       (centrality) and \code{"prob"} (sequence likelihood). See details.}
 
-  \item{score}{an optional vector containing the representativeness scores used to sort the sequences in the candidate
+  \item{score}{an optional vector of representativeness scores for sorting the sequences in the candidate
       list. The length of the vector must be equal to the number of sequences in the sequence object.}
 
   \item{decreasing}{if a score vector is provided, indicates whether the objects in the candidate list must be sorted in
-      ascending or descending order of this score. Default is TRUE, i.e. descending. The first object in the candidate list
+      ascending or descending order of this score. Default is \code{TRUE}, i.e. descending. The first object in the candidate list
       is then supposed to be the most representative. }
 
-  \item{trep}{coverage threshold, i.e. minimum proportion of sequences that should have a representative in their
-      neighborhood (neighborhood diameter is defined by \code{tsim}).}
+  \item{trep}{coverage threshold, i.e., minimum proportion of sequences that should have a representative in their
+      neighborhood (neighborhood radius is defined by \code{tsim}).}
 
  \item{nrep}{number of representative sequences. If \code{NULL} (default), the size of the representative set is
      controlled by \code{trep}.}
 
-  \item{tsim}{threshold for setting the redundancy and neighborhood
-radius. Defined as a percentage of the maximum (theoretical)
-distance. Defaults to 0.1 (10\%). Sequence \eqn{y} is considered as
-redundant to/in the neighborhood of sequence \eqn{x} if the distance
-from \eqn{y} to \eqn{x} is less than \code{tsim}*\code{dmax}. The
-neighborhood diameter is thus twice this threshold.}
+  \item{tsim}{neighborhood
+radius as a percentage of the maximum (theoretical)
+distance \code{dmax}. Defaults to 0.1 (10\%). Sequence \eqn{y} is
+redundant to sequence \eqn{x} when it is in the neighborhood of \eqn{x}, i.e., within a distance
+\code{tsim*dmax} from \eqn{x}.}
 
-  \item{dmax}{maximum theoretical distance. The neighborhood diameter is defined as a proportion of this
-      maximum theoretical distance. If \code{NULL}, it is derived from the distance matrix.}
+  \item{dmax}{maximum theoretical distance. Used to derive the neighborhood radius as \code{tsim*dmax}. If \code{NULL}, the value of \code{dmax} is derived from the dissimilarity matrix.}
 
-  \item{dist.matrix}{a matrix containing the pairwise distances between sequences in \code{seqdata}. If \code{NULL}, the
+  \item{dist.matrix}{matrix of pairwise dissimilarities between sequences in \code{seqdata}. If \code{NULL}, the
       matrix is computed by calling the \code{\link{seqdist}} function. In that case, optional arguments to be passed to
-      the \code{seqdist} function (see ... hereafter) should also be provided.}
+      the \code{seqdist} function (see \code{...} hereafter) should also be provided.}
 
   \item{weighted}{logical: Should weights assigned to the state sequence object be accounted for? (See \code{\link{seqdef}}.)
   Set as \code{FALSE} to ignore the weights.}
@@ -58,21 +62,17 @@ neighborhood diameter is thus twice this threshold.}
 }
 
 \details{
- The representative set is obtained by an heuristic that
-first builds a sorted list of candidates using a representativeness
-score and then eliminates redundancy. The available criterions for
-sorting the candidate list are: \emph{sequence frequency},
-\emph{neighborhood density}, \emph{mean state frequency},
-\emph{centrality} and \emph{sequence likelihood}.
+ The representative set is obtained by an heuristic. Representatives are selected by successively extracting from  the sequences sorted by their representativeness score those which are not redundant with already retained representatives. The selection stops when either the desired coverage or the wanted number of representatives is reached. Sequences are sorted either by the values provided as \code{score} argument or by specifying one of the following as \code{criterion} argument: \code{"freq"} (\emph{sequence frequency}), \code{"density"}
+(\emph{neighborhood density}), \code{"mscore"} (\emph{mean state frequency}), \code{"dist"}
+(\emph{centrality}) and \code{"dist"} (\emph{sequence likelihood}).
 
-The \emph{sequence frequency} criterion uses the sequence frequencies as representativeness score. The more frequent a
-sequence the more representative it is supposed to be. Hence, sequences are sorted in decreasing frequency order.
+With the \emph{sequence frequency} criterion, the more frequent a
+sequence the more representative it is supposed to be. Therefore, sequences are sorted in decreasing frequency order.
 
-The \emph{neighborhood density} criterion uses the
-number---density---of sequences in the neighborhood of each candidate
-sequence. This requires indeed to set the neighborhood diameter
-\code{tsim}. We suggest to set it as a given proportion of the
-maximal theoretical distance between two sequences. Sequences are
+The \emph{neighborhood density} is the
+number---density---of sequences in the neighborhood of the
+sequence. This requires to set the neighborhood radius
+\code{tsim}.  Sequences are
 sorted in decreasing density order.
 
 The \emph{mean state frequency} criterion is the mean value of the transversal frequencies of the successive states.
@@ -87,10 +87,10 @@ MSF(s)=\frac{1}{\ell} \sum_{i=1}^{\ell} f_{s_{i}}
 }
 %
 The lower and upper boundaries of \eqn{MSF} are \eqn{0} and \eqn{1}. \eqn{MSF} is equal to \eqn{1} when all the sequences
-in the set are the same, i.e. when there is a single distinct sequence. The most representative sequence is the one with
+in the set are identical, i.e. when there is a single sequence pattern. The most representative sequence is the one with
 the highest score.
 
-The \emph{centrality} criterion uses the sum of distances to all other sequences as a representativeness criterion. The
+The \emph{centrality} criterion is the sum of distances to all other sequences. The
 smallest the sum, the most representative the sequence.
 
 The \emph{sequence likelihood} \eqn{P(s)} is defined as the product of the probability with which each of its observed
@@ -104,17 +104,19 @@ P(s)=P(s_1,1) * P(s_2,2) * ... * P(s_l,l)
 with \eqn{P(s_{t},t)}{P(s_t,t)} the probability to observe state \eqn{s_t} at position \eqn{t}.
 \cr
 The question is how to determinate the state probabilities \eqn{P(s_{t},t)}{P(s_t,t)}. One commonly used method for
-computing them is to postulate a Markov model, which can be of various order. The implemented criterion considers the
+computing them is to postulate a Markov Chain model, which can be of various order. The implemented criterion considers the
 probabilities derived from the first order Markov model, that is each \eqn{P(s_{t},t)}{P(s_t,t)}, \eqn{t>1} is set to the
 transition rate \eqn{p(s_t|s_{t-1})}{p(s_t)|s_t-1} estimated across sequences from the observations at positions \eqn{t}
 and \eqn{t-1}. For \eqn{t=1}, we set \eqn{P(s_1,1)} to the observed frequency of the state \eqn{s_1} at position 1.
 
 The likelihood \eqn{P(s)} being generally very small, we use
-\eqn{-\log P(s)} as sorting criterion. The latter quantity is minimal
-when \eqn{P(s)} is equal to 1, which leads to sort the sequences in
+\eqn{-\log P(s)} as sorting criterion. The latter quantity reaches its minimum for
+\eqn{P(s)} equal to 1, which leads to sort the sequences in
 ascending order of their score.
 
-For more details, see \cite{Gabadinho et al., 2009}.
+Use \code{criterion="dist"} and \code{nrep=1} to get the medoid and \code{criterion="density"} and \code{nrep=1} to get the densest sequence pattern.
+
+For more details, see \cite{Gabadinho et al., 2011}.
 }
 
 \value{An object of class \code{stslist.rep}. This is actually a
@@ -122,19 +124,20 @@ state sequence object (containing a list of state sequences) with the
 following additional attributes:
   \item{Scores}{a vector with the representative score of each sequence in the original set given the chosen criterion.}
   \item{Distances}{a matrix with the distance of each sequence to its nearest representative.}
-  \item{Statistics}{contains several quality measures for each representative sequence in the set: number of sequences
-      attributed to the representative, number of sequence in the representatives neighborhood, mean distance to the
+  \item{Statistics}{a data frame with quality measures for each representative sequence: number of sequences
+      attributed to the representative, number of sequence in the representative's neighborhood, mean distance to the
       representative.}
   \item{Quality}{overall quality measure.}
 
-Print,plot and summary methods are available. More elaborated plots
-are produced by the \code{seqplot} function using the \code{type="r"}
-argument, or the \code{seqrplot} alias. }
+Print, plot and summary methods are available. More elaborated plots
+are produced by the \code{\link{seqplot}} function using the \code{type="r"}
+argument, or the \code{\link{seqrplot}} alias. }
 
-\references{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Summarizing Sets of Categorical Sequences, In
-International Conference on Knowledge Discovery and Information Retrieval, Madeira, 6-8 October, INSTICC.}
+\references{
+Gabadinho A, Ritschard G, Studer M, Müller NS (2011). "Extracting and Rendering Representative Sequences", In A Fred, JLG Dietz, K Liu, J Filipe (eds.), \emph{Knowledge Discovery, Knowledge Engineering and Knowledge Management}, volume 128 of \emph{Communications in Computer and Information Science (CCIS)}, pp. 94-106. Springer-Verlag.
+}
 
-\seealso{\code{\link{seqplot}}, \code{\link{plot.stslist.rep}}}
+\seealso{\code{\link{seqplot}}, \code{\link{plot.stslist.rep}}, \code{\link{dissrep}}, \code{\link{disscenter}}}
 
 \examples{
 ## Defining a sequence object with the data in columns 10 to 25
@@ -154,6 +157,8 @@ biofam.rep
 summary(biofam.rep)
 plot(biofam.rep)
 }
+
+\author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{misc}
+\keyword{Dissimilarity-based analysis}

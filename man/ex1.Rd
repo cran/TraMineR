@@ -19,4 +19,4 @@ The data set contains also case weights (variable \code{weights}). The sum of th
 
 \source{The brain of the TraMineR package maintainer.}
 
-\keyword{datasets}
+\keyword{Datasets}

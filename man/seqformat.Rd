@@ -37,7 +37,7 @@ seqformat(data, var=NULL, id=NULL,
   \item{var}{List of columns with the sequence data. Default is \code{NULL}, i.e., all columns.
 Sequences are assumed to be in compressed form (character strings) when there is a single column and in extended form otherwise.}
 
-   \item{id}{Column containing the 'id' of the sequences. Mandatory with \code{from="SPELL"} 
+   \item{id}{Column containing the 'id' of the sequences. Mandatory with \code{from="SPELL"}
 in order to identify the spells of a same sequence.}
 
    \item{from}{Format of the input data. One of \code{"STS"}, \code{"SPS"}, \code{"SPELL"}.
@@ -76,7 +76,7 @@ end position of the spell}
 the status}
 
 	\item{process}{Logical: When converting from
-\code{SPELL}, should sequences be created on a process time axis? Default is \code{TRUE}. Set as 
+\code{SPELL}, should sequences be created on a process time axis? Default is \code{TRUE}. Set as
 \code{FALSE} for creating sequences on a calendar time axis.}
 
 	\item{pdata}{When converting from \code{SPELL} and
@@ -150,4 +150,7 @@ actcal.DSS <- seqformat(actcal,13:24,
 head(actcal.DSS)
 }
 
-\keyword{manip}
+
+\author{Alexis Gabadinho, Nicolas S. Müller and Matthias Studer (with Gilbert Ritschard for the help page)}
+
+\keyword{Data handling}

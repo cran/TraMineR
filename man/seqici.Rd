@@ -26,9 +26,9 @@ distribution and the number of transitions in the sequence.}
  \deqn{ C(s)= \sqrt{\frac{q(s)}{q_{max}} \,\frac{h(s)}{h_{max}}} }{%
  C(s) = ([q(s) h(s)]/[q_\{max\} h_\{max\}])^(.5)}
 
-where \eqn{q(s)} is the number of transitions in the sequence, 
-\eqn{q_{max}} the maximum number of transitions,  
-\eqn{h(s)} the within entropy, and \eqn{h_{max}} the theoretical maximum 
+where \eqn{q(s)} is the number of transitions in the sequence,
+\eqn{q_{max}} the maximum number of transitions,
+\eqn{h(s)} the within entropy, and \eqn{h_{max}} the theoretical maximum
 entropy which is \eqn{h_{max} = -\log 1/|A|}{h_max = -log 1/|A|}.
 
 The index \eqn{C(s)} is the geometric mean of its two components
@@ -59,7 +59,6 @@ séquences catégorielles", In \emph{Extraction et gestion des
 connaissances (EGC 2010), Revue des nouvelles technologies de
 l'information RNTI}. Vol. E-19, pp. 61-66. }
 
-\author{Alexis Gabadinho}
 
 \seealso{\code{\link{seqient}}, \code{\link{seqST}}}
 
@@ -82,4 +81,8 @@ ex1.seq <- seqdef(ex1, 1:13)
 seqici(ex1.seq)
 seqici(ex1.seq, with.missing=TRUE)
 }
-\keyword{univar}
+
+\author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
+
+\keyword{Longitudinal characteristics}
+\keyword{State sequences} 

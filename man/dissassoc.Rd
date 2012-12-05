@@ -93,6 +93,7 @@ print(da)
 hist(da)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-%\keyword{ ~kwd1 }
-%\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{Dissimilarity-based analysis}

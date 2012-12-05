@@ -55,4 +55,8 @@ ex1.seq <- seqdef(ex1, 1:13, weights=ex1$weights)
 seqient(ex1.seq)
 seqient(ex1.seq, with.missing=TRUE)
 }
-\keyword{univar}
+
+\author{Alexis Gabadinho}
+
+\keyword{Longitudinal characteristics}
+\keyword{State sequences}

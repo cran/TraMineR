@@ -18,7 +18,7 @@ seqetm(seq, method = "transition", use.labels = TRUE,
 }
 \details{
   Warning!!!: State labels should not contain commas \code{","} which are reserved for separating multiple events of a same transition!
-    
+
   One of three methods can be selected with the \code{method} argument:
 
   \code{"transition"} generates a single (from-state > to-state) event for each found transition and a distinct start-state event for each different sequence start;
@@ -55,4 +55,8 @@ seqetm(actcal.seq,method = "period")
 seqetm(actcal.seq,method = "period", bp="begin")
 }
 
-\keyword{misc}
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Event sequences}
+\keyword{Data handling}

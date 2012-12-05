@@ -1,6 +1,6 @@
 \name{seqistatd}
 \alias{seqistatd}
-\title{States frequency for each individual sequence}
+\title{State frequencies in each individual sequence}
 \description{
   Returns the state frequencies (total durations) for each sequence in the sequence object.
 }
@@ -32,4 +32,9 @@ seqistatd(ex1.seq)
 seqistatd(ex1.seq, with.missing=TRUE)
 
 }
-\keyword{univar}
+
+\author{Alexis Gabadinho}
+
+\keyword{Longitudinal characteristics}
+\keyword{State sequences} 
+

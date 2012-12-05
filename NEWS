@@ -1,15 +1,30 @@
 ## =========
+Version 1.8-5 
+
+Bug fixes:
+  - seqefsub(): reported support did not properly account for weights.
+  - seqtreedisplay(): corrected a bug when using representative sequences and
+    a "dist" object was passed to the "dist.matrix" argument (reported by
+    Emanuela Struffolino).
+  - seqLLCS() and seqLLCP(): added a check on the argument. Both sequences
+    should belong to state sequence objects with a common alphabet.
+  - seqpcplot(): small change in default lower ylim. 
+
+Help pages:
+  - help pages updated with author and keyword fields.
+
+## =========
 Version 1.8-4
 
 Bug fixes:
   - seqrep(), dissrep(), seqrplot(): wrong (unweighted) "na" values were returned;
-    also quality measures "MD" (mean distance to representative) and "V" (discrepancy) were not computed properly when more than one
-    representative selected (since version 1.8-2).
+    also quality measures "MD" (mean distance to representative) and "V"
+    (discrepancy) were not computed properly when more than one representative
+    selected (since version 1.8-2).
 
 User invisible changes:
-  - Added an internal function to fix an issue with an internal C level 
+  - Added an internal function to fix an issue with an internal C level
     function when called from other packages.
-    
 
 ## =========
 Version 1.8-3

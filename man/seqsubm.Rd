@@ -116,4 +116,8 @@ ex1.omw <- seqdist(ex1.seq, method="OM", sm=subm.w, with.missing=TRUE)
 
 ex1.om == ex1.omw
 }
-\keyword{misc}
+
+\author{Matthias Studer and Alexis Gabadinho (first version) (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Dissimilarity measures}

@@ -198,4 +198,8 @@ ex1.seq <- seqdef(ex1, 1:13, weights=ex1$weights)
 ## weighted sequence frequencies
 seqtab(ex1.seq)
 }
-\keyword{manip}
+
+\author{Alexis Gabadinho (with Gilbert Ritschard for help page)}
+
+\keyword{Data handling}
+\keyword{State sequences} 

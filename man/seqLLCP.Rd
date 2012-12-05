@@ -28,4 +28,4 @@ famform.seq <- seqdef(famform)
 ## in the famform sequence object is 2
 seqLLCP(famform.seq[1,],famform.seq[2,])
 }
-\keyword{misc}
+\keyword{Dissimilarity measures}

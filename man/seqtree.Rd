@@ -77,3 +77,7 @@ seqtreedisplay(seqt, type="I", sortv=cmdscale(mvad.dhd, k=1))
 
 }
 
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Dissimilarity-based analysis}

@@ -2,7 +2,7 @@
 \alias{seqmpos}
 \title{Number of matching positions between two sequences.}
 \description{
-Returns the number of common elements, ie same states appearing at the same position in the two sequences.
+Returns the number of common elements, i.e., same states appearing at the same position in the two sequences.
 }
 \usage{
  seqmpos(seq1, seq2, with.missing=FALSE)
@@ -10,10 +10,10 @@ Returns the number of common elements, ie same states appearing at the same posi
 \arguments{
   \item{seq1}{a sequence from a sequence object.}
   \item{seq2}{a sequence from a sequence object.}
-  \item{with.missing}{if \code{TRUE}, gaps appearing at the same position in both sequences are also considedered as common elements}.
+  \item{with.missing}{if \code{TRUE}, gaps appearing at the same position in both sequences are also considered as common elements}.
 }
 \seealso{
- \code{}.
+ \code{\link{seqLLCP}}, \code{\link{seqLLCS} }.
 }
 \examples{
 data(famform)
@@ -32,4 +32,7 @@ seqmpos(ex1.seq[1,], ex1.seq[2,])
 seqmpos(ex1.seq[1,], ex1.seq[2,], with.missing=TRUE)
 
 }
-\keyword{misc}
+
+\author{Alexis Gabadinho (with Gilbert Ritschard for help page)}
+
+\keyword{Dissimilarity measures}

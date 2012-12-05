@@ -332,19 +332,19 @@ extern "C" {
     	TMRLOG(1,"\nSearching for: Subsequence %i\n",j);
     	// TMRLOG(1,"%c",subseqC->print()); // TMRLOG doesn't work for this
 	dsupp[j] = 0;
-	int c = 0;
-	int sp = 0;
+	double c = 0;
+	double sp = 0;
     	for (int i=0; i<numseq; i++)
     	  {
     	    seq=VECTOR_ELT(seqs,i);
     	    ASSIGN_TMRSEQ_TYPE(s,seq);
     	    TMRLOG(1,"Search in: Sequence %i\n",i);
 	    // TMRLOG(1,"%c",s->print()); // TMRLOG doesn't work for this
-    	    int counting = subseqC->count(s,mGap,wSize,aMin,aMax,aMaxEnd,
+    	    double counting = s->getWeight()*subseqC->count(s,mGap,wSize,aMin,aMax,aMaxEnd,
 					  cMethod);
     	    TMRLOG(1,"Counted: %i\n",counting);
     	    c+=counting;
-	    if (counting>0) sp++;
+	    if (counting>0) sp+=s->getWeight();
     	  }
     	dcnt[j] = c;
 	dsupp[j] = sp;

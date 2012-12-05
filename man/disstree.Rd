@@ -119,3 +119,7 @@ disstreedisplay(dt, imagefunc=myplotfunction, title.cex=3,
 	withlegend=FALSE, axes=FALSE, tlim=0, space=0, ylab="", border=NA)
 }
 }
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Dissimilarity-based analysis}

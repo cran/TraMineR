@@ -79,3 +79,8 @@ to leave enough space for the title.
 }
 
 \seealso{\code{\link{seqtree}} and \code{\link{seqtreedisplay}}, \code{\link{disstree}} and \code{\link{disstreedisplay}}.}
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Dissimilarity-based analysis}
+\keyword{Plot} 

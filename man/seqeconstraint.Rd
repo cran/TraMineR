@@ -55,3 +55,7 @@ seqeconstraint(maxGap = -1, windowSize = -1, ageMin = -1,
 
 \seealso{\code{\link{seqefsub}}, \code{\link{seqeapplysub}}}
 
+\author{Matthias Studer, Nicolas S. Müller and Reto Bürgin (alternative counting methods) (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Event sequences}

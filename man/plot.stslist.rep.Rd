@@ -5,7 +5,7 @@
 \title{Plot method for representative sequence sets}
 
 \description{
-This is the plot method for output produced by the seqrep function, i.e objects of class \emph{stslist.rep}. It produces a
+This is the plot method for output produced by the \code{\link{seqrep}} function, i.e, for objects of class \emph{stslist.rep}. It produces a
 representative sequence plot.
 }
 
@@ -46,6 +46,8 @@ plots with group splits and automatic display of the color legend. The \code{\li
 calling \code{seqplot} with \code{type="r"}.
 }
 
+\author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
+
 \examples{
 ## Loading the mvad data set and creating a sequence object
 data(mvad)
@@ -69,4 +71,4 @@ plot(mvad.rep)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{misc}
+\keyword{Plot}

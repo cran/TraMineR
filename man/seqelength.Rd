@@ -6,7 +6,7 @@
 \title{Lengths of event sequences}
 \description{
 The length of an event sequence is its time span, i.e., the total time of observation. This information is useful to perform for instance a survival analysis. The function
-\code{seqelength} retrieves the lengths of the given sequences, while
+\code{seqelength} retrieves the lengths of the provided sequences, while
 \code{seqelength <-} sets the length of the sequences.
 
 \code{seqesetlength} is deprecated.
@@ -24,7 +24,7 @@ seqesetlength(s, len)
   \item{value}{A list of sequence lengths.}
 }
 \value{
-  \code{seqelength} returns a numeric vector with the lengths of the sequences.
+  A numeric vector with the lengths of the sequences.
 }
 %\references{ ~put references to the literature/web site here ~ }
 %\author{ ~~who you are~~ }
@@ -43,5 +43,9 @@ actcal.seqe[1:10]
 ## Retrieve lengths
 seqelength(actcal.seqe)
 }
-\keyword{attribute}
 %\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Event sequences}
+\keyword{Longitudinal characteristics}
