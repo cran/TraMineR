@@ -8,7 +8,7 @@ read.tda.mdist(file)
 \arguments{
   \item{file}{the path to the file containing TDA output.}
 }
-\value{a R matrix containing the distances.} 
+\value{a R matrix containing the distances.}
 %\seealso{\code{\link{}}
 %\examples{}
-\keyword{manip}
+\keyword{Data handling}

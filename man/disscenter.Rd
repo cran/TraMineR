@@ -98,3 +98,7 @@ print(dc)
 dc <- disscenter(mvad.ham, group=mvad$Grammar, medoids.index="all")
 print(dc)
 }
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Dissimilarity-based analysis}

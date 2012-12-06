@@ -70,4 +70,8 @@ smatrix[[2]] <- seqsubm(marr.seq, method="CONSTANT")
 smatrix[[3]] <- seqsubm(left.seq, method="TRATE")
 mcdist2 <- seqdistmc(channels=list(child.seq, marr.seq, left.seq),
 	method="OM", sm =smatrix, cweight=c(2,1,1)) }
-\keyword{misc}
+
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Dissimilarity measures}

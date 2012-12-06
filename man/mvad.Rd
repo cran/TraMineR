@@ -41,4 +41,4 @@ The data set contains also ids (\code{id}) and sample weights (\code{weight}) as
 McVicar, Duncan and Anyadike-Danes, Michael (2002). Predicting Successful and Unsuccessful Transitions from School to Work by Using Sequence Methods,
 \emph{Journal of the Royal Statistical Society. Series A (Statistics in Society)}, 165, 2, pp. 317--334.
 }
-\keyword{datasets}
+\keyword{Datasets}

@@ -21,4 +21,7 @@ biofam.seq <- seqdef(biofam,10:25)
 ## in the biofam data set.
 seqfpos(biofam.seq,"1")
 }
-\keyword{attribute}
+
+\author{Alexis Gabadinho}
+
+\keyword{Longitudinal characteristics}

@@ -8,7 +8,7 @@
 \alias{seqHtplot}
 \alias{seqmsplot}
 \alias{seqmtplot}
-\alias{seqrplot}
+%%\alias{seqrplot} %% alias in seqrep
 
 \title{Plot state sequence objects}
 \description{
@@ -29,7 +29,7 @@ seqIplot(seqdata, group=NULL, title=NULL, ...)
 seqHtplot(seqdata, group=NULL, title=NULL, ...)
 seqmsplot(seqdata, group=NULL, title=NULL, ...)
 seqmtplot(seqdata, group=NULL, title=NULL, ...)
-seqrplot(seqdata, group=NULL, title=NULL, ...)
+%%seqrplot(seqdata, group=NULL, title=NULL, ...)
 }
 \arguments{
 	\item{seqdata}{a state sequence object created with the \code{\link{seqdef}} function.}
@@ -64,7 +64,7 @@ seqrplot(seqdata, group=NULL, title=NULL, ...)
 
   \item{ltext}{optional description of the states to appear in the legend. Must be a vector of character strings with number of elements equal to the size of the alphabet. If unspecified, the \code{label} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}).}
 
-	\item{cex.legend}{expansion factor for setting the size of the font for the labels in the legend. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase the size.}
+  \item{cex.legend}{expansion factor for setting the size of the font for the labels in the legend. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase the size.}
 
  \item{use.layout}{if \code{TRUE}, \code{\link[graphics]{layout}} is used to arrange plots when using the group option or plotting a legend. When layout is activated, the standard '\code{\link[graphics]{par}(mfrow=....)}' for arranging plots does not work. With \code{withlegend=FALSE} and \code{group=NULL}, layout is automatically deactivated and '\code{par(mfrow=....)}' can be used.}
 
@@ -83,7 +83,7 @@ The \code{seqdplot}, \code{seqfplot}, \code{seqiplot}, \code{seqIplot},
 and \code{seqrplot} functions are aliases for calling \code{seqplot}
 with \code{type} argument set respectively to \code{"d"}, \code{"f"},
 \code{"i"}, \code{"I"}, \code{"Ht"}, \code{"ms"}, \code{"mt"},
-\code{"pc"} or \code{"r"}. 
+\code{"pc"} or \code{"r"}.
 
 State distribution plot (\code{type="d"}) represent the sequence of the transversal state frequencies by position (time point) computed by the \code{\link{seqstatd}} function.
 
@@ -104,7 +104,8 @@ The \emph{representative sequence plot} (\code{type="r"}) displays a reduced, no
 }
 
 \seealso{
- \code{\link{plot.stslist.statd}}, \code{\link{plot.stslist.freq}}, \code{\link{plot.stslist}}, \code{\link{plot.stslist.modst}}, \code{\link{plot.stslist.meant}}, \code{\link{plot.stslist.rep}}.
+ \code{\link{plot.stslist.statd}}, \code{\link{plot.stslist.freq}}, \code{\link{plot.stslist}}, \code{\link{plot.stslist.modst}}, \code{\link{plot.stslist.meant}}, \code{\link{plot.stslist.rep}}
+ \code{\link{seqpcplot}}, \code{\link{seqrplot}} .
 }
 
 
@@ -227,4 +228,7 @@ seqplot(actcal.seq, type="mt", group=actcal$sex)
 seqmtplot(biofam.seq, group=biofam$sex)
 
 }
-\keyword{hplot}
+
+\author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
+
+\keyword{Plot}

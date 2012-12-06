@@ -2,7 +2,7 @@
 \alias{seqcomp}
 \title{Compare two state sequences}
 \description{
-Compare two state sequences and return TRUE if they are equal and FALSE otherwise
+Check whether two state sequences are identical.
 }
 \usage{
  seqcomp(x, y)
@@ -30,4 +30,4 @@ seqcomp(mvad.seq[1,],mvad.seq[2,])
 ## Comparing sequences 176 and 211 in mvad.seq
 seqcomp(mvad.seq[176,],mvad.seq[211,])
 }
-\keyword{misc}
+\keyword{Data handling}

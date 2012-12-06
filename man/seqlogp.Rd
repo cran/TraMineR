@@ -3,22 +3,22 @@
 \alias{seqlogp}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Compute the logarithm of sequences probabilities
+Logarithm of the probabilities of state sequences
 }
 \description{
-Compute the logarithm of probability of each sequence using a state transition model. The probability of a sequence is equal to the product of each state probability of the sequence. There are several method to compute a state probability.
+Compute the logarithm of the probability of each state sequence obtained from a state transition model. The probability of a sequence is equal to the product of each state probability of the sequence. There are several methods to compute a state probability.
 }
 \usage{
-seqlogp(seqdata, prob="trate", time.varying=TRUE, begin="freq", 
+seqlogp(seqdata, prob="trate", time.varying=TRUE, begin="freq",
     weighted=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
 	\item{seqdata}{The sequence to compute the probabilities.}
 	
-	\item{prob}{The name of the probability model used. The probability can be either based on transition rates ("trate") or on state frequencies ("freq"). This can also be an \code{\link{array}} specifying the transition probabilities at each \eqn{t} (see details).}
+	\item{prob}{either the name (either "trate" or "freq") of the probability model used to generate the state probabilities, or an \code{\link{array}} specifying the transition probabilities at each \eqn{t} (see details).}
 	
-	\item{time.varying}{Logical. If \code{TRUE}, the probabilities are (either transition or frequencies) are computed separately for each time \eqn{t}}
+	\item{time.varying}{Logical. If \code{TRUE}, the probabilities (transitions or frequencies) are computed separately for each time \eqn{t} point.}
 	
 	\item{begin}{Model used to compute the probability of the first state. Either "freq" to use the observed frequencies on the first period or a vector specifying the probability of each states appearing in \code{seqdata}.}
 	
@@ -39,7 +39,7 @@ The question is how to determinate the state probabilities \eqn{P(s_t,t)}. Sever
 One commonly used method for computing them is to postulate a Markov model, which can be of various order. We can consider probabilities derived from the first order Markov model, that is each \eqn{P(s_t,t)}, \eqn{t>1} is set to the transition rate \eqn{p(s_t|s_{t-1})}{p(s_t|s_(t-1))}. This is available in \code{seqlogp} by setting \code{prob="trate"}. \cr
 The transition rates may be considered constant over time/positions (\code{time.varying=FALSE}), that is estimated across sequences from the observations at positions \eqn{t} and \eqn{t-1} for all \eqn{t} together. Time varying transition rates may also be considered (\code{time.varying=TRUE}), in which case they are computed separately for each position, that is estimated across sequences from the observations at positions \eqn{t} and \eqn{t-1} for each \eqn{t}, yielding an array of transition matrices. The user may also specify his own transition rates array or matrix.
 
-Another method is to use the frequency of a state at each position to set \eqn{P(s_{t},t)}{P(s_t,t)} (\code{prob="freq"}). In the latter case, the probability of a sequence is independant of the probability of its transition. Here again, the frequencies can be computed all together (\code{time.varying=FALSE}) or separately for each position \eqn{t} (\code{time.varying=TRUE}).
+Another method is to use the frequency of a state at each position to set \eqn{P(s_{t},t)}{P(s_t,t)} (\code{prob="freq"}). In the latter case, the probability of a sequence is independent of the probability of the transitions. Here again, the frequencies can be computed all together (\code{time.varying=FALSE}) or separately for each position \eqn{t} (\code{time.varying=TRUE}).
 %
 For \eqn{t=1}, we set \eqn{P(s_1,1)} to the observed frequency of the state \eqn{s_1} at position 1. Alternatively, the \code{begin} argument allows to specify the probability of the first state.
 
@@ -61,3 +61,8 @@ cohort <- biofam$birthyr>1940
 boxplot(biofam.prob~cohort)
 
 }
+
+\author{Matthias Studer and Alexis Gabadinho (with Gilbert Ritschard for the help page)}
+
+\keyword{State sequences}
+\keyword{Longitudinal characteristics}  

@@ -48,4 +48,4 @@ plot(mvad.meant, main="Mean durations in each state of the alphabet",
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{hplot}
+\keyword{Plot}

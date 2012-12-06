@@ -4,18 +4,18 @@
 \alias{as.character.seqe}
 \alias{as.character.seqelist}
 
-\title{String representation of sequence object}
+\title{String representation of an event sequence object}
 \description{
-  Return a string representation of an event sequence object. This work on sequence or subsequences as well.
-  This is an overiding of the usual corresponding function (\code{str} and \code{as.character})
+  Return a string representation of an event sequence object. Works on event sequences as well as on subsequences.
+  This is an overriding of the usual corresponding functions (\code{str} and \code{as.character})
 }
 \details{
    The string have the following form:
   time-(e1,e2,...)-elapsedtime-(e2,...)...
   Where time is the time elapsed from previous set of events and (e1,e2,...) a non empty list of simultaneous events.
-  This function also work on list.
-  You will mainly used \code{str.seqelist} wich a return a single string for a whole list, and \code{as.character.seqelist} which return a vector of string.
-  \code{str.seqe} and \code{as.character.seqe} have mainly an internal purpose (there are called by print and more).
+  The function also works on list.
+  Use \code{str.seqelist} to get a single string for a whole list, and \code{as.character.seqelist} to get a vector of strings.
+  \code{str.seqe} and \code{as.character.seqe} have mainly an internal purpose (they are called by print methods for example).
 }
 
 \seealso{\code{\link{seqecreate}} for a full example }
@@ -24,4 +24,10 @@ data(actcal.tse)
 actcal.seqe <- seqecreate(actcal.tse)
 as.character(actcal.seqe)
 }
+
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+
 \keyword{internal}
+\keyword{Event Sequences}

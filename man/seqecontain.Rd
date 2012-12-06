@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Check if sequence contains events}
 \description{
-  Check if a sequence or a subsequence contains given events
+  Check if an event sequence or subsequence contains given events
 }
 \usage{
 seqecontain(seq, eventList, exclude = FALSE)
@@ -37,5 +37,9 @@ seqecontain(fsubseq,c("FullTime"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{attribute}
 %\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Event sequences}

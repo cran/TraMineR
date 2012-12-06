@@ -54,4 +54,8 @@ seqtab(ex1.seq, weighted=FALSE)
 ## Weighted frequencies
 seqtab(ex1.seq, weighted=TRUE)
 }
-\keyword{univar}
+
+\author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
+
+\keyword{Transversal characteristics}
+

@@ -60,4 +60,7 @@ ex1.seq <- seqdef(ex1, 1:13)
 seqtransn(ex1.seq)
 seqtransn(ex1.seq, with.missing=TRUE)
 }
-\keyword{attribute}
+
+\author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
+
+\keyword{Longitudinal characteristics}

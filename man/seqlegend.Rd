@@ -5,8 +5,8 @@
 Plots a legend for the states in a sequence object. Useful if several graphics are plotted together and only one legend is necessary. Unless specified by the user, the \emph{cpal} and \emph{labels} attributes of the sequence object are used for the colors and text appearing in the legend (see \code{\link{seqdef}}).
 }
 \usage{
-seqlegend(seqdata, with.missing="auto", 
-	cpal=NULL, missing.color=NULL, ltext=NULL, 
+seqlegend(seqdata, with.missing="auto",
+	cpal=NULL, missing.color=NULL, ltext=NULL,
 	position="topleft", fontsize=1, ...)
 }
 \arguments{
@@ -28,7 +28,7 @@ seqlegend(seqdata, with.missing="auto",
 %\seealso{}
 \examples{
 ## Loading the 'actcal' example data set
-## and defining a sequence object with 
+## and defining a sequence object with
 ## (activity statuses from jan. to dec. 2000)
 ## the data in columns 13 to 24
 data(actcal)
@@ -36,7 +36,7 @@ actcal.seq <- seqdef(actcal,13:24,
 	labels=c("> 37 hours", "19-36 hours", "1-18 hours", "no work"))
 
 ## Plotting the sequences frequency,
-## the states distribution  
+## the states distribution
 ## and the legend
 par(mfrow=c(2,2))
 seqiplot(actcal.seq, tlim=0, withlegend=FALSE, border=NA, space=0)
@@ -44,4 +44,7 @@ seqfplot(actcal.seq, pbarw=TRUE, withlegend=FALSE)
 seqdplot(actcal.seq, withlegend=FALSE)
 seqlegend(actcal.seq)
 }
-\keyword{hplot}
+
+\author{Alexis Gabadinho}
+
+\keyword{Plot}

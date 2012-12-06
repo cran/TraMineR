@@ -5,7 +5,7 @@
   Returns the length of sequences.
 }
 \details{
-The length of a sequence is computed by eliminating the missing values at the end (right) and counting the number of states or events. The seqlength function returns a vector containing the length of each sequence in the sequence object given as argument.
+The length of a sequence is computed by eliminating the missing values at the end (right) and counting the number of states or events. The \code{seqlength} function returns a vector containing the length of each sequence in the sequence object given as argument.
 }
 \usage{
  seqlength(seqdata)
@@ -20,9 +20,11 @@ data(famform)
 
 ## Defining a sequence object with the 'famform' data set
 ff.seq <- seqdef(famform)
- 
-## Retrieving the length of the first 10 sequences 
+
+## Retrieving the length of the first 10 sequences
 ## in the ff.seq sequence object
 seqlength(ff.seq)
 }
-\keyword{attribute}
+
+\author{Alexis Gabadinho}
+\keyword{Longitudinal characteristics}

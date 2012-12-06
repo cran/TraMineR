@@ -41,27 +41,21 @@ by \code{tsim}.}
 \code{trep} argument is used to control the size of the
 representative set.}
 
- \item{tsim}{threshold for setting the redundancy and neighborhood
-radius. Defined as a percentage of the maximum (theoretical)
-distance. Defaults to 0.1 (10\%). Object \eqn{y} is considered as
-redundant to/in the neighborhood of object \eqn{x} if the distance from
-\eqn{y} to \eqn{x} is less than \code{tsim}*\code{dmax}. The neighborhood
-diameter is thus twice this threshold. }
+  \item{tsim}{neighborhood
+radius as a percentage of the maximum (theoretical)
+distance  \code{dmax}. Defaults to 0.1 (10\%). Object \eqn{y} is
+redundant to object \eqn{x} when it is in the neighborhood of \eqn{x}, i.e., within a distance
+\code{tsim*dmax} from \eqn{x}.}
 
-  \item{dmax}{maximum theoretical distance. Redundancy and neighborhood
-diameters are defined as a proportion of this maximum theoretical
-distance. If \code{NULL}, it is derived from the distance matrix.}
+  \item{dmax}{maximum theoretical distance. Used to derive the neighborhood radius as \code{tsim*dmax}. If \code{NULL}, the value of \code{dmax} is derived from the dissimilarity matrix.}
 
     \item{weights}{vector of weights of length equal to the number of rows of the dissimilarity matrix. If \code{NULL}, equal weights are assigned.}
  }
 
 \details{
- The representative set is obtained by an heuristic that
-first builds a sorted list of candidates using a representativeness
-score and then eliminates redundancy. The available criterions for
-sorting the candidate list are: \emph{sequence frequency},
-\emph{neighborhood density}, \emph{centrality}. Other user defined
-sorting criterions can be provided using the \code{score} argument.
+ The representative set is obtained by an heuristic. Representatives are selected by successively extracting from  the sequences sorted by their representativeness score those which are not redundant with already retained representatives. The selection stops when either the desired coverage or the wanted number of representatives is reached. Objects are sorted either by the values provided as \code{score} argument, or by specifying one of the following as \code{criterion} argument: \code{"freq"} (\emph{sequence frequency}), \code{"density"}
+(\emph{neighborhood density}), \code{"dist"}
+(\emph{centrality}).
 
 The \emph{frequency} criterion uses the frequencies as
 representativeness score. The frequency of an object in the data is
@@ -71,16 +65,16 @@ is supposed to be. Hence, objects are sorted in decreasing frequency
 order. Indeed, this criterion is the neighborhood (see below)
 criterion with the neighborhood diameter set to 0.
 
-The \emph{neighborhood density} criterion uses the
-number---density---of objects in the neighborhood of each candidate.
-This requires indeed to set the neighborhood diameter. We suggest to
-set it as a given proportion of the maximal (theoretical) distance
-between two objects. Candidates are sorted in decreasing density
-order.
+The \emph{neighborhood density} is the
+number---density---of sequences in the neighborhood of the object. This requires to set the neighborhood radius \code{tsim}.  Objects are
+sorted in decreasing density order.
 
-The \emph{centrality} criterion uses the sum of distances to all
-other objects, i.e. the centrality as a representativeness criterion.
-The smallest the sum, the most representative the candidate.
+
+The \emph{centrality} criterion is the sum of distances to all other objects. The
+smallest the sum, the most representative the sequence.
+
+Use \code{criterion="dist"} and \code{nrep=1} to get the medoid and \code{criterion="density"} and \code{nrep=1} to get the densest object pattern.
+
 
 For more details, see \cite{Gabadinho et al., 2011}.
 }
@@ -89,9 +83,8 @@ For more details, see \cite{Gabadinho et al., 2011}.
 the indexes of the representative objects with the following additional attributes:
   \item{Scores}{a vector with the representative score of each object given the chosen criterion.}
   \item{Distances}{a matrix with the distance of each object to its nearest representative.}
-  \item{Statistics}{contains several quality measures for each representative
-in the set: number of objects attributed to the representative,
-number of object in the representatives neighborhood, mean distance
+  \item{Statistics}{a data frame with quality measures for each representative: number of objects attributed to the representative,
+number of object in the representative's neighborhood, mean distance
 to the representative.}
   \item{Quality}{overall quality measure.}
 
@@ -102,7 +95,7 @@ Print and summary methods are available.
 Gabadinho A, Ritschard G, Studer M, Müller NS (2011). "Extracting and Rendering Representative Sequences", In A Fred, JLG Dietz, K Liu, J Filipe (eds.), \emph{Knowledge Discovery, Knowledge Engineering and Knowledge Management}, volume 128 of \emph{Communications in Computer and Information Science (CCIS)}, pp. 94-106. Springer-Verlag.
 }
 
-\seealso{\code{\link{seqrep}}, \code{\link{plot.stslist.rep}}}
+\seealso{\code{\link{seqrep}}, \code{\link{disscenter}}}
 
 \examples{
 ## Defining a sequence object with the data in columns 10 to 25
@@ -123,4 +116,7 @@ summary(biofam.rep)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{misc}
+
+\author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
+
+\keyword{Dissimilarity-based analysis}

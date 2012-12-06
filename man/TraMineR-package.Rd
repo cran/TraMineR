@@ -25,8 +25,8 @@ sequences and vice versa.
 \details{
 \tabular{ll}{
 Package: \tab TraMineR\cr
-Version: \tab 1.8-4\cr
-Date: \tab 2012-11-17\cr
+Version: \tab 1.8-5\cr
+Date: \tab 2012-12-5\cr
 Depends: \tab R (>= 2.8.1), RColorBrewer, boot\cr
 Suggests: \tab cluster, xtable\cr
 License: \tab GPL (>= 2)\cr
@@ -106,25 +106,26 @@ seqeconstraint          Setting time constraints and the counting
 seqecontain             Check if sequence contains events
 seqecreate              Create event sequence objects.
 seqefsub                Searching for frequent subsequences
-seqeid                  Retrieve id of an event sequence object.
+seqeid                  Retrieve unique ids from an event sequence
+                        object.
 seqelength              Lengths of event sequences
 seqetm                  Create a transition-definition matrix
 seqeweight              Setting or retrieving weights of an event
                         sequence object.
-seqfind                 Find the occurrences of sequence(s) x in the
-                        set of sequences y
+seqfind                 Indexes of state sequence(s) x in state
+                        sequence object y
 seqformat               Conversion between sequence formats
 seqfpos                 Search for the first occurrence of a given
                         element in a sequence
 seqgen                  Random sequences generation
 seqici                  Complexity index of individual sequences
 seqient                 Within sequence entropies
-seqistatd               States frequency for each individual sequence
+seqistatd               State frequencies in each individual sequence
 seqlegend               Plot a legend for the states in a sequence
                         object
 seqlength               Sequence length
-seqlogp                 Compute the logarithm of sequences
-                        probabilities
+seqlogp                 Logarithm of the probabilities of state
+                        sequences
 seqmeant                Mean durations in each state
 seqmodst                Sequence of modal states
 seqmpos                 Number of matching positions between two
@@ -140,7 +141,8 @@ seqsep                  Adds separators to sequences stored as
                         character string
 seqstatd                Sequence of transversal state distributions and
                         their entropies
-seqstatf                State frequencies in the all sequence data set
+seqstatf                State frequencies in the whole sequence data
+                        set
 seqstatl                List of distinct states or events (alphabet) in
                         a sequence data set.
 seqsubm                 Create a substitution-cost matrix
@@ -161,7 +163,7 @@ Further information is available in the following vignettes:
 }
 }
 \author{
-Alexis Gabadinho <alexis.gabadinho@unige.ch>, Matthias Studer <matthias.studer@unige.ch>, Nicolas S. Müller <nsmuller@gmail.com>, Reto Bürgin <reto.buergin@unige.ch>, Gilbert Ritschard <gilbert.ritschard@unige.ch>.
+Alexis Gabadinho <alexis.gabadinho@unige.ch>, Matthias Studer <matthias.studer@unige.ch>, Nicolas S. Müller <nsmuller@gmail.com>, Reto Bürgin <reto.buergin@unige.ch> and Gilbert Ritschard <gilbert.ritschard@unige.ch>.
 \cr
 Maintainer: Gilbert Ritschard <gilbert.ritschard@unige.ch>
 }
@@ -194,5 +196,5 @@ seqdplot(mvad.seq, group=mvad$male, border=NA)
 mvad.lcs <- seqdist(mvad.seq[1:10,], method="LCS")
 }
 
-\keyword{ package }
+\keyword{package}
 

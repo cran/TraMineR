@@ -56,4 +56,9 @@ actcal.seqe[1:10]
 actcal.seqe <- seqecreate(data=actcal.tse)
 
 }
-\keyword{manip}
+
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Event sequences}
+\keyword{Data handling}

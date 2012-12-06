@@ -68,3 +68,7 @@ mvad.ham <- seqdist(mvad.seq, method="HAM")
 ## Pseudo variance of the sequences
 print(dissvar(mvad.ham))
 }
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Dissimilarity-based analysis}

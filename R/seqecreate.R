@@ -6,10 +6,14 @@
 #tmrsequence<-function(id,timestamp,event){
 #  .Call("tmrsequence",as.integer(id),as.double(timestamp),as.integer(event), PACKAGE="TraMineR")
 #}
-seqecreate <- function(data=NULL, id=NULL,timestamp=NULL, event=NULL, endEvent=NULL, tevent="transition", use.labels=TRUE, weighted=TRUE){
-	return(seqecreate.internal(data=data, id=id, timestamp=timestamp, event=event, endEvent=endEvent, tevent=tevent, use.labels=use.labels, order.before=FALSE, weighted=weighted))
+seqecreate <- function(data=NULL, id=NULL,timestamp=NULL, event=NULL, endEvent=NULL, 
+						tevent="transition", use.labels=TRUE, weighted=TRUE){
+	return(seqecreate.internal(data=data, id=id, timestamp=timestamp, event=event, 
+								endEvent=endEvent, tevent=tevent, use.labels=use.labels, 
+								order.before=FALSE, weighted=weighted))
 }
-seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent, use.labels, order.before, weighted){
+seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent, 
+								use.labels, order.before, weighted){
 	if (!is.null(data)) {
 		if (inherits(data,"stslist")) {
 			if (!is.matrix(tevent)) {
@@ -23,15 +27,15 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent, us
 			id <- data.tse$id
 			timestamp <- data.tse$time
 			event <- data.tse$event
-		}else if(is.data.frame(data)){
+		} else if(is.data.frame(data)) {
 			dname <- names(data)
 			if("id" %in% dname && ("timestamp" %in% dname ||"time" %in% dname)&& "event" %in% dname){
-				id <- data[,"id"]
-				event <- data[,"event"]
+				id <- data[ ,"id"]
+				event <- data[ ,"event"]
 				if ("timestamp" %in% dname) {
-					timestamp <- data[,"timestamp"]
+					timestamp <- data[ ,"timestamp"]
 				} else {
-					timestamp <- data[,"time"]
+					timestamp <- data[ ,"time"]
 				}
 			}
 		}
@@ -50,7 +54,7 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent, us
 	}
 	#  warning("Event sequence analysis module is still experimental", call.=FALSE)
 	classname <- c("seqe")
-	intEvent=NULL
+	intEvent <- NULL
 	if(!is.factor(event)){
 		event <- factor(event)
 	}
@@ -58,7 +62,7 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent, us
 		dictionnary <- levels(event)
 		if (!is.null(endEvent)) { 
 			for(i in 1:length(dictionnary)){
-				if (dictionnary[i]==endEvent) {
+				if (dictionnary[i] == endEvent) {
 					intEvent <- i
 				}
 			}
@@ -68,7 +72,10 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent, us
 			}
 		}
 	} else {
-		dictionnary<-c()
+		dictionnary <- c()
+	}
+	if(any(grepl("\\(|\\)|,", dictionnary))){
+		warning(" [!] some of your events contain '(', ')' or ',' characters. The search of specific subsequences may not work properly.")
 	}
 	id <- as.integer(id)
 	timestamp <- as.double(timestamp) 
@@ -79,8 +86,8 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent, us
 		as.double(timestamp), as.integer(event),
 		as.integer(c(intEvent)), classname, as.character(dictionnary))
 
-	class(ret) <- c("seqelist","list")
-	if(inherits(data,"stslist")){
+	class(ret) <- c("seqelist", "list")
+	if(inherits(data, "stslist")){
 		seqelength(ret) <- seqlength(data)
 		ww <- attr(data, "weights")
 		if(!is.null(ww) && weighted){
@@ -91,10 +98,10 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent, us
 }
 #SEXP tmrsequence(SEXP idpers, SEXP time, SEXP event, SEXP classname, SEXP seq)
 
-seqecreatesub<-function(subseq, seqe){
+seqecreatesub <- function(subseq, seqe){
 #  warning("Event sequence analysis module is still experimental", call.=FALSE)
 	if (!is.seqelist(seqe)) {
-		stop("seqe should be a seqelist. See help on seqecreate.")
+		stop(" [!] seqe should be a seqelist. See help on seqecreate.")
 	}
 	classname <- c("seqe")
 	irow <- 1
@@ -102,7 +109,7 @@ seqecreatesub<-function(subseq, seqe){
 	codebase <- levels(seqe)
 	iseq <- 1
 	for (subseqstr in subseq) {
-		mystr <- sub("\\(|\\)", "", unlist(strsplit(subseqstr, "\\)[[:space:]]*-[[:space:]]*\\(")))
+		mystr <- gsub("(^\\()|(\\)$)", "", unlist(strsplit(subseqstr, "\\)[[:space:]]*-[[:space:]]*\\(")))
 		timestamp <- numeric()
 		events <- integer()
 		tindex <- 1
@@ -114,7 +121,7 @@ seqecreatesub<-function(subseq, seqe){
 				mmm <- sub('^[[:space:]]+', '', mmm)
 				ecode <- charmatch(mmm, codebase)
 				if (is.na(ecode)) {
-					stop(paste("Couldn't interpret '", mmm,"' as an event. It should be in (",paste(codebase,collapse=","),")",sep=""))
+					stop(" [!] Couldn't interpret '", mmm,"' as an event. It should be in (", paste(codebase, collapse=","),")")
 				}
 				timestamp[irow] <- tindex
 				events[irow] <- ecode
@@ -133,6 +140,6 @@ seqecreatesub<-function(subseq, seqe){
 	}
 #  e<-factor(event,levels=levels(seq))
  # ret<-list(.Call("tmrsequence",as.integer(-1),as.double(timestamp),as.integer(e),classname,seq, PACKAGE="TraMineR"))
-	class(ret)<-c("seqelist", "list")
+	class(ret) <- c("seqelist", "list")
 	return(ret)
 }

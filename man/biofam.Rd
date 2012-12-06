@@ -52,4 +52,4 @@ Two additional weights variables are inserted for illustrative purpose ONLY (sin
   In \emph{XIVe Rencontre de la Société francophone de classification
   (SFC 2007), Paris, 5 - 7 septembre 2007}, pp. 157--160.
 }
-\keyword{datasets}
+\keyword{Datasets}

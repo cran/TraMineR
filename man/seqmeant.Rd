@@ -21,7 +21,9 @@ seqmeant(seqdata, weighted=TRUE, with.missing=FALSE, prop=FALSE)
 An object of class \emph{stslist.meant}. There are \code{print} and \code{plot} methods for such objects.
 }
 
-\seealso{\code{\link{plot.stslist.meant}} for basic plots of \emph{stslist.meant} objects and \code{\link{seqplot}} with \code{type="mt"} argument for more sophisticated plots of the mean durations allowing grouping and legend.}
+\seealso{\code{\link{plot.stslist.meant}} for basic plots of \emph{stslist.meant} objects and \code{\link{seqmtplot}} (\code{\link{seqplot}} with \code{type="mt"}) argument for more sophisticated plots of the mean durations allowing grouping and legend.}
+
+\author{Alexis Gabadinho}
 
 \references{
 Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
@@ -37,10 +39,7 @@ actcal.seq <- seqdef(actcal,13:24,labels=actcal.lab)
 ## Computing the mean durations
 seqmeant(actcal.seq)
 
-## Example with weights
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{univar}
+\keyword{Global characteristics}

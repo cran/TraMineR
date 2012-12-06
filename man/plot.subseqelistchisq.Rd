@@ -8,7 +8,7 @@ Plot the result of \code{\link{seqecmpgroup}}
 \method{plot}{subseqelistchisq}(x, ylim = "uniform", rows = NA, cols = NA,
     residlevels = c(0.05,0.01),
     cpal = brewer.pal(1 + 2 * length(residlevels), "RdBu"),
-    legendcol = NULL, legend.cex = 1, ptype="freq", 
+    legendcol = NULL, legend.cex = 1, ptype="freq",
     legend.title = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,7 +22,7 @@ Plot the result of \code{\link{seqecmpgroup}}
   \item{legendcol}{When \code{TRUE} the legend is printed vertically, when \code{FALSE} it is printed horizontally. If \code{NULL} (default) the best position will be chosen.}
   \item{legend.cex}{Scale parameters for text legend.}
   \item{ptype}{If set to \code{"resid"}, Pearson residuals are plotted instead of frequencies}
-  \item{legend.title}{Legend title.}  
+  \item{legend.title}{Legend title.}
   \item{\dots}{Additional parameters passed to \code{\link{barplot}}}
 }
 %\details{}
@@ -36,3 +36,9 @@ Plot the result of \code{\link{seqecmpgroup}}
 % ~Make other sections like Warning with \section{Warning }{....} ~
 %}
 \seealso{\code{\link{seqecmpgroup}}}
+
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Event sequences}
+\keyword{Plot} 

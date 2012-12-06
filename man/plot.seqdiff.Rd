@@ -9,7 +9,7 @@ Plotting a seqdiff object.
 }
 \usage{
 \method{plot}{seqdiff}(x, stat = "Pseudo R2", type = "l", ylab = stat, xlab = "",
-     legendposition = "top", ylim = NULL, 
+     legendposition = "top", ylim = NULL,
      xaxt = TRUE, col = NULL, xtstep=NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -37,3 +37,8 @@ Plotting a seqdiff object.
 }
 
 \seealso{\code{\link{seqdiff}}}
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Dissimilarity-based analysis}
+\keyword{Plot}

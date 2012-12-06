@@ -73,3 +73,7 @@ nbkids <- recodef(actcal$nbkid00,
 table(nbkids, actcal$nbkid00, useNA="always")
 
 }
+\author{Matthias Studer (with Gilbert Ritschard for the help page)}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{Data handling}

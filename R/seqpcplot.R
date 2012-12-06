@@ -676,7 +676,7 @@ seqpcplot_privat <- function(seqdata, weights = NULL, group,
       xlim <- c(min(pts$x) - sqrt(grid.scale) / 2 - sqrt(max((wid.group.tot-wid.group.use) / wid.group.tot)) * sqrt(grid.scale) * ngrid0 / ngrid * cex, max(pts$x) + sqrt(grid.scale) / 2)
     }
     if (missing(ylim)) {
-      ylim <- c(min(pts$y) - sqrt(grid.scale) / 2 - sqrt(max((wid.group.tot-wid.group.use) / wid.group.tot)) * sqrt(grid.scale) * ngrid0 / ngrid * cex, max(pts$y) + sqrt(grid.scale) / 2)
+      ylim <- c(1 - sqrt(grid.scale) / 2 - sqrt(max((wid.group.tot-wid.group.use) / wid.group.tot)) * sqrt(grid.scale) * ngrid0 / ngrid * cex, ny + sqrt(grid.scale) / 2)
     }  
     
     ## finalize point coordinates

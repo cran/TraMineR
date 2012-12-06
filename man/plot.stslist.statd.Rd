@@ -55,5 +55,5 @@ plot(biofam.statd, type="Ht")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{hplot}
+\keyword{Plot}
 

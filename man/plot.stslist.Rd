@@ -90,4 +90,4 @@ ex1.seq <- seqdef(ex1, 1:13, weights=ex1$weights)
 plot(ex1.seq)
 plot(ex1.seq, weighted=FALSE)
 }
-\keyword{hplot}
+\keyword{Plot}

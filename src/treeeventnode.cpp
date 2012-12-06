@@ -45,7 +45,7 @@ void TreeEventNode::addSequenceInternal(Sequence *s, SequenceEventNode * en, Con
     }*/
 
 	// If we count several by sequences, or the last element added was from another sequence, we had this element to support.
-	if (cst->getcountMethod()==2 || this->lastID!=s->getIDpers()) {
+	if (cst->getcountMethod()==2 || this->lastID != s->getIDpers()) {
         this->support+=s->getWeight();//
         this->lastID=s->getIDpers();
 	}

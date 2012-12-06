@@ -1,9 +1,9 @@
 \name{seqstatf}
 \alias{seqstatf}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{State frequencies in the all sequence data set}
+\title{State frequencies in the whole sequence data set}
 \description{
-Frequency of each state of the alphabet in the all sequence data set.
+Overall frequency of each state of the alphabet in the state sequence object.
 }
 \usage{
 seqstatf(seqdata, weighted = TRUE)
@@ -15,10 +15,10 @@ seqstatf(seqdata, weighted = TRUE)
   (see \code{\link{seqdef}}). Default is \code{TRUE}.  If no weights were assigned during the creation of the sequence object, \code{weighted=TRUE} will yield the same result as \code{weighted=FALSE} since each sequence is allowed a weight of 1.}
 }
 \details{
-The \code{seqstatf} function computes the (weighted) count and frequency of each state of the alphabet in \code{seqdata}, i.e the (weighted) sum of the occurrences of a state in \code{seqdata}.
+The \code{seqstatf} function computes the (weighted) count and frequency of each state of the alphabet in \code{seqdata}, i.e., the (weighted) sum of the occurrences of a state in \code{seqdata}.
 }
 \value{
-A data.frame with as many rows as states in the alphabet and two columns, one for the count (Freq) and one for the percentage frequencies (Percent).
+A data frame with as many rows as states in the alphabet and two columns, one for the count (Freq) and one for the percentage frequencies (Percent).
 }
 
 \seealso{
@@ -44,7 +44,11 @@ seqstatf(ex1.seq, weighted=FALSE)
 ## Weighted
 seqstatf(ex1.seq, weighted=TRUE)
 }
+
+\author{Alexis Gabadinho}
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{univar}
+\keyword{State sequences}
+\keyword{Global characteristics} 
 
