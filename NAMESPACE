@@ -1,4 +1,5 @@
 import(boot, RColorBrewer)
+importFrom(utils, packageDescription)
 
 export(
 	alphabet,

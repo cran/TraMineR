@@ -41,7 +41,7 @@ seqerules <- function(fsubseq, sortv=NULL, decreasing=FALSE) {
               jmeasure <- (confidence * log((confidence/pb), base=2)) + (invconf * log((invconf/invpb), base=2)) 
 
               ## implicative stat
-              icstatmat <- TraMineR:::implicativestat(matcount[,a], matcount[,b], type="indice")
+              icstatmat <- implicativestat(matcount[,a], matcount[,b], type="indice")
               if(dim(icstatmat)[1]>1) {
                 icstat <- icstatmat[2,2]
               }

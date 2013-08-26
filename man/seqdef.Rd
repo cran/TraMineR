@@ -24,10 +24,11 @@ seqdef(data, var=NULL, informat="STS", stsep=NULL,
 whether the sequences are in the compressed (successive states in a
 character string) or extended format.}
 
-   \item{informat}{format of the original data. Default is \code{"STS"}.
-Available formats are: \code{"STS"}, \code{"SPS"}, \code{"SPELL"}.
-See TraMineR user's manual (\cite{Gabadinho et al., 2010}) for a
-description of the formats.}
+   \item{informat}{format of the original data. Default is \code{"STS"}.  
+Other available formats are: \code{"SPS"} and \code{"SPELL"}, in which case the \code{\link{seqformat}} function is called to convert the data into the \code{"STS"} format (see TraMineR user's manual (\cite{Gabadinho et al., 2010}) for a
+description of these formats). A better solution is nonetheless to convert first your
+data with \code{\link{seqformat}}, so as to have better control over the conversion process and visualize the intermediate \code{"STS"} formatted data.
+}
 
    \item{stsep}{the character used as separator in the original
 data if input format is successive states in a character string. If
@@ -202,4 +203,4 @@ seqtab(ex1.seq)
 \author{Alexis Gabadinho (with Gilbert Ritschard for help page)}
 
 \keyword{Data handling}
-\keyword{State sequences} 
+\keyword{State sequences}

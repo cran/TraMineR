@@ -155,7 +155,7 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 				stop("You must provide a distance matrix", call.=FALSE)
 			else {
 				if (inherits(dist.matrix, "dist")) {
-        				dist.matrix <- TraMineR:::dist2matrix(dist.matrix)
+        				dist.matrix <- dist2matrix(dist.matrix)
 				} 
 
 				olist[["dist.matrix"]] <- dist.matrix[gindex[[np]],gindex[[np]]]

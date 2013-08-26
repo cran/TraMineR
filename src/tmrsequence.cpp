@@ -8,6 +8,7 @@
 #include <Rmath.h>
 #include "TraMineR.h"
 #include <string>
+#include "tmrformat.h"
 
 /**
 	tmrsequence build a sequence obect and return an external pointer to that object
@@ -212,7 +213,9 @@ extern "C" {
     SEXP tmrsequencestringinternal(SEXP seq) {
         Sequence *s =NULL;
         ASSIGN_TMRSEQ_TYPE(s,seq);
+		TMRNumberFormatInit();
         std::string buffer = s->sprint();
+		TMRNumberFormatClean();
         return mkChar(buffer.c_str());
     }
     /**Return a string representation of a sequence*/

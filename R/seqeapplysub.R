@@ -59,7 +59,7 @@ seqeapplysub<-function(subseq,method=NULL,
                    as.double(c(constraint$ageMin)),
                    as.double(c(constraint$ageMax)),
                    as.double(c(constraint$ageMaxEnd)),
-                   as.integer(c(constraint$countMethod)),
+                   as.double(c(constraint$countMethod)),
                    PACKAGE="TraMineR"))
     }
   }

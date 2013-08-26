@@ -1,8 +1,8 @@
 ## .First.lib <- function(lib, pkg) {library.dynam("TraMineR", pkg, lib)}
 
 .onAttach <- function(libname, pkgname){
-	suppressWarnings(descr<-utils:::packageDescription("TraMineR"))
-	Tver <- TraMineR:::extract.ver(descr$Version)
+	suppressWarnings(descr <- utils::packageDescription("TraMineR"))
+	Tver <- extract.ver(descr$Version)
 	if(as.numeric(Tver[2])%%2==0) {
 		state <- "stable"
 	}

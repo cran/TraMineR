@@ -6,7 +6,7 @@ seqlogp <- function(seqdata, prob="trate", time.varying=TRUE, begin="freq", weig
 	agedtr <- vector(mode="list", length=maxage)
 	
 	## On ajoute 1 pour que les codes correspondent aux index R (commence à 1)
-	seqdatanum <- TraMineR:::seqasnum(seqdata)+1
+	seqdatanum <- seqasnum(seqdata)+1
 	nbstates <- max(seqdatanum)
 	## User defined begin frequencies
 	if(is.numeric(begin)){

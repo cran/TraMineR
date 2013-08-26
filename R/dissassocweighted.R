@@ -102,7 +102,7 @@ dissassocweighted.permgroup <- function(diss, grpint, weights, R, ret, randomWei
 			k=k, disscSCtot=disscSCtot))
 		
 	}
-	return(TraMineR:::TraMineR.permutation(1:n, R, WeightedGroupTestValues))
+	return(TraMineR.permutation(1:n, R, WeightedGroupTestValues))
 	
 }
 dissassocweighted.permdiss <- function(diss, grpint, weights, R, ret) {

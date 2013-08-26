@@ -132,12 +132,18 @@ Scherer S (2001). Early Career Patterns: A Comparison of Great Britain and West 
 
 ## biofam data set
 data(biofam)
+## We use only a sample of 300 cases
+set.seed(10)
+biofam <- biofam[sample(nrow(biofam),300),]
 biofam.lab <- c("Parent", "Left", "Married", "Left+Marr",
-"Child", "Left+Child", "Left+Marr+Child", "Divorced")
+                "Child", "Left+Child", "Left+Marr+Child", "Divorced")
 biofam.seq <- seqdef(biofam, 10:25, labels=biofam.lab)
 
 ## actcal data set
 data(actcal)
+## We use only a sample of 300 cases
+set.seed(1)
+actcal <- actcal[sample(nrow(actcal),300),]
 actcal.lab <- c("> 37 hours", "19-36 hours", "1-18 hours", "no work")
 actcal.seq <- seqdef(actcal,13:24,labels=actcal.lab)
 
@@ -176,16 +182,12 @@ costs <- seqsubm(biofam.seq, method="TRATE")
 biofam.om <- seqdist(biofam.seq, method="OM", sm=costs)
 
 ## Plot of the representative sets grouped by sex
-## using the default frequency criterion
-seqrplot(biofam.seq, dist.matrix=biofam.om, group=biofam$sex)
-
-## Plot of the representative sets grouped by sex
-## using the default frequency criterion
+## using the default density criterion
 seqrplot(biofam.seq, group=biofam$sex, dist.matrix=biofam.om)
 
 ## Plot of the representative sets grouped by sex
-## using the "density" criterion
-seqrplot(biofam.seq, group=biofam$sex, criterion="density", dist.matrix=biofam.om)
+## using the "dist" (centrality) criterion
+seqrplot(biofam.seq, group=biofam$sex, criterion="dist", dist.matrix=biofam.om)
 
 ## ====================
 ## Sequence index plots
@@ -198,24 +200,23 @@ seqiplot(biofam.seq)
 ## grouped by sex
 ## using 'border=NA' and 'space=0' options to have a nicer plot
 seqiplot(actcal.seq, group=actcal$sex, tlim=0, border=NA, space=0,
-	sortv=actcal$age00)
+         sortv=actcal$age00)
 
-## ===================
-## Entropy index plots
-## ===================
-seqplot(biofam.seq, type="Ht", group=biofam$sex)
 
 ## =======================
 ## State distribution plot
 ## =======================
 
-## Grouped by sex
+## biofam grouped by sex
+seqplot(biofam.seq, type="d", group=actcal$sex)
+
+## actcal grouped by sex
 seqplot(actcal.seq, type="d", group=actcal$sex)
 
-## Sequence index plot (first 10 seq.)
-## for the actcal data set
-## grouped by sex
-seqplot(actcal.seq, type="i", group=actcal$sex)
+## ===================
+## Cross-sectional entropy plot
+## ===================
+seqplot(biofam.seq, type="Ht", group=biofam$sex)
 
 ## ===============
 ## Meant time plot

@@ -4,7 +4,7 @@
 \encoding{latin1}
 \title{Dissimilarity Tree}
 \description{
-  Tree structured discrepancy analysis of non-measurable objects described by their pairwise dissimilarities.
+  Tree structured discrepancy analysis of objects described by their pairwise dissimilarities.
 }
 \usage{
 disstree(formula, data = NULL, weights = NULL, minSize = 0.05,
@@ -14,8 +14,8 @@ disstree(formula, data = NULL, weights = NULL, minSize = 0.05,
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{formula}{A formula where the left hand side is a dissimilarity matrix and the right hand specifies the candidate partitioning variables}
-  \item{data}{A data frame where arguments in formula will be searched}
+  \item{formula}{Formula with a dissimilarity matrix as left hand side and the candidate partitioning variables on the right side.}
+  \item{data}{Data frame where variables in formula will be searched for.}
   \item{weights}{Optional numerical vector of weights.}
   \item{minSize}{Minimum number of cases in a node, will be treated as a proportion if less than 1.}
   \item{maxdepth}{Maximum depth of the tree}

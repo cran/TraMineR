@@ -42,20 +42,70 @@ DTNsplit <- function(varindex, index,  prob, info, labels=NULL, breaks=NULL, naG
 	return(retsplit)
 }
 
+	
+
 ###########################
 ## Retrieve leaf belonging
 ###########################
 
-disstreeleaf <- function(tree) {
+disstreeleaf <- function(tree, label=FALSE) {
 	if (inherits(tree, "disstree")) {
-		tree <- tree$root
+		root <- tree$root
+	}else{
+		root <- tree
+		label <- FALSE
 	}
-	if (!inherits(tree, "DissTreeNode")) {
+	if (!inherits(root, "DissTreeNode")) {
 		stop("tree should be a DissTreeNode object")
 	}
-	categorie <- numeric(length(tree$ind))
-	categorie[] <- -1
-	return(DTNdisstreeleaf(tree, categorie))
+	DTNnodelabels <- function(dtl){
+		split_s <- function(sp){
+			formd <- function (x){
+				return(format(x, digits =getOption("digits")-2))
+			}
+			str_split <- character(2)
+			vname <- colnames(tree$data)[sp$varindex]
+			if (!is.null(sp$breaks)) {
+				str_split[1] <- paste("<=", formd(sp$breaks))
+				str_split[2] <- paste(">", formd(sp$breaks))
+			}
+			else {
+				str_split[1] <- paste0("[", paste(sp$labels[sp$index==1], collapse=", "),"]")
+				str_split[2] <- paste0("[", paste(sp$labels[sp$index==2], collapse=", "),"]")
+			}
+			if(!is.null(sp$naGroup)){
+				str_split[sp$naGroup] <- paste(str_split[sp$naGroup], "with NA")
+			}
+			return(paste(vname, str_split))
+		}
+		labelEnv <- new.env()
+		labelEnv$label <- list()
+		addLabel <- function(n1, n2, val){
+			id1 <- as.character(n1$id)
+			id2 <- as.character(n2$id)
+			labelEnv$label[[id2]] <- c(labelEnv$label[[id1]], val)
+		}
+		nodeRec <- function(node){
+			if(!is.null(node$split)){
+				spl <- split_s(node$split)
+				addLabel(node, node$kids[[1]], spl[1])
+				addLabel(node, node$kids[[2]], spl[2])
+				nodeRec(node$kids[[1]])
+				nodeRec(node$kids[[2]])
+			}
+		}
+		nodeRec(tree$root)
+		l2 <- list()
+		for(nn in names(labelEnv$label)){
+			l2[[nn]] <- paste0(labelEnv$label[[nn]], collapse=" & ")
+		}
+		return(factor(factor(dtl, levels=as.numeric(names(l2)), labels=as.character(l2))))
+	}
+	categorie <- rep(-1, length(root$ind))
+	if(label){
+		return(DTNnodelabels(DTNdisstreeleaf(root, categorie)))
+	}
+	return(DTNdisstreeleaf(root, categorie))
 }
 
 ###########################
@@ -180,7 +230,10 @@ DTNdisstree <- function(dissmatrix, predictor, terms, weights=NULL, minSize=0.05
 	if (minSize<1) {
 		minSize <- pop*minSize
 	}
-	if(pval<(1/sum(R))){
+	if(R<=1){
+		pval <- 1
+	}
+	else if(pval<(1/sum(R))){
 		warning(" [!] Minimum possible p-value using ", R, " permutations is ", 1/sum(R), ". Parameter pval (=", pval, ") changed to ", 1/sum(R))
 		pval <- 1/sum(R)
 	}
@@ -231,7 +284,7 @@ DTNBuildNode <- function(dmat, pred, minSize, ind, vardis,
 	}
 	else {
 		for (p in 1:ncol(pred)) {
-			## cat("Checking", varnames[[p]], "...\n")
+			## cat("Checking", names(pred[p]), "...\n")
 			spl <- DTNGroupFactorBinary(dissmatrix=dmat, currentSCres=SCres, pred=pred[, p], minSize=minSize, varindex=p, ind=ind, weights=weights)
 			## print(str(spl))
 			if (!is.null(spl) && (is.null(bestSpl) || spl$spl$info$SCres<bestSpl$spl$info$SCres)) {
@@ -331,6 +384,20 @@ DTNGroupFactorBinary <- function(dissmatrix, currentSCres, pred, minSize, varind
 	## Computing residuals
 	#print(inertiaMat)
 	SCres <- sum(diag(inertiaMat)/grpSize)
+	## An error here might be due to weights=0
+	## Check for grpSize==0?
+	# if(is.na(SCres)||is.na(currentSCres)){
+		# print("SCres")
+		# print(SCres)
+		# print("inertiaMat")
+		# print(inertiaMat)
+		# print("grpSize")
+		# print(grpSize)
+		# print("llgrp")
+		# print(llgrp)
+		# print("currentSCres")
+		# print(currentSCres)
+	# }
 	## cat("SCres max: ", SCres)
 	if (SCres>currentSCres){
 		## print("Unsplittable")

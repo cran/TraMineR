@@ -35,7 +35,9 @@ seqtree(formula, data = NULL, weighted = TRUE, minSize = 0.05,
 	The \code{seqtree} objects can be "plotted" with \code{\link{seqtreedisplay}}. A print method is also available which prints the medoid sequence for each terminal node.
 }
 \value{
-	a seqtree object.
+	A \code{seqtree} object with same attributes as \code{\link{disstree}} objects.
+    
+    The leaf membership is in the first column of the fitted attribute. For example, the leaf memberships for a tree \code{dt}  are in \code{dt$fitted[,1]}.
 }
 
 \references{
@@ -53,23 +55,22 @@ data(mvad)
 ## Defining a state sequence object
 mvad.seq <- seqdef(mvad[, 17:86])
 
-## Building a seqtree using hamming distance
-## You should use much higher value for the R parameter,
-## thus the results may be unstable.
-## R should be at least 1000
-## (R is keeped low to avoid too much computation in examples).
+## Growing a seqtree from Hamming distances:
+##   Warning: The R=10 used here to save computation time is
+##   much too small and will generate strongly unstable results.
+##   We recommend to set R at least as R=1000.
 seqt <- seqtree(mvad.seq~ male + Grammar + funemp + gcse5eq + fmpr + livboth,
-    data=mvad, R = 10, seqdist_arg=list(method="HAM", norm=TRUE))
+    data=mvad, R=10, seqdist_arg=list(method="HAM", norm=TRUE))
 print(seqt)
 
-## Building a seqtree using a specified distance matrix
+## Growing a seqtree from an existing distance matrix
 mvad.dhd <- seqdist(mvad.seq, method="DHD")
 seqt <- seqtree(mvad.seq~ male + Grammar + funemp + gcse5eq + fmpr + livboth,
     data=mvad, R = 10, diss=mvad.dhd)
 print(seqt)
 
 
-### Will only work if GraphViz is properly installed
+### Following commands only work if GraphViz is properly installed
 \dontrun{
 seqtreedisplay(seqt, type="d", border=NA)
 seqtreedisplay(seqt, type="I", sortv=cmdscale(mvad.dhd, k=1))

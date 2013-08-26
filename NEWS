@@ -1,5 +1,43 @@
 ## =========
-Version 1.8-5 
+Version 1.8-6
+
+Changes in existing functions:
+  - seqformat(): new 'nr' argument to specify the missing state
+    symbol in SPS input.
+  - disstreeleaf(): new logical 'label' argument to specify
+    whether the leaf membership should be labelled with
+    the classification rules.
+
+Bug fixes:
+  - seqtreedisplay() and disstreedisplay(): GraphViz installer no longer
+    adds GraphViz to the PATH environment variable. Therefore the two
+    functions have been adapted to search for GraphViz. In case GraphViz
+    would not be found, you can specify the GraphViz installation
+    directory with the new 'gvpath' argument.
+  - disstree() and seqtree(): removed the warning when R equals 0 or 1
+    (no permutations).
+  - seqformat(): fixed a problem with missing states when converting
+    from SPS to STS (see Changes in function above.)
+  - seqpcplot(): fixed issues with 'which' argument of 'plot.seqpcplot'.
+  - seqpcplot(): fixed issues with arguments 'xlab' and 'title'.
+  - seqpcplot(): replaced a warning message by an error message at
+    failures in finding plot positions for sequences. The error
+    message advices to modify the (currently hidden) 'maxit' argument.
+    Additionally, automatically generated subtitles are now hidden
+    when the argument 'title' is used.
+  - as.character.seqelist(), print.seqelist(): fixed an issue with time
+    display in event sequences which was in scientific notation for numbers
+    with more than 2 digits. The function now uses the R format function and
+    thus accounts for global formatting options such as options(digits=)
+    and/or options(scipen=).
+  - seqtrate(): fixed error with sequence objects having only two columns.
+
+New functionalities:
+  - disstree2dot() and disstree2dotp() gain a new argument called "title.outer".
+    If title.outer=TRUE, the title is printed in the outer margins.
+
+## =========
+Version 1.8-5
 
 Bug fixes:
   - seqefsub(): reported support did not properly account for weights.
@@ -8,7 +46,7 @@ Bug fixes:
     Emanuela Struffolino).
   - seqLLCS() and seqLLCP(): added a check on the argument. Both sequences
     should belong to state sequence objects with a common alphabet.
-  - seqpcplot(): small change in default lower ylim. 
+  - seqpcplot(): small change in default lower ylim.
 
 Help pages:
   - help pages updated with author and keyword fields.

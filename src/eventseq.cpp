@@ -1,6 +1,7 @@
 #include "eventseq.h"
 #include <sstream>
 
+#include "tmrformat.h"
 using namespace std;
 
 /** Sequence finalizer, used by R to free memory
@@ -74,7 +75,7 @@ Sequence::~Sequence() {
 
 string Sequence::sprint() {
 	ostringstream oss;
-	oss.precision(2);
+	//oss.precision(2);
     //if(!this->isGeneric())n = sprintf(buffer, (char*)"[%i] ",this->idpers);
     //Rprintf((char*)"Current buffer %s\n",buffer);
     if (this->hasEvent()) {
@@ -84,14 +85,19 @@ string Sequence::sprint() {
 
 }
 void Sequence::print() {
+	TMRNumberFormatInit();
     string r=this->sprint();
     //Rprintf((char *)"%s %i",buffer,r);
     REprintf((char *)"%s\n",r.c_str());
+	TMRNumberFormatClean();
 }
 void SequenceEventNode::sprint(ostringstream &oss, const bool& start, const bool &printGap, const EventDictionary& ed, const double & remainingTime) {
     if (start) {
         if (this->gap>0&&printGap) {
-			oss << this->gap << "-(" << ed.find(this->type)->second;
+			SEXP gg;
+			PROTECT(gg=asChar(TMRNumberFormat(gap)));
+			oss << CHAR(gg) << "-(" << ed.find(this->type)->second;
+			UNPROTECT(1);
             //tmp=sprintf(&buffer[index],(char*)"%.2f-",this->gap);
         } else {
             //tmp=ed.sprint(&buffer[index],"(",this->type);
@@ -101,9 +107,13 @@ void SequenceEventNode::sprint(ostringstream &oss, const bool& start, const bool
 
     } else if (this->gap>0) {
         if (printGap) {
-			oss << ")-" << this->gap << "-(" << ed.find(this->type)->second;
+			SEXP gg;
+			PROTECT(gg=asChar(TMRNumberFormat(gap)));
+			oss << ")-" << CHAR(gg)<< "-(" << ed.find(this->type)->second;
+			UNPROTECT(1);
         } else {
 			oss << ")-(" << ed.find(this->type)->second;
+			
         }
     } else {
 		oss << "," << ed.find(this->type)->second;
@@ -112,7 +122,10 @@ void SequenceEventNode::sprint(ostringstream &oss, const bool& start, const bool
         this->next->sprint(oss, false, printGap, ed, remainingTime-this->gap);
     } else {
     	if(remainingTime>0){
-			oss << ")-" << (remainingTime-this->gap);
+			SEXP gg;
+			PROTECT(gg=asChar(TMRNumberFormat(remainingTime-this->gap)));
+			oss << ")-" << CHAR(gg);
+			UNPROTECT(1);
     	}
     	else{
     		oss << ")";

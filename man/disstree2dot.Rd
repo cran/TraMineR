@@ -5,23 +5,24 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Graphical representation of a dissimilarity tree}
 \description{
-Functions to generate a "dot" file and associated images files that can be used in GraphViz to get a graphical representation of the tree.
-}
+Functions to generate a "dot" file and associated images files that can be
+used in GraphViz to get a graphical representation of the tree. }
 \usage{
 disstree2dot(tree, filename, digits=3, imagefunc=NULL, imagedata=NULL,
-             imgLeafOnly=FALSE, devicefunc="jpeg", imageext="jpg",
-             device.arg=list(), use.title=TRUE, label.loc="main",
-             node.loc="main", split.loc="sub", title.cex=1, legendtext=NULL,
-             legendimage=NULL, qualityimage=NULL, showdepth=FALSE, ...)
+            imgLeafOnly=FALSE, devicefunc="jpeg", imageext="jpg",
+            device.arg=list(), use.title=TRUE, label.loc="main",
+            node.loc="main", split.loc="sub", title.cex=1, legendtext=NULL,
+            legendimage=NULL, qualityimage=NULL, showdepth=FALSE,
+            title.outer=FALSE, ...)
 
 disstree2dotp(tree, filename, imagedata=NULL, imgLeafOnly=FALSE,
-              imagefunc=plot, title.cex=3, withquality=TRUE,
-			  quality.fontsize=title.cex, ...)
+            imagefunc=plot, title.cex=3, withquality=TRUE,
+            quality.fontsize=title.cex, title.outer=FALSE, ...)
 
 seqtree2dot(tree, filename, seqdata=tree$info$object, imgLeafOnly=FALSE,
             sortv=NULL, dist.matrix=NULL, title.cex=3, withlegend="auto",
             legend.fontsize=title.cex, withquality=FALSE,
-			quality.fontsize=title.cex, axes=FALSE, ...)
+            quality.fontsize=title.cex, axes=FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -39,6 +40,7 @@ seqtree2dot(tree, filename, seqdata=tree$info$object, imgLeafOnly=FALSE,
   \item{node.loc}{Node content location, see \code{\link{title}} for possible values.}
   \item{split.loc}{Split information location, see \code{\link{title}} for possible values.}
   \item{title.cex}{\code{cex} applied to all calls to \code{title} (see \code{use.title}).}
+  \item{title.outer}{Logical: If \code{TRUE}, the title (see \code{use.title}) is printed in the outer margins.}
   \item{legendtext}{An optional text appearing in a distinct node.}
   \item{legendimage}{An optional image file appearing in a distinct node.}
   \item{qualityimage}{An optional image file appearing in a distinct node.}
@@ -62,10 +64,10 @@ node). These functions are not intended to be used by end-user. See \code{\link{
 and \code{\link{disstreedisplay}} for a much simpler way to generate a graphical representation of a
 tree (\code{\link{seqtree}} or \code{\link{disstree}}).
 
-\code{seqtree2dot} is a shortcut for sequences objects using the plot function \code{\link{seqplot}}. For each node, it calls \code{\link{seqplot}} passing the selected lines of \code{seqdata} as argument.
-	You should at least specify the \code{type} of the plot to use (i.e. using \code{type="d"} for instance, see \code{\link{seqplot}} for more details).
-	
-	
+\code{seqtree2dot} is a shortcut for sequences objects using the plot function \code{\link{seqplot}}. For each node, it calls \code{\link{seqplot}} with the corresponding subset of rows of \code{seqdata} and the provided \code{\link{seqplot}}'s arguments.
+    You should at least specify the \code{type} of the plot (e.g.  \code{type="d"}, see \code{\link{seqplot}} for more details).
+
+
 If \code{use.title} is \code{TRUE}, \code{imagefunc} should take care
 to leave enough space for the title.
 
@@ -75,7 +77,7 @@ to leave enough space for the title.
 
 }
 \value{
-  Nothing but generates a "dot" and several images files (one per node) in the current working directory (see \code{\link{getwd}} and \code{\link{setwd}}).
+  Nothing but generates a "dot" and several image files (one per node) in the current working directory (see \code{\link{getwd}} and \code{\link{setwd}}).
 }
 
 \seealso{\code{\link{seqtree}} and \code{\link{seqtreedisplay}}, \code{\link{disstree}} and \code{\link{disstreedisplay}}.}
@@ -83,4 +85,4 @@ to leave enough space for the title.
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{Dissimilarity-based analysis}
-\keyword{Plot} 
+\keyword{Plot}

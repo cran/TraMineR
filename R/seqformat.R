@@ -2,14 +2,14 @@
 ## TRANSLATION BETWEEN SEQUENCE REPRESENTATIONS
 ## ============================================
 
-seqformat <- function(data, var=NULL, id=NULL, 
+seqformat <- function(data, var=NULL, id=NULL,
 	from, to, compressed=FALSE,
 	nrep=NULL, tevent, stsep=NULL, covar=NULL,
 	SPS.in=list(xfix="()", sdsep=","),
 	SPS.out=list(xfix="()", sdsep=","),
-	begin=NULL, end=NULL, status=NULL, 
-	process=TRUE, pdata=NULL, pvar=NULL, limit=100, overwrite=TRUE, 
-	fillblanks=NULL, tmin=NULL, tmax=NULL) {
+	begin=NULL, end=NULL, status=NULL,
+	process=TRUE, pdata=NULL, pvar=NULL, limit=100, overwrite=TRUE,
+	fillblanks=NULL, tmin=NULL, tmax=NULL, nr="*") {
 
 	## Checking the format
 	list.from <- c("STS","SPS","SPELL")
@@ -24,7 +24,7 @@ seqformat <- function(data, var=NULL, id=NULL,
 	if (missing(to) || !to %in% list.to)	
 		stop("output format must be one of: ", paste(list.to), call.=FALSE)
 
-	## 
+	##
 	if (!is.null(covar)) covariates <- subset(data,,covar)
 
 	if (!is.null(id)) ident <- as.matrix(subset(data,,id))
@@ -41,7 +41,7 @@ seqformat <- function(data, var=NULL, id=NULL,
 			message(" [>] converting special codes for missing states to NA's")
 			seqdata[seqdata==attr(data,"nr")] <- NA
 			seqdata[seqdata==attr(data,"void")] <- NA
-		} 
+		}
 		else {
 			if (is.null(stsep)) {
 				stsep <- seqfcheck(seqdata)
@@ -66,10 +66,11 @@ seqformat <- function(data, var=NULL, id=NULL,
 			stsep <- seqfcheck(seqdata)
 			if (stsep %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=stsep)
 		}
-		else
+		else {
 			seqdata <- seqdecomp(seqdata,sep=stsep)
+		}
 
-		trans <- SPS_to_STS(seqdata, spsformat=SPS.in)
+		trans <- SPS_to_STS(seqdata, spsformat=SPS.in, nr=nr)
 	}
 
 	## ==========
@@ -95,9 +96,9 @@ seqformat <- function(data, var=NULL, id=NULL,
 		## Extracting the sequences from the data set
 		## seqdata <- seqxtract(data, var, data.frame=TRUE)
 		
-		trans <- BIOSPELL_to_STS(seqdata=seqdata, 
-			process=process, pdata=pdata, pvar=pvar, 
-			limit=limit, overwrite=overwrite, fillblanks=fillblanks, 
+		trans <- BIOSPELL_to_STS(seqdata=seqdata,
+			process=process, pdata=pdata, pvar=pvar,
+			limit=limit, overwrite=overwrite, fillblanks=fillblanks,
 			tmin=tmin, tmax=tmax)	
 		## ident <- unique(ident)
 	}
@@ -147,7 +148,7 @@ seqformat <- function(data, var=NULL, id=NULL,
 		out <- STS_to_TSE(trans, ident, tevent)
 		nbout <- nrow(out)
 		}
-	else 
+	else
 		stop("Output format is unsupported")
 
 	if (to!="STS") message(" [>] STS sequences converted to ",nbout," ", to," seq./rows")
