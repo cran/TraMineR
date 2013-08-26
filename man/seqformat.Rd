@@ -28,7 +28,7 @@ seqformat(data, var=NULL, id=NULL,
      begin=NULL, end=NULL, status=NULL,
      process=TRUE, pdata=NULL, pvar=NULL,
      limit=100, overwrite=TRUE,
-     fillblanks=NULL, tmin=NULL, tmax=NULL)
+     fillblanks=NULL, tmin=NULL, tmax=NULL, nr="*")
  }
 
 \arguments{
@@ -64,6 +64,8 @@ When \code{to="SRS"} the covariates are replicated across the shifted replicated
 	\item{SPS.in}{List with the \code{xfix=} and \code{sdsep=} specifications for the state-duration couples in input data in \code{SPS} form. The first specification, \code{xfix}, specifies the prefix/suffix character (use a two-character string if the prefix and suffix differ and set \code{xfix=""} when no prefix/suffix are present). The second one, \code{sdsep}, specifies the state/duration separator.}
 
 	\item{SPS.out}{List with the \code{xfix} and \code{sdsep} specifications for output in \code{SPS} format. (see argument \code{SPS.in} above.)}
+
+    \item{nr}{Symbol used for missing state in input \code{"SPS"} format which will be converted to \code{NA} in \code{"STS"} representation.}
 
 
 	\item{begin}{When converting from \code{SPELL}, the column with

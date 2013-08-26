@@ -87,13 +87,22 @@ seqtrate <- function(seqdata, statl=NULL, time.varying=FALSE, weighted=TRUE, lag
 			## Count
 			PA <- 0
 			colxcond <- seqdata[, alltransition]== statl[x] 
-			PA <- sum(weights * rowSums(colxcond & missingcond))
+			if(numtransition>1){
+				PA <- sum(weights * rowSums(colxcond & missingcond))
+			}
+			else{
+				PA <- sum(weights * (colxcond & missingcond))
+			}
 			if (PA==0){
 				 tmat[x, ] <- 0
 			}
 			else {
 				for (y in 1:nbetat) {
-					PAB <- sum(weights * rowSums(colxcond & seqdata[,alltransition+lag]==statl[y]))
+					if(numtransition>1){
+						PAB <- sum(weights * rowSums(colxcond & seqdata[,alltransition+lag]==statl[y]))
+					} else{
+						PAB <- sum(weights * (colxcond & seqdata[,alltransition+lag]==statl[y]))
+					}
 					tmat[x,y] <- PAB/PA
 				}
 			}

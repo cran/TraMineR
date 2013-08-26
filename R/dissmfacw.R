@@ -121,7 +121,7 @@ dissmfacw <- function(formula, data, R=1000, gower=FALSE,
 		
 			#If we permute the models, then hat_matrix is in function...
 			gc()
-			bts <- TraMineR:::TraMineR.permutation(predictor, R=R, statistic=internalbootmatrixregression2)
+			bts <- TraMineR.permutation(predictor, R=R, statistic=internalbootmatrixregression2)
 		
 		#Computing Pvalue based on permutations tests
 		

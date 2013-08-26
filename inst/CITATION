@@ -54,15 +54,14 @@ citEntry(entry="incollection",
 )
 
 citEntry(entry="incollection",
-  author = personList(p1, p2, p3, p4),
-  title = "Extracting and Rendering Representative Sequences",
-  booktitle = "Knowledge Discovery, Knowledge Engineering and Knowledge Management",
-  publisher = "Springer-Verlag",
-  year = "2011",
-  editor = "A. Fred, J.L.G. Dietz, K. Liu, J. Filipe",
-  pages = "94-106",
-  note = "128",
-  textVersion="Gabadinho, A., Ritschard, G., Studer, M. & M\u00FCller, N.S. (2011), Extracting and Rendering Representative Sequences, In A. Fred, J.L.G. Dietz, K. Liu, J. Filipe (eds.), Knowledge Discovery, Knowledge Engineering and Knowledge Management. Series: Communications in Computer and Information Science (CCIS), Vol. 128, pp. 94-106. Springer-Verlag.",
+  author = personList(p1, p2),
+  title = "Searching for typical life trajectories applied to child birth histories",
+  booktitle = "Gendered life courses",
+  publisher = "Vienna: LIT",
+  year = "2013",
+  editor = "R. L\u00E9vy and  E. Widmer",
+  pages = "287-312",
+  textVersion="Gabadinho, A. & Ritschard, G. (2013), Searching for typical life trajectories applied to child birth histories, In R. L\u00E9vy & E. widmer (eds.), Gendered life courses.  pp. 287-312. Vienna: LIT",
   header="For representative sequences:"
 )
 citEntry(entry="article",
@@ -86,7 +85,7 @@ citEntry(entry="article",
   pages = "25-36",
   booktitle = "Extraction et gestion des connaissances (EGC 2010)",
   textVersion="M\u00FCller, N.S., Studer, M., Gabadinho, A. & Ritschard, G. (2010), Extraction de r\u00E8gles d'association s\u00E9quentielle \u00E0 l'aide de mod\u00E8les semi-param\u00E9triques \u00E0 risques proportionnels, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 25-36. ",
-  header="For event sequences:\n"
+  header="For event sequences:"
 )
 citEntry(entry="article",
   author = personList(p3, p4, p2, p1),
@@ -105,7 +104,7 @@ citEntry(entry="inproceedings",
   year = "2012",
   note = "Poster",
   url = "http://www3.unil.ch/wpmu/sequences2012/files/2012/05/Buergin_LaCOSA_Poster.pdf",
-  textVersion="B\u00FCrgin, R. & Ritschard, G. (2012), Categorical parallel coordinate plot, In LaCOSA Lausanne Conference On Sequence Analysis, University of Lausanne, June 6th-8th 2012 (Poster), http://www3.unil.ch/wpmu/sequences2012/files/2012/05/Buergin_LaCOSA_Poster.pdf", 
+  textVersion="B\u00FCrgin, R. & Ritschard, G. (2012), Categorical parallel coordinate plot, In LaCOSA Lausanne Conference On Sequence Analysis, University of Lausanne, June 6th-8th 2012 (Poster), http://www3.unil.ch/wpmu/sequences2012/files/2012/05/Buergin_LaCOSA_Poster.pdf",
 )
 
 citFooter("See",sQuote("citation()"),"for citing R itself.")

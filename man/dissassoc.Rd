@@ -18,7 +18,7 @@ dissassoc(diss, group, weights=NULL, R=1000,
 
 \arguments{
   \item{diss}{A dissimilarity matrix or a dist object (see \code{\link{dist}})}
-  \item{group}{The grouping variable}
+  \item{group}{A categorical variable. For a numerical variable use \code{\link{dissmfac}}.}
   \item{weights}{optional numerical vector containing weights.}
   \item{R}{Number of permutations for computing the p-value. If equal to 1, no permutation test is performed.}
   \item{weight.permutation}{Weighted permutation method: \code{"diss"}
@@ -37,6 +37,8 @@ homogeneity (equality of within variances) using a generalization of
 the Levene statistic and Bartlett's statistics. \cr There are
 \code{print} and \code{hist} methods (the latter producing an
 histogram of the permuted values used for testing the significance).
+
+If a numeric \code{group} variable is provided, it will be treated as categorical, i.e., each different value will be considered as a different category. To measure the `linear' effect of a numerical variable, use \code{\link{dissmfac}}.
 }
 
 \value{ An object of class \code{dissassoc} with the

@@ -77,10 +77,9 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
     appear on the y-axis. This argument is solely relevant for
     \code{seqelist} objects.}
 
-  \item{order.align}{Method for converting timestamps to individual
-  order positions. Either \code{"first"} (default) or
-  \code{"last"}. \code{"first"} numbers the positions from the beginning
-  while \code{"last"} numbers them from the end.}
+  \item{order.align}{Aligning method. For aligning on order positions use either \code{"first"} (default) or
+  \code{"last"}. Option \code{"first"} numbers the positions from the beginning
+  while \code{"last"} numbers them from the end. With \code{order.align = "time"}, the elements in the sequences are aligned on their rounded timestamps.}
 
   \item{title}{title for the graphic.}
   \item{xlab}{label for the x axis}
@@ -88,8 +87,8 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
   \item{xaxis}{logical: Should x-axis be plotted?}
   \item{yaxis}{logical: Should y-axis be plotted?}
 
-  \item{axes}{if set to \code{"all"} (default value) x-axes are drawn
-    for each plot in the graphic. If set to \code{"bottom"} and
+  \item{axes}{if set as \code{"all"} (default value) x-axes are drawn
+    for each plot in the graphic. If set as \code{"bottom"} and
     \code{group} is used, axes are drawn only under the plots at
     the bottom of the graphic area. If \code{FALSE}, no x-axis is drawn.}
 
@@ -138,7 +137,7 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
   example.
 
   Type \code{function}: colors the patterns depending on the values
-  returned by a [0,1] valued function on the frequency x of the
+  returned by a [0,1] valued function of the frequency x of the
   pattern. Two native functions can be used: \code{"minfreq"} and
   \code{"cumfreq"}. Use \code{filter = list(type = "function", value =
   "minfreq", level = 0.05)} to color patterns with a support of at least
@@ -270,4 +269,4 @@ seqpcplot(seqdata = biofam.seqe,
 \author{Reto Bürgin (with Gilbert Ritschard for the help page)}
 
 \keyword{Plot}
-\keyword{Event sequences} 
+\keyword{Event sequences}

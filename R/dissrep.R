@@ -6,7 +6,7 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 	dmax=NULL, weights=NULL) {
 
 	if (inherits(diss, "dist")) {
-        diss <- TraMineR:::dist2matrix(diss)
+        diss <- dist2matrix(diss)
 	}
 
 	nbobj <- nrow(diss)

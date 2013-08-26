@@ -116,7 +116,7 @@ ascending order of their score.
 
 Use \code{criterion="dist"} and \code{nrep=1} to get the medoid and \code{criterion="density"} and \code{nrep=1} to get the densest sequence pattern.
 
-For more details, see \cite{Gabadinho et al., 2011}.
+For more details, see \cite{Gabadinho & Ritschard, 2013}.
 }
 
 \value{An object of class \code{stslist.rep}. This is actually a
@@ -134,7 +134,10 @@ are produced by the \code{\link{seqplot}} function using the \code{type="r"}
 argument, or the \code{\link{seqrplot}} alias. }
 
 \references{
-Gabadinho A, Ritschard G, Studer M, Müller NS (2011). "Extracting and Rendering Representative Sequences", In A Fred, JLG Dietz, K Liu, J Filipe (eds.), \emph{Knowledge Discovery, Knowledge Engineering and Knowledge Management}, volume 128 of \emph{Communications in Computer and Information Science (CCIS)}, pp. 94-106. Springer-Verlag.
+{Gabadinho A, Ritschard G (2013). "Searching for typical life trajectories applied to child birth histories", In R Lévy, E. Widmer (eds.), \emph{Gendered Life Courses}, pp. 287-312. Vienna: LIT.}
+
+
+{Gabadinho A, Ritschard G, Studer M, Müller NS (2011). "Extracting and Rendering Representative Sequences", In A Fred, JLG Dietz, K Liu, J Filipe (eds.), \emph{Knowledge Discovery, Knowledge Engineering and Knowledge Management}, volume 128 of \emph{Communications in Computer and Information Science (CCIS)}, pp. 94-106. Springer-Verlag.}
 }
 
 \seealso{\code{\link{seqplot}}, \code{\link{plot.stslist.rep}}, \code{\link{dissrep}}, \code{\link{disscenter}}}

@@ -3,12 +3,22 @@
 ###########################
 DTNplotfunc <- function(imagedata, plotfunc, plotfunc.title.cex,
 				plotfunc.use.title=TRUE, plotfunc.label.loc="main",
-				plotfunc.node.loc="main", plotfunc.split.loc="sub", ...) {
+				plotfunc.node.loc="main", plotfunc.split.loc="sub",
+				plotfunc.title.outer=FALSE, ...) {
+	getSize <- function(loc){
+		locvect <- c(plotfunc.label.loc,  plotfunc.node.loc, plotfunc.split.loc)
+		return(sum(as.integer(locvect==loc))*plotfunc.title.cex)
+		
+	}
 	if (plotfunc.use.title) {
-		top <- (as.integer(plotfunc.label.loc=="main")+as.integer(plotfunc.node.loc=="main")+as.integer(plotfunc.split.loc=="main"))*plotfunc.title.cex
-		bottom <- (as.integer(plotfunc.label.loc=="sub")+as.integer(plotfunc.node.loc=="sub")+as.integer(plotfunc.split.loc=="sub"))*plotfunc.title.cex
-		left <- (as.integer(plotfunc.label.loc=="ylab")+as.integer(plotfunc.node.loc=="ylab")+as.integer(plotfunc.split.loc=="ylab"))*plotfunc.title.cex
-		par(mar=c(bottom, left, top, 0), font.sub=2, mgp=c(0, 0, 0))
+		top <- getSize("main")
+		bottom <- getSize("sub")
+		left <- getSize("ylab")
+		if(!plotfunc.title.outer){
+			par(mar=c(bottom, left, top, 0), font.sub=2, mgp=c(0, 0, 0))
+		}else{
+			par(oma=c(bottom, left, top, 0), font.sub=2, mgp=c(0, 0, 0))
+		}
 		#on.exit(par(oldpar))
 	}
 	plotfunc(imagedata, ...)
@@ -78,7 +88,7 @@ disstreedisplay <- function(tree, filename=NULL, imagedata=NULL, imagefunc=plot,
 }
 
 disstreedisplayInternal <- function(tree, filename, tmpdisstree, imagedata, imagefunc, imgLeafOnly, title.cex, imageformat,
-							withquality, quality.fontsize, legendtext, showtree, showdepth, ...) {
+							withquality, quality.fontsize, legendtext, showtree, showdepth, gvpath=NULL, ...) {
 	if(imageformat!="jpg"){
 		disstree2dotp(tree=tree, filename=tmpdisstree, imagedata=imagedata, imgLeafOnly=imgLeafOnly, imagefunc=imagefunc,
 			title.cex=title.cex, devicefunc="png", imageext="png", legendtext=legendtext, 
@@ -89,22 +99,64 @@ disstreedisplayInternal <- function(tree, filename, tmpdisstree, imagedata, imag
 			title.cex=title.cex, legendtext=legendtext, withquality=withquality, quality.fontsize=quality.fontsize, showdepth=showdepth, ...)
 	}
 	
-	myshellrun <- function(cmd, ...) {
+	myshellrun <- function(cmd, gvpath=NULL, ...) {
+		cmd <- paste(gvpath, cmd, sep="")
 		if (.Platform$OS.type=="windows") {
-			return(system(paste(Sys.getenv("COMSPEC"),"/c", cmd),...))
+			return(system(paste(Sys.getenv("COMSPEC"),"/c \"", cmd, "\""), ...))
 		}
 		else {
 			return(system(cmd,...))
 		}
 	}
+	
 	if(imageformat!="jpg"){
-		dotval <- myshellrun(paste("dot -Tpng -o", tmpdisstree,".png ", tmpdisstree,".dot", sep=""))
+		dotcommand <- paste(" -Tpng -o", tmpdisstree,".png ", tmpdisstree,".dot", sep="")
 	}else{
-		dotval <- myshellrun(paste("dot -Tjpg -o", tmpdisstree,".jpg ", tmpdisstree,".dot", sep=""))
+		dotcommand <- paste(" -Tjpg -o", tmpdisstree,".jpg ", tmpdisstree,".dot", sep="")
 	}
-	if (dotval==1) {
-		stop("You should install GraphViz to use this function: see http://www.graphviz.org")
+	
+	if (is.null(gvpath)) {
+		## First check for GVPATH
+		gvpath <- Sys.getenv("GVPATH")
+		if(gvpath==""){
+			getGraphVizPath <- function(envVar){
+				envDir <- Sys.getenv(envVar)
+				dd <- dir(envDir, "Graphviz(.*)")
+				if(length(dd)>0){
+					cond <- file.exists(paste(envDir, dd, "bin", "dot.exe", sep="\\"))
+					if(sum(cond)==0){
+						return(NULL)
+					}
+					dd <- dd[cond]
+					versions <- sub("Graphviz[[:space:]]?", "", dd)
+					ii <- which.max(as.numeric(versions))
+					message(" [>] GraphViz version ", versions[ii], " found.")
+					dd <- dd[ii]
+					return(paste(envDir, dd, sep="\\"))
+				}
+				return(NULL)
+			}
+			## GVPATH not found, check default locations directories...
+			gvpath <- getGraphVizPath("programfiles")
+			if(is.null(gvpath)){
+				gvpath <- getGraphVizPath("programfiles(x86)")
+			}
+			
+		}
 	}
+	gvpath <- paste("\"", gvpath, "\\bin\\dot.exe\" ", sep="")
+	if (.Platform$OS.type!="windows") {
+		gvpath <- "dot "
+	}
+	dotval <- myshellrun(dotcommand, gvpath=gvpath)
+	if(dotval==1){
+		stop(paste(" [!] GraphViz was not found. If you haven't, please install GraphViz to use this function: see http://www.graphviz.org",
+			 " [!] If GraphViz is installed on your computer, you need to specify the GraphViz installation directory using the argument gvpath='installdir'",
+			 " [!] You can also add this directory to the PATH environment variable",
+			 " [!] GraphViz installation directory usually looks like 'C:\\Program Files\\GraphViz'\n", sep="\n"
+			 ))
+	}
+	
 	
 	if (!(imageformat %in% c("jpg", "png"))) {
 		imagickval <- myshellrun(paste("convert ", tmpdisstree,".png ",tmpdisstree,".", imageformat, sep=""))
@@ -172,7 +224,8 @@ seqtree2dot <- function(tree, filename, seqdata=tree$info$object, imgLeafOnly=FA
 ## Generate dot file
 ###########################
 disstree2dotp <- function(tree, filename, imagedata=NULL, imgLeafOnly=FALSE,
-						imagefunc=plot, title.cex=3, withquality=TRUE, quality.fontsize=title.cex, ...){
+						imagefunc=plot, title.cex=3, withquality=TRUE, 
+						quality.fontsize=title.cex, title.outer=FALSE, ...){
 	qualityimage <- NULL
 	arguments <- list(...)
 	if(withquality) {
@@ -206,7 +259,8 @@ disstree2dotp <- function(tree, filename, imagedata=NULL, imgLeafOnly=FALSE,
 	disstree2dot(tree, filename, imagedata=imagedata, imgLeafOnly=imgLeafOnly, title.cex=title.cex, imagefunc=DTNplotfunc, plotfunc=imagefunc,
 			use.title=TRUE, label.loc="main", node.loc="main", split.loc="sub",
 			plotfunc.use.title=TRUE, plotfunc.label.loc="main", plotfunc.node.loc="main",
-			plotfunc.split.loc="sub", plotfunc.title.cex=3, qualityimage=qualityimage, ...)
+			plotfunc.split.loc="sub", plotfunc.title.cex=3, qualityimage=qualityimage, 
+			title.outer=title.outer, plotfunc.title.outer=title.outer, ...)
 			
 
 }
@@ -218,7 +272,8 @@ disstree2dot <- function(tree, filename, digits=3, imagefunc=NULL, imagedata=NUL
 							imgLeafOnly=FALSE, devicefunc="jpeg", imageext="jpg",
 							device.arg=list(), use.title=TRUE, label.loc="main",
 							node.loc="main", split.loc="sub", title.cex=1, legendtext=NULL, 
-							legendimage=NULL, qualityimage=NULL, showdepth=FALSE, ...) {
+							legendimage=NULL, qualityimage=NULL, showdepth=FALSE,
+							title.outer=FALSE, ...) {
 	dotfile <- paste(filename, ".dot", sep="")
 	node <- tree$root
 	cat("digraph distree{\n", file=dotfile)
@@ -256,7 +311,7 @@ disstree2dot <- function(tree, filename, digits=3, imagefunc=NULL, imagedata=NUL
 			}
 			if (use.title) {
 				title.arg <- list(main = NULL, sub = NULL, xlab = NULL, ylab = NULL,
-							line = NA, outer = FALSE, cex.main=title.cex,	cex.sub=title.cex,
+							line = NA, outer = title.outer, cex.main=title.cex,	cex.sub=title.cex,
 							cex.lab=title.cex)
 				title.arg[[node.loc]] <- stringcontentnode
 				title.arg[[split.loc]] <- stringcontentsplit

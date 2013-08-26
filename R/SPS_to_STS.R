@@ -2,12 +2,12 @@
 ## Convert from SPS to STS format
 ## ==============================
 
-SPS_to_STS <- function(seqdata, spsformat) {
+SPS_to_STS <- function(seqdata, spsformat, nr="*") {
 
 	nbseq <- seqdim(seqdata)[1]
 	trans <- matrix("", nrow=nbseq, ncol=1)
 
-	if (spsformat$xfix!="") 
+	if (spsformat$xfix!="")
 		xfix <- paste("[",spsformat$xfix,"]", sep="")
 	else xfix=""
 	sdsep <- spsformat$sdsep
@@ -19,9 +19,10 @@ SPS_to_STS <- function(seqdata, spsformat) {
 			sps <- strsplit(gsub(xfix,"",tmpseq[s]), split=sdsep)[[1]]
 	
 			seq <- sps[1]
+            if (seq==nr) seq <- NA
 			dur <- as.integer(sps[2])
 
-			if (s==1) trans[i] <- paste(trans[i],seq,sep="") 
+			if (s==1) trans[i] <- paste(trans[i],seq,sep="")
 			else trans[i] <- paste(trans[i],seq,sep="-")
 
 			if (dur>1)

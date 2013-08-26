@@ -83,14 +83,14 @@ str.seqe<-function(object,...){
   NextMethod("str")
 }
 
-as.character.seqe<-function(x,...){
+as.character.seqe<-function(x, ...){
 #  seqestr(s)
   if(!is.seqe(x))stop("x should be a seqe object. See help on seqecreate.")
   x<-.Call(TMR_tmrsequencestring,x)
   NextMethod("as.character")
 }
 
-as.character.seqelist<-function(x,...){
+as.character.seqelist<-function(x, ...){
   tmrsequencestring.internal<-function(s){
     if(is.seqe(s)){
       return(.Call(TMR_tmrsequencestring, s))
@@ -98,7 +98,7 @@ as.character.seqelist<-function(x,...){
     return(as.character(s))
   }
   if(!is.seqelist(x))  stop("x should be a seqelist object. See help on seqecreate.")
-  x<-as.character(sapply(unlist(x), tmrsequencestring.internal))
+  x <- as.character(sapply(unlist(x), tmrsequencestring.internal))
   NextMethod("as.character")
 }
 
@@ -109,13 +109,13 @@ as.character.seqelist<-function(x,...){
 #seqeprint<-function(s){
 #  print(seqestr(s))
 #}
-print.seqe<-function(x,quote = FALSE,...){
-  x<-as.character(x)
-  print(x,quote=quote,...)
+print.seqe<-function(x,quote = FALSE, ...){
+  x <- as.character(x)
+  print(x, quote=quote, ...)
 }
-print.seqelist<-function(x,quote = FALSE,...){
-  x<-as.character(x)
-  print(x,quote=quote,...)
+print.seqelist<-function(x, quote = FALSE, ...){
+  x <- as.character(x)
+  print(x, quote=quote, ...)
 }
 
 ## ========================================

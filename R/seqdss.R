@@ -22,7 +22,7 @@ seqdss <- function(seqdata, with.missing=FALSE) {
 		statl <- c(statl, nr)
 	}
 
-	seqdatanum <- TraMineR:::seqasnum(seqdata, with.missing=with.missing)
+	seqdatanum <- seqasnum(seqdata, with.missing=with.missing)
 
 	if (!with.missing)
 		seqdatanum[is.na(seqdatanum)] <- -99

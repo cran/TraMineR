@@ -50,16 +50,16 @@ DTNdissassocweighted <- function(dmat, grp, indiv, R, weights, weight.permutatio
 		return(-(r1+r2))
 	}
 	if ( weight.permutation %in% c("diss", "group")) {
-		perms <- TraMineR:::TraMineR.permutation(grp, R=R, statistic=internalDTNdissassocWeighted, 
+		perms <- TraMineR.permutation(grp, R=R, statistic=internalDTNdissassocWeighted, 
 			dmat=dmat, indiv=indiv, grp2=(!grp), use.sort=(length(grp)>750), weights=weights, 
 			permutGroup=(weight.permutation=="group"))
 	} else if(weight.permutation=="none") {
-		perms <- TraMineR:::TraMineR.permutation(grp, R=R, statistic=internalDTNdissassocUnweighted, 
+		perms <- TraMineR.permutation(grp, R=R, statistic=internalDTNdissassocUnweighted, 
 			dmat=dmat, indiv=indiv, grp2=(!grp), use.sort=(length(grp)>750))
 	}else { ##Replicate
 		grp <- rep(grp, times=as.integer(weights[indiv]))
 		indiv <- rep(indiv, times=as.integer(weights[indiv]))
-		perms <- TraMineR:::TraMineR.permutation(grp, R=R, statistic=internalDTNdissassocReplicate, 
+		perms <- TraMineR.permutation(grp, R=R, statistic=internalDTNdissassocReplicate, 
 			dmat=dmat, indiv=indiv, grp2=(!grp))
 	}
 	return(perms$pval[1])

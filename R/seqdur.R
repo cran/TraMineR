@@ -15,7 +15,7 @@ seqdur <- function(seqdata, with.missing=FALSE) {
 	rownames(trans) <- rownames(seqdata)
 	colnames(trans) <- paste("DUR",1:maxsl, sep="")
 
-	seqdatanum <- TraMineR:::seqasnum(seqdata, with.missing=with.missing)
+	seqdatanum <- seqasnum(seqdata, with.missing=with.missing)
 	if (!with.missing)
 		seqdatanum[is.na(seqdatanum)] <- -99
 

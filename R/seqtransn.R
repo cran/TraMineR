@@ -14,7 +14,7 @@ seqtransn <- function(seqdata, with.missing=FALSE, norm=FALSE, pweight=FALSE) {
 
 	if (pweight) {
 		tr <- seqtrate(seqdata)
-		dss.num <- TraMineR:::seqasnum(dss)+1
+		dss.num <- seqasnum(dss)+1
 		trans <- matrix(0, nrow=nbseq, ncol=1)
 		rownames(trans) <- rownames(seqdata)
 
