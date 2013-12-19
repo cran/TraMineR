@@ -25,11 +25,18 @@ sequences and vice versa.
 \details{
 \tabular{ll}{
 Package: \tab TraMineR\cr
-Version: \tab 1.8-6\cr
-Date: \tab 2013-08-26\cr
+Version: \tab 1.8-7\cr
+Date: \tab 2013-12-12\cr
+Authors@R: \tab c(
+  person("Alexis", "Gabadinho", role = "aut"),
+  person("Matthias", "Studer", role = "aut"),
+  person("Nicolas", "Muller", role = "ctb"),
+  person("Reto", "Buergin", role = "ctb"),
+  person("Gilbert", "Ritschard", role = c("aut", "cre", "ths", "cph"),
+  email = "gilbert.ritschard@unige.ch"))\cr
 Depends: \tab R (>= 2.8.1), RColorBrewer, boot\cr
-Suggests: \tab cluster, xtable\cr
 Imports: \tab utils\cr
+Suggests: \tab cluster, xtable\cr
 License: \tab GPL (>= 2)\cr
 URL: \tab http://mephisto.unige.ch/traminer\cr
 Encoding: \tab latin1\cr
@@ -158,43 +165,33 @@ seqtreedisplay          Graphical rendering of a sequence regression
 stlab                   Get or set the state labels of a sequence
                         object
 }
-Further information is available in the following vignettes:
-\tabular{ll}{
-\code{TraMineR-state-sequence} \tab Analyzing and Visualizing State Sequences (source)\cr
-}
 }
 \author{
-Alexis Gabadinho <alexis.gabadinho@unige.ch>, Matthias Studer <matthias.studer@unige.ch>, Nicolas S. Müller <nsmuller@gmail.com>, Reto Bürgin <reto.buergin@unige.ch> and Gilbert Ritschard <gilbert.ritschard@unige.ch>.
+Alexis Gabadinho [aut],
+  Matthias Studer [aut],
+  Nicolas Muller [ctb],
+  Reto Buergin [ctb],
+  Gilbert Ritschard [aut, cre, ths, cph]
 Maintainer: Gilbert Ritschard <gilbert.ritschard@unige.ch>
 }
-  
 \references{
 {Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011).
 Analyzing and Visualizing State Sequences in R with TraMineR.
 \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
 }
-  
-{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). 
-Mining Sequence Data in \code{R} with the \code{TraMineR} package: 
-A users guide. Department of Econometrics and Laboratory of 
-Demography, University of Geneva } 
-}
-   
+{Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009).
+Mining Sequence Data in \code{R} with the \code{TraMineR} package:
+A user's guide. Department of Econometrics and Laboratory of
+Demography, University of Geneva } }
 \examples{
 ## load the mvad data
 library(TraMineR)
 data(mvad)
-  
 ## create a state sequence object from columns 17 to 86
 mvad.seq <- seqdef(mvad[,17:86])
-  
 ## distribution plot by sex (male)
 seqdplot(mvad.seq, group=mvad$male, border=NA)
-  
 ## compute the LCS pairwise distance matrix
 ## among the first 10 sequences
-mvad.lcs <- seqdist(mvad.seq[1:10,], method="LCS")
-}
-    
+mvad.lcs <- seqdist(mvad.seq[1:10,], method="LCS") }
 \keyword{ package }
-

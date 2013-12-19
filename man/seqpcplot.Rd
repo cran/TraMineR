@@ -25,8 +25,7 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
           title = NULL, xlab = NULL, ylab = NULL,
           xaxis = TRUE, yaxis = TRUE, axes = "all",
           xtlab = NULL, cex.plot = 1,
-          rows = NA, cols = NA, plot = TRUE,
-          output = !plot, ...)
+          rows = NA, cols = NA, plot = TRUE, ...)
 
 }
 \arguments{
@@ -104,9 +103,6 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
   \item{plot}{logical. If \code{FALSE} nothing is plotted and an object
     of class \code{seqpcplot} is returned by default.}
 
-  \item{output}{logical. Should object
-    of class \code{seqpcplot} be returned?}
-
   \item{...}{arguments to be passed to other methods, such as graphical
     parameters (see \code{\link{par}}).}
 }
@@ -150,6 +146,13 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
   gradually the color intensity of patterns according to the frequency
   of the pattern.
 
+}
+
+\value{
+  \code{seqpcplot} returns an object of \code{class} \code{"seqpcplot"}
+  with various information for constructing the plot,
+  e.g. coordinates. There is also a \code{summary} method for such
+  objects.  
 }
 
 

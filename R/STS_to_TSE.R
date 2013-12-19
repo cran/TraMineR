@@ -27,7 +27,11 @@ STS_to_TSE <- function(seqdata, id=NULL, tevent) {
 	for (i in 1:nc){
 		for (j in 1:nl) {
 			if (is.character(tevent[j,i])){
-				levent[[paste(rownames(tevent)[j],">",colnames(tevent)[i],sep="")]] <- strsplit(tevent[j,i],",")[[1]]
+				ll <- strsplit(tevent[j,i],",")[[1]]
+				if(length(ll)==0){
+					ll <- NA
+				}
+				levent[[paste(rownames(tevent)[j],">",colnames(tevent)[i],sep="")]] <- ll
 			} else {
 				levent[[paste(rownames(tevent)[j],">",colnames(tevent)[i],sep="")]] <- as.character(tevent[j,i])
 			}

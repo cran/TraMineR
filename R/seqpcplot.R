@@ -7,8 +7,7 @@ seqpcplot <- function(seqdata, group = NULL, weights = NULL,
                       title = NULL, xlab = NULL, ylab = NULL,
                       xaxis = TRUE, yaxis = TRUE, axes = "all",
                       xtlab = NULL, cex.plot = 1,
-                      rows = NA, cols = NA, plot = TRUE,
-                      output = !plot, ...) {
+                      rows = NA, cols = NA, plot = TRUE, ...) {
 
   seqpcplot_private(seqdata = seqdata, group = group, weights = weights,
                     cex = cex, lwd = lwd, cpal = cpal,
@@ -21,8 +20,7 @@ seqpcplot <- function(seqdata, group = NULL, weights = NULL,
                     xaxis = xaxis, yaxis = yaxis,
                     axes = axes, xtlab = xtlab,
                     cex.plot = cex.plot,
-                    rows = rows, cols = cols, plot = plot,
-                    output = output, ...)
+                    rows = rows, cols = cols, plot = plot, ...)
 
 }
 
@@ -45,8 +43,7 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
                               xaxis = TRUE, yaxis = TRUE, axes = "all",
                               cex.plot = 1, rows = NA, cols = NA,
                               plot = TRUE, add = FALSE,
-                              output = !plot, verbose = FALSE,
-                              ...) {
+                              verbose = FALSE, ...) {
 
   if (!"seqpcplot" %in% class(seqdata)) {
 
@@ -104,9 +101,14 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
         y <- TMP$event
 
         ## delete 'end' event
-        if ("_end" %in% levels(y) && !any(y == "_end"))
+        if ("_end" %in% levels(y)) {
+          subs <- y != "_end"
+          id <- id[subs]
+          x <- x[subs]
+          y <- y[subs]
           y <- factor(y, levels = levels(y)[levels(y) != "_end"])
-
+        }
+        
         if (is.null(weights)) weights <- seqeweight(seqdata)
 
         ## STS format (STS or DSS representation)
@@ -115,7 +117,8 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
         if (order.align %in% c("first", "last")) {
           seqdata <- seqdss(seqdata)
         }
-        TMP <- data.frame(seqdata)
+        TMP <- as.data.frame(seqdata)
+        
         TMP <- reshape(data = TMP, ids = 1:nrow(TMP), times = colnames(TMP), timevar = "time", varying = list(state = colnames(TMP)), v.names = "state", direction = "long")
         TMP$id <- factor(TMP$id)
         TMP <- TMP[TMP$state %in% c(attr(seqdata, "alphabet"), attr(seqdata, "nr")), ]
@@ -816,7 +819,7 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
 
   ## Step 8: Return data ................................... #
 
-  if (output) return(x)
+  invisible(x)
 }
 
 plot.seqpcplot <- function(x, add = NULL, which = NULL, ...) {
