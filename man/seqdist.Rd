@@ -10,7 +10,7 @@ dissimilarities with a reference sequence. Several dissimilarities measures or m
 
 \usage{
 seqdist(seqdata, method, refseq=NULL, norm=FALSE,
-     indel=1, sm, with.missing = FALSE, full.matrix = TRUE)
+     indel=1, sm=NA, with.missing=FALSE, full.matrix=TRUE)
 }
 
 \arguments{

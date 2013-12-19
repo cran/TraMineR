@@ -1,4 +1,23 @@
 ## =========
+Version 1.8-7
+
+Changes in existing functions:
+  - seqpcplot(): Suppressed unnecessary "output" argument. The
+    'seqpcplot' object is automatically retrieved when using the
+    assignment operator, e.g., p <- seqepcplot(...).
+
+Bug fixes:
+  - seqformat(): When converting from STS to TSE, an error was raised if the
+    tevent matrix had empty strings (i.e. ""). Now, this is considered as no event.
+  - seqpcplot(): Fixed error that appeared at the use of "_end" events.
+  - seqpcplot(): An error occurred when plotting a state sequence object
+    (of class stslist) with a numeric 'cnames' attribute.
+    
+Misc:
+  - Required packages RColorBrewer and boot now listed as "imports" 
+    in DESCRIPTION and using import in NAMESPACE.    
+
+## =========
 Version 1.8-6
 
 Changes in existing functions:

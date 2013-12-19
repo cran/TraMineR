@@ -1,18 +1,29 @@
 Package: TraMineR
-Version: 1.8-6
-Date: 2013-08-26
+Version: 1.8-7
+Date: 2013-19-12
 Title: Trajectory miner: a toolbox for exploring and rendering sequence
         data
-Author: Alexis Gabadinho <alexis.gabadinho@unige.ch>, Matthias Studer <matthias.studer@unige.ch>, Nicolas S. Müller <nsmuller@gmail.com>, Reto Bürgin <reto.buergin@unige.ch> and Gilbert Ritschard <gilbert.ritschard@unige.ch>.
-Maintainer: Gilbert Ritschard <gilbert.ritschard@unige.ch>
-Depends: R (>= 2.8.1), RColorBrewer, boot
+Authors@R: c(
+  person("Alexis", "Gabadinho", role = c("aut", "cph")),
+  person("Matthias", "Studer", role = c("aut", "cph")),
+  person("Nicolas", "Muller", role = "aut"),
+  person("Reto", "Buergin", role = "aut"),
+  person("Gilbert", "Ritschard", role = c("aut", "cre", "cph"),
+  email = "gilbert.ritschard@unige.ch"))
+Depends: R (>= 2.8.1),
+Imports: utils, RColorBrewer, boot
 Suggests: cluster, xtable
-Imports: utils
-Description: This package is a toolbox for sequence manipulation, description, rendering and more generally the mining of sequence data in the field of social sciences. Though it is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers its features also apply to many other kinds of categorical sequence data. It accepts many different sequence representations as input and provides tools for translating sequences from one format to another. It offers several statistical functions for describing and rendering sequences, for computing distances between sequences with different metrics among which optimal matching, the longest common prefix and the longest common subsequence, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them. A user's guide can be found on TraMineR's web page.
+Description: This package is a toolbox for sequence manipulation, description, rendering and more generally the mining of sequence data in the field of social sciences. Though it is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers its features also apply to many other kinds of categorical sequence data. It accepts many different sequence representations as input and provides tools for translating sequences from one format to another. It offers several statistical functions for describing and rendering sequences, for computing distances between sequences with different metrics among which optimal matching, the longest common prefix and the longest common subsequence, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them. A user's guide can be found on the TraMineR web page.
 License: GPL (>= 2)
 URL: http://mephisto.unige.ch/traminer
 Encoding: latin1
-Packaged: 2013-08-26 16:00:06 UTC; adm
+Packaged: 2013-12-19 17:12:53 UTC; adm
+Author: Alexis Gabadinho [aut, cph],
+  Matthias Studer [aut, cph],
+  Nicolas Muller [aut],
+  Reto Buergin [aut],
+  Gilbert Ritschard [aut, cre, cph]
+Maintainer: Gilbert Ritschard <gilbert.ritschard@unige.ch>
 NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2013-08-26 18:30:10
+Date/Publication: 2013-12-19 19:41:29
