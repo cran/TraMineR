@@ -1,4 +1,16 @@
 ## =========
+Version 1.9-8 (Development version)
+
+Bug fixes:
+  - seqecreate(): an error is thrown when events are not grouped
+    by id in inputted TSE data. (Reported by Nicolas Jay).
+    This requirement is now specified in seqecreate help page.
+
+Misc:
+  - exported alias functions allowing other packages to access TraMineR
+    internal functions (see ?TraMineRInternalLayout).
+
+## =========
 Version 1.8-7
 
 Changes in existing functions:
@@ -12,10 +24,11 @@ Bug fixes:
   - seqpcplot(): Fixed error that appeared at the use of "_end" events.
   - seqpcplot(): An error occurred when plotting a state sequence object
     (of class stslist) with a numeric 'cnames' attribute.
-    
+
 Misc:
-  - Required packages RColorBrewer and boot now listed as "imports" 
-    in DESCRIPTION and using import in NAMESPACE.    
+  - Required packages RColorBrewer and boot now listed as "imports"
+    in DESCRIPTION and using import in NAMESPACE.
+
 
 ## =========
 Version 1.8-6

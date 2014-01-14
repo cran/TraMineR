@@ -1,5 +1,5 @@
 import(boot, RColorBrewer)
-importFrom("utils", packageDescription)
+importFrom(utils, packageDescription)
 
 export(
 	alphabet,
@@ -61,7 +61,10 @@ export(
 	seqtrate,
 	stlab,
 	"stlab<-",
-	TraMineR.checkupdates
+	TraMineR.checkupdates,
+	TraMineRInternalNodeInit,
+	TraMineRInternalSplitInit,
+	TraMineRInternalLayout
   )
 
 ## stslist methods
