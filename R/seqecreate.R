@@ -6,13 +6,13 @@
 #tmrsequence<-function(id,timestamp,event){
 #  .Call("tmrsequence",as.integer(id),as.double(timestamp),as.integer(event), PACKAGE="TraMineR")
 #}
-seqecreate <- function(data=NULL, id=NULL,timestamp=NULL, event=NULL, endEvent=NULL, 
+seqecreate <- function(data=NULL, id=NULL,timestamp=NULL, event=NULL, endEvent=NULL,
 						tevent="transition", use.labels=TRUE, weighted=TRUE){
-	return(seqecreate.internal(data=data, id=id, timestamp=timestamp, event=event, 
-								endEvent=endEvent, tevent=tevent, use.labels=use.labels, 
+	return(seqecreate.internal(data=data, id=id, timestamp=timestamp, event=event,
+								endEvent=endEvent, tevent=tevent, use.labels=use.labels,
 								order.before=FALSE, weighted=weighted))
 }
-seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent, 
+seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent,
 								use.labels, order.before, weighted){
 	if (!is.null(data)) {
 		if (inherits(data,"stslist")) {
@@ -60,7 +60,7 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent,
 	}
 	if (is.factor(event)) {
 		dictionnary <- levels(event)
-		if (!is.null(endEvent)) { 
+		if (!is.null(endEvent)) {
 			for(i in 1:length(dictionnary)){
 				if (dictionnary[i] == endEvent) {
 					intEvent <- i
@@ -78,11 +78,11 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent,
 		warning(" [!] some of your events contain '(', ')' or ',' characters. The search of specific subsequences may not work properly.")
 	}
 	id <- as.integer(id)
-	timestamp <- as.double(timestamp) 
+	timestamp <- as.double(timestamp)
 	event <- as.integer(event)
 
 	
-	ret <- .Call(TMR_tmrsequenceseveral, as.integer(id), 
+	ret <- .Call(TMR_tmrsequenceseveral, as.integer(id),
 		as.double(timestamp), as.integer(event),
 		as.integer(c(intEvent)), classname, as.character(dictionnary))
 
@@ -93,6 +93,9 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent,
 		if(!is.null(ww) && weighted){
 			seqeweight(ret) <- ww
 		}
+	}
+	if(length(ret) != length(unique(id))){
+		stop(" [!] Events not grouped by id! See seqecreate help page.")
 	}
 	return(ret)
 }

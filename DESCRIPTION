@@ -1,6 +1,6 @@
 Package: TraMineR
-Version: 1.8-7
-Date: 2013-19-12
+Version: 1.8-8
+Date: 2014-01-14
 Title: Trajectory miner: a toolbox for exploring and rendering sequence
         data
 Authors@R: c(
@@ -17,7 +17,7 @@ Description: This package is a toolbox for sequence manipulation, description, r
 License: GPL (>= 2)
 URL: http://mephisto.unige.ch/traminer
 Encoding: latin1
-Packaged: 2013-12-19 17:12:53 UTC; adm
+Packaged: 2014-01-14 14:35:59 UTC; adm
 Author: Alexis Gabadinho [aut, cph],
   Matthias Studer [aut, cph],
   Nicolas Muller [aut],
@@ -26,4 +26,4 @@ Author: Alexis Gabadinho [aut, cph],
 Maintainer: Gilbert Ritschard <gilbert.ritschard@unige.ch>
 NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2013-12-19 19:41:29
+Date/Publication: 2014-01-14 16:55:22
