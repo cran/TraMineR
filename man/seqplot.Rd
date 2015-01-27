@@ -12,15 +12,15 @@
 
 \title{Plot state sequence objects}
 \description{
-High level plot functions for state sequence objects that can produce state distribution, frequency, index,  transversal entropy, sequence of modes, meant time, and representative plots.
+High level plot functions for state sequence objects that can produce state distribution (chronograms), frequency, index,  transversal entropy, sequence of modes, meant time, and representative plots.
 }
 \usage{
 seqplot(seqdata, group=NULL, type="i", title=NULL,
-	cpal=NULL, missing.color=NULL,
-	ylab=NULL, yaxis=TRUE, axes="all", xtlab=NULL, cex.plot=1,
-	withlegend="auto", ltext=NULL, cex.legend=1,
-	use.layout=(!is.null(group) | withlegend!=FALSE),
-	legend.prop=NA, rows=NA, cols=NA, ...)
+        cpal=NULL, missing.color=NULL,
+        ylab=NULL, yaxis=TRUE, axes="all", xtlab=NULL, cex.plot=1,
+        withlegend="auto", ltext=NULL, cex.legend=1,
+        use.layout=(!is.null(group) | withlegend!=FALSE),
+        legend.prop=NA, rows=NA, cols=NA, ...)
 
 seqdplot(seqdata, group=NULL, title=NULL, ...)
 seqfplot(seqdata, group=NULL, title=NULL, ...)
@@ -32,33 +32,33 @@ seqmtplot(seqdata, group=NULL, title=NULL, ...)
 %%seqrplot(seqdata, group=NULL, title=NULL, ...)
 }
 \arguments{
-	\item{seqdata}{a state sequence object created with the \code{\link{seqdef}} function.}
+    \item{seqdata}{a state sequence object created with the \code{\link{seqdef}} function.}
 
-	\item{group}{Plots one plot for each level of the factor given as argument.}
-	
-	\item{type}{the type of the plot. Available types are \code{"d"}
-	for state distribution plots, \code{"f"} for sequence frequency
-	plots, \code{"Ht"} for transversal entropy plots, \code{"i"} for
-	selected sequence index plots, \code{"I"} for whole set index
-	plots, \code{"ms"} for plotting the sequence of modal states,
-	\code{"mt"} for mean times plots, \code{"pc"} for parallel
-	coordinate plots and \code{"r"} for representative sequence plots.}
+    \item{group}{Plots one plot for each level of the factor given as argument.}
 
-	\item{title}{title for the graphic. Default is \code{NULL}.}
+    \item{type}{the type of the plot. Available types are \code{"d"}
+    for state distribution plots (chronograms), \code{"f"} for sequence frequency
+    plots, \code{"Ht"} for transversal entropy plots, \code{"i"} for
+    selected sequence index plots, \code{"I"} for whole set index
+    plots, \code{"ms"} for plotting the sequence of modal states,
+    \code{"mt"} for mean times plots, \code{"pc"} for parallel
+    coordinate plots and \code{"r"} for representative sequence plots.}
 
-	\item{cpal}{Color palette used for the states. By default, the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}). If user specified, a vector of colors with number of elements equal to the number of distinct states.}
+    \item{title}{title for the graphic. Default is \code{NULL}.}
 
-	\item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the \code{missing.color} attribute of the plotted sequence object.}
+    \item{cpal}{Color palette used for the states. By default, the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}). If user specified, a vector of colors with number of elements equal to the number of distinct states.}
 
-	\item{ylab}{an optional label for the y-axis. If set to \code{NA}, no label is drawn.}
+    \item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the \code{missing.color} attribute of the plotted sequence object.}
 
-	\item{yaxis}{controls whether a y-axis is plotted. When set to \code{TRUE} (default value), sequence indexes are displayed for \code{"i"} and \code{"I"}, mean time values for \code{"mt"} and percentages for \code{"d"} and \code{"f"}. }
+    \item{ylab}{an optional label for the y-axis. If set to \code{NA}, no label is drawn.}
 
-	\item{axes}{if set to \code{"all"} (default value) x axes are drawn for each plot in the graphic. If set to \code{"bottom"} and \code{group} is used, axes are drawn only under the plots located at the bottom of the graphic area. If \code{FALSE}, no x-axis is drawn.}
+    \item{yaxis}{controls whether a y-axis is plotted. When set to \code{TRUE} (default value), sequence indexes are displayed for \code{"i"} and \code{"I"}, mean time values for \code{"mt"} and percentages for \code{"d"} and \code{"f"}. }
 
-  \item{xtlab}{optional labels for the x-axis tick labels. If unspecified, the column names of the \code{seqdata} sequence object are used (see \code{\link{seqdef}}).}
+    \item{axes}{if set to \code{"all"} (default value) x axes are drawn for each plot in the graphic. If set to \code{"bottom"} and \code{group} is used, axes are drawn only under the plots located at the bottom of the graphic area. If \code{FALSE}, no x-axis is drawn.}
 
-	\item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase the size.}
+    \item{xtlab}{optional labels for the x-axis tick labels. If unspecified, the column names of the \code{seqdata} sequence object are used (see \code{\link{seqdef}}).}
+
+    \item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase the size.}
 
   \item{withlegend}{defines if and where the legend of the state colors is plotted. The default value \code{"auto"} sets the position of the legend automatically. Other possible value is \code{"right"}. Obsolete value \code{TRUE} is equivalent to \code{"auto"}.}
 
@@ -85,7 +85,7 @@ with \code{type} argument set respectively to \code{"d"}, \code{"f"},
 \code{"i"}, \code{"I"}, \code{"Ht"}, \code{"ms"}, \code{"mt"},
 \code{"pc"} or \code{"r"}.
 
-State distribution plot (\code{type="d"}) represent the sequence of the transversal state frequencies by position (time point) computed by the \code{\link{seqstatd}} function.
+State distribution plot (\code{type="d"}) represent the sequence of the cross-sectional state frequencies by position (time point) computed by the \code{\link{seqstatd}} function. Such plots are also known as chronograms.
 
 \emph{Sequence frequency plots} (\code{type="f"}) display the most frequent sequences, each one with an horizontal stack bar of its successive states. Sequences are displayed bottom-up in decreasing order of their frequencies (computed by the \code{\link{seqtab}} function). The \code{\link{plot.stslist.freq}} plot method is called for producing the plot. \cr
 The \code{tlim} optional argument may be specified for selecting the sequences to be plotted (default is 1:10, i.e. the 10 most frequent sequences). The width of the bars representing the sequences is by default proportional to their frequencies, but this can be disabled with the \code{pbarw=FALSE} optional argument. If weights have been specified when creating \code{seqdata}, weighted frequencies will be returned by \code{seqtab} since the default option is \code{weighted=TRUE}. See examples below, the \code{\link{seqtab}} and \code{\link{plot.stslist.freq}} manual pages for a complete list of optional arguments and \cite{Müller et al., (2008)} for a description of sequence frequency plots.

@@ -45,6 +45,7 @@ export(
 	seqnum,
 	seqplot,
         seqpcplot,
+        seqpcfilter,
 	seqpm,
 	seqrecode,
 	seqrep,
@@ -64,7 +65,9 @@ export(
 	TraMineR.checkupdates,
 	TraMineRInternalNodeInit,
 	TraMineRInternalSplitInit,
-	TraMineRInternalLayout
+	TraMineRInternalLayout,
+	TraMineRInternalLegend, 
+	TraMineRInternalSeqeage
   )
 
 ## stslist methods

@@ -9,3 +9,11 @@ TraMineRInternalSplitInit <- function(...){
 TraMineRInternalLayout <- function(...){
 	return(TraMineR.setlayout(...))
 }
+
+TraMineRInternalSeqeage <- function(...){
+	return(seqeage(...))
+}
+
+TraMineRInternalLegend <- function(...){
+	return(TraMineR.legend(...))
+}

@@ -1,6 +1,7 @@
 %% -*- RD:ANSI -*-
 \name{seqpcplot}
 \alias{seqpcplot}
+\alias{seqpcfilter}
 \alias{plot.seqe}
 \alias{plot.seqelist}
 \title{Parallel coordinate plot for sequence data}
@@ -21,11 +22,14 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
           ltype = "unique", embedding = "most-frequent",
           lorder = NULL , lcourse = "upwards",
           filter = NULL, hide.col = "grey80",
-          alphabet = NULL, order.align = "first",
+          alphabet = NULL, missing = "auto", order.align = "first",
           title = NULL, xlab = NULL, ylab = NULL,
           xaxis = TRUE, yaxis = TRUE, axes = "all",
           xtlab = NULL, cex.plot = 1,
-          rows = NA, cols = NA, plot = TRUE, ...)
+          rows = NA, cols = NA, plot = TRUE,
+          seed = NULL, ...)
+
+seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 
 }
 \arguments{
@@ -76,6 +80,12 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
     appear on the y-axis. This argument is solely relevant for
     \code{seqelist} objects.}
 
+  \item{missing}{character. Whether and how missing values should be
+    displayed. Available are \code{"auto"}, \code{"show"} and
+    \code{"hide"}. If \code{"auto"}, the plot will show missings only if
+    present. \code{"hide"} will fade out missings and \code{"show"} will
+    always show missings.}
+
   \item{order.align}{Aligning method. For aligning on order positions use either \code{"first"} (default) or
   \code{"last"}. Option \code{"first"} numbers the positions from the beginning
   while \code{"last"} numbers them from the end. With \code{order.align = "time"}, the elements in the sequences are aligned on their rounded timestamps.}
@@ -103,6 +113,15 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
   \item{plot}{logical. If \code{FALSE} nothing is plotted and an object
     of class \code{seqpcplot} is returned by default.}
 
+  \item{seed}{integer. Start seed value.}
+
+  \item{method}{character string. Defines the filtering
+     function. Available are \code{"minfreq"}, \code{"cumfreq"} and
+     \code{"linear"}.}
+
+  \item{level}{numeric scalar between 0 and 1. The frequency threshold
+    for the filtering methods \code{"minfreq"} and \code{"cumfreq"}.}
+
   \item{...}{arguments to be passed to other methods, such as graphical
     parameters (see \code{\link{par}}).}
 }
@@ -117,49 +136,58 @@ seqpcplot(seqdata, group = NULL, weights = NULL,
   at least elements \code{type} and \code{value}. The following types
   are implemented:
 
-  Type \code{sequence}: colors a specific pattern, for example assign\cr
+  Type \code{"sequence"}: colors a specific pattern, for example assign\cr
   \code{filter = list(type = "sequence", value = "(Leaving
   Home,Union)-(Child)")}.
 
-  Type \code{subsequence}: colors patterns which include a specific
+  Type \code{"subsequence"}: colors patterns which include a specific
   subsequence, for example\cr \code{filter = list(type =
   "subsequence", value = "(Child)-(Marriage)")} .
 
-  Type \code{value}: gradually colors the patterns according to the
+  Type \code{"value"}: gradually colors the patterns according to the
   numeric vector (of length equal to the number of sequences) provided as
   \code{"value"} element in the list. You can give something like
   \code{filter = list(type = "value", value = c(0.2, 1, ...))} or
   provide the distances to the medoid as \code{value} vector for
   example.
 
-  Type \code{function}: colors the patterns depending on the values
+  Type \code{"function"}: colors the patterns depending on the values
   returned by a [0,1] valued function of the frequency x of the
-  pattern. Two native functions can be used: \code{"minfreq"} and
-  \code{"cumfreq"}. Use \code{filter = list(type = "function", value =
-  "minfreq", level = 0.05)} to color patterns with a support of at least
-  5\% (within group). Or, use\cr\code{filter = list(type = "function",
-  value = "cumfreq", level = 0.5)} to highlight the 50\% most frequent
-  patterns (within group). Other user-specified functions can be
-  provided by giving something like\cr\code{filter = list(type =
-  "function", value = function(x, arg1, arg2) {return(x / max(x) * arg1
-  / arg2)}, arg1 = 1, arg2 = 1)}. This latter function adjusts
-  gradually the color intensity of patterns according to the frequency
-  of the pattern.
+  pattern. Three native functions can be used: \code{"minfreq"},
+  \code{"cumfreq"} and \code{"linear"}. Use \code{filter = list(type =
+  "function", value = "minfreq", level = 0.05)} to color patterns with a
+  support of at least 5\% (within group). Use\cr\code{filter = list(type
+    = "function", value = "cumfreq", level = 0.5)} to highlight the 50\% most
+  frequent patterns (within group). Or, use \code{filter = list(type =
+    "function", value = "linear")} to use a linear gradient for the
+  color intensity (the most most frequent trajectory obtains
+  100\% intensity). Other user-specified functions can be provided by
+  giving something like\cr\code{filter = list(type = "function", value =
+  function(x, arg1, arg2) {return(x / max(x) * arg1 / arg2)}, arg1 = 1,
+  arg2 = 1)}. This latter function adjusts gradually the color intensity
+  of patterns according to the frequency of the pattern.
 
+  The function \code{seqpcfilter} is a convenience function for type
+  \code{"function"}. The three examples above can be imitated by
+  \code{seqpcfilter("minfreq", 0.05)}, \code{seqpcfilter("cumfreq",
+    0.5)} and \code{seqpcfilter("linear")}.
+
+  If a numeric scalar is assigned to \code{filter}, the \code{"minfreq"}
+  filter is used.
 }
 
 \value{
   \code{seqpcplot} returns an object of \code{class} \code{"seqpcplot"}
   with various information for constructing the plot,
   e.g. coordinates. There is also a \code{summary} method for such
-  objects.  
+  objects.
 }
 
 
 \seealso{ \code{\link{seqplot}}, \code{\link{seqdef}}, \code{\link{seqecreate}}}
 
 \references{
-  Bürgin, R., G. Ritschard and E. Rousseaux (2012), Exploration graphique de donnéees séquentielles. In Atelier Fouille Visuelle de Données : méthodologie et évaluation, EGC 2012, Bordeaux. Association EGC: http://www.egc.asso.fr/sdoc-237-egc2012_atelier_fvd.pdf.
+  Bürgin, R. and G. Ritschard (2014), A decorated parallel coordinate plot for categorical longitudinal data, \emph{The American Statistician} 68(2), 98-103.
 }
 
 \examples{
@@ -253,19 +281,45 @@ seqpcplot(seqdata = biofam.seqe,
                           value = "(Parent)-(Left)"),
           alphabet = lab, order.align = "first")
 
-## color sequences over 5% (within group) (function method)
+## color sequences over 10% (within group) (function method)
 seqpcplot(seqdata = biofam.seqe,
           filter = list(type = "function",
-                          value = "minfreq",
-                          level = 0.1),
-          alphabet = lab, order.align = "first")
+                        value = "minfreq",
+                        level = 0.1),
+          alphabet = lab, order.align = "first", seed = 1)
+
+## .. same result using the convenience functions
+seqpcplot(seqdata = biofam.seqe,
+          filter = 0.1,
+          alphabet = lab, order.align = "first", seed = 1)
+
+seqpcplot(seqdata = biofam.seqe,
+          filter = seqpcfilter("minfreq", 0.1),
+          alphabet = lab, order.align = "first", seed = 1)
 
 ## highlight the 50% most frequent sequences
 seqpcplot(seqdata = biofam.seqe,
           filter = list(type = "function",
                           value = "cumfreq",
                           level = 0.5),
-          alphabet = lab, order.align = "first")
+          alphabet = lab, order.align = "first", seed = 2)
+
+## .. same result using the convenience functions
+seqpcplot(seqdata = biofam.seqe,
+          filter = seqpcfilter("cumfreq", 0.5),
+          alphabet = lab, order.align = "first", seed = 2)
+
+## linear gradient
+seqpcplot(seqdata = biofam.seqe,
+          filter = list(type = "function",
+                          value = "linear"),
+          alphabet = lab, order.align = "first", seed = 2)
+
+seqpcplot(seqdata = biofam.seqe,
+          filter = seqpcfilter("linear"),
+          alphabet = lab, order.align = "first", seed = 1)
+
+
 
 }
 

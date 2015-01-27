@@ -30,8 +30,11 @@ dissmfac(formula, data, R = 1000, gower = FALSE, squared = TRUE,
   This method is, in some way, a generalization of \code{\link{dissassoc}} to account for several explanatory variables.
   The function computes the part of discrepancy explained by the list of covariates specified in the \code{formula}.
   It provides for each covariate the Type-II effect, i.e. the effect measured when removing the covariate from the full model with all variables included.
+  
+  (The returned F values may slightly differ from those obtained with TraMineR versions older than 1.8-9. Since 1.8-9, the within sum of squares at the denominator is divided by \eqn{n-m} instead of \eqn{n-m-1}, where \eqn{n} is the sample size and \eqn{m} the total number of predictors and/or contrasts used to represent categorical factors.)
+  
   For a single factor \code{dissmfac} is slower than \code{\link{dissassoc}}.
-  Moreover, the latter performs also tests for homogeneity in within-group discrepancies (equality of variances) with a generalization of Levene's and Bratlett's statistics.
+  Moreover, the latter performs also tests for homogeneity in within-group discrepancies (equality of variances) with a generalization of Levene's and Bartlett's statistics.
 
   Part of the function is based on the Multivariate Matrix Regression with qr decomposition algorithm written in SciPy-Python by Ondrej Libiger and Matt Zapala (See \cite{Zapala and Schork}, 2006, for a full reference.)  The algorithm has been adapted for Type-II effects and extended to account for case weights.
 }

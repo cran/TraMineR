@@ -9,7 +9,7 @@ Transition rates are the probabilities of transition from one state to another o
 }
 \usage{
  seqtrate(seqdata, statl=NULL, time.varying=FALSE, weighted=TRUE,
-		  lag=1, with.missing=FALSE)
+         lag=1, with.missing=FALSE)
 }
 \arguments{
   \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}

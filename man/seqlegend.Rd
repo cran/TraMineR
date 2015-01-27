@@ -6,8 +6,8 @@ Plots a legend for the states in a sequence object. Useful if several graphics a
 }
 \usage{
 seqlegend(seqdata, with.missing="auto",
-	cpal=NULL, missing.color=NULL, ltext=NULL,
-	position="topleft", fontsize=1, ...)
+         cpal=NULL, missing.color=NULL, ltext=NULL,
+         position="topleft", fontsize=1, ...)
 }
 \arguments{
   \item{seqdata}{a sequence object as returned by the the \code{\link{seqdef}} function.}

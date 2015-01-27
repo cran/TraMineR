@@ -10,10 +10,10 @@ Create a state sequence object with attributes such as alphabet, color palette a
 
 \usage{
 seqdef(data, var=NULL, informat="STS", stsep=NULL,
-    alphabet=NULL, states=NULL, id=NULL, weights=NULL, start=1,
-    left=NA, right="DEL", gaps=NA, missing=NA, void="\%", nr="*",
-    cnames=NULL, xtstep=1, cpal=NULL, missing.color="darkgrey",
-    labels=NULL, ...)
+       alphabet=NULL, states=NULL, id=NULL, weights=NULL, start=1,
+       left=NA, right="DEL", gaps=NA, missing=NA, void="\%", nr="*",
+       cnames=NULL, xtstep=1, cpal=NULL, missing.color="darkgrey",
+       labels=NULL, ...)
 }
 
 \arguments{
@@ -24,7 +24,7 @@ seqdef(data, var=NULL, informat="STS", stsep=NULL,
 whether the sequences are in the compressed (successive states in a
 character string) or extended format.}
 
-   \item{informat}{format of the original data. Default is \code{"STS"}.  
+   \item{informat}{format of the original data. Default is \code{"STS"}.
 Other available formats are: \code{"SPS"} and \code{"SPELL"}, in which case the \code{\link{seqformat}} function is called to convert the data into the \code{"STS"} format (see TraMineR user's manual (\cite{Gabadinho et al., 2010}) for a
 description of these formats). A better solution is nonetheless to convert first your
 data with \code{\link{seqformat}}, so as to have better control over the conversion process and visualize the intermediate \code{"STS"} formatted data.
@@ -47,7 +47,7 @@ Other separators must be specified explicitly.}
     \item{start}{starting time. For instance, if sequences begin
 at age 15, you can specify 15. At this stage, used only for labelling column names.}
 
-	\item{left}{the behavior for missing values appearing before the
+    \item{left}{the behavior for missing values appearing before the
 first (leftmost) valid state in each sequence. See \cite{Gabadinho et
 al. (2010)} for more details on the options for handling missing
 values when defining sequence objects. By default, left missing

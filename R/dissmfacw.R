@@ -111,7 +111,7 @@ dissmfacw <- function(formula, data, R=1000, gower=FALSE,
 				hwm <- hatw_matrix_qr(pred)
 				SCexp <- sum(hwm * g_matrix)
 				SCres <- SCtot-SCexp
-				F_list[[var]] <- ((SCexp-SSbv[var])/(p_list[var])) / ((SCres)/(totalweight-m-1))
+				F_list[[var]] <- ((SCexp-SSbv[var])/(p_list[var])) / ((SCres)/(totalweight-m))
 				#calculate proportion of variance explained
 				R2_list[[var]] <- (SCexp-SSbv[var]) / SCtot
 				# Printing single regression analysis output

@@ -87,14 +87,16 @@ citEntry(entry="incollection",
   textVersion="Ritschard, G., B\u00FCrgin, R. & Studer, M. (2013), Exploratory Mining of Life Event Histories, In J.J. McArdle & G. Ritschard (eds.), Contemporary Issues in Exploratory Data Mining in the Behavioral Sciences.  pp. 221-253. New York: Routledge",
   header="For event sequences:"
 )
-citEntry(entry="inproceedings",
+citEntry(entry="article",
   author = personList(p5, p2),
-  title = "Categorical parallel coordinate plot",
-  booktitle = "{LaCOSA} {L}ausanne Conference On Sequence Analysis, {U}niversity of {L}ausanne, June 6th-8th 2012",
-  year = "2012",
-  note = "Poster",
-  url = "http://www3.unil.ch/wpmu/sequences2012/files/2012/05/Buergin_LaCOSA_Poster.pdf",
-  textVersion="B\u00FCrgin, R. & Ritschard, G. (2012), Categorical parallel coordinate plot, In LaCOSA Lausanne Conference On Sequence Analysis, University of Lausanne, June 6th-8th 2012 (Poster), http://www3.unil.ch/wpmu/sequences2012/files/2012/05/Buergin_LaCOSA_Poster.pdf",
+  title = "A decorated parallel coordinate plot for categorical longitudinal data",
+  journal = "The American Statistician",
+  year = "2014",
+  volume = "68",
+  pages = "98-103",
+  number = "2",
+  doi = "10.1080/00031305.2014.887591",
+  textVersion="B\u00FCrgin, R. & Ritschard, G. (2014), A decorated parallel coordinate plot for categorical longitudinal data, The American Statistician 68(2), 98-103.  DOI http://dx.doi.org/10.1080/00031305.2014.887591",
 )
 
 citFooter("See",sQuote("citation()"),"for citing R itself.")

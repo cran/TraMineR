@@ -3,10 +3,10 @@
 \alias{TraMineR}
 \docType{package}
 \title{
-Trajectory miner: a toolbox for exploring and rendering sequence data
+Trajectory Miner: a Toolbox for Exploring and Rendering Sequences
 }
 \description{
-This package is a toolbox for sequence manipulation, description, rendering and more generally the mining of sequence data in the field of social sciences. Though it is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers its features also apply to many other kinds of categorical sequence data. It accepts many different sequence representations as input and provides tools for translating sequences from one format to another. It offers several statistical functions for describing and rendering sequences, for computing distances between sequences with different metrics among which optimal matching, the longest common prefix and the longest common subsequence, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them. A user's guide can be found on the TraMineR web page.
+This is a toolbox for the manipulation, description and rendering of sequences, and more generally the mining of sequence data in the field of social sciences. Although the toolbox is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers, its features also apply to many other kinds of categorical sequence data. It accepts many different sequence representations as input and provides tools for converting sequences from one format to another. It offers several functions for describing and rendering sequences, for computing distances between sequences with different metrics (among which optimal matching), original dissimilarity-based analysis tools, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them. A user's guide can be found on the TraMineR web page.
   
 TraMineR provides tools for both state sequences and event
 sequences. The first step when using the package is to define a
@@ -25,8 +25,8 @@ sequences and vice versa.
 \details{
 \tabular{ll}{
 Package: \tab TraMineR\cr
-Version: \tab 1.8-8\cr
-Date: \tab 2014-01-14\cr
+Version: \tab 1.8-9\cr
+Date: \tab 2015-01-27\cr
 Authors@R: \tab c(
   person("Alexis", "Gabadinho", role = c("aut", "cph")),
   person("Matthias", "Studer", role = c("aut", "cph")),
@@ -144,7 +144,7 @@ seqnum                  Transform into a sequence object with numerical
                         alphabet.
 seqpcplot               Parallel coordinate plot for sequence data
 seqplot                 Plot state sequence objects
-seqpm                   Find patterns in sequences
+seqpm                   Find substring patterns in sequences
 seqrecode               Recoding state sequence objects and factors
 seqrep                  Extracting sets of representative sequences
 seqsep                  Adds separators to sequences stored as
