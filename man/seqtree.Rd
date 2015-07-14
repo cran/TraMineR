@@ -2,16 +2,16 @@
 \alias{seqtree}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-	Tree structured analysis of a state sequence object.
+Tree structured analysis of a state sequence object.
 }
 \description{
-	Facility for growing a regression tree for a state sequence object.
+Facility for growing a regression tree for a state sequence object.
 }
 \usage{
 seqtree(formula, data = NULL, weighted = TRUE, minSize = 0.05,
      maxdepth = 5, R = 1000, pval = 0.01,
-	 weight.permutation = "replicate",
-	 seqdist_arg = list(method = "LCS", norm = TRUE),
+     weight.permutation = "replicate",
+     seqdist_arg = list(method = "LCS", norm = TRUE),
      diss = NULL, squared = FALSE, first = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -30,13 +30,13 @@ seqtree(formula, data = NULL, weighted = TRUE, minSize = 0.05,
   \item{first}{Character. An optional variable name to force the first split.}
 }
 \details{
-	The function provides a simplified interface for applying \code{\link{disstree}} on state sequence objects.
-	
-	The \code{seqtree} objects can be "plotted" with \code{\link{seqtreedisplay}}. A print method is also available which prints the medoid sequence for each terminal node.
+The function provides a simplified interface for applying \code{\link{disstree}} on state sequence objects.
+
+The \code{seqtree} objects can be "plotted" with \code{\link{seqtreedisplay}}. A print method is also available which prints the medoid sequence for each terminal node.
 }
 \value{
-	A \code{seqtree} object with same attributes as \code{\link{disstree}} objects.
-    
+    A \code{seqtree} object with same attributes as \code{\link{disstree}} objects.
+
     The leaf membership is in the first column of the fitted attribute. For example, the leaf memberships for a tree \code{dt}  are in \code{dt$fitted[,1]}.
 }
 
@@ -45,7 +45,7 @@ Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2011). Discrepancy anal
 }
 
 \seealso{
-	\code{\link{seqtreedisplay}}, \code{\link{disstree}}
+    \code{\link{seqtreedisplay}}, \code{\link{disstree}}
 }
 
 

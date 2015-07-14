@@ -4,7 +4,7 @@
 \title{Distances (dissimilarities) between sequences}
 
 \description{
- Computes pairwise dissimilarities between sequences or
+Computes pairwise dissimilarities between sequences or
 dissimilarities with a reference sequence. Several dissimilarities measures or metrics are available: optimal matching (OM), distance based on the longest common prefix (LCP), on the longest common suffix (RLCP), on the longest common subsequence (LCS), the Hamming distance (HAM) and the Dynamic Hamming Distance (DHD).
  }
 
@@ -40,6 +40,7 @@ For OM, HAM and DHD, a user specified substitution cost matrix can be provided w
 Distances can optionally be normalized by means of the \code{norm} argument. If set to \code{TRUE}, Elzinga's normalization (similarity divided by geometrical mean of the two sequence lengths) is applied to LCP, RLCP and LCS distances, while Abbott's normalization (distance divided by length of the longer sequence) is used for OM, HAM and DHD. Elzinga's method can be forced with \code{"gmean"} and Abbott's rule with \code{"maxlength"}. With \code{"maxdist"} the distance is normalized by its maximal possible value. For more details, see \cite{Elzinga (2008)} and \cite{Gabadinho et al. (2009)}.
 
 When sequences contain gaps and the \code{gaps=NA} option was passed to \code{\link{seqdef}}, i.e. when there are non deleted missing values, the \code{with.missing} argument should be set to \code{TRUE}. If left to \code{FALSE} the function stops when it encounters a gap. This is to make the user aware that there are gaps in his sequences. If the OM method is selected, \code{seqdist} expects a substitution cost matrix with a row and a column entry for the missing state (symbol defined with the \code{nr} option of \code{\link{seqdef}}). This will be the case for substitution cost matrices returned by \code{\link{seqsubm}}. More details on how to compute distances with sequences containing gaps are given in \cite{Gabadinho et al. (2009)}.
+
 }
 
 \value{
@@ -48,6 +49,9 @@ When sequences contain gaps and the \code{gaps=NA} option was passed to \code{\l
 
 \seealso{
  \code{\link{seqsubm}}, \code{\link{seqdef}}, and for multichannel distances \code{\link{seqdistmc}}.
+ 
+ For more dissimilarity measures, consider the package \emph{seqdist2} (available from R-Forge \url{https://r-forge.r-project.org/R/?group_id=743}) that proposes all the measures addressed in \cite{Studer and Ritschard (2015)}.
+
 }
 
 \references{
@@ -58,7 +62,9 @@ Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Vi
 
 Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide. Department of Econometrics and Laboratory of Demography, University of Geneva
 
-Lesnard, L. (2006) Optimal Matching and Social Sciences. \emph{Série des Documents de Travail du CREST},  Institut National de la Statistique et des Etudes Economiques, Paris.
+Lesnard, L. (2006). Optimal Matching and Social Sciences. \emph{Série des Documents de Travail du CREST},  Institut National de la Statistique et des Etudes Economiques, Paris.
+
+Studer, M. and G. Ritschard (2015). What matters in differences between life trajectories: A comparative review of sequence dissimilarity. \emph{Journal of the Royal Statistical Society A},  (in press).
 
 }
 

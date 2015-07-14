@@ -56,7 +56,7 @@ seqtree2dot(tree, filename, seqdata=tree$info$object, imgLeafOnly=FALSE,
     \item{\dots}{other parameters that will be passed to \code{imagefunc} or \code{\link{seqplot}} (for \code{seqtree2dot}).}
 }
 \details{
-  These functions generate a "dot" file that can be used in GraphViz (\url{http://www.graphviz.org}).
+  These functions generate a "dot" file that can be used in GraphViz (\code{http://www.graphviz.org}). 
 It also generates one image per node through a call to
 \code{imagefunc} passing the selected lines of \code{imagedata} if
 present or otherwise a list of indexes (of individuals belonging to a

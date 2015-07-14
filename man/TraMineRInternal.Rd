@@ -3,19 +3,21 @@
 \alias{TraMineRInternalLegend}
 \alias{TraMineRInternalNodeInit}
 \alias{TraMineRInternalSeqeage}
+\alias{TraMineRInternalSeqgbar}
 \alias{TraMineRInternalSplitInit}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
  Access to TraMineR internal functions
 }
 \description{
-Functions allowing other packages to access some TraMineR internal functions. Corresponding functions are respectively are \code{TraMineR.setlayout}, \code{TraMineR.Legend}, \code{DTNInit}, \code{seqeage}, and \code{DTNsplit}. For experts only.
+Functions allowing other packages to access some TraMineR internal functions. Corresponding functions are respectively are \code{TraMineR.setlayout}, \code{TraMineR.Legend}, \code{DTNInit}, \code{seqeage}, \code{seqgbar} and \code{DTNsplit}. For experts only.
 }
 \usage{
 TraMineRInternalLayout(...)
 TraMineRInternalLegend(...)
 TraMineRInternalNodeInit(...)
 TraMineRInternalSeqeage(...)
+TraMineRInternalSeqgbar(...)
 TraMineRInternalSplitInit(...)
 }
 %- maybe also 'usage' for other objects documented here.

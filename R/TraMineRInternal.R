@@ -17,3 +17,7 @@ TraMineRInternalSeqeage <- function(...){
 TraMineRInternalLegend <- function(...){
 	return(TraMineR.legend(...))
 }
+
+TraMineRInternalSeqgbar <- function(...){
+	return(seqgbar(...))
+}

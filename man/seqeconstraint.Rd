@@ -19,7 +19,7 @@ seqeconstraint(maxGap = -1, windowSize = -1, ageMin = -1,
   \item{ageMaxEnd}{Maximal end time position allowed for subsequences. Ignored when equal to -1 (default).}
   \item{countMethod}{By default, subsequences are counted only
     one time by sequence (\code{'COBJ'} method). Alternative counting methods
-    can be called by setting  this argument to \code{'CDIST_O'}, \code{'CWIN'},
+    are \code{'CDIST_O'}, \code{'CWIN'},
     \code{'CMINWIN'} or \code{'CDIST'} respectively. See details.}
 }
 
@@ -36,10 +36,9 @@ seqeconstraint(maxGap = -1, windowSize = -1, ageMin = -1,
   of the sequence.
 
   There are 5 options for the \code{countMethod} argument. (1) By default,
-  subsequences are counted by occurrence by object (\code{"COBJ"} method).
-  Alternatives are (2) \code{"CDIST_O"} (distinct occurrences with possibility of
-  event-timestamp overlap), (3) \code{"CWIN"} (one occurrence of span-window),
-  (4) \code{"CMINWIN"} (number of minimal windows of occurrence) and (5) \code{"CDIST"} (distinct occurrences without event-timestamp overlap). See
+  the count is the number of sequences that contain the subsequence (\code{"COBJ"} method).
+  Alternatives are (2) \code{"CDIST_O"} (counts all distinct occurrences in each sequence including possibly overlapping occurrences, i.e., occurrences sharing a same event occurrence), (3) \code{"CWIN"} (number of slidden windows of length \code{windowSize}  that contain an occurrence of the subsequence),
+  (4) \code{"CMINWIN"} (number of minimal windows of occurrence) and (5) \code{"CDIST"} (distinct occurrences without event occurrences overlap). See
   references.
 }
 
@@ -51,6 +50,8 @@ seqeconstraint(maxGap = -1, windowSize = -1, ageMin = -1,
   Joshi, Mahesh V., George Karypis, and Vipin Kumar (2001) A Universal Formulation of
   Sequential Patterns \emph{Proceedings of the KDD'2001 Workshop on
   Temporal Data Mining}, San Francisco.
+
+  Ritschard, G., A. Gabadinho, N.S. Müller and M. Studer (2008), Mining event sequences: A social science perspective, \emph{International Journal of Data Mining, Modelling and Management, IJDMMM}, 1(1), 68-90.
   }
 
 \seealso{\code{\link{seqefsub}}, \code{\link{seqeapplysub}}}

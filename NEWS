@@ -1,4 +1,14 @@
 ## =========
+Version 1.8-10 
+
+Misc:
+  - Updated help pages: seqeconstraint, seqtree, distree2dot
+  - Added required basic packages to the import statements to
+    comply with R v3.3 requirements
+  - One additional exported alias to a TraMineR internal function:
+    TraMineRInternalSeqgbar.
+
+## =========
 Version 1.8-9
 
 New function:
@@ -12,9 +22,9 @@ Changes in existing functions:
     - New argument 'seed' to control the jittering.
     - The 'filter' argument can now simply be a scalar, in which case
       the 'minfreq' filter is applied with this numeric value as threshold.
-      See also the new function pcfilter().
-    - New argument 'missing' to allow controlling  whether and
-      how to display missing values in 'seqpcplot'.
+      See also the new function seqpcfilter().
+    - New argument 'missing' to control  whether and how to display missing
+      values.
 
 Bug fixes:
   - seqformat(): fixed error occurring when converting from STS to TSE
