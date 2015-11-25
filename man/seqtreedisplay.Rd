@@ -21,7 +21,7 @@ disstreedisplay(tree, filename=NULL, imagedata=NULL, imagefunc=plot,
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{tree}{A \code{seqtree} object (as produced by \code{\link{seqtree}}).}
+  \item{tree}{A \code{seqtree} object (as produced by \code{\link{seqtree}}) for \code{seqtreedisplay}. A \code{disstree} object (as produced by \code{\link{disstree}}) for \code{disstreedisplay}.}
   \item{filename}{The name of a file where to save the plot (overwritting existing file). If \code{NULL}, a temporary file is created.}
   \item{seqdata}{The sequence object containing the state sequences plotted in the nodes.}
   \item{imgLeafOnly}{Logical. If \code{TRUE} sequences are plotted only in terminal nodes.}
@@ -59,4 +59,4 @@ See \code{\link{seqtree}} and \code{\link{disstree}} for examples, and \code{\li
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{Dissimilarity-based analysis}
-\keyword{Plot} 
+\keyword{Plot}

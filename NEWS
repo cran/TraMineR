@@ -1,5 +1,24 @@
 ## =========
-Version 1.8-10 
+Version 1.8-11
+
+Changes in existing functions:
+  - seqmeant(): New serr argument. When serr=TRUE, seqmeant computes
+    the variance and standard deviation of the total times spent in the
+    different states, and the standard error of the mean total times.
+  - seqmtplot(): When serr=TRUE, error bars are displayed in the
+    mean time plot.
+  - seqdist():
+    - New error message when sm=NA with method "OM".
+    - New error message when 'refseq' is a state sequence object with
+      an alphabet assigned to it different from that of 'seqdata'.
+
+Misc:
+  - updated disstreedisplay help page (tree argument).
+  - updated seqdist help page (refseq argument and example).
+  - updated CITATION file (new ref and fixed a doi argument).
+
+## =========
+Version 1.8-10
 
 Misc:
   - Updated help pages: seqeconstraint, seqtree, distree2dot
@@ -7,6 +26,7 @@ Misc:
     comply with R v3.3 requirements
   - One additional exported alias to a TraMineR internal function:
     TraMineRInternalSeqgbar.
+
 
 ## =========
 Version 1.8-9

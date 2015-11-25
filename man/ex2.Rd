@@ -35,6 +35,6 @@ ex2u.seq <- seqdef(ex2.unweighted)
 }
 
 
-\source{The brain of the TraMineR package maintainer.}
+\source{The brain of the TraMineR package team.}
 
 \keyword{Datasets}

@@ -6,19 +6,19 @@
 Trajectory Miner: a Toolbox for Exploring and Rendering Sequences
 }
 \description{
-(Version: 1.8.10) Toolbox for the manipulation, description and rendering of sequences, and more generally the mining of sequence data in the field of social sciences. Although the toolbox is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers, its features also apply to many other kinds of categorical sequence data. It accepts many different sequence representations as input and provides tools for converting sequences from one format to another. It offers several functions for describing and rendering sequences, for computing distances between sequences with different metrics (among which optimal matching), original dissimilarity-based analysis tools, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them. A user's guide can be found on the TraMineR web page.
+(Version: 1.8.11) Toolbox for the manipulation, description and rendering of sequences, and more generally the mining of sequence data in the field of social sciences. Although the toolbox is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers, its features also apply to many other kinds of categorical sequence data. It accepts many different sequence representations as input and provides tools for converting sequences from one format to another. It offers several functions for describing and rendering sequences, for computing distances between sequences with different metrics (among which optimal matching), original dissimilarity-based analysis tools, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them. A user's guide can be found on the TraMineR web page.
 
 
 }
 \details{
-
+  
 TraMineR provides tools for both state sequences and event
 sequences. The first step when using the package is to define a
 state sequence object (with \code{\link{seqdef}}) if you want to
 explore state sequences, and an event sequence object (with
 \code{\link{seqecreate}}) if you are interested in event
 sequencing.
-
+  
 State sequences are defined from a series of variables giving the
 states at the successive positions, while event sequences are
 defined from (vertical) time stamped event data. The package,
@@ -57,7 +57,7 @@ seqdplot(mvad.seq, group=mvad$male, border=NA)
 
 ## compute the LCS pairwise distance matrix
 ## among the first 10 sequences
-mvad.lcs <- seqdist(mvad.seq[1:10,], method="LCS")
+mvad.lcs <- seqdist(mvad.seq[1:10,], method="LCS") 
 }
 
 \keyword{ package }

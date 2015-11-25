@@ -2,14 +2,14 @@
 ## Generic function for plotting state sequence objects
 ## ====================================================
 
-seqplot <- function(seqdata, group=NULL, type="i", title=NULL, 
-	cpal=NULL, missing.color=NULL, 
+seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
+	cpal=NULL, missing.color=NULL,
 	ylab=NULL, yaxis=TRUE, axes="all", xtlab=NULL, cex.plot=1,
-	withlegend="auto", ltext=NULL, cex.legend=1, 
+	withlegend="auto", ltext=NULL, cex.legend=1,
 	use.layout=(!is.null(group) | withlegend!=FALSE), legend.prop=NA, rows=NA, cols=NA, ...) {
 
 	if (!inherits(seqdata,"stslist"))
-		stop(call.=FALSE, "data is not a sequence object, use seqdef function to create one")
+		stop(call.=FALSE, "seqplot: data is not a sequence object, use seqdef function to create one")
 
 	## Storing original optional arguments list
 	oolist <- list(...)
@@ -22,24 +22,24 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
           oolist <- append(oolist, list(group = group, rows = rows, cols = cols))
           group <- NULL
         }
-        
+
 	if (!is.null(group)) {
           group <- group(group)
-          
+
           ## Check length
           if (length(group)!=nrow(seqdata))
             stop(call.=FALSE, "group must contain one value for each row in the sequence object")
-          
+
           nplot <- length(levels(group))
           gindex <- vector("list",nplot)
-          
+
           for (s in 1:nplot)
             gindex[[s]] <- which(group==levels(group)[s])
-          
+
           ## Title of each plot
-          if (!is.null(title)) 
+          if (!is.null(title))
             title <- paste(title,"-",levels(group))
-          else 
+          else
             title <- levels(group)
 	} else {
           nplot <- 1
@@ -51,9 +51,9 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 	## Defining the layout
 	## ===================
 	if (type=="Ht" | type =="pc") { withlegend=FALSE }
-        
-	## IF xaxis argument is provided 
-	## it interferes with axes argument 
+
+	## IF xaxis argument is provided
+	## it interferes with axes argument
 	if ("xaxis" %in% names(oolist)) {
 		tmpxaxis <- oolist[["xaxis"]]
 		if (tmpxaxis==TRUE) {axes="all"}
@@ -93,8 +93,8 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 			message(" [i] argument 'with.miss' is obsolete and replaced by 'with.missing'")
 		}
 
-		plist <- list(main=title[np], cpal=cpal, missing.color=missing.color, 
-			ylab=ylab, yaxis=yaxis, xaxis=xaxis[np], 
+		plist <- list(main=title[np], cpal=cpal, missing.color=missing.color,
+			ylab=ylab, yaxis=yaxis, xaxis=xaxis[np],
 			xtlab=xtlab, cex.plot=cex.plot)
 
 		## Selecting sub sample for x
@@ -156,7 +156,7 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 			else {
 				if (inherits(dist.matrix, "dist")) {
         				dist.matrix <- dist2matrix(dist.matrix)
-				} 
+				}
 
 				olist[["dist.matrix"]] <- dist.matrix[gindex[[np]],gindex[[np]]]
 
@@ -167,7 +167,7 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 				}
 			}
 
-                      } else if (type == "pc") { # modification of Reto Buergin 16.08.2012 
+                      } else if (type == "pc") { # modification of Reto Buergin 16.08.2012
 
                         plist$title <- title
                         olist <- c(olist, plist)
@@ -176,7 +176,7 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
                         olist <- olist[names(olist) %in% names(formals(f))]
                         plist <- list()
                       }
-		else 
+		else
 			stop("Unknown 'type' argument.")		
 
 		## Calling appropriate function and plotting
@@ -212,13 +212,13 @@ seqplot <- function(seqdata, group=NULL, type="i", title=NULL,
 
 		if (is.null(ltext)) ltext <- attr(seqdata,"labels")
 
-		if (is.null(missing.color)) missing.color <- attr(seqdata,"missing.color") 
+		if (is.null(missing.color)) missing.color <- attr(seqdata,"missing.color")
 
 		if (is.null(cpal)) cpal <- attr(seqdata,"cpal")
 
 		density <- if ("density" %in% names(oolist)) { oolist[["density"]] } else { NULL }
 		angle <- if ("angle" %in% names(oolist)) { oolist[["angle"]] } else { NULL }
- 
+
 		## Adding an entry for missing in the legend
 		if (with.missing & any(seqdata==nr)) {
 			cpal <- c(cpal,missing.color)

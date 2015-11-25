@@ -17,6 +17,6 @@ The data set contains also case weights (variable \code{weights}). The sum of th
 
 \format{A data frame with 7 rows, 13 state variables, 1 weight variable.}
 
-\source{The brain of the TraMineR package maintainer.}
+\source{The brain of the TraMineR package team.}
 
 \keyword{Datasets}

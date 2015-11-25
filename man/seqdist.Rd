@@ -18,13 +18,13 @@ seqdist(seqdata, method, refseq=NULL, norm=FALSE,
 
   \item{method}{a character string indicating the metric to be used. One of \code{"OM"} (Optimal Matching), \code{"LCP"} (Longest Common Prefix), \code{"RLCP"} (reversed LCP, i.e. Longest Common Suffix), \code{"LCS"} (Longest Common Subsequence), \code{"HAM"} (Hamming distance), \code{"DHD"} (Dynamic Hamming distance).}
 
-  \item{refseq}{Optional baseline sequence to compute the distances from. Can be the index of a sequence in the state sequence object, 0 for the most frequent sequence, or an external sequence passed as a sequence object with 1 row.}
+  \item{refseq}{Optional baseline sequence to compute the distances from. Can be the index of a sequence in the state sequence object, 0 for the most frequent sequence, or an external sequence passed as a sequence object with 1 row and same alphabet as seqdata assigned to it.}
 
   \item{norm}{if \code{TRUE}, the computed OM, LCP, RLCP or LCS distances are normalized to account for differences in sequence lengths, and the normalization method is automatically selected.  Default is \code{FALSE}. Can also be one of \code{"none"}, \code{"maxlength"}, \code{"gmean"}, \code{"maxdist"}, \code{"YujianBo"}. See details.}
 
   \item{indel}{the insertion/deletion cost (OM method). Default is 1. Ignored with non OM metrics.}
 
-  \item{sm}{substitution-cost matrix (OM, HAM and DHD method). Can also be one of the \code{\link{seqsubm}} build methods \code{"TRATE"} or \code{"CONSTANT"}. Default is \code{NA}. Ignored with LCP, RLCP and LCS metrics.}
+  \item{sm}{substitution-cost matrix (OM, HAM and DHD method). Can also be one of the \code{\link{seqsubm}} build methods \code{"TRATE"} or \code{"CONSTANT"}. Default is \code{NA}. Ignored with LCP, RLCP and LCS metrics. A valid non NA value must be given for OM.}
 
   \item{with.missing}{must be set to \code{TRUE} when sequences contain non deleted gaps (missing values). See details.}
 
@@ -49,7 +49,7 @@ When sequences contain gaps and the \code{gaps=NA} option was passed to \code{\l
 
 \seealso{
  \code{\link{seqsubm}}, \code{\link{seqdef}}, and for multichannel distances \code{\link{seqdistmc}}.
- 
+
  For more dissimilarity measures, consider the package \emph{seqdist2} (available from R-Forge \url{https://r-forge.r-project.org/R/?group_id=743}) that proposes all the measures addressed in \cite{Studer and Ritschard (2015)}.
 
 }
@@ -62,9 +62,9 @@ Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Vi
 
 Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide. Department of Econometrics and Laboratory of Demography, University of Geneva
 
-Lesnard, L. (2006). Optimal Matching and Social Sciences. \emph{Série des Documents de Travail du CREST},  Institut National de la Statistique et des Etudes Economiques, Paris.
+Lesnard, L. (2006). Optimal Matching and Social Sciences. \emph{Série des Documents de Travail du CREST},  Institut National de la Statistique et des Etudes Economiques, \bold{2006-01}, Paris.
 
-Studer, M. and G. Ritschard (2015). What matters in differences between life trajectories: A comparative review of sequence dissimilarity. \emph{Journal of the Royal Statistical Society A},  (in press).
+Studer, M. and G. Ritschard (2015). What matters in differences between life trajectories: A comparative review of sequence dissimilarity measures. \emph{Journal of the Royal Statistical Society A},  (Early view), DOI: 10.1111/rssa.12125.
 
 }
 
@@ -84,6 +84,12 @@ biofam.lcs <- seqdist(biofam.seq, method="LCS", refseq=0, norm=TRUE)
 
 ## histogram of the normalized LCS distances
 hist(biofam.lcs)
+
+## distance to an external sequence
+refs <- seqdef("(0,5)-(3,5)-(4,6)", informat="SPS",
+            alphabet=alphabet(biofam.seq))
+biofam.ref <- seqdist(biofam.seq, method="LCS", refseq=refs)
+hist(biofam.ref)
 
 ## =====================
 ## Example with missings

@@ -15,16 +15,16 @@ TraMineR.seqdist.refseq <- function(seqdata, method, refseq,
 		compseq <- refseq
 		message(" [>] using (external) sequence ",
         	suppressMessages(seqformat(compseq, from="STS", to="SPS", compressed=TRUE)), " as reference")
-	} 
+	}
 	## Most frequent sequence as reference
 	else if (refseq==0) {
 		mfseq <- seqtab(seqdata, tlim=1)
-		message(" [>] using most frequent sequence as reference: ", 
+		message(" [>] using the most frequent sequence as reference: ",
 			suppressMessages(seqformat(mfseq, from="STS", to="SPS", compressed=TRUE)))
 		idxmfseq <- suppressMessages(seqfind(mfseq, seqdata))
-		message(" [>] most frequent sequence appears ", length(idxmfseq), " times")
+		message(" [>] the most frequent sequence appears ", length(idxmfseq), " times")
 		compseq <- seqdata[idxmfseq[1],]
-	} 
+	}
 	## Indice of sequence given as reference
 	else if (is.numeric(refseq) & refseq>0) {
 		compseq <- seqdata[refseq,]
@@ -69,7 +69,7 @@ TraMineR.seqdist.refseq <- function(seqdata, method, refseq,
 }
 
 
-TraMineR.seqdist.all <- function(seqdata, method, 
+TraMineR.seqdist.all <- function(seqdata, method,
 	norm, indel, sm, alphsize, nd, dseq, slength, mcorr, optimized){
 	
 	magicSeq <- order(mcorr)

@@ -10,7 +10,7 @@
  Access to TraMineR internal functions
 }
 \description{
-Functions allowing other packages to access some TraMineR internal functions. Corresponding functions are respectively are \code{TraMineR.setlayout}, \code{TraMineR.Legend}, \code{DTNInit}, \code{seqeage}, \code{seqgbar} and \code{DTNsplit}. For experts only.
+Functions allowing other packages to access some TraMineR internal functions. Corresponding functions are respectively \code{TraMineR.setlayout}, \code{TraMineR.Legend}, \code{DTNInit}, \code{seqeage}, \code{seqgbar} and \code{DTNsplit}. For experts only.
 }
 \usage{
 TraMineRInternalLayout(...)

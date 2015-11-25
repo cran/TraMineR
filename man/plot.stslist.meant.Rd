@@ -25,6 +25,8 @@ This is the plot method for objects of class \emph{stslist.meant} produced by th
 }
 \details{This is the plot method for the output produced by the \code{\link{seqmeant}} function, i.e., objects of class \emph{stslist.meant}. It produces a plot showing the mean times spent in each state of the alphabet.
 
+When the \code{"se"} attribute of \code{x} is \code{TRUE}, i.e., when \code{x} contains also the standard errors of the mean times, error bars are automatically displayed on the plot. See the \code{serr} argument of  \code{\link{seqmeant}}. 
+
 This method is called by the generic \code{\link{seqplot}} function (if \code{type="mt"}) that produces more sophisticated plots, allowing grouping and automatic display of the states legend. The \code{\link{seqmtplot}} function is a shortcut for calling \code{seqplot} with \code{type="mt"}.
 }
 
@@ -45,6 +47,11 @@ plot(mvad.meant, main="Mean durations in each state of the alphabet")
 ## Changing the y axis limits
 plot(mvad.meant, main="Mean durations in each state of the alphabet",
  ylim=c(0,40))
+
+## Displaying error bars
+plot(mvad.meant, main="Mean durations in each state of the alphabet",
+ ylim=c(0,40), serr=TRUE)
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

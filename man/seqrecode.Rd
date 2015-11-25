@@ -16,7 +16,7 @@ recodef(x, recodes, otherwise=NULL, na=NULL)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{seqdata}{
-	The state sequences objects to be recoded (created with \code{\link{seqdef}}).
+	The state sequence object to be recoded (created with \code{\link{seqdef}}).
 	}
   \item{recodes}{A \code{list} specifying the recoding operations where each element is in the form \code{newcode=oldcode} or \code{newcode=c(oldcode1, oldcode2,...)}. The rules are treated in the same order as they appear, hence subsequent rules may modify the first ones.}
   \item{otherwise}{\code{NULL} or Character. Level given to cases uncovered by the \code{recodes} list. If \code{NULL}, old states remain unchanged.}
@@ -29,7 +29,7 @@ recodef(x, recodes, otherwise=NULL, na=NULL)
 
 %\details{}
 
-\value{ A recoded factor or a recoded state sequence object.}
+\value{ The recoded factor or state sequence object.}
 
 \seealso{
 \code{\link{seqdef}} to create a state sequence object.
