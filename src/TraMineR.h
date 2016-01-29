@@ -13,16 +13,12 @@
 	#include <cstdio>
 	#include <cstdarg>
 	using std::sprintf;
-	extern "C" {
 #endif	//#ifdef __cplusplus
 
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <Rmath.h>
-#ifdef __cplusplus
-	} //end extern "C" {
-#endif	//#ifdef __cplusplus
 
 
 

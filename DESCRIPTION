@@ -1,5 +1,5 @@
 Package: TraMineR
-Version: 1.8-11
+Version: 1.8-11.1
 Date: 2015-11-25
 Title: Trajectory Miner: a Toolbox for Exploring and Rendering
         Sequences
@@ -19,11 +19,11 @@ URL: http://mephisto.unige.ch/traminer
 Encoding: latin1
 Maintainer: Gilbert Ritschard <gilbert.ritschard@unige.ch>
 NeedsCompilation: yes
-Packaged: 2015-11-25 11:28:43 UTC; adm
+Packaged: 2016-01-29 10:50:38 UTC; ripley
 Author: Alexis Gabadinho [aut, cph],
   Matthias Studer [aut, cph],
   Nicolas Muller [aut],
   Reto Buergin [aut],
   Gilbert Ritschard [aut, cre, cph]
 Repository: CRAN
-Date/Publication: 2015-11-25 13:49:07
+Date/Publication: 2016-01-29 11:55:21

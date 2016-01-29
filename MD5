@@ -1,4 +1,4 @@
-feca00d0c243d136c2bee964a62d04ed *DESCRIPTION
+4353fb487f6d8a773ec8aebd467a80e8 *DESCRIPTION
 fb1a46183d7343ead733c1ac3349df8b *NAMESPACE
 44f90b6f371ee33272f08083870d6bfb *NEWS
 0fd796a3f49f9da78e811a1b3df3e854 *R/BIOSPELL_to_STS.R
@@ -243,7 +243,7 @@ ee624491fe8d91887deb76979c2ea0de *man/seqtrate.Rd
 79feb99da5557c85f9193910ba1aebd4 *man/seqtreedisplay.Rd
 c6647e1b868b6e269efce303d4189476 *man/stlab.Rd
 833d571bcc47062814e0176d2195ac65 *man/str.seqe.Rd
-e4a91a7beb680bd85275dee26d03add3 *src/TraMineR.h
+d690d197b1119c8b2c5c35d28d42c26e *src/TraMineR.h
 094db0632ee58877f4ca28dac6ed314f *src/alignement.cpp
 7dc20a0c62ecc0d1ccf904de856fbf26 *src/alignement.h
 66d22ffdfcd91d028c7d497cfff72041 *src/checktriangleineq.c
