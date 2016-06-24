@@ -131,10 +131,11 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 		}
 
 		if (is.null(ytlab)) {ytlab <- tlim}
-		else if (ytlab=="id") {ytlab <- rownames(x)[tlim]}
+		else if (length(ytlab)==1) {
+            if(ytlab=="id") {ytlab <- rownames(x)[tlim]}
+        }
 
 		axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=ylas, tick=FALSE, cex.axis=cex.plot)
 	}
 
 }
-

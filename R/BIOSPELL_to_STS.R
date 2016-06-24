@@ -2,20 +2,27 @@
 ## Convert from SPELL to STS format
 ## ================================
 
-BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4, 
-	process=TRUE, pdata=NULL, pvar=NULL, 
-	limit=100, overwrite=TRUE, fillblanks=NULL, 
+BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
+	process=TRUE, pdata=NULL, pvar=NULL,
+	limit=100, overwrite=TRUE, fillblanks=NULL,
 	tmin=NULL, tmax=NULL) {
 
 	## if overwrite=TRUE, the latest spell overwrite the one before, if set to FALSE, the earlier is kept
 	begincolumn <- seqdata[,begin]
 	endcolumn <- seqdata[,end]
-	if (any(begincolumn<1, na.rm=TRUE)) {
-		stop(" [!] found one or more spell with starting time < 1", call.=FALSE)
-	} 
-	if (any(endcolumn-begincolumn<0, na.rm=TRUE)) {
-		stop(" [!] found one or more spell with ending time < starting time", call.=FALSE)
+
+    is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
+
+	if (any(!is.wholenumber(c(endcolumn,begincolumn)), na.rm=TRUE)) {
+		stop(" [!] Found non-integer values in colunms refer to by begin and/or end argument!", call.=FALSE)
 	}
+	if (any(begincolumn<1, na.rm=TRUE)) {
+		stop(" [!] Found one or more spell with starting time < 1", call.=FALSE)
+	}
+	if (any(endcolumn-begincolumn<0, na.rm=TRUE)) {
+		stop(" [!] Found one or more spell with ending time < starting time", call.=FALSE)
+	}
+
 	
 	frmoption <- NULL
 
@@ -73,12 +80,12 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
         seqresult <- matrix(nrow=nbseq, ncol=limit)
 	#seqresult <- as.data.frame(seqresult)
         status.orig <- seqdata[,status]
-	if (is.factor(seqdata[,status])) { 
+	if (is.factor(seqdata[,status])) {
           seqdata[,status] <- as.integer(seqdata[,status])
-        #	for (k in 1:(limit)) { 
-	#		seqresult[,k] <- factor(seqresult[,k], levels=levels(seqdata[,status]), labels=levels(seqdata[,status])) 
+        #	for (k in 1:(limit)) {
+	#		seqresult[,k] <- factor(seqresult[,k], levels=levels(seqdata[,status]), labels=levels(seqdata[,status]))
 	#	}
-		if(!is.null(fillblanks)) { 
+		if(!is.null(fillblanks)) {
 			fillblanksF <- fillblanks
 			fillblanks <- nlevels(status.orig)+1
 		}
@@ -86,7 +93,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
   #  if (!is.null(fillblanks)) {
 		
 #		fillblanksv <- nlevels(status.orig)+1
-#	}    
+#	}
 	#names(seqresult) <- names.seqresult
 	## ================================
 	## end of creation of the dataframe
@@ -138,9 +145,9 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 			#print(birthy)
 			age1 <- spell[1,begin]
 		}
-		if (is.na(age1)) { 
+		if (is.na(age1)) {
 			message(" [>] warning, start time is missing for case ", i,", skipping sequence creation")
-			age1 <- -1 
+			age1 <- -1
 		}
 
 		# we fill the line with NAs
@@ -149,7 +156,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	    if (age1 >= 0) {
 			if (idxmax>0) {
 				# by default, the most recent episode erases the one before
-				if(overwrite==TRUE) {      
+				if(overwrite==TRUE) {
 					spelllist <- 1:idxmax
 				}
 				# if we want the opposite, we just go from the last to the first episode
@@ -176,7 +183,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 						sstop <- (spell[j,end] - tmin)+1
 						#print(sstart)
 						#print(sstop)
-					} 
+					}
 					
 					# spell are in year format, and we want age sequences
 					if(frmoption=="year2age") {
@@ -229,12 +236,12 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 				
 									if(sstop <= limit) {
 									# if the sequence begins at age 0, we delete the first state
-									# if (sstart==0) { 
-									#	sstart <- sstart+1 
+									# if (sstart==0) {
+									#	sstart <- sstart+1
 									#	dur <- dur -1
-									#	} 
+									#	}
 										seqresult[i,sstart:sstop] <- rep(state, dur)
-                                                                        
+
 									}
 							
 					   		 }
@@ -246,20 +253,19 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	}
         seqresult <- as.data.frame(seqresult)
         if(is.factor(status.orig)) {
-          for (k in 1:(limit)) { 
+          for (k in 1:(limit)) {
             if(is.null(fillblanks)) {
-				seqresult[,k] <- factor(seqresult[,k], levels=1:nlevels(status.orig), labels=levels(status.orig)) 
+				seqresult[,k] <- factor(seqresult[,k], levels=1:nlevels(status.orig), labels=levels(status.orig))
 			}
 			else {
-				seqresult[,k] <- factor(seqresult[,k], levels=1:(nlevels(status.orig)+1), labels=c(levels(status.orig), fillblanksF)) 
+				seqresult[,k] <- factor(seqresult[,k], levels=1:(nlevels(status.orig)+1), labels=c(levels(status.orig), fillblanksF))
 			}
 		  }
         }
         names(seqresult) <- names.seqresult
 
-	## setting id as rowname 
+	## setting id as rowname
 	row.names(seqresult) <- lid
 	
 	return(seqresult)
 }
-

@@ -27,17 +27,21 @@ sequence. This maximum is computed as
 distinct states, i.e. the sequence duration divided by the number
 \eqn{d} of distinct states in the sequence.
 
-The function searches for missing states in the sequences and if found, adds the missing state to the alphabet for the computation of the turbulence. In this case the \code{\link{seqdss}} and \code{\link{seqdur}} functions for extracting the distinct successive state sequences and the associated durations are called with the \code{{with.missing=TRUE}} argument. A missing state in a sequence is considered as the occurence of an additional symbol of the alphabet, and two or more consecutive missing states are considered as two or more occurences of the same state. Hence the DSS of \code{A-A-*-*-*-B-B-C-C-D} is \code{A-*-B-C-D} and the associated durations are \code{2-3-2-2-1}.
+The function searches for missing states in the sequences and if found, adds the missing state to the alphabet for the computation of the turbulence. In this case the \code{\link{seqdss}} and \code{\link{seqdur}} functions for extracting the distinct successive state sequences and the associated durations are called with the \code{{with.missing=TRUE}} argument. A missing state in a sequence is considered as the occurrence of an additional symbol of the alphabet, and two or more consecutive missing states are considered as two or more occurences of the same state. Hence the DSS of \code{A-A-*-*-*-B-B-C-C-D} is \code{A-*-B-C-D} and the associated durations are \code{2-3-2-2-1}.
+
+The normalized value is obtained by subtracting 1 to the index and dividing by the turbulence value of a sequence made by repeating successively the alphabet up to the maximal length in \code{seqdata}.
 }
 \usage{
- seqST(seqdata)
+ seqST(seqdata, norm=FALSE)
 }
 \arguments{
   \item{seqdata}{a state sequence object as returned by the the \code{\link{seqdef}} function.}
+  
+  \item{norm}{logical: Should the turbulence index be normalized?}
 }
 
 \value{a vector of length equal to the number of sequences in
-\code{seqdata} containing the turbulence value of each sequence. }
+\code{seqdata} containing the turbulence value of each sequence. Normalized values are returned when \code{norm=TRUE}.}
 
 \seealso{
  \code{\link{seqdss}}, \code{\link{seqdur}}. For another composite measure of sequence complexity see and \code{\link{seqici}}.
@@ -53,15 +57,19 @@ The function searches for missing states in the sequences and if found, adds the
 
   ## Defining a sequence object with data in columns 13 to 24
   ## (activity status from january to december 2000)
-  actcal.seq <- seqdef(actcal,13:24, informat='STS')
+  actcal.seq <- seqdef(actcal[,13:24], informat='STS')
 
   ## Computing the sequences turbulence
   turb <- seqST(actcal.seq)
 
   ## Histogram for the turbulence
   hist(turb)
+  
+  ## Normalized turbulence
+  turb.norm <- seqST(actcal.seq, norm=TRUE)
+
 }
 
-\author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
+\author{Alexis Gabadinho and Gilbert Ritschard}
 
 \keyword{Longitudinal characteristics}

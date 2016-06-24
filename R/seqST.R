@@ -4,11 +4,11 @@
 ## ========================================
 
 turb <- function(x) {
-		phi <- x[1] 
+		phi <- x[1]
 		n <- x[2]
 		## sum.tx <- x[3]
 		mean.tx <- x[3]
-		s2.tx <- x[4] 
+		s2.tx <- x[4]
 
 		s2max <- (n-1) * (1-mean.tx)^2
 		
@@ -25,10 +25,10 @@ realvar <- function(x) {
 	}
 	
 
-seqST <- function(seqdata) {
+seqST <- function(seqdata, norm=FALSE) {
 
 	if (!inherits(seqdata,"stslist"))
-		stop("data is NOT a sequence object, see 'seqdef' function to create one")
+		stop("seqdata is NOT a sequence object, see 'seqdef' function to create one")
 
 	nr <- attr(seqdata,"nr")
 	with.missing=FALSE
@@ -53,6 +53,26 @@ seqST <- function(seqdata) {
 	Tx <- apply(tmp, 1, turb)
 	Tx <- as.matrix(Tx)
 
+    if(norm){
+        alph <- alphabet(seqdata)
+
+        maxlength <- max(seqlength(seqdata))
+        nrep <- ceiling(maxlength/length(alph))
+
+        turb.seq <- seqdef(t(rep(alph,nrep)[1:maxlength]))
+        turb.states <- seqdss(turb.seq)
+        turb.dur <- seqdur(turb.seq)
+        turb.phi <- suppressMessages(seqsubsn(seqdss(turb.seq), DSS=FALSE))
+        turb.s2 <- apply(turb.dur, 1, realvar)
+        turb.mean <- rowMeans(turb.dur, na.rm=TRUE)
+
+        tmp <- data.frame(turb.phi, maxlength, turb.mean, turb.s2)
+
+        maxT <- apply(tmp, 1, turb)
+
+        Tx <- (Tx-1)/as.numeric(maxT-1)
+    }
+
 	rownames(Tx) <- rownames(seqdata)
 	colnames(Tx) <- "Turbulence"
 
@@ -60,5 +80,3 @@ seqST <- function(seqdata) {
 }
 
 	
-
- 

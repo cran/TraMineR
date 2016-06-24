@@ -55,13 +55,13 @@ If \code{data} is a sequence object, format is automatically set to \code{"STS"}
 
 
 	\item{begin}{When converting from \code{SPELL}, the column with
-the beginning position of the spell}
+the beginning position of the spell. (Positions must be integer values!)}
 
 	\item{end}{When converting from \code{SPELL}, the column with the
-end position of the spell}
+end position of the spell. (Positions must be integer values!)}
 
 	\item{status}{When converting from \code{SPELL}, the column with
-the status}
+the status.}
 
 	\item{process}{Logical: When converting from
 \code{SPELL}, should sequences be created on a process time axis? Default is \code{TRUE}. Set as
@@ -115,14 +115,25 @@ head(actcal.SPS.A)
 
 ## SPS (compressed) format with no prefix/suffix "/" as state/duration separator
 actcal.SPS.B <- seqformat(actcal,13:24,
-	from="STS", to="SPS", compressed=TRUE,
-	SPS.out=list(xfix="", sdsep="/"))
+    from="STS", to="SPS", compressed=TRUE,
+    SPS.out=list(xfix="", sdsep="/"))
 head(actcal.SPS.B)
 
 ## Converting sequences into DSS (compressed) format
 actcal.DSS <- seqformat(actcal,13:24,
-	from="STS", to="DSS", compressed=TRUE)
+    from="STS", to="DSS", compressed=TRUE)
 head(actcal.DSS)
+
+## Converting from SPELL to STS format
+##  bfspell20 contains the first 20 biofam sequences in SPELL format
+##  bfpdata20 ids and year when aged 15 of the considered cases
+data(bfspell) ## includes bfspell20 and bfpdata20
+bf.sts <- seqformat(bfspell20, from="SPELL", to="STS", process=TRUE,
+    id='id', begin='begin', end='end', status='states', pdata=bfpdata20,
+    pvar=c('id','when15'), limit=16)
+names(bf.sts) <- paste0('a',15:30)
+head(bf.sts)
+
 }
 
 

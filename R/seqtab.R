@@ -7,7 +7,7 @@ seqtab <- function(seqdata, tlim=1:10, weighted=TRUE, format="SPS") {
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use seqdef function to create one")
 
-	## Eliminating empty sequences 
+	## Eliminating empty sequences
 	seqdata <- seqdata[rowSums(seqdata!=attr(seqdata,"nr"))!=0,]
 
 	## Weights
@@ -16,22 +16,22 @@ seqtab <- function(seqdata, tlim=1:10, weighted=TRUE, format="SPS") {
 	if (!weighted || is.null(weights)) {
 		weights <- rep(1.0, nrow(seqdata))
 	}
-	## Also takes into account that in unweighted sequence objects created with 
+	## Also takes into account that in unweighted sequence objects created with
 	## older TraMineR versions the weights attribute is a vector of 1
-	## instead of NULL  
-	if (all(weights==1)) 
+	## instead of NULL
+	if (all(weights==1))
 		weighted <- FALSE
 
-	if (seqfcheck(seqdata)=="-X") 
+	if (seqfcheck(seqdata)=="-X")
 		warning("'-' character in states codes may cause invalid results")
 
 	if (format=="SPS") {
-		seqlist <- suppressMessages(seqformat(seqdata, from='STS', to='SPS', 
+		seqlist <- suppressMessages(seqformat(seqdata, from='STS', to='SPS',
 			SPS.out=list(xfix="", sdsep="/"), compressed=TRUE))
 	}
 	else if (format=="STS")
 		seqlist <- seqconc(seqdata)
-	else 
+	else
 		stop("Format must be one of: STS or SPS")
 
 	Freq <- tapply(weights, seqlist, sum)
@@ -44,8 +44,12 @@ seqtab <- function(seqdata, tlim=1:10, weighted=TRUE, format="SPS") {
 		tlim <- 1:nbuseq
 	}	
 
-	res <- seqdata[match(rownames(Freq), seqlist)[tlim],]
-
+	##if (nbuseq >1){
+        res <- seqdata[match(names(Freq), seqlist)[tlim],]
+    ##}
+    ##else {
+    ##    res <- names(Freq)
+    ##}
 	table <- data.frame(Freq, Percent)[tlim,]
 	
 	## ==================================
@@ -64,4 +68,4 @@ seqtab <- function(seqdata, tlim=1:10, weighted=TRUE, format="SPS") {
 
 	return(res)
 }
-	 
+	

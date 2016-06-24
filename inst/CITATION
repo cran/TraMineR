@@ -18,7 +18,7 @@ citEntry(entry = "Article",
   url          = "http://www.jstatsoft.org/v40/i04/",
 
   textVersion  =
-  paste("Gabadinho, A., Ritschard, G., M\u00FCller, N. S., Studer, M. (2011).",
+  paste("Gabadinho, A., Ritschard, G., M\u00FCller, N. S., & Studer, M. (2011).",
         "Analyzing and Visualizing State Sequences in R with TraMineR.",
         "Journal of Statistical Software, 40(4), 1-37.",
         "URL http://www.jstatsoft.org/v40/i04/."),
@@ -29,10 +29,13 @@ citEntry(entry="Article",
     author = personList(p3, p2),
     title = "What matters in differences between life trajectories: a comparative review of sequence dissimilarity measures",
     journal = "Journal of the Royal Statistical Society, Series A",
-    year    = "2015",
+    year    = "2016",
+  volume       = "179",
+  number       = "2",
+  pages        = "481--511",
     doi = "10.1111/rssa.12125",
 
-    textVersion="Studer, M. & Ritschard, G. (2015), What matters in differences between life trajectories: A comparative review of sequence dissimilarity measures, Journal of the Royal Statistical Society, Series A. DOI http://dx.doi.org/10.1111/rssa.12125",
+    textVersion="Studer, M. & Ritschard, G. (2016). What matters in differences between life trajectories: A comparative review of sequence dissimilarity measures, Journal of the Royal Statistical Society, Series A, 179(2), 481-511. DOI http://dx.doi.org/10.1111/rssa.12125",
     header="For dissimilarity measures:\n"
 )
 

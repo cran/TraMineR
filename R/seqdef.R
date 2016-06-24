@@ -2,8 +2,8 @@
 ## Defining a set of sequences as an object
 ## ========================================
 
-seqdef <- function(data, var=NULL, informat="STS", stsep=NULL, 
-	alphabet=NULL, states=NULL, id=NULL, weights=NULL, start=1, 
+seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
+	alphabet=NULL, states=NULL, id=NULL, weights=NULL, start=1,
 	left=NA, right="DEL", gaps=NA, missing=NA, void="%", nr="*",
 	cnames=NULL, xtstep=1, cpal=NULL, missing.color="darkgrey", labels=NULL, ...) {
 
@@ -22,7 +22,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		if (is.null(stsep)) {
 			sf <- seqfcheck(seqdata)
 			if (sf %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=sf)
-			else if (sf=="-X") 
+			else if (sf=="-X")
 				message(" [!] found '-' character in states codes, not recommended")
 		}
 		else {
@@ -36,7 +36,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 
 	## If states are made of logical values
 	if (any(is.logical(seqdata))) {
-		for (i in 1:ncol(seqdata)) 
+		for (i in 1:ncol(seqdata))
 			seqdata[,i] <- as.character(seqdata[,i])
 	}
 
@@ -72,7 +72,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	}
 
 	if ((is.na(missing) && any(is.na(seqdata))) || ((!is.na(missing)) && any(seqdata==missing, na.rm=TRUE))) {
-		message(" [>] found missing values ('",missing,"') in sequence data") 
+		message(" [>] found missing values ('",missing,"') in sequence data")
 		seqdata <- seqprep(seqdata, left=left, gaps=gaps, right=right, missing=missing, void=void, nr=nr)
 	}
 
@@ -124,14 +124,17 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	attr(seqdata,"alphabet") <- A
 	nbstates <- length(A)
 
-	if (nbstates==1) 
-		stop("\n [!] alphabet contains only one state", call.=FALSE)
-	else if (nbstates>12 && missing(cpal)) 
-		warning(" [!] no automatic color palete attributed, number of states>12. \n     Use 'cpal' argument to define one.", call.=FALSE)
+	##if (nbstates==1)
+		## stop("\n [!] alphabet contains only one state", call.=FALSE)
+		## warning("\n [!] alphabet contains only one state", call.=FALSE)
+	##else
+    if (nbstates>12 && missing(cpal))
+		warning(" [!] No color palette automatically assigned because number of states > 12.
+               \n     Use 'cpal' argument to assign one.", call.=FALSE)
 
 	## Converting each column to a factor
 	for (i in 1:ncol(seqdata)) {
-		seqdata[,i] <- factor(seqdata[,i], 
+		seqdata[,i] <- factor(seqdata[,i],
 			## levels=c(plevels,nr,void),
 			## labels=c(A,nr,void))
 			levels=c(A,nr,void))
@@ -142,7 +145,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		if (length(labels) != nbstates) {
 			stop("\n [!] number of labels must equal number of states in the alphabet", call.=FALSE)
 		}
-	} else 
+	} else
 		labels <- A
 	
 	attr(seqdata,"labels") <- labels
@@ -183,20 +186,20 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	## COLOR PALETTE ATTRIBUTE
 	## =======================
 	if (is.null(cpal)) {
-		if (nbstates==2) 
-			attr(seqdata,"cpal") <- brewer.pal(3,"Accent")[1:2]
-		else if (nbstates<=8) 
+		if (nbstates<=2)
+			attr(seqdata,"cpal") <- brewer.pal(3,"Accent")[1:nbstates]
+		else if (nbstates<=8)
 			attr(seqdata,"cpal") <- brewer.pal(nbstates,"Accent")
-		else if (nbstates>8 & nbstates<=12) 
+		else if (nbstates>8 & nbstates<=12)
 			attr(seqdata,"cpal") <- brewer.pal(nbstates,"Set3")
 		else if (nbstates>12)
 			message(" [>] no color palette attributed, provide one to use graphical functions")
 	}
 	else {
 		## Controling if number of colors = number of states
-		if (length(cpal)!=nbstates) 
+		if (length(cpal)!=nbstates)
 			stop("\n [!] number of colors in 'cpal' must equal length of alphabet", call.=FALSE)
-		else 
+		else
 			attr(seqdata,"cpal") <- cpal
 	}
 
@@ -218,9 +221,9 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		colnames(seqdata) <- cnames
 	}
 	else {
-		if (is.null(cntmp)) 
+		if (is.null(cntmp))
 			colnames(seqdata) <- paste("T",start:(max(seql)+start-1),sep="")
-		else if (all(is.na(cntmp)!=TRUE)) 
+		else if (all(is.na(cntmp)!=TRUE))
 			colnames(seqdata) <- cntmp
 		else colnames(seqdata) <- paste("T",start:(max(seql)+start-1),sep="")
 	}
@@ -228,10 +231,10 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	attr(seqdata,"xtstep") <- xtstep
 
 	if (!is.null(id)) {
-		if (length(id)==1 && id=="auto") { 
-			rownames(seqdata) <- paste("[",1:nbseq,"]",sep="") } 
-		else { 
-			rownames(seqdata) <- id 
+		if (length(id)==1 && id=="auto") {
+			rownames(seqdata) <- paste("[",1:nbseq,"]",sep="") }
+		else {
+			rownames(seqdata) <- id
 		}
 		if (!is.null(weights)) { names(weights) <- rownames(seqdata) }
 	}
@@ -245,6 +248,3 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	## ======================
 	return(seqdata)
 }
-
-
-

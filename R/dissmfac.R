@@ -19,7 +19,6 @@ dissmfac <- function(formula, data, R=1000, gower=FALSE,
 		if(permutation!="dissmatrix") {
 			warning("dissmfac permutation method is now always set to dissmatrix.")
 		}
-		warning("dissmfac function is deprecated. It internaly use dissmfacw with different default values and was keeped for backward compatibility.")
+		warning("dissmfac function is deprecated. It internaly uses dissmfacw with different default values and was kept for backward compatibility.")
 		return(dissmfacw(formula=formula, data=data, R=R, gower=gower, squared=squared))
 }
-

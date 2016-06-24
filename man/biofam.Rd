@@ -2,6 +2,7 @@
 \name{biofam}
 \docType{data}
 \alias{biofam}
+
 \title{Example data set: Family life states from the Swiss Household Panel biographical survey}
 
 \description{2000 16 year-long family life sequences built from the retrospective biographical survey carried out by the Swiss Household Panel (SHP) in 2002.}
@@ -42,8 +43,14 @@ Two additional weights variables are inserted for illustrative purpose ONLY (sin
 \code{wp00tbgp} \tab (weights inflating to the Swiss population)\cr
 \code{wp00tbgs} \tab (weights respecting sample size) \cr
 }
+
+
+
 }
-\usage{data(biofam)}
+\usage{data(biofam)
+
+data(bfspell)
+}
 \format{A data frame with 2000 rows, 16 state variables, 1 id variable and 7 covariates and 2 weights variables.}
 \source{Swiss Household Panel \url{www.swisspanel.ch}}
 \references{
