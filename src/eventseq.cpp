@@ -230,7 +230,7 @@ int Sequence::count(Sequence * s, const double &maxGap,
 	  } else {
 	  stopWin = ageMaxEnd;
 	}
-	lWin = round(stopWin-startWin-windowSize+1);
+	lWin = fround(stopWin-startWin-windowSize+1,0);
 	double *tWin = new double[lWin];
 	TMRLOG(3,"Windows: \n");
 	for (int i=0;i<lWin;i++)

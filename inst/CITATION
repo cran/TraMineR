@@ -75,7 +75,7 @@ citEntry(entry="incollection",
   year = "2013",
   editor = "R. L\u00E9vy and  E. Widmer",
   pages = "287-312",
-  textVersion="Gabadinho, A. & Ritschard, G. (2013), Searching for typical life trajectories applied to child birth histories, In R. L\u00E9vy & E. widmer (eds.), Gendered life courses.  pp. 287-312. Vienna: LIT",
+  textVersion="Gabadinho, A. & Ritschard, G. (2013), Searching for typical life trajectories applied to child birth histories, In R. L\u00E9vy & E. Widmer (eds.), Gendered life courses.  pp. 287-312. Vienna: LIT",
   header="For representative sequences:"
 )
 citEntry(entry="article",
