@@ -1,14 +1,14 @@
-is.subseqelist<-function(s){
-#   return(.Call("istmrsequence",s, PACKAGE="TraMineR"))
-	return(inherits(s, "subseqelist"))
+is.subseqelist<-function(eseq){
+#   return(.Call(C_istmrsequence,eseq))
+	return(inherits(eseq, "subseqelist"))
 }
 
-createsubseqelist<-function(seqe, constraint, subseq, data, type="frequent"){
-	if(!is.seqelist(seqe)) {
-		stop(" [!] seqe should be a seqelist")
+createsubseqelist<-function(eseq, constraint, subseq, data, type="frequent"){
+	if(!is.seqelist(eseq)) {
+		stop(" [!] eseq should be a seqelist")
 	}
 	ret <- list()
-	ret$seqe <- seqe
+	ret$eseq <- eseq
 	ret$constraint <- constraint
 	ret$subseq <- subseq
 	ret$data <- as.data.frame(data, optional=TRUE)
@@ -21,7 +21,7 @@ createsubseqelist<-function(seqe, constraint, subseq, data, type="frequent"){
 print.subseqelist<-function(x,...){
 	z <- data.frame(data.frame(Subsequence=as.character(x$subseq), check.names=FALSE), x$data, row.names=NULL, check.names=FALSE)
 	print(z, ...)
-	cat("\nComputed on", length(x$seqe), "event sequences\n")
+	cat("\nComputed on", length(x$eseq), "event sequences\n")
 	print(x$constraint,...)
 }
 
@@ -29,7 +29,7 @@ print.subseqelist<-function(x,...){
     # If only 1 subscript is given, the result will still be a Surv object
     #  If the second is given extract the relevant columns as a matrix
 	if (missing(j)) {
-		ret <- createsubseqelist(x$seqe, x$constraint, x$subseq[i,drop=drop], data=x$data[i,], type=x$type)
+		ret <- createsubseqelist(x$eseq, x$constraint, x$subseq[i,drop=drop], data=x$data[i,], type=x$type)
 		if(!is.null(x$labels)) {
 			ret$labels<-x$labels
 		}

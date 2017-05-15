@@ -2,11 +2,13 @@
 ## Representative sequence of a set of sequences
 ## =============================================
 
-seqrep <- function(seqdata, criterion="density", score=NULL, decreasing=TRUE, 
-	trep=0.25, nrep=NULL, tsim=0.10, 
-	dmax=NULL, dist.matrix=NULL, weighted=TRUE, ...) {
+seqrep <- function(seqdata, criterion = "density", score = NULL,
+  decreasing = TRUE, coverage = 0.25, nrep = NULL, pradius = 0.10, dmax = NULL,
+  diss = NULL, weighted = TRUE, trep, tsim, dist.matrix, ...) {
 
-	if (!inherits(seqdata,"stslist")) 
+  checkargs(alist(coverage = trep, pradius = tsim, diss = dist.matrix))
+
+	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, see seqdef function to create one", call.=FALSE)
 
 	slength <- ncol(seqdata)
@@ -18,8 +20,8 @@ seqrep <- function(seqdata, criterion="density", score=NULL, decreasing=TRUE,
 	if (all(weights==1)) { weighted <- FALSE }
 
 	## Distance matrix
-	if (missing(dist.matrix) || is.null(dist.matrix))
-		dist.matrix <- seqdist(seqdata, ...)
+	if (missing(diss) || is.null(diss))
+		diss <- seqdist(seqdata, ...)
 
 
 	if (is.null(score)) {
@@ -34,7 +36,7 @@ seqrep <- function(seqdata, criterion="density", score=NULL, decreasing=TRUE,
 
 			score <- apply(seqdata,1, TraMineR.mscore, slength, statelist, freq)
 			decreasing <- TRUE
-		} 
+		}
 		## ===============
 		## Max probability
 		## ===============
@@ -46,9 +48,9 @@ seqrep <- function(seqdata, criterion="density", score=NULL, decreasing=TRUE,
 	}
 
 	## Getting the representatives
-	rep <- dissrep(dist.matrix, criterion=criterion, score=score, 
-		decreasing=decreasing, trep=trep, nrep=nrep, tsim=tsim, dmax=dmax, weights=weights)
-	
+	rep <- dissrep(diss, criterion=criterion, score=score,
+		decreasing=decreasing, coverage=coverage, nrep=nrep, pradius=pradius, dmax=dmax, weights=weights)
+
 	## Occurence of the representative sequence
 	nds <- nrow(unique(seqdata))
 	message(" [>] ", nds, " distinct sequence(s)")
@@ -67,9 +69,9 @@ seqrep <- function(seqdata, criterion="density", score=NULL, decreasing=TRUE,
 	attr(res, "Scores") <- attr(rep,"Scores")
 	attr(res, "Distances") <- attr(rep,"Distances")
 	attr(res, "Statistics") <- attr(rep,"Statistics")
-	attr(res, "Quality") <- attr(rep,"Quality") 
+	attr(res, "Quality") <- attr(rep,"Quality")
 	attr(res, "weighted") <- weighted
 
 	return(res)
-}	
-	
+}
+

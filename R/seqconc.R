@@ -3,15 +3,15 @@
 ## into character strings
 ## ========================================
 
-sconc <- function(seq, sep, void) {
+sconc <- function(seqdata, sep, void) {
 
-	if (is.na(void)) 
-		vi <- !is.na(seq)
+	if (is.na(void))
+		vi <- !is.na(seqdata)
 	else if (!is.null(void))
-		vi <- seq!=void
-	else vi <- 1:length(seq)
+		vi <- seqdata!=void
+	else vi <- 1:length(seqdata)
 
-	return(paste(seq[vi], collapse=sep))
+	return(paste(seqdata[vi], collapse=sep))
 	}
 
 seqconc <- function (data, var=NULL, sep="-", vname="Sequence", void=NA) {
@@ -25,17 +25,17 @@ seqconc <- function (data, var=NULL, sep="-", vname="Sequence", void=NA) {
 	else {
 		seqdata <- seqxtract(data, var)
 
-		if (seqdim(seqdata)[1]==1) 
+		if (seqdim(seqdata)[1]==1)
 			cseq <- sconc(seqdata,sep, void)
-		else 
+		else
 			cseq <- apply(seqdata, 1, sconc, sep, void)
 
 		cseq <- as.matrix(cseq)
 
 		## Rows and column names for the output
 		rownames(cseq) <- paste("[",seq(1:length(cseq)),"]",sep="")
-	}		
-	
+	}
+
 	colnames(cseq) <- vname
 
 	return(cseq)

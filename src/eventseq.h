@@ -11,7 +11,7 @@ extern "C"{
 }
 
 //using namespace std;
-//Déclaration des types (définitions ci-après)
+//DÃ©claration des types (dÃ©finitions ci-aprÃ¨s)
 class SequenceEventNode;
 class Sequence;
 //Global variable, check for correct type

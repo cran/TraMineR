@@ -5,16 +5,17 @@
   Retrieve the unique ids from an event sequence object or from a list of event sequence object.
 }
 \usage{
-seqeid(s)
+seqeid(eseq, s)
 }
 \arguments{
-\item{s}{An event sequence object (as created with \code{\link{seqecreate}}) or a list of event sequence objects}
+  \item{eseq}{An event sequence object (as created with \code{\link{seqecreate}}) or a list of event sequence objects}
+  \item{s}{Deprecated. Use \code{eseq} instead.}
 }
 %\seealso{}
 \examples{
 data(actcal.tse)
-actcal.seqe <- seqecreate(actcal.tse)
-seqeid(actcal.seqe)
+actcal.eseq <- seqecreate(actcal.tse)
+seqeid(actcal.eseq)
 }
 
 \author{Matthias Studer (with Gilbert Ritschard for the help page)}

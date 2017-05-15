@@ -1,41 +1,36 @@
 ## ========================================
-## Get and set length of seqe
+## Get and set length of eseq
 ## ========================================
 
-seqelength<-function(s){
-	seqelength.internal<-function(s){
-		if(is.seqe(s)){
-			return(.Call(TMR_tmrsequencegetlength, s))
+seqelength <- function(eseq, s) {
+
+  checkargs(alist(eseq = s))
+
+	seqelength.internal<-function(eseq){
+		if(is.eseq(eseq)){
+			return(.Call(C_tmrsequencegetlength, eseq))
 		}
 		return(-1)
 	}
-	if(is.seqelist(s)){
-		as.numeric(sapply(unlist(s),seqelength.internal))
-	}else if(is.seqe(s)){
-		as.numeric(seqelength.internal(s))
+	if(is.seqelist(eseq)){
+		as.numeric(sapply(unlist(eseq),seqelength.internal))
+	}else if(is.eseq(eseq)){
+		as.numeric(seqelength.internal(eseq))
 	}else{
-		stop("s should be a seqelist. See help on seqecreate.")
+		stop("eseq should be a seqelist. See help on seqecreate.")
 	}
 }
 
-"seqelength<-" <- function(s, value){
-	if(!is.seqelist(s)) {
-		stop("s should be a seqelist. See help on seqecreate.")
-	}
-	if(length(s)!=length(value)) {
-		stop("s and len should be of the same size.")
-	}
-	.Call(TMR_tmrsequencesetlength, s, as.double(value))
-	return(s)
-}
-seqesetlength<-function(s, len){
-	warning(" [!] This function has been depreaceted, use (seqelength(s) <- len) instead ")
-	if(!is.seqelist(s)) {
-		stop("s should be a seqelist. See help on seqecreate.")
-	}
-	if(length(s)!=length(len)) {
-		stop("s and len should be of the same size.")
-	}
-	return(invisible(.Call(TMR_tmrsequencesetlength, s, as.double(len))))
-}
+"seqelength<-" <- function(eseq, s, value){
 
+  checkargs(alist(eseq = s))
+
+	if(!is.seqelist(eseq)) {
+		stop("eseq should be a seqelist. See help on seqecreate.")
+	}
+	if(length(eseq)!=length(value)) {
+		stop("eseq and len should be of the same size.")
+	}
+	.Call(C_tmrsequencesetlength, eseq, as.double(value))
+	return(eseq)
+}

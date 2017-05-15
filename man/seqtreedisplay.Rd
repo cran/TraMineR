@@ -7,44 +7,67 @@
 Generate a graphical representation of a regression tree of state sequence data.
 }
 \usage{
-seqtreedisplay(tree, filename=NULL, seqdata=tree$info$object,
-               imgLeafOnly=FALSE, sortv=NULL, dist.matrix=NULL,
-               title.cex=3, withlegend="auto", legend.fontsize=title.cex,
-               axes=FALSE, imageformat="png", withquality=TRUE,
-               quality.fontsize=title.cex, legendtext=NULL,
-               showtree=TRUE, showdepth=FALSE, ...)
+seqtreedisplay(tree, filename = NULL, seqdata = tree$info$object,
+  only.leaf = FALSE, sortv = NULL, diss = NULL, cex.main = 3,
+  with.legend = "auto", cex.legend = cex.main, axes = FALSE,
+  image.format = "png", with.quality = TRUE, cex.quality = cex.main,
+  legend.text = NULL, show.tree = TRUE, show.depth = FALSE,
+  imgLeafOnly, dist.matrix, title.cex, withlegend, legend.fontsize,
+  imageformat, withquality, quality.fontsize, legendtext, showtree,
+  showdepth, ...)
 
-disstreedisplay(tree, filename=NULL, imagedata=NULL, imagefunc=plot,
-                imgLeafOnly=FALSE, title.cex=3, imageformat="png",
-                withquality=TRUE, quality.fontsize=title.cex,
-                legendtext=NULL, showtree=TRUE, showdepth=FALSE, ...)
+disstreedisplay(tree, filename = NULL, image.data= NULL, image.fun = plot,
+  only.leaf = FALSE, cex.main = 3, image.format = "png",
+  with.quality = TRUE, cex.quality = cex.main,
+  legend.text = NULL, show.tree = TRUE, show.depth = FALSE,
+  imagedata, imagefunc, imgLeafOnly, title.cex, imageformat,
+  withquality, quality.fontsize, legendtext, showtree, showdepth, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{tree}{A \code{seqtree} object (as produced by \code{\link{seqtree}}) for \code{seqtreedisplay}. A \code{disstree} object (as produced by \code{\link{disstree}}) for \code{disstreedisplay}.}
   \item{filename}{The name of a file where to save the plot (overwritting existing file). If \code{NULL}, a temporary file is created.}
   \item{seqdata}{The sequence object containing the state sequences plotted in the nodes.}
-  \item{imgLeafOnly}{Logical. If \code{TRUE} sequences are plotted only in terminal nodes.}
+  \item{only.leaf}{Logical. If \code{TRUE} sequences are plotted only in terminal nodes.}
   \item{sortv}{Argument passed to \code{\link{seqplot}}}
-  \item{dist.matrix}{Argument passed to \code{\link{seqplot}}}
-  \item{title.cex}{The \code{cex} value for the node titles (see \code{\link{par}}).}
-  \item{withlegend}{Logical. Should the color legend be displayed on the plot?}
-  \item{legend.fontsize}{Font \code{cex} value for the legend.}
+  \item{diss}{Argument passed to \code{\link{seqplot}}}
+  \item{cex.main}{Node title magnification. See \code{\link{par}}.}
+  \item{with.legend}{Logical. Should the color legend be displayed on the plot?}
+  \item{cex.legend}{
+    Legend magnification. See \code{\link{par}}. If not specified, use the
+    value of \code{cex.main}.
+  }
   \item{axes}{Argument passed to \code{\link{seqplot}}}
-  \item{imageformat}{Image format of the output file (\code{filename})}
-  \item{withquality}{If \code{TRUE}, a node displaying fitting measures of the tree is added to the plot.}
-  \item{quality.fontsize}{Numeric. Size of the font of the fitting measures node.}
-  \item{legendtext}{Character. Optional text information that should be added.}
-  \item{showtree}{Logical. Should the tree be shown on the screen?}
-  \item{showdepth}{Logical. If \code{TRUE}, the splits are ordered according to their global pseudo-R2.}
-  \item{imagefunc}{A function to plot the individuals in a node, see details.}
-  \item{imagedata}{a \code{data.frame} that will be passed to \code{imagefunc}.}
+  \item{image.format}{Image format of the output file (\code{filename})}
+  \item{with.quality}{If \code{TRUE}, a node displaying fitting measures of the tree is added to the plot.}
+  \item{cex.quality}{
+    Fitting measure text magnification. See \code{\link{par}}. If not specified,
+    use the value of \code{cex.main}.
+  }
+  \item{legend.text}{Character. Optional text information that should be added.}
+  \item{show.tree}{Logical. Should the tree be shown on the screen?}
+  \item{show.depth}{Logical. If \code{TRUE}, the splits are ordered according to their global pseudo-R2.}
+  \item{image.fun}{A function to plot the individuals in a node, see details.}
+  \item{image.data}{a \code{data.frame} that will be passed to \code{image.fun}.}
+  \item{imgLeafOnly}{Deprecated. Use \code{only.leaf} instead.}
+  \item{dist.matrix}{Deprecated. Use \code{diss} instead.}
+  \item{title.cex}{Deprecated. Use \code{cex.main} instead.}
+  \item{withlegend}{Deprecated. Use \code{with.legend} instead.}
+  \item{legend.fontsize}{Deprecated. Use \code{cex.legend} instead.}
+  \item{imageformat}{Deprecated. Use \code{image.format} instead.}
+  \item{withquality}{Deprecated. Use \code{with.quality} instead.}
+  \item{quality.fontsize}{Deprecated. Use \code{cex.quality} instead.}
+  \item{legendtext}{Deprecated. Use \code{legend.text} instead.}
+  \item{showtree}{Deprecated. Use \code{show.tree} instead.}
+  \item{showdepth}{Deprecated. Use \code{show.depth} instead.}
+  \item{imagedata}{Deprecated. Use \code{image.data} instead.}
+  \item{imagefunc}{Deprecated. Use \code{image.fun} instead.}
   \item{\dots}{additional arguments passed to seqplot}
 }
 \details{
 This function generates a tree image. For each node, it invokes \code{\link{seqplot}} for the selected lines of \code{seqdata} as argument.
 You should at least specify the \code{type} of the plot to use (\code{type="d"} for instance, see \code{\link{seqplot}} for more details).
-	
+
 The plot is actually not generated as an R plot, but with GraphViz (www.graphviz.org). Hence, \code{seqtreedisplay} only works when GraphViz is correctly installed.
 
 Conversion to image formats other than "jpeg" or "png" is done using ImageMagick (www.imagemagick.org). To use this feature,  ImageMagick (www.imagemagick.org) should hence also be installed.

@@ -5,15 +5,16 @@
 This is the plot method for state sequence objects of class \code{stslist} created by the \code{seqdef} function. It produces a sequence index plot.
 }
 \usage{
-\method{plot}{stslist}(x, tlim=NULL, weighted=TRUE, sortv=NULL,
-    cpal=NULL, missing.color=NULL,
-    ylab, yaxis = TRUE, xaxis = TRUE, ytlab = NULL, ylas=0,
-    xtlab = NULL, xtstep = NULL, cex.plot=1, ...)
+\method{plot}{stslist}(x, idxs = NULL, weighted = TRUE, sortv = NULL,
+  cpal = NULL, missing.color = NULL, ylab = NULL,
+  yaxis = TRUE, xaxis = TRUE, ytlab = NULL, ylas = 0,
+  xtlab = NULL, xtstep = NULL, cex.axis = 1,
+  tlim, cex.plot, ...)
 }
 \arguments{
 	\item{x}{A state sequence object created with the \code{\link{seqdef}} function.}
 
-	\item{tlim}{Indexes of the sequences to be plotted (default value is \code{1:10}), for instance \code{20:50} to plot sequences 20 to 50, \code{c(2,8,12,25)} to plot sequences 2,8,12 and 25 in \code{seqdata}. If set to \code{0}, all sequences in \code{seqdata} are plotted.}
+	\item{idxs}{Indexes of the sequences to be plotted (default value is \code{1:10}), for instance \code{20:50} to plot sequences 20 to 50, \code{c(2,8,12,25)} to plot sequences 2,8,12 and 25 in \code{seqdata}. If set to \code{0}, all sequences in \code{seqdata} are plotted.}
 
      \item{weighted}{Logical: Should the bar representing each sequence be proportional to its weight? Ignored when no weights are assigned to sequences (see \code{\link{seqdef}}.)}
 
@@ -29,7 +30,7 @@ This is the plot method for state sequence objects of class \code{stslist} creat
 
 	\item{xaxis}{if \code{TRUE} (default), the x (time) axis is plotted.}
 
-	\item{ytlab}{the labels of the plotted sequences to display on the y axis. Default is the indexes of the sequences as defined by the \code{tlim} argument. Can be set to \code{"id"} for displaying the row names (id) of the sequences instead of their indexes; row names can be assigned to the sequence object with the  \code{id} argument of the \code{\link{seqdef}} function or afterwards with \code{\link{rownames}}. Otherwise \code{ytlab} can be set to a vector of length equal to the number of  sequences to be plotted.}
+	\item{ytlab}{the labels of the plotted sequences to display on the y axis. Default is the indexes of the sequences as defined by the \code{idxs} argument. Can be set to \code{"id"} for displaying the row names (id) of the sequences instead of their indexes; row names can be assigned to the sequence object with the  \code{id} argument of the \code{\link{seqdef}} function or afterwards with \code{\link{rownames}}. Otherwise \code{ytlab} can be set to a vector of length equal to the number of  sequences to be plotted.}
 
   \item{ylas}{sets the orientation of the sequence labels appearing on the y axis. Accepted values are the same as for the \code{las} standard option
   \cr
@@ -46,7 +47,9 @@ This is the plot method for state sequence objects of class \code{stslist} creat
 
   \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with \code{xtstep=3} a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
 
-  \item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names of the axes. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase it.}
+  \item{cex.axis}{Axis annotation magnification. See \code{\link{par}}.}
+  \item{tlim}{Deprecated. Use \code{idxs} instead.}
+  \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
 
  \item{...}{arguments to be passed to the plot function or other graphical parameters.}
 }
@@ -80,7 +83,7 @@ plot(biofam.seq)
 
 ## Plotting the all data set
 ## with no borders
-plot(biofam.seq, tlim=0, space=0, border=NA)
+plot(biofam.seq, idxs=0, space=0, border=NA)
 
 ## =======
 ## Weights

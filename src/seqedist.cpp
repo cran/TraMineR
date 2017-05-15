@@ -80,7 +80,7 @@ extern "C" {
         int maxevent=0, event=0;
         SequenceEventNode * sen=NULL, *sen2=NULL;
 		
-		//Calcul de la taille de la matrice, nb max event est une borne supérieur
+		//Calcul de la taille de la matrice, nb max event est une borne supÃ©rieur
         for (int j=0;j<ns;j++) {
             seq=VECTOR_ELT(seqs,j);
             ASSIGN_TMRSEQ_TYPE(s,seq);

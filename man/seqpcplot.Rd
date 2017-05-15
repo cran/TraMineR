@@ -2,7 +2,7 @@
 \name{seqpcplot}
 \alias{seqpcplot}
 \alias{seqpcfilter}
-\alias{plot.seqe}
+\alias{plot.eseq}
 \alias{plot.seqelist}
 \title{Parallel coordinate plot for sequence data}
 \description{
@@ -11,23 +11,19 @@
   jittered frequency-weighted parallel lines.
   The plot is also embedded as the \code{type="pc"} option of the
   \code{\link{seqplot}} function and serves as plot
-  method for \code{seqe} and \code{seqelist} objects.
+  method for \code{eseq} and \code{seqelist} objects.
 }
 
 
 \usage{
-
-seqpcplot(seqdata, group = NULL, weights = NULL,
-          cex = 1, lwd = 1/4, cpal = NULL, grid.scale = 1/5,
-          ltype = "unique", embedding = "most-frequent",
-          lorder = NULL , lcourse = "upwards",
-          filter = NULL, hide.col = "grey80",
-          alphabet = NULL, missing = "auto", order.align = "first",
-          title = NULL, xlab = NULL, ylab = NULL,
-          xaxis = TRUE, yaxis = TRUE, axes = "all",
-          xtlab = NULL, cex.plot = 1,
-          rows = NA, cols = NA, plot = TRUE,
-          seed = NULL, ...)
+seqpcplot(seqdata, group = NULL, weights = NULL, cex = 1, lwd = 1/4,
+  cpal = NULL, grid.scale = 1/5, ltype = "unique",
+  embedding = "most-frequent", lorder = NULL , lcourse = "upwards",
+  filter = NULL, hide.col = "grey80", alphabet = NULL,
+  missing = "auto", order.align = "first", main = NULL, xlab = NULL,
+  ylab = NULL, xaxis = TRUE, yaxis = TRUE, axes = "all", xtlab = NULL,
+  cex.lab = 1, rows = NA, cols = NA, plot = TRUE, seed = NULL,
+  title, cex.plot, ...)
 
 seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 
@@ -46,7 +42,7 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
   \item{weights}{a numeric vector of weights of length equal the number
   of sequences. Overrides weights in the \code{seqdata} object.}
 
-  \item{cex}{expansion factor for the squared symbols.}
+  \item{cex}{Plotting text and symbols magnification. See \code{\link{par}}.}
 
   \item{lwd}{expansion factor for line widths. The expansion is
     relative to the size of the squared symbols.}
@@ -90,7 +86,7 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
   \code{"last"}. Option \code{"first"} numbers the positions from the beginning
   while \code{"last"} numbers them from the end. With \code{order.align = "time"}, the elements in the sequences are aligned on their rounded timestamps.}
 
-  \item{title}{title for the graphic.}
+  \item{main}{title for the graphic.}
   \item{xlab}{label for the x axis}
   \item{ylab}{label for the y axis}
   \item{xaxis}{logical: Should x-axis be plotted?}
@@ -103,10 +99,7 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 
   \item{xtlab}{labels for the x-axis ticks.}
 
-  \item{cex.plot}{expansion factor for the size of the font for
-    the axis labels and names. The default value is 1. Values lesser
-    than 1 will reduce the size of the font, values greater than 1 will
-    increase the size.}
+  \item{cex.lab}{x and y labels magnification. See \code{\link{par}}.}
 
   \item{rows,cols}{integers to arrange the plot panel design.}
 
@@ -121,7 +114,8 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 
   \item{level}{numeric scalar between 0 and 1. The frequency threshold
     for the filtering methods \code{"minfreq"} and \code{"cumfreq"}.}
-
+  \item{title}{Deprecated. Use \code{main} instead.}
+  \item{cex.plot}{Deprecated. Use \code{cex.lab} instead.}
   \item{...}{arguments to be passed to other methods, such as graphical
     parameters (see \code{\link{par}}).}
 }
@@ -187,7 +181,7 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 \seealso{ \code{\link{seqplot}}, \code{\link{seqdef}}, \code{\link{seqecreate}}}
 
 \references{
-  Bürgin, R. and G. Ritschard (2014), A decorated parallel coordinate plot for categorical longitudinal data, \emph{The American Statistician} 68(2), 98-103.
+  BÃ¼rgin, R. and G. Ritschard (2014), A decorated parallel coordinate plot for categorical longitudinal data, \emph{The American Statistician} 68(2), 98-103.
 }
 
 \examples{
@@ -226,96 +220,84 @@ seqplot(seqdata = biofam.seq, type = "pc", order.align = "first")
 biofam.DSS <- seqdss(seqdata = biofam.seq) # prepare format
 seqpcplot(seqdata = biofam.DSS)
 
-## plot TSE data converted from state sequences
-## ============================================
-
-## conversion
-biofam.TSE <- seqformat(data = biofam.seq, from = "STS", to = "TSE",
-                        tevent = seqetm(biofam.seq, method = "state"))
-biofam.TSE$event <- factor(biofam.TSE$event, levels = lab) # define alphabet
-biofam.TSE$time <- biofam.TSE$time + 15 # correct age
-
-seqpcplot(seqdata = biofam.TSE, order.align = "time")
-
-
 ## plot event sequences
 ## ====================
 
-biofam.seqe <- seqecreate(biofam.seq, tevent = "state") # prepare data
+biofam.eseq <- seqecreate(biofam.seq, tevent = "state") # prepare data
 
 ## plot the time in the x-axis
-seqpcplot(seqdata = biofam.seqe, order.align = "time", alphabet = lab)
+seqpcplot(seqdata = biofam.eseq, order.align = "time", alphabet = lab)
 
 ## ordering of events
-seqpcplot(seqdata = biofam.seqe, order.align = "first", alphabet = lab)
+seqpcplot(seqdata = biofam.eseq, order.align = "first", alphabet = lab)
 
 ## ... or
-plot(biofam.seqe, order.align = "first", alphabet = lab)
+plot(biofam.eseq, order.align = "first", alphabet = lab)
 
 ## additional arguments
 ## ====================
 
 ## non-embeddable sequences
-seqpcplot(seqdata = biofam.seqe, ltype = "non-embeddable",
+seqpcplot(seqdata = biofam.eseq, ltype = "non-embeddable",
           order.align = "first", alphabet = lab)
 
 ## align on last event
 par(mar=c(4,8,2,2))
-seqpcplot(seqdata = biofam.seqe, order.align = "last", alphabet = lab)
+seqpcplot(seqdata = biofam.eseq, order.align = "last", alphabet = lab)
 
 ## use group variables
-seqpcplot(seqdata = biofam.seqe, group = biofam$sex[1:20],
+seqpcplot(seqdata = biofam.eseq, group = biofam$sex[1:20],
           order.align = "first", alphabet = lab)
 
 ## color patterns (Parent)-(Married) and (Parent)-(Left+Marr+Child)
 par(mfrow = c(1, 1))
-seqpcplot(seqdata = biofam.seqe,
+seqpcplot(seqdata = biofam.eseq,
           filter = list(type = "sequence",
                           value=c("(Parent)-(Married)",
                                   "(Parent)-(Left+Marr+Child)")),
           alphabet = lab, order.align = "first")
 
 ## color subsequence pattern (Parent)-(Left)
-seqpcplot(seqdata = biofam.seqe,
+seqpcplot(seqdata = biofam.eseq,
           filter = list(type = "subsequence",
                           value = "(Parent)-(Left)"),
           alphabet = lab, order.align = "first")
 
 ## color sequences over 10% (within group) (function method)
-seqpcplot(seqdata = biofam.seqe,
+seqpcplot(seqdata = biofam.eseq,
           filter = list(type = "function",
                         value = "minfreq",
                         level = 0.1),
           alphabet = lab, order.align = "first", seed = 1)
 
 ## .. same result using the convenience functions
-seqpcplot(seqdata = biofam.seqe,
+seqpcplot(seqdata = biofam.eseq,
           filter = 0.1,
           alphabet = lab, order.align = "first", seed = 1)
 
-seqpcplot(seqdata = biofam.seqe,
+seqpcplot(seqdata = biofam.eseq,
           filter = seqpcfilter("minfreq", 0.1),
           alphabet = lab, order.align = "first", seed = 1)
 
 ## highlight the 50% most frequent sequences
-seqpcplot(seqdata = biofam.seqe,
+seqpcplot(seqdata = biofam.eseq,
           filter = list(type = "function",
                           value = "cumfreq",
                           level = 0.5),
           alphabet = lab, order.align = "first", seed = 2)
 
 ## .. same result using the convenience functions
-seqpcplot(seqdata = biofam.seqe,
+seqpcplot(seqdata = biofam.eseq,
           filter = seqpcfilter("cumfreq", 0.5),
           alphabet = lab, order.align = "first", seed = 2)
 
 ## linear gradient
-seqpcplot(seqdata = biofam.seqe,
+seqpcplot(seqdata = biofam.eseq,
           filter = list(type = "function",
                           value = "linear"),
           alphabet = lab, order.align = "first", seed = 2)
 
-seqpcplot(seqdata = biofam.seqe,
+seqpcplot(seqdata = biofam.eseq,
           filter = seqpcfilter("linear"),
           alphabet = lab, order.align = "first", seed = 1)
 
@@ -323,7 +305,7 @@ seqpcplot(seqdata = biofam.seqe,
 
 }
 
-\author{Reto Bürgin (with Gilbert Ritschard for the help page)}
+\author{Reto BÃ¼rgin (with Gilbert Ritschard for the help page)}
 
 \keyword{Plot}
 \keyword{Event sequences}

@@ -1,107 +1,449 @@
-\encoding{latin1}
+% Author for TraMineR 2: Pierre-Alexandre Fonta (2016-2017)
+
 \name{seqdist}
 \alias{seqdist}
 \title{Distances (dissimilarities) between sequences}
-
 \description{
-Computes pairwise dissimilarities between sequences or
-dissimilarities with a reference sequence. Several dissimilarities measures or metrics are available: optimal matching (OM), distance based on the longest common prefix (LCP), on the longest common suffix (RLCP), on the longest common subsequence (LCS), the Hamming distance (HAM) and the Dynamic Hamming Distance (DHD).
- }
-
+  Computes pairwise dissimilarities between sequences or dissimilarity from
+  a reference sequence. Several dissimilarity measures can be chosen, including
+  optimal matching (OM) and many of its variants, distance based on the count
+  of common attributes, and distances between sequence state distributions.
+}
 \usage{
-seqdist(seqdata, method, refseq=NULL, norm=FALSE,
-     indel=1, sm=NA, with.missing=FALSE, full.matrix=TRUE)
+seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
+  with.missing = FALSE, full.matrix = TRUE, kweights = rep(1.0, ncol(seqdata)),
+  tpow = 1.0, expcost = 0.5, context, link = "mean", h = 0.5, nu,
+  transindel = "constant", otto, previous = FALSE, add.column = TRUE,
+  breaks = NULL, step = 1, overlap = FALSE, weighted = TRUE, prox = NULL)
 }
-
 \arguments{
-  \item{seqdata}{a state sequence object defined with the \code{\link{seqdef}} function.}
+  \item{seqdata}{
+    State Sequence Object.
+    The sequence data to use.
+    It can be created with the \code{\link{seqdef}} function.
+  }
+  \item{method}{
+    String.
+    The dissimilarity measure to use.
+    It could be \code{"OM"}, \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
+    \code{"OMstran"}, \code{"HAM"}, \code{"DHD"}, \code{"CHI2"}, \code{"EUCLID"},
+    \code{"LCS"}, \code{"LCP"}, \code{"RLCP"}, \code{"NMS"}, \code{"NMSMST"},
+    \code{"SVRspell"}, or \code{"TWED"}. See the Details section.
+  }
+  \item{refseq}{
+    \code{NULL}, Integer, or State Sequence Object.
+    Default: \code{NULL}.
+    The baseline sequence to compute the distances from.
 
-  \item{method}{a character string indicating the metric to be used. One of \code{"OM"} (Optimal Matching), \code{"LCP"} (Longest Common Prefix), \code{"RLCP"} (reversed LCP, i.e. Longest Common Suffix), \code{"LCS"} (Longest Common Subsequence), \code{"HAM"} (Hamming distance), \code{"DHD"} (Dynamic Hamming distance).}
+    The most frequent sequence (\code{0}) or a sequence in \code{seqdata} at a
+    specified index (strictly greater than \code{0}) when an integer and
+    \code{method} is one \code{"OM"}, \code{"OMloc"}, \code{"OMslen"},
+    \code{"OMspell"}, \code{"HAM"}, \code{"DHD"}, \code{"LCS"}, \code{"LCP"},
+    \code{"RLCP"}, \code{"NMS"}, \code{"NMSMST"}, \code{"SVRspell"}, or \code{"TWED"}.
 
-  \item{refseq}{Optional baseline sequence to compute the distances from. Can be the index of a sequence in the state sequence object, 0 for the most frequent sequence, or an external sequence passed as a sequence object with 1 row and same alphabet as seqdata assigned to it.}
+    An external sequence when a state sequence object and \code{method} is one
+    of \code{"OM"}, \code{"HAM"}, \code{"DHD"}, \code{"LCS"}, \code{"LCP"}, or
+    \code{"RLCP"}. It must have a single row and the same alphabet as \code{seqdata}.
+  }
+  \item{norm}{
+    String.
+    Default: \code{"none"}.
+    The normalization to use when \code{method} is one of \code{"OM"},
+    \code{"HAM"}, \code{"DHD"}, \code{"CHI2"}, \code{"EUCLID"}, \code{"LCS"},
+    \code{"LCP"}, or \code{"RLCP"}. It could be \code{"none"}, \code{"auto"},
+    or, except for \code{"CHI2"} and \code{"EUCLID"}, \code{"maxlength"},
+    \code{"gmean"}, \code{"maxdist"}, or \code{"YujianBo"}. \code{"auto"} is
+    equivalent to \code{"maxlength"} when \code{method} is one of \code{"OM"},
+    \code{"HAM"}, or \code{"DHD"}, to \code{"gmean"} when \code{method} is one
+    of \code{"LCS"}, \code{"LCP"}, or \code{"RLCP"}, and to a specific
+    normalization for\code{"CHI2"} and \code{"EUCLID"}. See the Details section.
+    % Others: OMloc, OMslen, OMspell, OMstran, NMS, NMSMST, SVRspell, TWED.
+  }
+  \item{indel}{
+    Double or Vector of Doubles.
+    Default: \code{1.0}.
+    Insertion/deletion cost(s).
 
-  \item{norm}{if \code{TRUE}, the computed OM, LCP, RLCP or LCS distances are normalized to account for differences in sequence lengths, and the normalization method is automatically selected.  Default is \code{FALSE}. Can also be one of \code{"none"}, \code{"maxlength"}, \code{"gmean"}, \code{"maxdist"}, \code{"YujianBo"}. See details.}
+    The single state-independent insertion/deletion cost when a double and
+    \code{method} is one of \code{"OM"}, \code{"OMslen"}, \code{"OMspell"},
+    \code{"OMstran"}, or \code{"TWED"}.
 
-  \item{indel}{the insertion/deletion cost (OM method). Default is 1. Ignored with non OM metrics.}
+    The state-dependent insertion/deletion costs when a vector of doubles and
+    \code{method = "OM"} or \code{method = "OMstran"}. It contains an indel cost
+    for each state in the same order as the alphabet.
 
-  \item{sm}{substitution-cost matrix (OM, HAM and DHD method). Can also be one of the \code{\link{seqsubm}} build methods \code{"TRATE"} or \code{"CONSTANT"}. Default is \code{NA}. Ignored with LCP, RLCP and LCS metrics. A valid non NA value must be given for OM.}
+    % Others: OMloc, HAM, DHD, CHI2, EUCLID, LCS, LCP, RLCP, NMS, NMSMST, SVRspell.
+  }
+  \item{sm}{
+    \code{NULL}, Matrix, Array, or String. Substitution costs.
+    Default: \code{NULL}.
 
-  \item{with.missing}{must be set to \code{TRUE} when sequences contain non deleted gaps (missing values). See details.}
+    The substitution-cost matrix when a matrix and \code{method} is one of
+    \code{"OM"}, \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
+    \code{"OMstran"}, \code{"HAM"}, or \code{"TWED"}.
 
-  \item{full.matrix}{If \code{TRUE} (default), the full distance matrix is returned. This is for compatibility with  earlier versions of the \code{seqdist} function. If \code{FALSE}, an object of class \code{\link{dist}} is returned, that is, a vector containing only values from the upper triangle of the distance matrix. Since the distance matrix is symmetrical, no information is lost with this representation while size is divided by 2. Objects of class \code{dist} can be passed directly as arguments to most clustering functions. Ignored when \code{refseq} is set.}
+    The series of the substitution-cost matrices when an array and
+    \code{method = "DHD"}. They are grouped in a 3-dimensional array with the
+    third index referring to the position in the sequence.
+
+    The name of a \code{\link{seqcost}} method when a string and \code{method}
+    is one of \code{"OM"}, \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
+    \code{"OMstran"}, \code{"HAM"}, \code{"DHD"}, or \code{"TWED"}. The method
+    is used to build \code{sm}. It could be \code{"INDELS"} or \code{"INDELSLOG"}
+    for \code{"OM"}, \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
+    \code{"OMstran"}, \code{"HAM"}, and \code{"TWED"}, \code{"CONSTANT"} for
+    \code{"OM"} and \code{"HAM"}, \code{"TRATE"} for \code{"OM"}, \code{"HAM"},
+    and \code{"DHD"}.
+
+    \code{sm} is mandatory when \code{method} is one of \code{"OM"},
+    \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"}, \code{"OMstran"},
+    or \code{"TWED"}.
+
+    \code{sm} is autogenerated when \code{method} is one of \code{"HAM"} or
+    \code{"DHD"} and \code{sm = NULL}. See the Details section.
+
+    Note: With \code{method = "NMS"} or \code{method = "SVRspell"}, see
+    \code{prox} instead.
+
+    % Others: CHI2, EUCLID, LCS, LCP, RLCP, NMS, NMSMST, SVRspell.
+  }
+  \item{with.missing}{
+    Logical.
+    Default: \code{FALSE}.
+    When \code{method} isn't \code{"OMslen"} or \code{"OMstran"}, should the
+    non-deleted gap (missing value) be added to the alphabet as an additional
+    state? If \code{FALSE} and \code{seqdata} or \code{refseq} contains such
+    gaps, an error is raised.
+  }
+  \item{full.matrix}{
+    Logical.
+    Default: \code{TRUE}.
+    When \code{refseq = NULL}, if \code{TRUE}, the full distance matrix is
+    returned, if \code{FALSE}, an object of class \code{\link{dist}} is returned,
+    that is, a vector containing only values from the upper triangle of the
+    distance matrix. Objects of class \code{dist} are smaller and can be passed
+    directly as arguments to most clustering functions.
+  }
+  \item{kweights}{
+    Vector of Doubles.
+    Default: vector of \code{1.0}.
+    The weights applied to subsequences when \code{method} is one of \code{"NMS"},
+    \code{"NMSMST"}, or \code{"SVRspell"}. It contains at position \eqn{k} the
+    weight applied to the subsequences of length \eqn{k}. It must be positive.
+    Its length must be equal to the number of columns of \code{seqdata}.
+  }
+  \item{tpow}{
+    Double.
+    Default: \code{1.0}.
+    The exponential weight of spell length when \code{method} is one of
+    \code{"OMspell"}, \code{"NMSMST"}, or \code{"SVRspell"}.
+  }
+  \item{expcost}{
+    Double.
+    Default: \code{0.5}.
+    The cost of spell length transformation when \code{method = "OMloc"} or
+    \code{method = "OMspell"}. It must be positive. The exact interpretation is
+    distance-dependent.
+  }
+  \item{context}{
+    Double.
+    Default: \code{1-2*expcost}.
+    The cost of local insertion when \code{method = "OMloc"}. It must be positive.
+  }
+  \item{link}{
+    String.
+    Default: \code{"mean"}.
+    The function used to compute substitution costs when \code{method = "OMslen"}.
+    One of \code{"mean"} (arithmetic average) or \code{"gmean"} (geometric mean
+    as in the original proposition of Halpin 2010).
+  }
+  \item{h}{
+    Double.
+    Default: \code{0.5}.
+    It must be greater than or equal to 0.
+
+    The exponential weight of spell length when \code{method = "OMslen"}.
+
+    The gap penalty when \code{method = "TWED"}. It corresponds to the lambda
+    in \cite{Halpin (2014), p 88}.
+  }
+  \item{nu}{
+    Double.
+    Stiffness when \code{method = "TWED"}. It must be strictly greater than 0.
+    See \cite{Halpin (2014), p 88}.
+  }
+  \item{transindel}{
+    String.
+    Default: \code{"constant"}.
+    Method for computing transition indel costs when \code{method = "OMstran"}.
+    One of \code{"constant"} (single indel of 1.0), \code{"subcost"} (based on
+    substitution costs), or \code{"prob"} (based on transition probabilities).
+  }
+  \item{otto}{
+    Double.
+    The origin-transition trade-off weight when \code{method = "OMstran"}. It
+    must be in [0, 1].
+  }
+  \item{previous}{
+    Logical.
+    Default: \code{FALSE}.
+    When \code{method = "OMstran"}, should we also account for the transition
+    from the previous state?
+  }
+  \item{add.column}{
+    Logical.
+    Default: \code{TRUE}.
+    When \code{method = "OMstran"}, should the last column (and also the first
+    column when \code{previous = TRUE}) be duplicated?
+  }
+  \item{breaks}{
+    \code{NULL}, List of pairs Integers.
+    Default: \code{NULL}.
+    The list of the possibly overlapping intervals when \code{method = "CHI2"}
+    or \code{method = "EUCLID"}.
+  }
+  \item{step}{
+    Integer.
+    Default: \code{1}.
+    The length of the intervals when \code{method = "CHI2"} or
+    \code{method = "EUCLID"} and \code{breaks = NULL}. It must be positive.
+    It must also be even when \code{overlap = TRUE}.
+  }
+  \item{overlap}{
+    Logical.
+    Default: \code{FALSE}.
+    When \code{method = "CHI2"} or \code{method = "EUCLID"} and
+    \code{breaks = NULL}, should the intervals overlap?
+  }
+  \item{weighted}{
+    Logical.
+    Default: \code{TRUE}.
+    When \code{method} is one of \code{"OMstran"}, \code{"CHI2"}, or
+    \code{"EUCLID"}, should the distributions account for the sequence weights
+    in \code{seqdata}? See \code{\link{seqdef}}.
+  }
+  \item{prox}{
+    \code{NULL} or Matrix.
+    Default: \code{NULL}.
+    The matrix of state proximities when \code{method = "SVRspell"}.
+  }
 }
-
 \details{
-The \code{seqdist} function returns a matrix of distances between sequences or a vector of distances to a reference sequence. The available metrics (see 'method' option) are optimal matching (\code{"OM"}), longest common prefix (\code{"LCP"}), longest common suffix (\code{"RLCP"}), longest common subsequence (\code{"LCS"}), Hamming distance (\code{"HAM"}) and Dynamic Hamming Distance (\code{"DHD"}). The Hamming distance is OM without indels and the
-Dynamic Hamming Distance is HAM with specific substitution costs at each position as proposed by \cite{Lesnard (2006)}. Note that HAM and DHD apply only to sequences of equal length.
+  The \code{seqdist} function returns a matrix of distances between sequences
+  or a vector of distances from the reference sequence when \code{refseq} is set.
+  The available metrics (see \code{method} option) include:
+  \itemize{
+    \item{
+      \emph{Edit distances}: optimal matching (\code{"OM"}), localized OM
+      (\code{"OMloc"}), spell-length-sensitive OM (\code{"OMslen"}), OM of spell
+      sequences (\code{"OMspell"}), OM of transition sequences (\code{"OMstran"}),
+      Hamming (\code{"HAM"}), dynamic Hamming (\code{"DHD"}), and the time warp edit
+      distance (\code{"TWED"}).
+    }
+    \item{
+      \emph{Metrics based on counts of common attributes}: distance based on
+      the longest common subsequence (\code{"LCS"}), on the longest common prefix
+      (\code{"LCP"}), on the longest common suffix (\code{"RLCP"}), on the number
+      of matching subsequences (\code{"NMS"}), on the number of matching
+      subsequences weighted by the minimum shared time (\code{"NMSMST"}) and,
+      the subsequence vectorial representation distance (\code{"SVRspell"}).
+    }
+    \item{
+      \emph{Distances between state distributions}: Euclidean (\code{"EUCLID"}),
+      Chi-squared (\code{"CHI2"}).
+    }
+  }
 
-For OM, HAM and DHD, a user specified substitution cost matrix can be provided with the \code{sm} argument. For DHD, this should be a series of matrices grouped in a 3-dimensional matrix with the third index referring to the position in the sequence. When \code{sm} is not specified, a constant substitution cost of 1 is used with HAM, and \cite{Lesnard (2006)}'s proposal for DHD.
+  See \cite{Studer and Ritschard (2014)} for a description and the comparison
+  of the above dissimilarity measures except \code{"TWED"} for which we refer to
+  \cite{Marteau (2009)} and \cite{Halpin (2014)}.
 
-Distances can optionally be normalized by means of the \code{norm} argument. If set to \code{TRUE}, Elzinga's normalization (similarity divided by geometrical mean of the two sequence lengths) is applied to LCP, RLCP and LCS distances, while Abbott's normalization (distance divided by length of the longer sequence) is used for OM, HAM and DHD. Elzinga's method can be forced with \code{"gmean"} and Abbott's rule with \code{"maxlength"}. With \code{"maxdist"} the distance is normalized by its maximal possible value. For more details, see \cite{Elzinga (2008)} and \cite{Gabadinho et al. (2009)}.
+  Each method can be controlled with the following parameters:
 
-When sequences contain gaps and the \code{gaps=NA} option was passed to \code{\link{seqdef}}, i.e. when there are non deleted missing values, the \code{with.missing} argument should be set to \code{TRUE}. If left to \code{FALSE} the function stops when it encounters a gap. This is to make the user aware that there are gaps in his sequences. If the OM method is selected, \code{seqdist} expects a substitution cost matrix with a row and a column entry for the missing state (symbol defined with the \code{nr} option of \code{\link{seqdef}}). This will be the case for substitution cost matrices returned by \code{\link{seqsubm}}. More details on how to compute distances with sequences containing gaps are given in \cite{Gabadinho et al. (2009)}.
+  \tabular{ll}{
+    method \tab parameters \cr
+    ------------------ \tab ---------------------------------\cr
+    \verb{OM} \tab \verb{sm, indel, norm, refseq} \cr
+    \verb{OMloc} \tab \verb{sm, expcost, context, refseq} \cr
+    \verb{OMslen} \tab \verb{sm, indel, link, h, refseq} \cr
+    \verb{OMspell} \tab \verb{sm, indel, tpow, expcost, refseq} \cr
+    \verb{OMstran} \tab \verb{sm, indel, transindel, otto, previous, add.column, weighted} \cr
+    \verb{HAM, DHD} \tab \verb{sm, norm, refseq}\cr
+    \verb{CHI2, EUCLID} \tab \verb{breaks, step, overlap, weighted, norm}\cr
+    \verb{LCS, LCP, RLCP} \tab \verb{norm, refseq}\cr
+    \verb{NMS} \tab \verb{prox, kweights, refseq}\cr
+    \verb{NMSMST} \tab \verb{kweights, tpow, refseq}\cr
+    \verb{SVRspell} \tab \verb{prox, kweights, tpow, refseq}\cr
+    \verb{TWED} \tab \verb{sm, indel, h, nu, refseq} \cr
+    ------------------ \tab ---------------------------------
+  }
 
+  \code{"LCS"} is \code{"OM"} with a substitution cost of 2 (\code{sm = "CONSTANT",
+  cval = 2}) and an \code{indel} of \code{1.0}. \code{"HAM"} is \code{"OM"} without
+  indels. \code{"DHD"} is \code{"HAM"} with specific substitution costs at each
+  position.
+
+  \code{"HAM"} and \code{"DHD"} apply only to sequences of equal length. Currently,
+  \code{"OM"} works only with sequences of equal lengths.
+
+  When \code{sm = NULL}, the substitution-cost matrix is automatically created
+  for \code{"HAM"} with a single substitution cost of 1 and for \code{"DHD"} with
+  the costs derived from the transition rates at the successive positions.
+
+  Distances can optionally be normalized by means of the \code{norm} argument.
+  If set to \code{"auto"}, Elzinga's normalization (similarity divided by
+  geometrical mean of the two sequence lengths) is applied to \code{"LCS"},
+  \code{"LCP"} and \code{"RLCP"} distances, while Abbott's normalization (distance
+  divided by length of the longer sequence) is used for \code{"OM"}, \code{"HAM"}
+  and \code{"DHD"}. Elzinga's method can be forced with \code{"gmean"} and
+  Abbott's rule with \code{"maxlength"}. With \code{"maxdist"} the distance is
+  normalized by its maximal possible value. For more details, see
+  \cite{Gabadinho et al. (2009, 2011)}. Finally, \code{"YujianBo"} is the
+  normalization proposed by \cite{Yujian and Bo (2007)} that preserves the
+  triangle inequality.
+
+  When sequences contain gaps and the \code{gaps = NA} option was passed to
+  \code{\link{seqdef}} (i.e. when there are non deleted missing values), the
+  \code{with.missing} argument should be set as \code{TRUE}. If left as
+  \code{FALSE} the function stops when it encounters a gap. This is to make the
+  user aware that there are gaps in the sequences. For methods that need an
+  \code{sm} value, \code{seqdist} expects a substitution-cost matrix with a row
+  and a column entry for the missing state (symbol defined with the \code{nr}
+  option of \code{\link{seqdef}}). Substitution-cost matrices returned by
+  \code{\link{seqcost}} (and so \code{\link{seqsubm}}) include these additional
+  entries when the function is called with \code{with.missing = TRUE}. More
+  details on how to compute distances with sequences containing gaps can be
+  found in \cite{Gabadinho et al. (2009)}.
 }
-
 \value{
- When \code{refseq} is specified, a vector with distances between the sequences in the data sequence object and the reference sequence is returned. When \code{refseq} is \code{NULL} (default), the whole matrix of pairwise distances between sequences is returned.
- }
-
-\seealso{
- \code{\link{seqsubm}}, \code{\link{seqdef}}, and for multichannel distances \code{\link{seqdistmc}}.
-
- For more dissimilarity measures, consider the package \emph{seqdist2} (available from R-Forge \url{https://r-forge.r-project.org/R/?group_id=743}) that proposes all the measures addressed in \cite{Studer and Ritschard (2015)}.
-
+  When \code{refseq} is \code{NULL} (default), the whole matrix of pairwise
+  distances between sequences or, if \code{full.matrix = FALSE},
+  the corresponding \code{dist} object of pairwise distances between sequences
+  is returned. Otherwise, a vector with distances between the sequences in the
+  state sequence object and the reference sequence specified with \code{refseq}
+  is returned.
 }
-
 \references{
-Elzinga, Cees H. (2008). Sequence analysis: Metric representations of categorical time
-series. \emph{Technical Report}, Department of Social Science Research Methods, Vrije Universiteit, Amsterdam.
+  Studer, M. and G. Ritschard (2016), "What matters in differences between life
+  trajectories: A comparative review of sequence dissimilarity measures",
+  \emph{Journal of the Royal Statistical Society, Series A}. \bold{179}(2),
+  481-511. DOI: \url{http://dx.doi.org/10.1111/rssa.12125}
 
-Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+  Studer, M. and G. Ritschard (2014). "A Comparative Review of Sequence
+  Dissimilarity Measures". \emph{LIVES Working Papers}, \bold{33}. NCCR LIVES,
+  Switzerland. DOI: \url{http://dx.doi.org/10.12682/lives.2296-1658.2014.33}
 
-Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide. Department of Econometrics and Laboratory of Demography, University of Geneva
+  Gabadinho, A., G. Ritschard, N. S. MÃ¼ller and M. Studer (2011). Analyzing and
+  Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical
+  Software} \bold{40}(4), 1--37.
 
-Lesnard, L. (2006). Optimal Matching and Social Sciences. \emph{Série des Documents de Travail du CREST},  Institut National de la Statistique et des Etudes Economiques, \bold{2006-01}, Paris.
+  Gabadinho, A., G. Ritschard, M. Studer and N. S. MÃ¼ller (2009). Mining
+  Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide
+  Department of Econometrics and Laboratory of Demography, University of Geneva
 
-Studer, M. and G. Ritschard (2015). What matters in differences between life trajectories: A comparative review of sequence dissimilarity measures. \emph{Journal of the Royal Statistical Society A},  (Early view), DOI: 10.1111/rssa.12125.
+  Halpin, B. (2014). Three Narratives of Sequence Analysis, in Blanchard, P.,
+  B?hlmann, F. and Gauthier, J.-A. (Eds.) \emph{Advances in Sequence Analysis:
+  Theory, Method, Applications}, Vol 2 of Series \emph{Life Course Research and
+  Social Policies}, pages 75--103, Heidelberg: Springer. DOI:
+  \url{http://dx.doi.org/10.1007/978-3-319-04969-4_5}
 
+  Marteau, P.-F. (2009). Time Warp Edit Distances with Stiffness Adjustment for
+  Time Series Matching. \emph{IEEE Transactions on Pattern Analysis and Machine
+  Learning Intelligence}, \bold{31}(2), 306--318. DOI:
+  \url{http://dx.doi.org/10.1109/TPAMI.2008.76}
+
+  Yujian, L. and Bo, L. (2007). A normalized Levenshtein distance metric.
+  \emph{IEEE Transactions On Pattern Analysis And Machine Intelligence},
+  \bold{29}(6), 1091--1095. DOI: \url{http://dx.doi.org/10.1109/TPAMI.2007.1078}
+
+  See also all references in \cite{Studer and Ritschard (2014, 2016)}
 }
-
+\author{
+  Matthias Studer, Pierre-Alexandre Fonta, Alexis Gabadinho, Nicolas S. MÃ¼ller,
+  Gilbert Ritschard.
+}
+\seealso{
+  \code{\link{seqcost}}, \code{\link{seqsubm}}, \code{\link{seqdef}}, and for
+  multichannel distances \code{\link{seqdistmc}}.
+}
 \examples{
-## optimal matching distances with substitution cost matrix
-## derived from transition rates
+## ========================
+## Example without missings
+## ========================
+
+## Defining a sequence object with columns 10 to 25 of a
+## subset of the 'biofam' data set
 data(biofam)
-biofam.seq <- seqdef(biofam, 10:25)
-costs <- seqsubm(biofam.seq, method="TRATE")
-biofam.om <- seqdist(biofam.seq, method="OM", indel=3, sm=costs)
+biofam.seq <- seqdef(biofam[501:600, 10:25])
 
-## normalized LCP distances
-biofam.lcp <- seqdist(biofam.seq, method="LCP", norm=TRUE)
+## OM distances with a substitution-cost matrix derived
+## from transition rates
+biofam.om <- seqdist(biofam.seq, method = "OM", indel = 3,
+  sm = "TRATE")
 
-## normalized LCS distances to the most frequent sequence in the data set
-biofam.lcs <- seqdist(biofam.seq, method="LCS", refseq=0, norm=TRUE)
+## OM distances using the vector of estimated indels and
+## substitution costs derived from the estimated indels
+costs <- seqcost(biofam.seq, method = "INDELSLOG")
+biofam.om <- seqdist(biofam.seq, method = "OM",
+  indel = costs$indel, sm = costs$sm)
 
-## histogram of the normalized LCS distances
-hist(biofam.lcs)
+## Normalized LCP distances
+biofam.lcp.n <- seqdist(biofam.seq, method = "LCP",
+  norm = "auto")
 
-## distance to an external sequence
-refs <- seqdef("(0,5)-(3,5)-(4,6)", informat="SPS",
-            alphabet=alphabet(biofam.seq))
-biofam.ref <- seqdist(biofam.seq, method="LCS", refseq=refs)
-hist(biofam.ref)
+## Normalized LCS distances to the most frequent sequence
+biofam.dref1 <- seqdist(biofam.seq, method = "LCS",
+  refseq = 0, norm = "auto")
+
+## LCS distances to an external sequence
+ref <- seqdef("(0,5)-(3,5)-(4,6)", informat = "SPS",
+  alphabet = alphabet(biofam.seq))
+biofam.dref2 <- seqdist(biofam.seq, method = "LCS",
+  refseq = ref)
+
+## Chi-squared distance over the full observed timeframe
+biofam.chi.full <- seqdist(biofam.seq, method = "CHI2",
+  step = max(seqlength(biofam.seq)))
+
+## Chi-squared distance over successive overlaping
+## intervals of length 4
+biofam.chi.ostep <- seqdist(biofam.seq, method = "CHI2",
+  step = 4, overlap = TRUE)
+
 
 ## =====================
 ## Example with missings
 ## =====================
 data(ex1)
-ex1.seq <- seqdef(ex1,1:13)
+ex1.seq <- seqdef(ex1[, 1:13])
 
-subm <- seqsubm(ex1.seq, method="TRATE", with.missing=TRUE)
-ex1.om <- seqdist(ex1.seq, method="OM", sm=subm, with.missing=TRUE)
+## OM with substitution costs based on transition
+## probabilities and indel set as half the maximum
+## substitution cost
+costs.tr <- seqcost(ex1.seq, method = "TRATE",
+  with.missing = TRUE)
+ex1.om <- seqdist(ex1.seq, method = "OM",
+  indel = costs.tr$indel, sm = costs.tr$sm,
+  with.missing = TRUE)
+
+## Localized OM
+ex1.omloc <- seqdist(ex1.seq, method = "OMloc",
+  indel = costs.tr$indel, sm = costs.tr$sm,
+  with.missing = TRUE)
+
+## OM of spells
+ex1.omspell <- seqdist(ex1.seq, method = "OMspell",
+  sm = costs.tr$sm, indel = costs.tr$indel,
+  with.missing = TRUE)
+
+## Distance based on number of matching subsequences
+ex1.nms <- seqdist(ex1.seq, method = "NMS",
+  with.missing = TRUE)
+
+## Using the sequence vetorial representation metric
+costs.fut <- seqcost(ex1.seq, method = "FUTURE", lag = 4,
+  proximities = TRUE, with.missing = TRUE)
+ex1.svr <- seqdist(ex1.seq, method = "SVRspell",
+  prox = costs.fut$prox, with.missing = TRUE)
 }
-
-\author{Matthias Studer, Alexis Gabadinho and Nicolas S. Müller (first version) (with Gilbert Ritschard for the help page)}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{Dissimilarity measures}

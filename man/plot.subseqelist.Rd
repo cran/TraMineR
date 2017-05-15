@@ -11,8 +11,8 @@ Plot frequencies of subsequences.
 \arguments{
   \item{x}{The subsequences to plot (a \code{subseqelist} object}
   \item{freq}{The frequencies to plot, support if \code{NULL}}
-  \item{cex}{Font size. See \code{\link{par}}.}
- %  \item{ylim}{A 2 length vector indicating minimum and maximum y values (by default to c(0,1))}
+  \item{cex}{Plotting text and symbols magnification. See \code{\link{par}}.}
+  % \item{ylim}{A 2 length vector indicating minimum and maximum y values (by default to c(0,1))}
   \item{\dots}{arguments passed to \code{\link{barplot}}}
 }
 %\details{}
@@ -30,10 +30,10 @@ Plot frequencies of subsequences.
 data(actcal.tse)
 
 ## creating sequences
-actcal.seqe <- seqecreate(actcal.tse)
+actcal.eseq <- seqecreate(actcal.tse)
 
 ## Looking for frequent subsequences
-fsubseq <- seqefsub(actcal.seqe,pMinSupport=0.01)
+fsubseq <- seqefsub(actcal.eseq,pmin.support=0.01)
 
 ## Frequence of first ten subsequences
 plot(fsubseq[1:10], cex=2)

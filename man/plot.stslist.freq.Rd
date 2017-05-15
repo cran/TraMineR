@@ -8,8 +8,9 @@ Plot method for output produced by the \code{seqtab} function, i.e objects of cl
 }
 \usage{
 \method{plot}{stslist.freq}(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
-    ylab = NULL, yaxis = TRUE, xaxis = TRUE,
-    xtlab = NULL, xtstep = NULL, cex.plot = 1, ...)
+  ylab = NULL, yaxis = TRUE, xaxis = TRUE,
+  xtlab = NULL, xtstep = NULL, cex.axis = 1,
+  cex.plot, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -31,9 +32,10 @@ Plot method for output produced by the \code{seqtab} function, i.e objects of cl
 
   \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with xtstep=3 a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
 
-  \item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values smaller than 1 will reduce the size of the font, values greater than 1 will increase the size.}
+  \item{cex.axis}{Axis annotation magnification. See \code{\link{par}}.}
 
   \item{\dots}{further graphical parameters. For example \code{border=NA} to remove the bars borders, \code{space=0} to remove space between sequences. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}. }
+  \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
 }
 \details{This is the plot method for the output produced by the \code{\link{seqtab}} function, i.e. objects of class \emph{stslist.freq}. It produces a plot showing the sequences sorted bottom up according to their frequency in the data set.
 
@@ -59,7 +61,7 @@ plot(actcal.freq, main="Sequence frequencies - actcal data set")
 
 ## Plotting all the distinct sequences without borders
 ## and space between sequences
-actcal.freq2 <- seqtab(actcal.seq, tlim=0)
+actcal.freq2 <- seqtab(actcal.seq, idxs=0)
 plot(actcal.freq2, main="Sequence frequencies - actcal data set",
   border=NA, space=0)
 }

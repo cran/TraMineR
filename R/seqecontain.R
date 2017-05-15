@@ -1,10 +1,14 @@
-seqecontain<-function(seq, eventList,exclude=FALSE){
-  if(is.subseqelist(seq))seq <- seq$subseq
-  if(!is.seqelist(seq))stop("seq should be a seqelist. See help on seqecreate.")
-  dict<-levels.seqelist(seq)
+seqecontain <- function(eseq, event.list, unknown.exclude = FALSE, seq,
+  eventList, exclude) {
 
-  elist<-factor(eventList,levels=dict)
-  if(exclude)excl=as.integer(c(1))
+  checkargs(alist(eseq = seq, event.list = eventList, unknown.exclude = exclude))
+
+  if(is.subseqelist(eseq))eseq <- eseq$subseq
+  if(!is.seqelist(eseq))stop("eseq should be a seqelist. See help on seqecreate.")
+  dict<-levels.seqelist(eseq)
+
+  elist<-factor(event.list,levels=dict)
+  if(unknown.exclude)excl=as.integer(c(1))
   else excl=as.integer(c(0))
-  return(.Call(TMR_tmrsequencecontainevent, seq, as.integer(elist), excl))
+  return(.Call(C_tmrsequencecontainevent, eseq, as.integer(elist), excl))
 }

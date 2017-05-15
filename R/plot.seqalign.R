@@ -2,8 +2,11 @@
 ## PLot of STS sequence objects
 ## =============================
 
-plot.seqalign <- function(x,
-	cpal=NULL, missing.color=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, ytlab=NULL, ylas=0, xtlab=NULL, cex.plot=1, ...) {
+plot.seqalign <- function(x, cpal = NULL, missing.color = NULL, ylab = NULL,
+  yaxis = TRUE, xaxis = TRUE, ytlab = NULL, ylas = 0, xtlab = NULL, cex.axis = 1,
+  cex.plot, ...) {
+
+  checkargs(alist(cex.axis = cex.plot))
 
 	showop <- "bars"
 	n <- 2
@@ -26,7 +29,7 @@ plot.seqalign <- function(x,
 
 	cpal <- c(cpal, "white")
 	statl <- c(statl, "-")
-	
+
 
 	## Storing the optional parameters in a list
 	olist <- list(...)
@@ -102,7 +105,7 @@ plot.seqalign <- function(x,
 	if (xaxis) {
 	axis(1, at=1:seql-0.5, labels=1:seql,
 		## mgp=c(3,0.5,0),
-		cex.axis=cex.plot)
+		cex.axis=cex.axis)
 	}
 
 
@@ -110,19 +113,19 @@ plot.seqalign <- function(x,
 	if (is.null(yaxis) || yaxis) {
 		if ("space" %in% names(olist)) sp <- olist[["space"]]
 		else sp <- 0.2
-	
+
 		y.lab.pos <- sp+0.5
 		y.lab.pos <- c(y.lab.pos, 1+(1*sp)+(0.5+sp))
 
 		if (is.null(ytlab)) {ytlab <- paste("seq",2:1, sep="")}
 		## else if (ytlab=="id") {ytlab <- rownames(x)[tlim]}
 
-		axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=ylas, tick=FALSE, cex.axis=cex.plot)
+		axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=ylas, tick=FALSE, cex.axis=cex.axis)
 
 		lab.op.pos <- c(2.7+sp, 3.0+sp, 3.3+sp)
 		axis(2, at=lab.op.pos, mgp=c(1.5,0.5,0), labels=c("IND","SUB","EQU"),
-			las=2, tick=FALSE, cex.axis=cex.plot)
-		
+			las=2, tick=FALSE, cex.axis=cex.axis)
+
 	}
 
 }

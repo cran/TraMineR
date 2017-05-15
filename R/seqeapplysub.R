@@ -14,23 +14,23 @@ seqeapplysub<-function(subseq,method=NULL,
     }
     if (!is.null(method)) {
       if (method=="count") {
-        constraint$countMethod <- 2
+        constraint$count.method <- 2
       } else if (method=="presence") {
-        constraint$countMethod <- 1
+        constraint$count.method <- 1
       } else if(method=="age") {
-        constraint$countMethod <- 6
+        constraint$count.method <- 6
       } else if(method=="COBJ") {
-        constraint$countMethod <- 1
+        constraint$count.method <- 1
       } else if(method=="CDIST_O") {
-        constraint$countMethod <- 2
+        constraint$count.method <- 2
       } else if(method=="CWIN") {
-        constraint$countMethod <- 3
+        constraint$count.method <- 3
       } else if(method=="CMINWIN") {
-        constraint$countMethod <- 4
+        constraint$count.method <- 4
       } else if(method=="CDIST") {
-        constraint$countMethod <- 5
+        constraint$count.method <- 5
       } else if (method%in%1:5) {
-        constraint$countMethod <- method
+        constraint$count.method <- method
       }
     }
     if (!inherits(constraint, "seqeconstraint")) {
@@ -39,27 +39,25 @@ seqeapplysub<-function(subseq,method=NULL,
     }
     if(!rules)
       {
-        return(.Call("tmrmatrixsubseqinseq",
+        return(.Call(C_tmrmatrixsubseqinseq,
                      unlist(list(subseq$subseq)),
-                     unlist(list(subseq$seqe)),
-                     as.double(c(constraint$maxGap)),
-                     as.double(c(constraint$windowSize)),
-                     as.double(c(constraint$ageMin)),
-                     as.double(c(constraint$ageMax)),
-                     as.double(c(constraint$ageMaxEnd)),
-                     as.double(c(constraint$countMethod)),
-                     PACKAGE="TraMineR"))
+                     unlist(list(subseq$eseq)),
+                     as.double(c(constraint$max.gap)),
+                     as.double(c(constraint$window.size)),
+                     as.double(c(constraint$age.min)),
+                     as.double(c(constraint$age.max)),
+                     as.double(c(constraint$age.max.end)),
+                     as.double(c(constraint$count.method))))
       }
     else {
-      return(.Call("tmrmatrixsubseqinseq",
+      return(.Call(C_tmrmatrixsubseqinseq,
                    unlist(list(subseq$subseq)),
                    unlist(list(subseq$subseq)),
-                   as.double(c(constraint$maxGap)),
-                   as.double(c(constraint$windowSize)),
-                   as.double(c(constraint$ageMin)),
-                   as.double(c(constraint$ageMax)),
-                   as.double(c(constraint$ageMaxEnd)),
-                   as.double(c(constraint$countMethod)),
-                   PACKAGE="TraMineR"))
+                   as.double(c(constraint$max.gap)),
+                   as.double(c(constraint$window.size)),
+                   as.double(c(constraint$age.min)),
+                   as.double(c(constraint$age.max)),
+                   as.double(c(constraint$age.max.end)),
+                   as.double(c(constraint$count.method))))
     }
   }

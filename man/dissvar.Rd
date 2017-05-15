@@ -1,6 +1,5 @@
 \name{dissvar}
 \alias{dissvar}
-\encoding{latin1}
 \title{Dissimilarity based discrepancy}
 \description{
   Compute the discrepancy from the pairwise dissimilarities between objects. The discrepancy is a measure of dispersion of the set of objects.
@@ -28,16 +27,16 @@ In the Euclidean case, the sum of squares can be expressed as:
 \value{The discrepancy.}
 
 \references{
-    Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
+    Studer, M., G. Ritschard, A. Gabadinho and N. S. MÃ¼ller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
 
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2010)
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. MÃ¼ller (2010)
   Discrepancy analysis of complex objects using dissimilarities.
   In F. Guillet, G. Ritschard, D. A. Zighed and H. Briand  (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
   Studies in Computational Intelligence, Volume 292, pp. 3-19. Berlin: Springer.
 
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
-  Analyse de dissimilarités par arbre d'induction. In EGC 2009,
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. MÃ¼ller (2009)
+  Analyse de dissimilaritÃ©s par arbre d'induction. In EGC 2009,
   \emph{Revue des Nouvelles Technologies de l'Information}, Vol. E-15, pp. 7-18.
 
   Anderson, M. J. (2001) A new method for non-parametric multivariate analysis of variance.
@@ -54,7 +53,7 @@ In the Euclidean case, the sum of squares can be expressed as:
 \cr
 \code{\link{disscenter}} to compute the distance of each object to its group center from pairwise dissimilarities.
    \cr
-	 \code{\link{dissmfac}} to perform multi-factor analysis of variance from pairwise dissimilarities.
+	 \code{\link{dissmfacw}} to perform multi-factor analysis of variance from pairwise dissimilarities.
 }
 
 \examples{

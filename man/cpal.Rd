@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{cpal}
 \alias{cpal}
 \alias{cpal<-}

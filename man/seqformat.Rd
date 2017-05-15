@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{seqformat}
 \alias{seqformat}
 \title{Conversion between sequence formats}
@@ -93,12 +92,12 @@ the \sQuote{begin} column in the data.}
 \value{A data frame}
 
 \references{
- Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller
+ Gabadinho, A., G. Ritschard, M. Studer and N. S. MÃ¼ller
 (2009). Mining Sequence Data in \code{R} with the \code{TraMineR}
 package: A user's guide. Department of Econometrics and Laboratory of
 Demography, University of Geneva.
 
-Ritschard, G., A. Gabadinho, M. Studer and N. S. Müller. Converting
+Ritschard, G., A. Gabadinho, M. Studer and N. S. MÃ¼ller. Converting
 between various sequence representations. in Ras, Z. & Dardzinska, A.
 (ed.) \emph{Advances in Data Management}, Springer, 2009, 223,
 155-175. }
@@ -137,6 +136,6 @@ head(bf.sts)
 }
 
 
-\author{Alexis Gabadinho, Nicolas S. Müller and Matthias Studer (with Gilbert Ritschard for the help page)}
+\author{Alexis Gabadinho, Nicolas S. MÃ¼ller and Matthias Studer (with Gilbert Ritschard for the help page)}
 
 \keyword{Data handling}

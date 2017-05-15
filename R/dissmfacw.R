@@ -18,15 +18,15 @@ gower_matrix <- function(diss, squared=TRUE, weights=NULL) {
 		weights <- One
 	}
 	s <- weights/sum(weights)
-	
+
 	return((diag(n) - tcrossprod(One,s)) %*%(diss/(-2))%*% (diag(n) - tcrossprod(s,One)))
 	# Creating centered (Gower's) matrix from the distance matrix:
-	
+
 }
 
 dissmfacw <- function(formula, data, R=1000, gower=FALSE,
 					squared=FALSE, weights=NULL) {
-	
+
 		#To ensure dissmatrix can be a dist object as well
 		dissmatrix <- as.matrix(eval(formula[[2]], data, parent.frame()))
 		formula[[2]] <- NULL
@@ -35,7 +35,7 @@ dissmfacw <- function(formula, data, R=1000, gower=FALSE,
 		seqok <- complete.cases(predictor_frame)
 		#To make sure unused levels after removing NA values are actually removed
 		predictor_frame <- model.frame(formula, data[seqok, ], drop.unused.levels = TRUE)
-		
+
 		predictor_terms <- attr(predictor_frame, "terms")
 		var_complete_name <- c(attr(predictor_terms, "term.labels"), "Total")
 		predictor <- model.matrix(formula, predictor_frame)
@@ -44,7 +44,7 @@ dissmfacw <- function(formula, data, R=1000, gower=FALSE,
 		} else {
 			weights <- weights[seqok]
 		}
-		
+
 		dissmatrix <- dissmatrix[seqok, seqok]
 
 		if (!gower) {
@@ -75,7 +75,7 @@ dissmfacw <- function(formula, data, R=1000, gower=FALSE,
 		#Number of variable (minus cte)
 		nterms <- length(var_names) - 1
 		SCtot <- sum(weights * diag(g_matrix))
-		
+
 		p_list <- numeric(nterms)
 		SSbv <- numeric(nterms)
 		#Compute all  "backward" SCexp based on QR decomposition
@@ -106,7 +106,7 @@ dissmfacw <- function(formula, data, R=1000, gower=FALSE,
 				return(c(F_list, R2_list))
 			}
 			for (var in 1:nterms) {
-				pred <- predictor 
+				pred <- predictor
 				pred[, c(var_list_index[var_list==var])] <- perm_predictor[, c(var_list_index[var_list==var])]
 				hwm <- hatw_matrix_qr(pred)
 				SCexp <- sum(hwm * g_matrix)
@@ -118,13 +118,13 @@ dissmfacw <- function(formula, data, R=1000, gower=FALSE,
 			}
 			return(c(F_list, R2_list))
 		}
-		
+
 			#If we permute the models, then hat_matrix is in function...
 			gc()
 			bts <- TraMineR.permutation(predictor, R=R, statistic=internalbootmatrixregression2)
-		
+
 		#Computing Pvalue based on permutations tests
-		
+
 		#Results
 		mfac <- data.frame(Variable=var_complete_name,
 				PseudoF=bts$t0[1:(nterms+1)],
@@ -153,9 +153,3 @@ print.dissmultifactor <- function(x, pvalue.confint=0.95, digits = NULL, ...) {
 	}
 	invisible(x)
 }
-print.dissregression <- function(x, ...) {
-	warning("dissreg function is deprecated. It has been renamed dissmfac.")
-	print(x$mreg)
-	invisible(x)
-}
-

@@ -113,7 +113,7 @@ void SequenceEventNode::sprint(ostringstream &oss, const bool& start, const bool
 			UNPROTECT(1);
         } else {
 			oss << ")-(" << ed.find(this->type)->second;
-			
+
         }
     } else {
 		oss << "," << ed.find(this->type)->second;
@@ -154,19 +154,19 @@ double Sequence::first_occurence(Sequence * s, const double &maxGap, const doubl
 // count the number of subsequences in assigned sequence * s
 
 int Sequence::count(Sequence * s, const double &maxGap,
-		    const double &windowSize, const double &ageMin, 
+		    const double &windowSize, const double &ageMin,
 		    const double &ageMax, const double &ageMaxEnd,
-		    const int &cMethod) 
+		    const int &cMethod)
 {
   if (!this->hasEvent()||!s->hasEvent()) return 0;
- // define SequenceEventNode from first event in entered sequence s 
+ // define SequenceEventNode from first event in entered sequence s
   SequenceEventNode * sen=s->getEvent();
   // define age of first event
   double age = 0;
   int type = 0;
   int c = 0;
   int cs;
-  
+
   switch (cMethod)
     {
     case 1: // COBJ method --------------------------------- //
@@ -179,7 +179,7 @@ int Sequence::count(Sequence * s, const double &maxGap,
 	    age+=sen->getGap();
 	    if (age>ageMax) break; // stop if age is exceeded
 	    if (age>=ageMin && this->event->checkType(sen))  // if event found
-	      { 
+	      {
 		cs = this->event->count(sen,maxGap,windowSize,
 					ageMaxEnd,0,age);
 		if (cs>0) c = 1; // count 1 if subsequence occures in sequence
@@ -198,7 +198,7 @@ int Sequence::count(Sequence * s, const double &maxGap,
 	    age+=sen->getGap();
 	    if (age>ageMax) break; // stop if age is exceeded
 	    if (age>=ageMin && this->event->checkType(sen))  // if event found
-	      { 
+	      {
 		c+=this->event->count(sen,maxGap,windowSize,ageMaxEnd,0,age);
 	      }
 	    sen = sen->getNext();
@@ -209,7 +209,7 @@ int Sequence::count(Sequence * s, const double &maxGap,
       {
 	double startWin, stopWin;
 	int lWin;
-	if (ageMin==-DBL_MAX) 
+	if (ageMin==-DBL_MAX)
 	  {
 	    sen = s->getEvent();
 	    startWin = sen->getGap()-windowSize;
@@ -253,14 +253,14 @@ int Sequence::count(Sequence * s, const double &maxGap,
 	    age+=sen->getGap();
 	    if (age>ageMax) break; // stop if age is exceeded
 	    if (age>=ageMin && this->event->checkType(sen))  // if event found
-	      { 
+	      {
 		c+= this->event->count3(sen,maxGap,windowSize,
 					ageMaxEnd,0,age,Win,tWin,lWin);
 	      }
 	    sen = sen->getNext();
 	  }
 	// Special count mechanism for CWIN method: the number of occurences
-	// are saved in vector WIN. A Win[i]=1 means that there is at 
+	// are saved in vector WIN. A Win[i]=1 means that there is at
 	// least one subsequence within [tWin[i],tWin[i]+windowSpan)
 	c = 0;
 	for (int i=0;i<lWin;i++)
@@ -284,7 +284,7 @@ int Sequence::count(Sequence * s, const double &maxGap,
 	    age+=sen->getGap();
 	    if (age>ageMax) break; // stop if age is exceeded
 	    if (age>=ageMin && this->event->checkType(sen))  // if event found
-	      { 
+	      {
 		TMRLOG(3,"CMinWin %.1f",maxGap);
 		cs=this->event->count4(sen,maxGap,windowSize,
 				       ageMaxEnd,0,age,minWin);
@@ -297,7 +297,7 @@ int Sequence::count(Sequence * s, const double &maxGap,
 		  {
 		    c = 1;
 		    minWinOld = minWin;
-		  } 
+		  }
 	      }
 	    sen = sen->getNext();
 	  }
@@ -333,7 +333,7 @@ int Sequence::count(Sequence * s, const double &maxGap,
 	    age+=sen->getGap();
 	    if (age>ageMax) break; // stop if age is exceeded
 	    if (age>=ageMin && this->event->checkType(sen))  // if event found
-	      { 
+	      {
 		c+=this->event->count5(sen,maxGap,windowSize,ageMaxEnd,0,age,
 				       typeSen,tSen,lSen,flagSen);
 	      }
@@ -344,9 +344,9 @@ int Sequence::count(Sequence * s, const double &maxGap,
 	delete [] flagSen;
       }
       break;
-    case 6: // age of appearance --------------------------- // 
+    case 6: // age of appearance --------------------------- //
       {
-	c+=this->first_occurence(s,maxGap,windowSize, 
+	c+=this->first_occurence(s,maxGap,windowSize,
 				 ageMin,ageMax,ageMaxEnd);
 	sen = NULL;
       }
@@ -361,7 +361,7 @@ int Sequence::count(Sequence * s, const double &maxGap,
 	    age+=sen->getGap();
 	    if (age>ageMax) break; // stop if age is exceeded
 	    if (age>=ageMin && this->event->checkType(sen))  // if event found
-	      { 
+	      {
 		cs = this->event->count(sen,maxGap,windowSize,
 					ageMaxEnd,0,age);
 		if (cs>0) c = 1; // count 1 if subsequence occures in sequence
@@ -412,7 +412,7 @@ int SequenceEventNode::count(SequenceEventNode * s, const double &maxGap, const 
 }
 // --------------------------------------------------------- //
 // Internal method for CWIN counting method
-// Reto Buergin, June 2011
+// Reto Bürgin, June 2011
 // --------------------------------------------------------- //
 
 /**
@@ -421,13 +421,13 @@ int SequenceEventNode::count(SequenceEventNode * s, const double &maxGap, const 
    lWin : Our
  */
 
-int SequenceEventNode::count3(SequenceEventNode *s, 
-			      const double &maxGap, 
-			      const double &windowSize, 
-			      const double &ageMaxEnd, 
-			      const double &gapConsumed, 
+int SequenceEventNode::count3(SequenceEventNode *s,
+			      const double &maxGap,
+			      const double &windowSize,
+			      const double &ageMaxEnd,
+			      const double &gapConsumed,
 			      const double &currentAge,
-			      int *Win, double *tWin, const int &lWin) 
+			      int *Win, double *tWin, const int &lWin)
 {
   int c = 0; // counter
   if (!this->hasNext()) // end of sequence
@@ -444,7 +444,7 @@ int SequenceEventNode::count3(SequenceEventNode *s,
 		  currentAge<=tWin[i]+windowSize &&
 		  Win[i]==0)
 		{
-		  TMRLOG(3,"TRUE\n"); 
+		  TMRLOG(3,"TRUE\n");
 		  Win[i] = 1;
 		} else TMRLOG(3,"FALSE\n");
 	    } else {
@@ -454,7 +454,7 @@ int SequenceEventNode::count3(SequenceEventNode *s,
 		currentAge<=ageMaxEnd &&
 		  Win[i]==0)
 	      {
-		TMRLOG(3,"TRUE\n"); 
+		TMRLOG(3,"TRUE\n");
 		Win[i] = 1;
 	      } else TMRLOG(3,"FALSE\n");
 	  }
@@ -463,20 +463,20 @@ int SequenceEventNode::count3(SequenceEventNode *s,
     }
   SequenceEventNode * sen=s->getNext();
   // if next event in subsequence takes place at the same time
-  if (this->next->gap==0) 
+  if (this->next->gap==0)
     {
-      while (sen!=NULL&&sen->gap==0) 
+      while (sen!=NULL&&sen->gap==0)
 	{
-	  if (this->next->checkType(sen)) 
+	  if (this->next->checkType(sen))
 	    {
-	      c+=this->next->count3(sen,maxGap,windowSize, 
+	      c+=this->next->count3(sen,maxGap,windowSize,
 				    ageMaxEnd,gapConsumed,currentAge,
 				    Win,tWin,lWin);
 	    }
 	  sen=sen->getNext();
 	}
     } else {
-    while (sen!=NULL&&sen->gap==0) 
+    while (sen!=NULL&&sen->gap==0)
       {//Looking for next gap
 	sen=sen->getNext();
 	//Rprintf("Skipping %i\n", sen->type);
@@ -484,13 +484,13 @@ int SequenceEventNode::count3(SequenceEventNode *s,
     if (sen==NULL) return 0; //we didn't match
     double g = 0;
     // if next event in subsequence has a gap to the current
-    while (sen!=NULL) 
+    while (sen!=NULL)
       {
 	g+=sen->gap; // get the gap to the current event
 	// time constraints, we don't need to look deeper
 	if (g>maxGap||(g+gapConsumed)>windowSize) return c;
 	if ((currentAge+g)>ageMaxEnd) return c;
-	if (this->next->checkType(sen)) 
+	if (this->next->checkType(sen))
 	  {
 	    c+=this->next->count3(sen,maxGap,windowSize,ageMaxEnd,
 				  g+gapConsumed,g+currentAge,
@@ -504,21 +504,21 @@ int SequenceEventNode::count3(SequenceEventNode *s,
 
 // --------------------------------------------------------- //
 // Internal method for CMinWin counting method
-// Reto Buergin, June 2011
+// Reto Bürgin, June 2011
 // --------------------------------------------------------- //
 
 /**
    minWin : Out
  */
 
-int SequenceEventNode::count4(SequenceEventNode *s, 
-			      const double &maxGap, 
-			      const double &windowSize, 
-			      const double &ageMaxEnd, 
-			      const double &gapConsumed, 
+int SequenceEventNode::count4(SequenceEventNode *s,
+			      const double &maxGap,
+			      const double &windowSize,
+			      const double &ageMaxEnd,
+			      const double &gapConsumed,
 			      const double &currentAge,
-			      double &minWin) 
-{ 
+			      double &minWin)
+{
   int c = 0; // counter
   if (!this->hasNext())
     {
@@ -526,19 +526,19 @@ int SequenceEventNode::count4(SequenceEventNode *s,
     }
   SequenceEventNode *sen = s->getNext();
   // if next event in subsequence takes place at the same time
-  if (this->next->gap==0) 
+  if (this->next->gap==0)
     {
-      while (sen!=NULL&&sen->gap==0) 
+      while (sen!=NULL&&sen->gap==0)
 	{
 	  if (this->next->checkType(sen))
 	    { // found an event of subsequence in sequence
-	      c+=this->next->count4(sen,maxGap,windowSize, 
+	      c+=this->next->count4(sen,maxGap,windowSize,
 				    ageMaxEnd,gapConsumed,currentAge,minWin);
 	      if (!this->next->hasNext())
 		{ // found the complete subsequence in sequence
 		  if (gapConsumed<minWin)
 		    { // renew minWin if required
-		      if (minWin<DBL_MAX) 
+		      if (minWin<DBL_MAX)
 			{
 			  TMRLOG(3,"Delete current minWin\n");
 			}
@@ -550,14 +550,14 @@ int SequenceEventNode::count4(SequenceEventNode *s,
 	sen=sen->getNext();
 	}
     } else {
-    while (sen!=NULL&&sen->gap==0) 
+    while (sen!=NULL&&sen->gap==0)
       { // looking for next gap
 	sen=sen->getNext();
       }
     if (sen==NULL) return 0; //we didn't match
     double g = 0;
     // if next event in subsequence has a gap to the current
-    while (sen!=NULL) 
+    while (sen!=NULL)
       {
 	g+=sen->gap; // get the gap to the current event
 	// leave if consumed gap larger than current minWin
@@ -565,7 +565,7 @@ int SequenceEventNode::count4(SequenceEventNode *s,
 	// time constraints, we don't need to look deeper
 	if (g>maxGap||(g+gapConsumed)>windowSize) return c;
 	if ((currentAge+g)>ageMaxEnd) return c;
-	if (this->next->checkType(sen)) 
+	if (this->next->checkType(sen))
 	  {  // found an event of subsequence in sequence
 	    c+=this->next->count4(sen, maxGap, windowSize, ageMaxEnd,
 				  g+gapConsumed,g+currentAge,minWin);
@@ -588,7 +588,7 @@ int SequenceEventNode::count4(SequenceEventNode *s,
 
 // --------------------------------------------------------- //
 // Internal method for CDIST counting method
-// Reto Buergin, June 2011
+// Reto Bürgin, June 2011
 // --------------------------------------------------------- //
 
 /**
@@ -597,14 +597,14 @@ int SequenceEventNode::count4(SequenceEventNode *s,
    flagSen : Out
  */
 
-int SequenceEventNode::count5(SequenceEventNode *s, 
-			      const double &maxGap, 
-			      const double &windowSize, 
-			      const double &ageMaxEnd, 
-			      const double &gapConsumed, 
+int SequenceEventNode::count5(SequenceEventNode *s,
+			      const double &maxGap,
+			      const double &windowSize,
+			      const double &ageMaxEnd,
+			      const double &gapConsumed,
 			      const double &currentAge,
 			      const int *typeSen, const double *tSen,
-			      const int &lSen, int *flagSen) 
+			      const int &lSen, int *flagSen)
 {
   int c = 0; // counter
   int ind, indc;
@@ -627,11 +627,11 @@ int SequenceEventNode::count5(SequenceEventNode *s,
     }
   TMRLOG(3,"Flag event (%i,%.1f)\n",typeSen[ind],tSen[ind]);
   flagSen[ind] = 1;
-  if (!this->hasNext()) 
+  if (!this->hasNext())
     {
       for (int i=0;i<lSen;i++)
 	{
-	  if (flagSen[i]==1) 
+	  if (flagSen[i]==1)
 	    {
 	      flagSen[i] = 2;
 	      TMRLOG(3,"Flag event (%i,%.1f) definitly\n",
@@ -643,11 +643,11 @@ int SequenceEventNode::count5(SequenceEventNode *s,
     }
   SequenceEventNode * sen=s->getNext();
   // if next event in subsequence takes place at the same time
-  if (this->next->gap==0) 
+  if (this->next->gap==0)
     {
-      while (sen!=NULL&&sen->gap==0) 
+      while (sen!=NULL&&sen->gap==0)
 	{
-	  if (this->next->checkType(sen)) 
+	  if (this->next->checkType(sen))
 	    {
 	      TMRLOG(3,"Found an event within sequence\n");
  	      ind = 0;
@@ -663,7 +663,7 @@ int SequenceEventNode::count5(SequenceEventNode *s,
 		}
 	      if (flagSen[ind]==0)
 		{
-		  c+=this->next->count5(sen,maxGap,windowSize, 
+		  c+=this->next->count5(sen,maxGap,windowSize,
 					ageMaxEnd,gapConsumed,currentAge,
 					typeSen,tSen,lSen,flagSen);
 		  if (flagSen[ind]==2)
@@ -679,7 +679,7 @@ int SequenceEventNode::count5(SequenceEventNode *s,
 	  sen=sen->getNext();
 	}
     } else { // skipping to next event in sequence with time gap
-    while (sen!=NULL&&sen->gap==0) 
+    while (sen!=NULL&&sen->gap==0)
       { //Looking for next gap
 	sen=sen->getNext();
 	//Rprintf("Skipping %i\n", sen->type);
@@ -694,7 +694,7 @@ int SequenceEventNode::count5(SequenceEventNode *s,
       }
     double g = 0;
     // if next event in subsequence has a gap to the current
-    while (sen!=NULL) 
+    while (sen!=NULL)
       {
 	g+=sen->gap; // get the gap to the current event
 	// time constraints, we don't need to look deeper
@@ -707,7 +707,7 @@ int SequenceEventNode::count5(SequenceEventNode *s,
 	      }
 	    return c;
 	  }
-	if (this->next->checkType(sen)) 
+	if (this->next->checkType(sen))
 	  {
 	    TMRLOG(3,"Found an event within sequence\n");
 	    ind = 0;

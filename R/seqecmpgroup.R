@@ -18,12 +18,12 @@
 seqecmpgroup <- function(subseq, group, method="chisq", pvalue.limit=NULL, weighted=TRUE){
 	## If non weighted, we just change the weights to 1
 	if(!weighted) {
-		www <- seqeweight(subseq$seqe)
-		totseq <- length(subseq$seqe)
+		www <- seqeweight(subseq$eseq)
+		totseq <- length(subseq$eseq)
 		ww <- as.double(rep(1, totseq))
-		seqeweight(subseq$seqe) <- ww
+		seqeweight(subseq$eseq) <- ww
 	} else {
-		ww <- seqeweight(subseq$seqe)
+		ww <- seqeweight(subseq$eseq)
 		totseq <- sum(ww)
 	}
 	seqecmpgroup.chisq <- function(index, group, seqmatrix, bonferroni, ntest){
@@ -46,7 +46,7 @@ seqecmpgroup <- function(subseq, group, method="chisq", pvalue.limit=NULL, weigh
 			names(freq) <- paste("Freq", levels(group), sep=".")
 			resid <- numeric(length(levels(group)))
 			names(resid) <- paste("Resid", levels(group), sep=".")
-			
+
 			freq[] <- sp/length(group)
 			return(data.frame(p.value=1.0, statistic=0, index=index,
 				as.list(freq), as.list(resid), check.names=FALSE))
@@ -90,36 +90,38 @@ seqecmpgroup <- function(subseq, group, method="chisq", pvalue.limit=NULL, weigh
 	cres <- order(as.double(res[,2]), decreasing = decreasing)[subseqnum]#[!is.na(as.double(res$stat))]
 	data <- data.frame(Support=as.data.frame(subseq$data[cres,"Support"], optional=TRUE), res[cres,], check.names=FALSE)
 	rownames(data) <- 1:nrow(data)
-	ret <- createsubseqelist(subseq$seqe, subseq$constraint, subseq$subseq[cres], data=data, type=method)
+	ret <- createsubseqelist(subseq$eseq, subseq$constraint, subseq$subseq[cres], data=data, type=method)
 	ret$labels <- levels(group)
 	ret$bonferroni <- list(used=bonferroni, ntest=ntest)
 	class(ret) <- c("subseqelistchisq",class(ret))
 	if(!weighted) {
-		seqeweight(subseq$seqe) <- www
+		seqeweight(subseq$eseq) <- www
 	}
 	return(ret)
 }
 
 
 
-plot.subseqelistchisq<-function(x, ylim="uniform", rows=NA, cols=NA,
-            residlevels=c(0.05,0.01), cpal=brewer.pal(1+2*length(residlevels),"RdBu"),legendcol=NULL,
-            legend.cex=1,ptype="freq",
-            legend.title=NULL,...){
+plot.subseqelistchisq <- function(x, ylim = "uniform", rows = NA, cols = NA,
+  resid.levels = c(0.05,0.01), cpal = brewer.pal(1 + 2 * length(resid.levels), "RdBu"),
+  vlegend = NULL, cex.legend = 1, ptype = "freq", legend.title = NULL,
+  residlevels, legendcol, legend.cex, ...) {
+
+  checkargs(alist(resid.levels = residlevels, vlegend = legendcol, cex.legend = legend.cex))
 
 	if(!inherits(x,"subseqelistchisq")) {
 		stop(" [!] x should be a result of seqecmpgroup")
 	}
 	nplot<-length(x$labels)
 	#  print(ylim)
-	pvalue.levels <- residlevels
+	pvalue.levels <- resid.levels
 	if (x$bonferroni$used) {
-		residlevels <- (1- (1-residlevels)^(1/x$bonferroni$ntest))
+		resid.levels <- (1- (1-resid.levels)^(1/x$bonferroni$ntest))
 	}
-	residlevels <- sort(-qnorm(residlevels))
-	
+	resid.levels <- sort(-qnorm(resid.levels))
+
 	#print(cpal)
-	residbreaks <- c(-Inf, -sort(residlevels), sort(residlevels), Inf)
+	residbreaks <- c(-Inf, -sort(resid.levels), sort(resid.levels), Inf)
 	lout <- TraMineR.setlayout(nplot, rows, cols, TRUE, "all")
 	## Save all current settings
 	savepar <- par(no.readonly = TRUE)
@@ -144,12 +146,12 @@ plot.subseqelistchisq<-function(x, ylim="uniform", rows=NA, cols=NA,
        }
 	#on.exit(par(savepar))
 	plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
-	title(main=legend.title, cex=legend.cex)
-	legncol <- length(c(paste("-", rev(residlevels)), "neutral", residlevels))
-	if(is.null(legendcol) && lout$legpos=="center"){
+	title(main=legend.title, cex=cex.legend)
+	legncol <- length(c(paste("-", rev(resid.levels)), "neutral", resid.levels))
+	if(is.null(vlegend) && lout$legpos=="center"){
 		legncol <- 1
 	}
-	else if(!is.null(legendcol) && legendcol){
+	else if(!is.null(vlegend) && vlegend){
 		legncol <- 1
 	}
 	legend(lout$legpos,
@@ -157,7 +159,7 @@ plot.subseqelistchisq<-function(x, ylim="uniform", rows=NA, cols=NA,
 			legend=c(paste("Negative", rev(pvalue.levels)), "neutral", paste("Positive", pvalue.levels)),
 			fill=cpal,
 			ncol=legncol,
-			cex=legend.cex,
+			cex=cex.legend,
 			bty="o"
 		)
 }

@@ -2,11 +2,10 @@
 ## Setting the layout for TraMineR plots
 ## =====================================
 
-TraMineR.setlayout <- function(nplot, prows, pcols, withlegend, axes, 
-	legend.prop=NA) {
+TraMineR.setlayout <- function(nplot, prows, pcols, with.legend, axes, legend.prop = NA) {
 
 	## Backward compatibility
-	if (withlegend==TRUE) withlegend <- "auto"
+	if (with.legend==TRUE) with.legend <- "auto"
 
 	if (is.na(pcols)) pcols <- min(nplot,2)
 	if (is.na(prows)) prows <- ceiling(nplot/pcols)
@@ -20,7 +19,7 @@ TraMineR.setlayout <- function(nplot, prows, pcols, withlegend, axes,
 	layrow <- prows
 	laycol <- pcols
 	laymat <- matrix(1:(layrow*laycol), nrow=layrow, ncol=laycol, byrow=TRUE)
-	
+
 	axisp <- 0
 
 	legpos=NULL
@@ -29,7 +28,7 @@ TraMineR.setlayout <- function(nplot, prows, pcols, withlegend, axes,
 	## =========================
 	## Positioning of the legend
 	## =========================
-	if (withlegend=="auto") {
+	if (with.legend=="auto") {
 		if (freecells==0) {
 			if (is.na(legend.prop)) legend.prop <- 0.15
 			layrow <- layrow+1
@@ -51,7 +50,7 @@ TraMineR.setlayout <- function(nplot, prows, pcols, withlegend, axes,
 			widths <- rep(pwidth/laycol,laycol)
 		}
 	}
-	else if (withlegend=="right") {
+	else if (with.legend=="right") {
 		if (is.na(legend.prop)) legend.prop <- 0.25
 		laycol <- laycol+1
 		pwidth <- pwidth-legend.prop
@@ -62,7 +61,7 @@ TraMineR.setlayout <- function(nplot, prows, pcols, withlegend, axes,
 
 		## Adding one row in the layout matrix for the legend
 		laymat <- cbind(laymat, rep(nplot+1,nrow(laymat)))
-	}	
+	}
 
 	## if (axes %in% c("all","bottom")) axisp <- 1
 
@@ -70,12 +69,12 @@ TraMineR.setlayout <- function(nplot, prows, pcols, withlegend, axes,
 	if (axes=="bottom") {
 		for (nc in 1:ncol(laymat))
 			axisp <- c(axisp, max(laymat[laymat[,nc]<=nplot,nc]))
-	} 
+	}
 	else if (axes=="all") axisp <- 1:nplot
 
-	
+
 	## Returning a list with layout settings
 	laylist <- list(laymat=laymat, widths=widths, heights=heights, axisp=axisp, legpos=legpos)
 
 	return(laylist)
-} 
+}

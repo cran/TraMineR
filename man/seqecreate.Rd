@@ -13,9 +13,9 @@
 %  A subsequence can be created using \code{seqecreatesub}, in which case \code{timestamp} is only used to detect simultaneous events (same time).
 }
 \usage{
-seqecreate(data = NULL, id = NULL, timestamp = NULL, event = NULL,
-    endEvent = NULL, tevent =  "transition", use.labels=TRUE,
-    weighted=TRUE)
+seqecreate(data = NULL, id = NULL,timestamp = NULL, event = NULL,
+  end.event = NULL, tevent = "transition", use.labels = TRUE,
+  weighted = TRUE, endEvent)
 %  seqecreatesub(timestamp, event)
 }
 \arguments{
@@ -23,10 +23,11 @@ seqecreate(data = NULL, id = NULL, timestamp = NULL, event = NULL,
   \item{id}{The sequence 'id' (integer) column when data are provided in TSE format (ignored if \code{data} argument is provided).}
   \item{timestamp}{The event 'timestamp' (double) column when data are provided in TSE format, i.e., the time at which events occur (ignored if \code{data} argument is provided).}
   \item{event}{The 'event' column when data are provided in TSE format, i.e., the events occurring at the specified time stamps  (ignored if \code{data} argument is provided).}
-  \item{endEvent}{If specified this event serves as a flag for the end of observation time (total length of event sequences).}
+  \item{end.event}{If specified this event serves as a flag for the end of observation time (total length of event sequences).}
   \item{tevent}{Either a transition matrix or a method to generate events from state sequences (see \code{\link{seqetm}}). Used only when \code{data} is a state sequence object.}
   \item{use.labels}{If \code{TRUE}, transitions names are built from long state labels rather than from the short state names of the alphabet.}
   \item{weighted}{If \code{TRUE} and \code{data} is a state sequence object, use the weights specified in \code{data} (see \code{\link{seqdef}})}
+  \item{endEvent}{Deprecated. Use \code{end.event} instead.}
 }
 \seealso{
  \code{\link{seqformat}} for converting between sequence formats,
@@ -43,17 +44,17 @@ data(biofam)
 ## Creating state sequences
 biofam.seq <- seqdef(biofam,10:25,informat='STS')
 ## Creating event sequences from biofam
-biofam.seqe <- seqecreate(biofam.seq)
+biofam.eseq <- seqecreate(biofam.seq)
 
 ## Loading data
 data(actcal.tse)
 ## Creating sequences
-actcal.seqe <- seqecreate(id=actcal.tse$id, timestamp=actcal.tse$time,
+actcal.eseq <- seqecreate(id=actcal.tse$id, timestamp=actcal.tse$time,
 	event=actcal.tse$event)
 ##printing sequences
-actcal.seqe[1:10]
+actcal.eseq[1:10]
 ## Using the data argument
-actcal.seqe <- seqecreate(data=actcal.tse)
+actcal.eseq <- seqecreate(data=actcal.tse)
 
 }
 

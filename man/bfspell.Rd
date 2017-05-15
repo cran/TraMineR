@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{bfspell}
 \docType{data}
 \alias{bfspell}
@@ -35,9 +34,9 @@ data(bfspell)
 The \code{bfspell20} data frame with the first 20 sequences of \code{biofam} in spell format, and
 \code{bfpdata20} with two columns \code{id} and {when15} with respectively the id and year when aged 15 corresponding to the 20 sequences in bfspell20.
 
-} 
-\seealso{
-\code{\link{biofam}} 
 }
-  
+\seealso{
+\code{\link{biofam}}
+}
+
 \keyword{Datasets}

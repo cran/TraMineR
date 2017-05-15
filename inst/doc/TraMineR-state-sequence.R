@@ -4,7 +4,7 @@
 ###################################################
 ### code chunk number 1: preliminary
 ###################################################
-options(width=76, prompt="R> ", continue="+   ", encoding="latin1", useFancyQuotes=FALSE)
+options(width=76, prompt="R> ", continue="+   ", encoding="UTF-8", useFancyQuotes=FALSE)
 library(TraMineR)
 library(xtable)
 
@@ -121,19 +121,19 @@ mvad.seq <- seqdef(mvad, 17:86, alphabet=mvad.alphab, states = mvad.scode,
 ###################################################
 ### code chunk number 16: iplot-A
 ###################################################
-seqiplot(mvad.seq, border=NA, withlegend="right")
+seqiplot(mvad.seq, border=NA, with.legend="right")
 
 
 ###################################################
 ### code chunk number 17: fig_iplot-A
 ###################################################
-seqiplot(mvad.seq, border=NA, withlegend="right")
+seqiplot(mvad.seq, border=NA, with.legend="right")
 
 
 ###################################################
 ### code chunk number 18: iplot-Aa
 ###################################################
-seqiplot(mvad.seq, border=NA, withlegend="right")
+seqiplot(mvad.seq, border=NA, with.legend="right")
 
 
 ###################################################
@@ -141,7 +141,7 @@ seqiplot(mvad.seq, border=NA, withlegend="right")
 ###################################################
 mvad.lcs <- seqdist(mvad.seq, method="LCS")
 mds <- cmdscale(mvad.lcs, k=1)
-dref <- seqdist(mvad.seq, ref=0, method="LCS")
+dref <- seqdist(mvad.seq, refseq=0, method="LCS")
 
 
 ###################################################
@@ -150,16 +150,16 @@ dref <- seqdist(mvad.seq, ref=0, method="LCS")
 png(file=paste(graphdir,"png_mvad_seqIplot-sorted.png",sep=""), unit="px", width=1600, height=700, pointsize=30)
 
 par(mfrow=c(1,3))
-seqIplot(mvad.seq, title="unsorted", withlegend=FALSE)
-seqIplot(mvad.seq, sortv=dref, title="by distance to most frequent", withlegend=FALSE)
-seqIplot(mvad.seq, sortv=mds, title="by 1st MDS factor", withlegend=FALSE)
+seqIplot(mvad.seq, main="unsorted", with.legend=FALSE)
+seqIplot(mvad.seq, sortv=dref, main="by distance to most frequent", with.legend=FALSE)
+seqIplot(mvad.seq, sortv=mds, main="by 1st MDS factor", with.legend=FALSE)
 dev.off()
 
 
 ###################################################
 ### code chunk number 21: seqtab
 ###################################################
-seqtab(mvad.seq, tlim=1:4)
+seqtab(mvad.seq, idxs=1:4)
 
 
 ###################################################
@@ -172,10 +172,10 @@ oopt <- options(width=60)
 ### code chunk number 23: seqfplot
 ###################################################
 par(mfrow=c(1,2))
-seqfplot(mvad.seq, border=NA, withlegend=FALSE,
-	title="Weighted frequencies")
-seqfplot(mvad.seq, weighted=FALSE, border=NA, withlegend=FALSE,
-	title="Unweighted frequencies")
+seqfplot(mvad.seq, border=NA, with.legend=FALSE,
+	main="Weighted frequencies")
+seqfplot(mvad.seq, weighted=FALSE, border=NA, with.legend=FALSE,
+	main="Unweighted frequencies")
 
 
 ###################################################
@@ -188,10 +188,10 @@ options(oopt)
 ### code chunk number 25: fig-seqfplot
 ###################################################
 par(mfrow=c(1,2))
-seqfplot(mvad.seq, border=NA, withlegend=FALSE,
-	title="Weighted frequencies")
-seqfplot(mvad.seq, weighted=FALSE, border=NA, withlegend=FALSE,
-	title="Unweighted frequencies")
+seqfplot(mvad.seq, border=NA, with.legend=FALSE,
+	main="Weighted frequencies")
+seqfplot(mvad.seq, weighted=FALSE, border=NA, with.legend=FALSE,
+	main="Unweighted frequencies")
 
 
 ###################################################
@@ -319,7 +319,7 @@ ex.comp <- seqdef(ex.comp, id="auto")
 ### code chunk number 38: fig_comp_ex
 ###################################################
 par(mfrow=c(1,2))
-seqiplot(ex.comp, border=NA, withlegend=FALSE, tlim=0, title="Example sequences")
+seqiplot(ex.comp, border=NA, with.legend=FALSE, idxs=0, main="Example sequences")
 ex.comp.indic <- cbind(seqtransn(ex.comp, norm=TRUE), seqient(ex.comp), seqST(ex.comp)/max(seqST(ex.comp)), seqici(ex.comp))
 barplot(t(ex.comp.indic),
  col=c("red","blue","cyan", "yellow"), horiz=TRUE, beside=TRUE,
@@ -397,20 +397,20 @@ D.max <- 70*min(2, max(scost))
 ###################################################
 ### code chunk number 48: seqrep-mvad
 ###################################################
-medoid <- seqrep(mvad.seq, dist.matrix=mvad.om, criterion="dist", nrep=1)
+medoid <- seqrep(mvad.seq, diss=mvad.om, criterion="dist", nrep=1)
 print(medoid, format="SPS")
 
 
 ###################################################
 ### code chunk number 49: seqrplot-mvad-density
 ###################################################
-seqrplot(mvad.seq, group=mvad$gcse5eq, dist.matrix=mvad.om, border=NA)
+seqrplot(mvad.seq, group=mvad$gcse5eq, diss=mvad.om, border=NA)
 
 
 ###################################################
 ### code chunk number 50: fg-seqrplot-mvad
 ###################################################
-seqrplot(mvad.seq, group=mvad$gcse5eq, dist.matrix=mvad.om, border=NA)
+seqrplot(mvad.seq, group=mvad$gcse5eq, diss=mvad.om, border=NA)
 
 
 ###################################################
@@ -428,13 +428,13 @@ plot(clusterward, which.plots=2, labels=FALSE)
 ###################################################
 ### code chunk number 53: mvad-clust-viz-rplot
 ###################################################
-seqrplot(mvad.seq, group=cl4.lab, dist.matrix=mvad.om, trep=.35, border=NA)
+seqrplot(mvad.seq, group=cl4.lab, diss=mvad.om, coverage=.35, border=NA)
 
 
 ###################################################
 ### code chunk number 54: fig_cluster-seqrplot
 ###################################################
-seqrplot(mvad.seq, group=cl4.lab, dist.matrix=mvad.om, trep=.35, border=NA)
+seqrplot(mvad.seq, group=cl4.lab, diss=mvad.om, coverage=.35, border=NA)
 
 
 ###################################################

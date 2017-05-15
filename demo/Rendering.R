@@ -63,9 +63,9 @@ seqfplot(biofam.seq)
 ## For actcal
 seqfplot(actcal.seq)
 
-seqtab(actcal.seq, tlim=10)
+seqtab(actcal.seq, idxs=10)
 
-seqtab(actcal.seq[,7:9], tlim=10)
+seqtab(actcal.seq[,7:9], idxs=10)
 
 ## --------------------
 ## Transition rates
@@ -85,7 +85,7 @@ seqiplot(actcal.seq)
 ## All sequences sorted by age in 2000
 ## grouped by sex
 ## using 'border=NA' and 'space=0' options to have a nicer plot
-seqiplot(actcal.seq, group=actcal$sex, tlim=0, border=NA, space=0,
+seqiplot(actcal.seq, group=actcal$sex, idxs=0, border=NA, space=0,
 	sortv=actcal$age00)
 
 ## -----------------------------
@@ -186,14 +186,14 @@ ient.max <- biofam.seq[biofam$Entropy>=q99,]
 omar <- par(mar=c(5,4,4,2)+.1)
 opar <- par(mfrow=c(2,2))
 seqiplot(ient.min,
-         title="10 seq. with low entropy",
-         withlegend=FALSE)
+         main="10 seq. with low entropy",
+         with.legend=FALSE)
 seqiplot(ient.med,
-         title="10 seq. with medium entropy",
-         withlegend=FALSE)
+         main="10 seq. with medium entropy",
+         with.legend=FALSE)
 seqiplot(ient.max,
-         title="10 seq. with high entropy",
-         withlegend=FALSE)
+         main="10 seq. with high entropy",
+         with.legend=FALSE)
 seqlegend(biofam.seq)
 
 par(opar)
@@ -266,14 +266,14 @@ turb.max <- biofam.seq[biofam$Turbulence>=q99,]
 
 opar <- par(mfrow=c(2,2))
 seqiplot(turb.min,
-         title="10 seq. with low turbulence",
-         withlegend=FALSE)
+         main="10 seq. with low turbulence",
+         with.legend=FALSE)
 seqiplot(turb.med,
-         title="10 seq. with medium turbulence",
-         withlegend=FALSE)
+         main="10 seq. with medium turbulence",
+         with.legend=FALSE)
 seqiplot(turb.max,
-         title="10 seq. with high turbulence",
-         withlegend=FALSE)
+         main="10 seq. with high turbulence",
+         with.legend=FALSE)
 seqlegend(biofam.seq)
 
 par(opar)

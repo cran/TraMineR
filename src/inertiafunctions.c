@@ -1,7 +1,7 @@
 #include "TraMineR.h"
 
 /** diss: Le vecteur de diss
-L'indexation est donn�e par
+L'indexation est donnée par
 n*(i-1) - i*(i-1)/2 + j-i
 =(i-1)*(n-i/2)- i +j
 
@@ -35,12 +35,12 @@ SEXP tmrsubmatrixinertiadiss(SEXP diss, SEXP diss_size, SEXP individuals) {
 
 }
 
-/** distmatrix: un vecteur de double repr�sentant la matrice (concat�nation des colonnes � la suite les une des autres
-L'indexation est assur�e par (ligne-1)+(colone-1)*len
+/** distmatrix: un vecteur de double représentant la matrice (concaténation des colonnes à la suite les une des autres
+L'indexation est assurée par (ligne-1)+(colone-1)*len
 n*(i-1) - i*(i-1)/2 + j-i
 
-    indiv: vecteur num�ric des indexs des individus qui forme le groupe (commence � 1)
-    matrixsize: taille (nbligne ou colonne de la matrice carr�e)
+    indiv: vecteur numérique des index des individus qui forme le groupe (commence à 1)
+    matrixsize: taille (nbligne ou colonne de la matrice carrée)
     groupesize: taille du groupe
 */
 SEXP tmrsubmatrixinertiaCindividuals(SEXP distmatrix, SEXP individuals) {

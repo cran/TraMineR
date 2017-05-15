@@ -1,8 +1,11 @@
-seqetm<-function(seq, method="transition", use.labels=TRUE, sep=">", bp="", ep="end"){
+seqetm <- function(seqdata, method = "transition", use.labels = TRUE, sep = ">",
+  bp = "", ep = "end", seq) {
 
-	statl <- alphabet(seq)#seqstatl(seq)
-	nr <- attr(seq, "nr")
-	has.nr <- any(seq==nr)
+  checkargs(alist(seqdata = seq))
+
+	statl <- alphabet(seqdata)#seqstatl(seqdata)
+	nr <- attr(seqdata, "nr")
+	has.nr <- any(seqdata==nr)
 	if (has.nr) {
 		statl <- c(statl, nr)
 	}
@@ -11,9 +14,9 @@ seqetm<-function(seq, method="transition", use.labels=TRUE, sep=">", bp="", ep="
 	rownames(tevent) <- statl
 	colnames(tevent) <- statl
 	alphabet <- statl
-	if (use.labels && inherits(seq, "stslist")) {
-		#label<-alphabet(seq)
-		label <- attr(seq, "labels")
+	if (use.labels && inherits(seqdata, "stslist")) {
+		#label<-alphabet(seqdata)
+		label <- attr(seqdata, "labels")
 		if (has.nr) {
 			label <- c(label, nr)
 		}

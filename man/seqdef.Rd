@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{seqdef}
 \alias{seqdef}
 \alias{print.stslist}
@@ -71,7 +70,7 @@ data. When specified, all cells containing this value will be
 replaced by \code{NA}'s, the internal R code for missing values. If
 '\code{missing}' is not specified, cells containing \code{NA}'s are
 considered as missing values.}
- 	
+
     \item{void}{the internal
 code used by TraMineR for representing void elements in the
 sequences. Default is\code{"\%"}.}
@@ -137,9 +136,9 @@ plotting functions (\code{seqdplot}, \code{seqiplot} or
 etc...}
 
 \references{
-Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+Gabadinho, A., G. Ritschard, N. S. MÃ¼ller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
 
-Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2010). Mining Sequence Data in \code{R} with the \code{TraMineR}
+Gabadinho, A., G. Ritschard, M. Studer and N. S. MÃ¼ller (2010). Mining Sequence Data in \code{R} with the \code{TraMineR}
 package: A user's guide. \emph{Department of Econometrics and
 Laboratory of Demography, University of Geneva}. }
 

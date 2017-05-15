@@ -2,7 +2,9 @@
 ## Sequences frequency table
 ## =========================
 
-seqtab <- function(seqdata, tlim=1:10, weighted=TRUE, format="SPS") {
+seqtab <- function(seqdata, idxs = 1:10, weighted = TRUE, format = "SPS", tlim) {
+
+  checkargs(alist(idxs = tlim))
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use seqdef function to create one")
@@ -40,18 +42,18 @@ seqtab <- function(seqdata, tlim=1:10, weighted=TRUE, format="SPS") {
 	Percent <- Freq/sum(Freq)*100
 
 	nbuseq <- length(Freq)
-	if (tlim==0 || max(tlim)>nbuseq) {
-		tlim <- 1:nbuseq
-	}	
+	if (idxs==0 || max(idxs)>nbuseq) {
+		idxs <- 1:nbuseq
+	}
 
 	##if (nbuseq >1){
-        res <- seqdata[match(names(Freq), seqlist)[tlim],]
+        res <- seqdata[match(names(Freq), seqlist)[idxs],]
     ##}
     ##else {
     ##    res <- names(Freq)
     ##}
-	table <- data.frame(Freq, Percent)[tlim,]
-	
+	table <- data.frame(Freq, Percent)[idxs,]
+
 	## ==================================
 	## DEFINING CLASS AND SOME ATTRIBUTES
 	## ==================================
@@ -59,13 +61,13 @@ seqtab <- function(seqdata, tlim=1:10, weighted=TRUE, format="SPS") {
 
 	## Setting the weights of the object equal to the frequencies
 	attr(res, "weights") <- table$Freq
-	
+
 	attr(res,"freq") <- table
 	attr(res,"nbseq") <- sum(weights)
 	attr(res,"weighted") <- weighted
-	attr(res,"tlim") <- tlim
+	attr(res,"idxs") <- idxs
 	attr(res,"format") <- format
 
 	return(res)
 }
-	
+

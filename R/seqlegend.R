@@ -2,20 +2,22 @@
 ## Plotting the legend for a sequence object
 ## =========================================
 
-seqlegend <- function(seqdata, with.missing="auto", cpal=NULL, missing.color=NULL, ltext=NULL, 
-	position="topleft", fontsize=1,...) {
-	
+seqlegend <- function(seqdata, with.missing = "auto", cpal = NULL,
+  missing.color = NULL, ltext = NULL, position = "topleft", cex = 1, fontsize, ...) {
+
+  checkargs(alist(cex = fontsize))
+
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use seqdef function to create one")
 
-	if (is.null(cpal)) 
+	if (is.null(cpal))
 		cpal <- attr(seqdata,"cpal")
 
-	if (is.null(ltext)) 
+	if (is.null(ltext))
 		ltext <- attr(seqdata,"labels")
 
-	if (is.null(missing.color)) 
-		missing.color <- attr(seqdata,"missing.color") 
+	if (is.null(missing.color))
+		missing.color <- attr(seqdata,"missing.color")
 
 	## Adding an entry for missing in the legend
 	nr <- attr(seqdata,"nr")
@@ -28,5 +30,5 @@ seqlegend <- function(seqdata, with.missing="auto", cpal=NULL, missing.color=NUL
 	}
 
 	plot(0, type= "n", axes=FALSE, xlab="", ylab="")
-	legend(position, fill=cpal, legend=ltext, cex=fontsize,...)
+	legend(position, fill=cpal, legend=ltext, cex=cex,...)
 }

@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{seqplot}
 \alias{seqplot}
 \alias{seqdplot}
@@ -15,21 +14,20 @@
 High level plot functions for state sequence objects that can produce state distribution (chronograms), frequency, index,  transversal entropy, sequence of modes, meant time, and representative plots.
 }
 \usage{
-seqplot(seqdata, group=NULL, type="i", title=NULL,
-        cpal=NULL, missing.color=NULL,
-        ylab=NULL, yaxis=TRUE, axes="all", xtlab=NULL, cex.plot=1,
-        withlegend="auto", ltext=NULL, cex.legend=1,
-        use.layout=(!is.null(group) | withlegend!=FALSE),
-        legend.prop=NA, rows=NA, cols=NA, ...)
+seqplot(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
+  missing.color = NULL, ylab = NULL, yaxis = TRUE, axes = "all",
+  xtlab = NULL, cex.axis = 1, with.legend = "auto", ltext = NULL,
+  cex.legend = 1, use.layout = (!is.null(group) | with.legend != FALSE),
+  legend.prop = NA, rows = NA, cols = NA, title, cex.plot, withlegend, ...)
 
-seqdplot(seqdata, group=NULL, title=NULL, ...)
-seqfplot(seqdata, group=NULL, title=NULL, ...)
-seqiplot(seqdata, group=NULL, title=NULL, ...)
-seqIplot(seqdata, group=NULL, title=NULL, ...)
-seqHtplot(seqdata, group=NULL, title=NULL, ...)
-seqmsplot(seqdata, group=NULL, title=NULL, ...)
-seqmtplot(seqdata, group=NULL, title=NULL, ...)
-%%seqrplot(seqdata, group=NULL, title=NULL, ...)
+seqdplot(seqdata, group = NULL, main = NULL, ...)
+seqfplot(seqdata, group = NULL, main = NULL, ...)
+seqiplot(seqdata, group = NULL, main = NULL, ...)
+seqIplot(seqdata, group = NULL, main = NULL, ...)
+seqHtplot(seqdata, group = NULL, main = NULL, ...)
+seqmsplot(seqdata, group = NULL, main = NULL, ...)
+seqmtplot(seqdata, group = NULL, main = NULL, ...)
+%%seqrplot(seqdata, group = NULL, main = NULL, ...)
 }
 \arguments{
     \item{seqdata}{a state sequence object created with the \code{\link{seqdef}} function.}
@@ -44,7 +42,7 @@ seqmtplot(seqdata, group=NULL, title=NULL, ...)
     \code{"mt"} for mean times plots, \code{"pc"} for parallel
     coordinate plots and \code{"r"} for representative sequence plots.}
 
-    \item{title}{title for the graphic. Default is \code{NULL}.}
+    \item{main}{title for the graphic. Default is \code{NULL}.}
 
     \item{cpal}{Color palette used for the states. By default, the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}). If user specified, a vector of colors with number of elements equal to the number of distinct states.}
 
@@ -58,21 +56,27 @@ seqmtplot(seqdata, group=NULL, title=NULL, ...)
 
     \item{xtlab}{optional labels for the x-axis tick labels. If unspecified, the column names of the \code{seqdata} sequence object are used (see \code{\link{seqdef}}).}
 
-    \item{cex.plot}{expansion factor for setting the size of the font for the axis labels and names. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase the size.}
+  \item{cex.axis}{
+    Axis annotation magnification. When \code{type = "r"} and for seqrplot(),
+    it also configures the plotting text and symbols magnification.
+    See \code{\link{par}}.
+  }
 
-  \item{withlegend}{defines if and where the legend of the state colors is plotted. The default value \code{"auto"} sets the position of the legend automatically. Other possible value is \code{"right"}. Obsolete value \code{TRUE} is equivalent to \code{"auto"}.}
+  \item{with.legend}{defines if and where the legend of the state colors is plotted. The default value \code{"auto"} sets the position of the legend automatically. Other possible value is \code{"right"}. Obsolete value \code{TRUE} is equivalent to \code{"auto"}.}
 
   \item{ltext}{optional description of the states to appear in the legend. Must be a vector of character strings with number of elements equal to the size of the alphabet. If unspecified, the \code{label} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}).}
 
-  \item{cex.legend}{expansion factor for setting the size of the font for the labels in the legend. The default value is 1. Values lesser than 1 will reduce the size of the font, values greater than 1 will increase the size.}
+  \item{cex.legend}{Legend magnification. See \code{\link{legend}}.}
 
- \item{use.layout}{if \code{TRUE}, \code{\link[graphics]{layout}} is used to arrange plots when using the group option or plotting a legend. When layout is activated, the standard '\code{\link[graphics]{par}(mfrow=....)}' for arranging plots does not work. With \code{withlegend=FALSE} and \code{group=NULL}, layout is automatically deactivated and '\code{par(mfrow=....)}' can be used.}
+ \item{use.layout}{if \code{TRUE}, \code{\link[graphics]{layout}} is used to arrange plots when using the group option or plotting a legend. When layout is activated, the standard '\code{\link[graphics]{par}(mfrow=....)}' for arranging plots does not work. With \code{with.legend=FALSE} and \code{group=NULL}, layout is automatically deactivated and '\code{par(mfrow=....)}' can be used.}
 
- \item{legend.prop}{sets the proportion of the graphic area used for plotting the legend when \code{use.layout=TRUE} and \code{withlegend=TRUE}. Default value is set according to the place (bottom or right of the graphic area) where the legend is plotted. Values from 0 to 1.}
+ \item{legend.prop}{sets the proportion of the graphic area used for plotting the legend when \code{use.layout=TRUE} and \code{with.legend=TRUE}. Default value is set according to the place (bottom or right of the graphic area) where the legend is plotted. Values from 0 to 1.}
 
  \item{rows,cols}{optional arguments to arrange plots when \code{use.layout=TRUE}.}
-
- \item{\dots}{arguments to be passed to the function called to produce the appropriate statistics and the associated plot method (see details), or other graphical parameters. For example the \code{weighted} argument can be passed to control whether (un)weighted statistics are produced or \code{with.missing} argument to take missing values into account when computing transversal or longitudinal state distributions.}
+  \item{title}{Deprecated. Use \code{main} instead.}
+  \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
+  \item{withlegend}{Deprecated. Use \code{with.legend} instead.}
+  \item{\dots}{arguments to be passed to the function called to produce the appropriate statistics and the associated plot method (see details), or other graphical parameters. For example the \code{weighted} argument can be passed to control whether (un)weighted statistics are produced or \code{with.missing} argument to take missing values into account when computing transversal or longitudinal state distributions.}
 }
 
 \details{
@@ -88,9 +92,9 @@ with \code{type} argument set respectively to \code{"d"}, \code{"f"},
 State distribution plot (\code{type="d"}) represent the sequence of the cross-sectional state frequencies by position (time point) computed by the \code{\link{seqstatd}} function. Such plots are also known as chronograms.
 
 \emph{Sequence frequency plots} (\code{type="f"}) display the most frequent sequences, each one with an horizontal stack bar of its successive states. Sequences are displayed bottom-up in decreasing order of their frequencies (computed by the \code{\link{seqtab}} function). The \code{\link{plot.stslist.freq}} plot method is called for producing the plot. \cr
-The \code{tlim} optional argument may be specified for selecting the sequences to be plotted (default is 1:10, i.e. the 10 most frequent sequences). The width of the bars representing the sequences is by default proportional to their frequencies, but this can be disabled with the \code{pbarw=FALSE} optional argument. If weights have been specified when creating \code{seqdata}, weighted frequencies will be returned by \code{seqtab} since the default option is \code{weighted=TRUE}. See examples below, the \code{\link{seqtab}} and \code{\link{plot.stslist.freq}} manual pages for a complete list of optional arguments and \cite{Müller et al., (2008)} for a description of sequence frequency plots.
+The \code{idxs} optional argument may be specified for selecting the sequences to be plotted (default is 1:10, i.e. the 10 most frequent sequences). The width of the bars representing the sequences is by default proportional to their frequencies, but this can be disabled with the \code{pbarw=FALSE} optional argument. If weights have been specified when creating \code{seqdata}, weighted frequencies will be returned by \code{seqtab} since the default option is \code{weighted=TRUE}. See examples below, the \code{\link{seqtab}} and \code{\link{plot.stslist.freq}} manual pages for a complete list of optional arguments and \cite{MÃ¼ller et al., (2008)} for a description of sequence frequency plots.
 
-In \emph{sequence index plots} (\code{type="i"} or \code{type="I"}), the requested individual sequences are rendered with horizontal stacked bars depicting the states over successive positions (time). Optional arguments are \code{tlim} for specifying the indexes of the sequences to be plotted (when \code{type="i"} defaults to the first ten sequences, i.e \code{tlim=1:10}). For plotting nicely a (big) whole set one can use \code{type="I"} which is the same as using \code{tlim=0} together with the additional graphical parameters \code{border=NA} and \code{space=0} to suppress bar borders and space between bars. The \code{sortv} argument can be used to pass a vector of numerical values for sorting the sequences or to specify a sorting method. See \code{\link{plot.stslist}} for a complete list of optional arguments and their description.
+In \emph{sequence index plots} (\code{type="i"} or \code{type="I"}), the requested individual sequences are rendered with horizontal stacked bars depicting the states over successive positions (time). Optional arguments are \code{idxs} for specifying the indexes of the sequences to be plotted (when \code{type="i"} defaults to the first ten sequences, i.e \code{idxs=1:10}). For plotting nicely a (big) whole set one can use \code{type="I"} which is the same as using \code{idxs=0} together with the additional graphical parameters \code{border=NA} and \code{space=0} to suppress bar borders and space between bars. The \code{sortv} argument can be used to pass a vector of numerical values for sorting the sequences or to specify a sorting method. See \code{\link{plot.stslist}} for a complete list of optional arguments and their description.
 
 The interest of sequence index plots has, for instance, been stressed by \cite{Scherer (2001)} and \cite{Brzinsky-Fay et al. (2006)}. Notice that index plots for thousands of sequences result in very heavy PDF or POSTSCRIPT graphic files. Dramatic file size reduction may be achieved by saving the figures in bitmap format with using for instance the \code{\link[grDevices]{png}} graphic device instead of \code{\link[grDevices]{postscript}} or \code{\link[grDevices]{pdf}}.
 
@@ -98,9 +102,9 @@ The \emph{transversal entropy plot} (\code{type="Ht"}) displays the evolution ov
 
 The \emph{modal state sequence plot} (\code{type="ms"}) displays the sequence of the modal states with each mode proportional to its frequency at the given position. The \code{\link{seqmodst}} function is called which returns the sequence and the result is plotted by calling the \code{\link{plot.stslist.modst}} plot method.
 
-The \emph{mean time plot} (\code{type="mt"}) displays the mean time spent in each state of the alphabet as computed by the \code{\link{seqmeant}} function. The \code{\link{plot.stslist.meant}} plot method is used to plot the resulting statistics. Set \code{serr=TRUE} to display error bars on the mean time plot. 
+The \emph{mean time plot} (\code{type="mt"}) displays the mean time spent in each state of the alphabet as computed by the \code{\link{seqmeant}} function. The \code{\link{plot.stslist.meant}} plot method is used to plot the resulting statistics. Set \code{serr=TRUE} to display error bars on the mean time plot.
 
-The \emph{representative sequence plot} (\code{type="r"}) displays a reduced, non redundant set of representative sequences extracted from the provided state sequence object and sorted according to a representativeness criterion. The \code{\link{seqrep}} function is called to extract the representative set which is then plotted by calling the \code{\link{plot.stslist.rep}} method. A distance matrix is required that is passed with the \code{dist.matrix} argument or by calling the \code{seqdist} function if \code{dist.matrix=NULL}. The \code{criterion} argument sets the representativeness criterion used to sort the sequences. See examples below, the \code{\link{seqrep}} and \code{\link{plot.stslist.rep}} manual pages for a complete list of optional arguments and \cite{Gabadinho et al. (2009)} for more details on the extraction of representative sets.
+The \emph{representative sequence plot} (\code{type="r"}) displays a reduced, non redundant set of representative sequences extracted from the provided state sequence object and sorted according to a representativeness criterion. The \code{\link{seqrep}} function is called to extract the representative set which is then plotted by calling the \code{\link{plot.stslist.rep}} method. A distance matrix is required that is passed with the \code{diss} argument or by calling the \code{seqdist} function if \code{diss=NULL}. The \code{criterion} argument sets the representativeness criterion used to sort the sequences. See examples below, the \code{\link{seqrep}} and \code{\link{plot.stslist.rep}} manual pages for a complete list of optional arguments and \cite{Gabadinho et al. (2009)} for more details on the extraction of representative sets.
 }
 
 \seealso{
@@ -115,11 +119,11 @@ the transition to adulthood. \emph{Journal of Population Research} \bold{18}(2),
 
 Brzinsky-Fay C., U. Kohler, M. Luniak (2006). Sequence Analysis with Stata. \emph{The Stata Journal}, \bold{6}(4), 435-460.
 
-Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+Gabadinho, A., G. Ritschard, N. S. MÃ¼ller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
 
-Gabadinho A, Ritschard G, Studer M, Müller NS (2011). "Extracting and Rendering Representative Sequences", In A Fred, JLG Dietz, K Liu, J Filipe (eds.), \emph{Knowledge Discovery, Knowledge Engineering and Knowledge Management}, volume 128 of \emph{Communications in Computer and Information Science (CCIS)}, pp. 94-106. Springer-Verlag.
+Gabadinho A, Ritschard G, Studer M, MÃ¼ller NS (2011). "Extracting and Rendering Representative Sequences", In A Fred, JLG Dietz, K Liu, J Filipe (eds.), \emph{Knowledge Discovery, Knowledge Engineering and Knowledge Management}, volume 128 of \emph{Communications in Computer and Information Science (CCIS)}, pp. 94-106. Springer-Verlag.
 
-Müller, N. S., A. Gabadinho, G. Ritschard and M. Studer (2008). Extracting knowledge from life courses: Clustering and visualization. In \emph{Data Warehousing and Knowledge Discovery, 10th International Conference  DaWaK 2008, Turin, Italy, September 2-5}, LNCS 5182, Berlin: Springer, 176-185.
+MÃ¼ller, N. S., A. Gabadinho, G. Ritschard and M. Studer (2008). Extracting knowledge from life courses: Clustering and visualization. In \emph{Data Warehousing and Knowledge Discovery, 10th International Conference  DaWaK 2008, Turin, Italy, September 2-5}, LNCS 5182, Berlin: Springer, 176-185.
 
 Scherer S (2001). Early Career Patterns: A Comparison of Great Britain and West Germany.
 \emph{European Sociological Review}, \bold{17}(2), 119-144.
@@ -183,11 +187,11 @@ biofam.om <- seqdist(biofam.seq, method="OM", sm=costs)
 
 ## Plot of the representative sets grouped by sex
 ## using the default density criterion
-seqrplot(biofam.seq, group=biofam$sex, dist.matrix=biofam.om)
+seqrplot(biofam.seq, group=biofam$sex, diss=biofam.om)
 
 ## Plot of the representative sets grouped by sex
 ## using the "dist" (centrality) criterion
-seqrplot(biofam.seq, group=biofam$sex, criterion="dist", dist.matrix=biofam.om)
+seqrplot(biofam.seq, group=biofam$sex, criterion="dist", diss=biofam.om)
 
 ## ====================
 ## Sequence index plots
@@ -199,7 +203,7 @@ seqiplot(biofam.seq)
 ## All sequences sorted by age in 2000
 ## grouped by sex
 ## using 'border=NA' and 'space=0' options to have a nicer plot
-seqiplot(actcal.seq, group=actcal$sex, tlim=0, border=NA, space=0,
+seqiplot(actcal.seq, group=actcal$sex, idxs=0, border=NA, space=0,
          sortv=actcal$age00)
 
 

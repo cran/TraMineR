@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{biofam}
 \docType{data}
 \alias{biofam}
@@ -9,7 +8,7 @@
 
 
 \details{
-The \emph{biofam} data set was constructed by Müller et al. (2007)
+The \emph{biofam} data set was constructed by MÃ¼ller et al. (2007)
 from the data of the retrospective biographical survey carried out by the Swiss Household Panel (SHP) in 2002.
 
 The data set contains (in columns 10 to 25) sequences of family life states from age 15 to 30 (sequence length is 16) and a series of covariates. The sequences are a sample of 2000 sequences of those created from the SHP biographical survey. It includes only individuals who were at least 30 years old at the time of the survey.  The \emph{biofam} data set describes family life courses of 2000 individuals born between 1909 and 1972.
@@ -54,9 +53,9 @@ data(bfspell)
 \format{A data frame with 2000 rows, 16 state variables, 1 id variable and 7 covariates and 2 weights variables.}
 \source{Swiss Household Panel \url{www.swisspanel.ch}}
 \references{
-  Müller, N. S., M. Studer, G. Ritschard (2007).
-  Classification de parcours de vie à l'aide de l'optimal matching.
-  In \emph{XIVe Rencontre de la Société francophone de classification
+  MÃ¼ller, N. S., M. Studer, G. Ritschard (2007).
+  Classification de parcours de vie Ã  l'aide de l'optimal matching.
+  In \emph{XIVe Rencontre de la SociÃ©tÃ© francophone de classification
   (SFC 2007), Paris, 5 - 7 septembre 2007}, pp. 157--160.
 }
 \keyword{Datasets}

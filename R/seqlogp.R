@@ -5,7 +5,7 @@ seqlogp <- function(seqdata, prob="trate", time.varying=TRUE, begin="freq", weig
 	nbtrans <- maxage -1
 	agedtr <- vector(mode="list", length=maxage)
 	
-	## On ajoute 1 pour que les codes correspondent aux index R (commence à 1)
+	## On ajoute 1 pour que les codes correspondent aux index R (commence Ã  1)
 	seqdatanum <- seqasnum(seqdata)+1
 	nbstates <- max(seqdatanum)
 	## User defined begin frequencies
@@ -42,8 +42,8 @@ seqlogp <- function(seqdata, prob="trate", time.varying=TRUE, begin="freq", weig
 			}
 		}
 		else if (prob=="freq") {
-			## On crée quand même une matrice de transition (qui ne dépend pas de l'état précédant)
-			## On peut ainsi utiliser le même algorithme
+			## On crÃ©e quand mÃªme une matrice de transition (qui ne dÃ©pend pas de l'Ã©tat prÃ©cÃ©dant)
+			## On peut ainsi utiliser le mÃªme algorithme
 			message(" [>] Using time varying frequencies as probability model")
 			agedtr <- array(0, dim=c(nbstates, nbstates, nbtrans))
 			if (time.varying) {

@@ -94,7 +94,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		message(" [>] ", nbdatastat," distinct states appear in the data: ")
 		for (i in 1:min(nbdatastat,maxstatedisplay)) {
 			message("     ",i, " = ", statl[i])
-		}		
+		}
 		if (nbdatastat>maxstatedisplay) message("      ...")
 
 		A <- plevels
@@ -147,7 +147,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		}
 	} else
 		labels <- A
-	
+
 	attr(seqdata,"labels") <- labels
 
 	## Displaying the alphabet
@@ -213,7 +213,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 
 	message(" [>] ", nbseq, " sequences in the data set")
 	message(" [>] min/max sequence length: ",min(seql),"/",max(seql))
-	
+
 	## ======================
 	## Rows and columns names
 	## ======================
@@ -238,7 +238,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		}
 		if (!is.null(weights)) { names(weights) <- rownames(seqdata) }
 	}
-	
+
 	## TraMineR Version
 	descr <- packageDescription("TraMineR")
 	attr(seqdata,"Version") <- descr$Version

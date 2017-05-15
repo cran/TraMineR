@@ -2,8 +2,10 @@
 ## Plot the modal state sequence
 ## =============================
 
-plot.stslist.modst <- function(x, cpal=NULL,
-	ylab=NULL, yaxis=TRUE, xaxis=TRUE, xtlab=NULL, xtstep=NULL, cex.plot=1, ...) {
+plot.stslist.modst <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
+  xaxis = TRUE, xtlab = NULL, xtstep = NULL, cex.axis = 1,  cex.plot, ...) {
+
+  checkargs(alist(cex.axis = cex.plot))
 
 	seql <- ncol(x)
 	statl <- attr(x,"alphabet")
@@ -53,7 +55,7 @@ plot.stslist.modst <- function(x, cpal=NULL,
 	barplot(prof.freq,
 		space=0,
 		## mgp=c(2.5,0.6,0),
-		cex.names=cex.plot,
+		cex.names=cex.axis,
 		ylim=c(0,1.2),
 		col=cpal,
 		## main=title,
@@ -63,19 +65,19 @@ plot.stslist.modst <- function(x, cpal=NULL,
 		...)
 
 	text(seql/2, 1.1, txt,
-		cex=cex.plot)
+		cex=cex.axis)
 
 	## Plotting the x axis
 	if (xaxis) {
 		tpos <- seq(1,seql, xtstep)
 		axis(1, at=tpos-0.5, labels=xtlab[tpos], pos=-0.02,
 		# mgp=c(3,0.5,0),
-		cex.axis=cex.plot)
+		cex.axis=cex.axis)
 	}
 
 	## Axis for the state frequencies
 	if (yaxis)
 		axis(2, at=seq(0,1.0,0.25), labels=c("0","0.25",".5","0.75","1"),
-			las=2, cex.axis=cex.plot)
+			las=2, cex.axis=cex.axis)
 
 }

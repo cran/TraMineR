@@ -1,9 +1,9 @@
 
 debuglevel <- function(level=NULL) {
 	if(is.null(level)){
-		return(.Call(TMR_getTraMineRDebugLevel))
+		return(.Call(C_getTraMineRDebugLevel))
 	}
-	.Call(TMR_setTraMineRDebugLevel,as.integer(level))
+	.Call(C_setTraMineRDebugLevel,as.integer(level))
 	return(level)
 	
 }

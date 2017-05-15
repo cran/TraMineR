@@ -1,8 +1,8 @@
 ## multichannel distances
 
-seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
+seqdistmc <- function(channels, method, norm="none", indel=1, sm=NULL,
 	with.missing=FALSE, full.matrix=TRUE, link="sum", cval=2, miss.cost=2, cweight=NULL ) {
-	
+
 	## Checking arguments
 	nchannels <- length(channels)
 	if (nchannels < 2) {
@@ -63,7 +63,7 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 	alphsize_list <-list()
 	## seqlenth of each channels
 	maxlength_list <- numeric(length=nchannels)
-	
+
 	## ============================================================
 	## Building and checking substitution matrix per channel
 	## ============================================================
@@ -96,18 +96,17 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 		## Checking correct dimension cost matrix
 		else {
 			if (method=="OM") {
-				TraMineR.checkcost(sm[[i]], channels[[i]], with.missing=with.missing, indel=indel[i])
+				checkcost(sm[[i]], channels[[i]], with.missing = with.missing, indel = indel[i])
 			} else {
-				TraMineR.checkcost(sm[[i]], channels[[i]], with.missing=with.missing)
+				checkcost(sm[[i]], channels[[i]], with.missing = with.missing)
 			}
 			substmat_list[[i]] <- sm[[i]]
 		}
-		
 
 		## Mutliply by channel weight
 		substmat_list[[i]] <- cweight[i]* substmat_list[[i]]
 	}
-	
+
 	## Checking that all channels have the same length
 	slength1 <- seqlength(channels[[1]])
 	for (i in 2:nchannels) {
@@ -152,15 +151,14 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 				newseqdata[,j] <- newCol
 			}
 		}
-		
     }
 	## Setting void states back to NA  (nr will be considered as a distinct state)
 	newseqdata[newseqdataNA] <- NA
-	
+
 	alphabet_size <- length(unique(as.character(newseqdata))) - as.integer(sum(is.na(newseqdata))>0)
 	suppressMessages(newseqdata <- seqdef(newseqdata, cpal=rep("blue", alphabet_size)))
 	message(" OK")
-	
+
 	## =========================================
 	## Building the new substitution cost matrix
 	## =========================================
@@ -217,5 +215,4 @@ seqdistmc <- function(channels, method, norm=FALSE, indel=1, sm=NULL,
 	## Calling seqdist
 	return(seqdist(newseqdata, method=method, norm=norm, indel=newindel,
 		sm=newsm, with.missing=FALSE, full.matrix=full.matrix))
-	
 }

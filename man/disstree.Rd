@@ -1,30 +1,31 @@
 \name{disstree}
 \alias{disstree}
 \alias{print.disstree}
-\encoding{latin1}
 \title{Dissimilarity Tree}
 \description{
   Tree structured discrepancy analysis of objects described by their pairwise dissimilarities.
 }
 \usage{
-disstree(formula, data = NULL, weights = NULL, minSize = 0.05,
-         maxdepth = 5, R = 1000, pval = 0.01, object = NULL,
-         weight.permutation = "replicate", squared = FALSE,
-         first = NULL)
+disstree(formula, data = NULL, weights = NULL, min.size = 0.05,
+  max.depth = 5, R = 1000, pval = 0.01, object = NULL,
+  weight.permutation = "replicate", squared = FALSE, first = NULL,
+  minSize, maxdepth)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{formula}{Formula with a dissimilarity matrix as left hand side and the candidate partitioning variables on the right side.}
   \item{data}{Data frame where variables in formula will be searched for.}
   \item{weights}{Optional numerical vector of weights.}
-  \item{minSize}{Minimum number of cases in a node, will be treated as a proportion if less than 1.}
-  \item{maxdepth}{Maximum depth of the tree}
+  \item{min.size}{Minimum number of cases in a node, will be treated as a proportion if less than 1.}
+  \item{max.depth}{Maximum depth of the tree}
   \item{R}{Number of permutations used to assess the significance of the split.}
   \item{pval}{Maximum allowed p-value for a split}
   \item{object}{An optional R object represented by the dissimilarity matrix. This object may be used by the \code{print} method or  \code{\link{disstree2dot}} to render specific object type.}
   \item{weight.permutation}{Weight permutation method: \code{"diss"} (attach weights to the dissimilarity matrix), \code{"replicate"} (replicate cases using \code{weights}), \code{"rounded-replicate"} (replicate case using rounded \code{weights}), \code{"random-sampling"} (random assignment of covariate profiles to the objects using distributions defined by the weights.)}
   \item{squared}{Logical: Should the \code{diss} dissimilarities be squared?}
   \item{first}{One of the variable in the right-hand side of the formula. This forces the first node of the tree to be split by this variable.}
+  \item{minSize}{Deprecated. Use \code{min.size} instead.}
+  \item{maxdepth}{Deprecated. Use \code{max.depth} instead.}
 }
 
 \details{
@@ -44,16 +45,16 @@ An object of class \code{disstree} that contains the following components:
   \item{weights}{weights}
 }
 \references{
-    Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
+    Studer, M., G. Ritschard, A. Gabadinho and N. S. MÃ¼ller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
 
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2010)
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. MÃ¼ller (2010)
   Discrepancy	analysis of complex objects using dissimilarities.
   In F. Guillet, G. Ritschard, D. A. Zighed and H. Briand (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
   Studies in Computational Intelligence, Volume 292, pp. 3-19. Berlin: Springer.
-	
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
-  Analyse de dissimilarités par arbre d'induction. In EGC 2009,
+
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. MÃ¼ller (2009)
+  Analyse de dissimilaritÃ©s par arbre d'induction. In EGC 2009,
   \emph{Revue des Nouvelles Technologies de l'Information}, Vol. E-15, pp. 7-18.
 
   Anderson, M. J. (2001) A new method for non-parametric multivariate analysis of variance.
@@ -77,7 +78,7 @@ algorithm. \emph{Journal of the Royal Statistical Society A} \bold{170}(4), 1061
    \cr
    \code{\link{dissassoc}} to test association between objects represented by their dissimilarities and a covariate.
    \cr
-	 \code{\link{dissmfac}} to perform multi-factor analysis of variance from pairwise dissimilarities.
+	 \code{\link{dissmfacw}} to perform multi-factor analysis of variance from pairwise dissimilarities.
 \cr
 \code{\link{disscenter}} to compute the distance of each object to its group center from pairwise dissimilarities.
 
@@ -90,17 +91,19 @@ mvad.seq <- seqdef(mvad[, 17:86])
 
 ## Computing dissimilarities (any dissimilarity measure can be used)
 mvad.ham <- seqdist(mvad.seq, method="HAM")
+## Grow the tree using using a low R value for illustration.
+## For R=10, pval cannot be lower than 0.1
 dt <- disstree(mvad.ham~ male + Grammar + funemp + gcse5eq + fmpr + livboth,
-    data=mvad, R = 10)
+    data=mvad, R = 10, pval = 0.1)
 print(dt)
 
 
 ## Will only work if GraphViz is properly installed
 ## See seqtree for simpler way to plot a sequence tree.
 \dontrun{
-disstreedisplay(dt, imagefunc=seqdplot, imagedata=mvad.seq,
-	## Additional parameters passed to seqdplot
-	withlegend=FALSE, axes=FALSE, ylab="")
+disstreedisplay(dt, image.fun = seqdplot, image.data = mvad.seq,
+  ## Additional parameters passed to seqdplot
+  with.legend = FALSE, axes = FALSE, ylab = "")
 }
 ## Second method, using a specific function
 myplotfunction <- function(individuals, seqs, ...) {
@@ -110,13 +113,13 @@ myplotfunction <- function(individuals, seqs, ...) {
 	seqiplot(seqs[individuals,], sortv=mds,...)
 	}
 
-## If imagedata is not set, index of individuals are sent to imagefunc
+## If image.data is not set, index of individuals are sent to image.fun
 \dontrun{
-disstreedisplay(dt, imagefunc=myplotfunction, title.cex=3,
-	## additional parameters passed to myplotfunction
-	seqs=mvad.seq,
-	## additional parameters passed to seqiplot (through myplotfunction)
-	withlegend=FALSE, axes=FALSE, tlim=0, space=0, ylab="", border=NA)
+disstreedisplay(dt, image.fun = myplotfunction, cex.main = 3,
+  ## additional parameters passed to myplotfunction
+  seqs = mvad.seq,
+  ## additional parameters passed to seqiplot (through myplotfunction)
+  with.legend = FALSE, axes = FALSE, idxs = 0, space = 0, ylab = "", border = NA)
 }
 }
 \author{Matthias Studer (with Gilbert Ritschard for the help page)}

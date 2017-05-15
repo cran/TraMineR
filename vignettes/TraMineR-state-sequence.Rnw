@@ -67,7 +67,6 @@ The functions can then easily retrieve this information to ensure presentation h
 
 
 %\documentclass[10pt,a4paper]{article}
-%\usepackage[latin1]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -155,7 +154,7 @@ The functions can then easily retrieve this information to ensure presentation h
 
 %% preliminary R commands
 <<preliminary, echo=FALSE, results=hide>>=
-options(width=76, prompt="R> ", continue="+   ", encoding="latin1", useFancyQuotes=FALSE)
+options(width=76, prompt="R> ", continue="+   ", encoding="UTF-8", useFancyQuotes=FALSE)
 library(TraMineR)
 library(xtable)
 
@@ -326,13 +325,13 @@ Specific \traminer functions can be combined in the same script with any of the 
 \tabularnewline
 		%\cline{2-4}
 		dissimilarities (Section \ref{sec_similarities}) & seqdist() & & Pairwise distances or distances to a baseline sequence \tabularnewline
-		%\cline{2-4}					
+		%\cline{2-4}
 			& seqdistmc() & & Multichannel distances \tabularnewline
-		%\cline{2-4}						
+		%\cline{2-4}
 %											& disscenter() & & Distances to the (virtual) center of the set \tabularnewline
-%		\cline{2-4}							
+%		\cline{2-4}
 %											& dissvar() & & Pseudo-variance of a set of sequences \tabularnewline
-%		\cline{2-4}							
+%		\cline{2-4}
 											& seqrep() & seqrplot() & Extracting sets of non-redundant representative sequences  \tabularnewline
 		\hline
 
@@ -340,7 +339,7 @@ Specific \traminer functions can be combined in the same script with any of the 
 
 \caption{\pkg{TraMineR}'s key functions.}
 \label{tab:Overview}
-\end{table}	
+\end{table}
 %
 
 \traminer is readily installed from  within \R via \code{install.packages("TraMineR")}. %
@@ -727,7 +726,7 @@ State sequence visualization is one of the most important features of the packag
 A \emph{sequence index plot} (Figure~\ref{fg_seqiplot_mvad}) individually renders the selected state sequences. Each of them is represented by horizontally stacked boxes that are colored according to the state at the successive positions. The resulting bars are put above each other to vertically align the positions. We thus visualize, for each case, the individual longitudinal succession of states as well as, through the length of each color segment, the duration spent in each successive state. The alignment also permits easy transversal comparisons at each position.
 %
 <<iplot-A, echo=FALSE, results=hide, fig=FALSE>>=
-seqiplot(mvad.seq, border=NA, withlegend="right")
+seqiplot(mvad.seq, border=NA, with.legend="right")
 @
 %
 \begin{figure}[tb]
@@ -751,7 +750,7 @@ The \emph{sequence index plot} shown in Figure~\ref{fg_seqiplot_mvad} was obtain
 @
 %
 %
-Since we have attached case weights to the \Comt{mvad.seq} sequence object, the width of the bar representing each sequence is proportional to its weight. This default behavior could be changed with the \Com{weighted=FALSE} argument. The plotted sequences are selected with the \Com{tlim} argument by providing either a vector of indexes, or 0 for requesting all the sequences. %For example \Com{tlim=c(141,10,23)} will plot sequences 141, 10 and 23 in that order and \Com{tlim=seq(from=1,to=711,by=10)} will plot every 10 sequences.
+Since we have attached case weights to the \Comt{mvad.seq} sequence object, the width of the bar representing each sequence is proportional to its weight. This default behavior could be changed with the \Com{weighted=FALSE} argument. The plotted sequences are selected with the \Com{idxs} argument by providing either a vector of indexes, or 0 for requesting all the sequences. %For example \Com{idxs=c(141,10,23)} will plot sequences 141, 10 and 23 in that order and \Com{idxs=seq(from=1,to=711,by=10)} will plot every 10 sequences.
 The default value is \Comt{1:10} and Figure~\ref{fg_seqiplot_mvad} displays therefore only the first 10 sequences of \Comt{mvad.seq}.
 
 The \Comt{seqIplot()} alias produces full index plots that display all the sequences in the set without spaces between sequences and without borders around unit states. The usefulness of such plots has, for instance, been stressed by \citet{Scherer2001} and \citet{Brzinsky-FayKohlerLuniak2006}.
@@ -764,16 +763,16 @@ of the dissimilarities between sequences (Figure~\ref{fg_mvad-full-seqIplot}). B
 <<Iplot-mdscale, echo=FALSE, results=hide, fig=FALSE, cache=TRUE>>=
 mvad.lcs <- seqdist(mvad.seq, method="LCS")
 mds <- cmdscale(mvad.lcs, k=1)
-dref <- seqdist(mvad.seq, ref=0, method="LCS")
+dref <- seqdist(mvad.seq, refseq=0, method="LCS")
 @
 
 <<Iplot-sorted, echo=FALSE, results=hide, fig=FALSE>>=
 png(file=paste(graphdir,"png_mvad_seqIplot-sorted.png",sep=""), unit="px", width=1600, height=700, pointsize=30)
 
 par(mfrow=c(1,3))
-seqIplot(mvad.seq, title="unsorted", withlegend=FALSE)
-seqIplot(mvad.seq, sortv=dref, title="by distance to most frequent", withlegend=FALSE)
-seqIplot(mvad.seq, sortv=mds, title="by 1st MDS factor", withlegend=FALSE)
+seqIplot(mvad.seq, main="unsorted", with.legend=FALSE)
+seqIplot(mvad.seq, sortv=dref, main="by distance to most frequent", with.legend=FALSE)
+seqIplot(mvad.seq, sortv=mds, main="by 1st MDS factor", with.legend=FALSE)
 dev.off()
 @
 
@@ -793,11 +792,11 @@ dev.off()
 \subsection{Sequence frequencies}
 \label{sec_sequence-frequencies}
 
-The \Com{seqtab()} function returns a table with the counts and percent frequencies of the sequences sorted in decreasing order of their frequencies. In the next example, we request the four most frequent sequences of \Comt{mvad.seq} with \Comt{tlim=1:4}. In the printed outcome, sequences are displayed in the shorter and more readable SPS format:
+The \Com{seqtab()} function returns a table with the counts and percent frequencies of the sequences sorted in decreasing order of their frequencies. In the next example, we request the four most frequent sequences of \Comt{mvad.seq} with \Comt{idxs=1:4}. In the printed outcome, sequences are displayed in the shorter and more readable SPS format:
 
 
 <<seqtab, echo=TRUE, results=verbatim>>=
-seqtab(mvad.seq, tlim=1:4)
+seqtab(mvad.seq, idxs=1:4)
 @
 The most frequent sequence in the \Comt{mvad.seq} object is a spell of two years of school followed by 46 months of higher education. It accounts, however, for only 4.7\% of the total weights of the 712 cases considered. The second most frequent sequence, which concerns 3.5\% of the weighted individuals, is indeed very similar to the previous one.
 %
@@ -813,10 +812,10 @@ oopt <- options(width=60)
 @
 <<seqfplot, echo=TRUE, results=hide>>=
 par(mfrow=c(1,2))
-seqfplot(mvad.seq, border=NA, withlegend=FALSE,
-	title="Weighted frequencies")
-seqfplot(mvad.seq, weighted=FALSE, border=NA, withlegend=FALSE,
-	title="Unweighted frequencies")
+seqfplot(mvad.seq, border=NA, with.legend=FALSE,
+	main="Weighted frequencies")
+seqfplot(mvad.seq, weighted=FALSE, border=NA, with.legend=FALSE,
+	main="Unweighted frequencies")
 @
 <<resetting_width, echo=FALSE, results=hide>>=
 options(oopt)
@@ -835,7 +834,7 @@ options(oopt)
  \setkeys{Gin}{width=.8\textwidth}
 \end{figure}
 %
-By default, only the 10 most frequent sequences are shown. %which can be changed with the \Com{tlim} argument.
+By default, only the 10 most frequent sequences are shown. %which can be changed with the \Com{idxs} argument.
 The $y$-axis indicates the cumulative percentage of the represented sequences.
 %
 If we look at the unweighted results, the most frequent sequence is to stay employed during the entire follow-up period (be in state EM during 70 months). This sequence, which was the fourth most frequent in the weighted frequency table with 2.5\% of the total weight, accounts for 7\% of the 712 cases considered.
@@ -852,7 +851,7 @@ Tick labels for the $x$-axis are retrieved, by default, from the plotted sequenc
 The values on the $y$-axis are the indexes of the plotted sequences. The index refers to the considered ranking of the sequences. For instance, in \emph{sequence index plots}, the default order is that in the state sequence object unless a specific sort variable is provided with the \Comt{sortv} argument. In \emph{sequence frequency plots}, sequences are sorted according to their frequency in the data set, while in \emph{representative sequence plots} (Section~\ref{sec_representative-sequences}), sequences are sorted according to their representativeness score.
 
 The indexes on the $y$-axis---and hence the sequences---are displayed bottom-up. Thus, when sequences are sorted, the first ranked one is at the bottom of the plot.%
-\footnote{This can be changed by with the \Comt{tlim} argument.}
+\footnote{This can be changed by with the \Comt{idxs} argument.}
 This respects the usual standard for $y$-axes. It may, however, be confusing when compared with the corresponding printed outputs where sequences are displayed top-down.
 
 Other aspects of the graphic (title, font size, axes display, axis label, state legend, ...) can be controlled with dedicated options described in detail in the reference manual. There is also an option to produce separate plots by levels of a covariate.
@@ -1101,7 +1100,7 @@ Perhaps the simplest indicator is the number of transitions in the sequence; i.e
 \setkeys{Gin}{width=1\textwidth}
 <<label=fig_comp_ex, fig=TRUE, echo=FALSE, width=10, height=5.5>>=
 par(mfrow=c(1,2))
-seqiplot(ex.comp, border=NA, withlegend=FALSE, tlim=0, title="Example sequences")
+seqiplot(ex.comp, border=NA, with.legend=FALSE, idxs=0, main="Example sequences")
 ex.comp.indic <- cbind(seqtransn(ex.comp, norm=TRUE), seqient(ex.comp), seqST(ex.comp)/max(seqST(ex.comp)), seqici(ex.comp))
 barplot(t(ex.comp.indic),
  col=c("red","blue","cyan", "yellow"), horiz=TRUE, beside=TRUE,
@@ -1423,7 +1422,7 @@ The principle of the search algorithm %\citep{Gabadinho_et_al_2009KDIR}
 \footnote{See the reference manual for the different criteria that can be used for sorting the original sequences.}
 and to remove the redundancy by browsing the sorted sequences. The redundancy threshold is set as a percentage (10\% by default) of the maximum theoretical
 %or observed
-dissimilarity $D_{max}$ between two sequences and the representative set will thus not contain any pair of sequences that are nearer each other than this threshold. The size of the representative set can be controlled by fixing either the minimal expected \Comt{trep} coverage of the representative set or the number \Comt{nrep} of representatives.
+dissimilarity $D_{max}$ between two sequences and the representative set will thus not contain any pair of sequences that are nearer each other than this threshold. The size of the representative set can be controlled by fixing either the minimal expected \Comt{coverage} of the representative set or the number \Comt{nrep} of representatives.
 
 The \textit{coverage} of a representative sequence is the percentage of sequences that are in its neighborhood; i.e., the number of sequences with a distance to the representative less than a selected threshold.%
 \footnote{We suggest setting the threshold as a given percentage of the maximum theoretical distance between two sequences.}
@@ -1438,7 +1437,7 @@ A first simple example
 of a set of sequences. The medoid is the most central object; i.e., the one with minimal sum of distances to all other objects in the set \citep{Kaufman-2005}. It is a special case of representative sequence obtained by selecting the centrality sorting criterion (\Comt{criterion="dist"}) and setting the size of the representative set to 1 (\Comt{nrep=1}).
 %
 <<seqrep-mvad, echo=TRUE, results=verbatim>>=
-medoid <- seqrep(mvad.seq, dist.matrix=mvad.om, criterion="dist", nrep=1)
+medoid <- seqrep(mvad.seq, diss=mvad.om, criterion="dist", nrep=1)
 print(medoid, format="SPS")
 @
 
@@ -1447,10 +1446,10 @@ print(medoid, format="SPS")
 The medoid of a set of sequences usually yields poor coverage.
 To increase coverage we should allow for more than one representative. When seeking for more than one representative, an initial sort of the sequences according to the density of their neighborhood yields better results. Neighborhood density is, therefore, the default criterion used by \Comt{seqrep()}.
 
-The command below finds and plots the representative set that, with a neighborhood radius of 10\% (default \Comt{tsim} value), covers at least 25\% (default \Comt{trep} value) of the sequences in each of the two \emph{gcse5eq} groups:
+The command below finds and plots the representative set that, with a neighborhood radius of 10\% (default \Comt{pradius} value), covers at least 25\% (default \Comt{coverage} value) of the sequences in each of the two \emph{gcse5eq} groups:
 %
 <<seqrplot-mvad-density, echo=TRUE, results=verbatim, fig=FALSE, cache=TRUE>>=
-seqrplot(mvad.seq, group=mvad$gcse5eq, dist.matrix=mvad.om, border=NA)
+seqrplot(mvad.seq, group=mvad$gcse5eq, diss=mvad.om, border=NA)
 @
 % $
 %
@@ -1493,11 +1492,11 @@ plot(clusterward, which.plots=2, labels=FALSE)
 \end{center}
 \end{figure}
 %
-Figure~\vref{fg_cluster-seqrplot} obtained with the command below shows the representative sequences by cluster, complementing the plots of the transversal state distributions shown in Figure~\ref{fg_cluster-seqdplot} page~\pageref{fg_cluster-seqdplot}. The threshold for the coverage of the representative set is set to 35\% using the \Comt{trep=.35} argument.
+Figure~\vref{fg_cluster-seqrplot} obtained with the command below shows the representative sequences by cluster, complementing the plots of the transversal state distributions shown in Figure~\ref{fg_cluster-seqdplot} page~\pageref{fg_cluster-seqdplot}. The threshold for the coverage of the representative set is set to 35\% using the \Comt{coverage=.35} argument.
 %
 
 <<mvad-clust-viz-rplot, echo=TRUE, results=hide, cache=TRUE>>=
-seqrplot(mvad.seq, group=cl4.lab, dist.matrix=mvad.om, trep=.35, border=NA)
+seqrplot(mvad.seq, group=cl4.lab, diss=mvad.om, coverage=.35, border=NA)
 @
 
 \begin{figure}[tb]

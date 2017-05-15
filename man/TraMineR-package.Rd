@@ -6,7 +6,7 @@
 Trajectory Miner: a Toolbox for Exploring and Rendering Sequences
 }
 \description{
-(Version: 1.8.13) Toolbox for the manipulation, description and rendering of sequences, and more generally the mining of sequence data in the field of social sciences. Although the toolbox is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers, its features also apply to many other kinds of categorical sequence data. It accepts many different sequence representations as input and provides tools for converting sequences from one format to another. It offers several functions for describing and rendering sequences, for computing distances between sequences with different metrics (among which optimal matching), original dissimilarity-based analysis tools, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them. A user's guide can be found on the TraMineR web page.
+(Version: 2.0-5) Toolbox for the manipulation, description and rendering of sequences, and more generally the mining of sequence data in the field of social sciences. Although the toolbox is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers, its features also apply to many other kinds of categorical sequence data. It accepts many different sequence representations as input and provides tools for converting sequences from one format to another. It offers several functions for describing and rendering sequences, for computing distances between sequences with different metrics (among which optimal matching), original dissimilarity-based analysis tools, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them. A user's guide can be found on the TraMineR web page.
 
 
 }
@@ -28,17 +28,17 @@ sequences and vice versa.
 }
 
 \author{
-Alexis Gabadinho, Matthias Studer, Nicolas S. Muller, Reto Buergin, and Gilbert Ritschard
+Alexis Gabadinho, Matthias Studer, Nicolas S. Müller, Reto Bürgin, and Gilbert Ritschard
 
 }
 
 
 \references{
-    Gabadinho, A., G. Ritschard, N. S. M�ller and M. Studer (2011).
+    Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011).
     Analyzing and Visualizing State Sequences in R with TraMineR.
     \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
 
-    Gabadinho, A., G. Ritschard, M. Studer and N. S. M�ller (2009).
+    Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009).
     Mining Sequence Data in \code{R} with the \code{TraMineR} package:
     A user's guide. Department of Econometrics and Laboratory of
     Demography, University of Geneva

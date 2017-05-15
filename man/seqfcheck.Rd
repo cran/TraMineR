@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{seqfcheck}
 \alias{seqfcheck}
 \title{Check if sequences are in the compressed or extended format}
@@ -20,7 +19,7 @@ seqfcheck(seqdata)
 }
 
 \references{
-Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with \code{TraMineR}: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
+Gabadinho, A., G. Ritschard, M. Studer and N. S. MÃ¼ller (2009). Mining Sequence Data in \code{R} with \code{TraMineR}: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
 }
 
 \examples{

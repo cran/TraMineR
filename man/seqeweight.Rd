@@ -9,13 +9,14 @@
 	Event sequence objects can be weighted. Weights are used by other functions such as \code{\link{seqefsub}} or \code{\link{seqecmpgroup}} to compute weighted statistics.
 }
 \usage{
-seqeweight(s)
-seqeweight(s) <- value
+seqeweight(eseq, s)
+seqeweight(eseq, s) <- value
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{s}{An event sequence object (\code{seqelist}).}
+  \item{eseq}{An event sequence object (\code{seqelist}).}
   \item{value}{Numerical vector containing weights}
+  \item{s}{Deprecated. Use \code{eseq} instead.}
 }
 \value{
 \code{seqeweight} returns a numerical vector containing the weights associated to each event sequence.
@@ -29,13 +30,13 @@ data(biofam)
 biofam.seq <- seqdef(biofam,10:25,informat='STS')
 
 ## Creating event sequences from biofam
-biofam.seqe <- seqecreate(biofam.seq, weighted=FALSE)
+biofam.eseq <- seqecreate(biofam.seq, weighted=FALSE)
 
 ## Using the weights
-seqeweight(biofam.seqe) <- biofam$wp00tbgs
+seqeweight(biofam.eseq) <- biofam$wp00tbgs
 
 ## Now seqefsub accoounts for weights unless weighted is set to FALSE
-fsubseq <- seqefsub(biofam.seqe, pMinSupport=0.01)
+fsubseq <- seqefsub(biofam.eseq, pmin.support=0.01)
 
 ## Searching for weighted susbsequences which best
 ## discriminate the birth cohort
@@ -47,4 +48,4 @@ plot(discr[1:15])
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{Sequence-object attributes}
-\keyword{Event sequences} 
+\keyword{Event sequences}

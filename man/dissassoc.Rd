@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{dissassoc}
 \alias{dissassoc}
 \alias{hist.dissassoc}
@@ -18,7 +17,7 @@ dissassoc(diss, group, weights=NULL, R=1000,
 
 \arguments{
   \item{diss}{A dissimilarity matrix or a dist object (see \code{\link{dist}})}
-  \item{group}{A categorical variable. For a numerical variable use \code{\link{dissmfac}}.}
+  \item{group}{A categorical variable. For a numerical variable use \code{\link{dissmfacw}}.}
   \item{weights}{optional numerical vector containing weights.}
   \item{R}{Number of permutations for computing the p-value. If equal to 1, no permutation test is performed.}
   \item{weight.permutation}{Weighted permutation method: \code{"diss"}
@@ -38,7 +37,7 @@ the Levene statistic and Bartlett's statistics. \cr There are
 \code{print} and \code{hist} methods (the latter producing an
 histogram of the permuted values used for testing the significance).
 
-If a numeric \code{group} variable is provided, it will be treated as categorical, i.e., each different value will be considered as a different category. To measure the `linear' effect of a numerical variable, use \code{\link{dissmfac}}.
+If a numeric \code{group} variable is provided, it will be treated as categorical, i.e., each different value will be considered as a different category. To measure the `linear' effect of a numerical variable, use \code{\link{dissmfacw}}.
 }
 
 \value{ An object of class \code{dissassoc} with the
@@ -49,16 +48,16 @@ following components:
   \item{perms}{The permutation object, containing the values computed for each permutation}
 }
 \references{
-    Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
+    Studer, M., G. Ritschard, A. Gabadinho and N. S. MÃ¼ller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
 
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2010)
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. MÃ¼ller (2010)
   Discrepancy analysis of complex objects using dissimilarities.
   In F. Guillet, G. Ritschard, H. Briand, and D. A. Zighed (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
   Studies in Computational Intelligence, Volume 292, pp. 3-19. Berlin: Springer.
 
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009).
-  Analyse de dissimilarités par arbre d'induction. In EGC 2009,
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. MÃ¼ller (2009).
+  Analyse de dissimilaritÃ©s par arbre d'induction. In EGC 2009,
   \emph{Revue des Nouvelles Technologies de l'Information}, Vol. E-15, pp. 7--18.
 
   Anderson, M. J. (2001) A new method for non-parametric multivariate analysis of variance.
@@ -78,7 +77,7 @@ pseudo variance analysis.
 \cr
 \code{\link{disscenter}} to compute the distance of each object to its group center from pairwise dissimilarities.
  \cr
- \code{\link{dissmfac}} to perform multi-factor analysis of variance from pairwise dissimilarities.
+ \code{\link{dissmfacw}} to perform multi-factor analysis of variance from pairwise dissimilarities.
 }
 
 \examples{

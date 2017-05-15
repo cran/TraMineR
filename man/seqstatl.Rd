@@ -14,9 +14,9 @@
 }
 
 \references{
-Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+Gabadinho, A., G. Ritschard, N. S. MÃ¼ller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
 
-Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in
+Gabadinho, A., G. Ritschard, M. Studer and N. S. MÃ¼ller (2009). Mining Sequence Data in
 \code{R} with the \code{TraMineR} package: A user's guide. Department of Econometrics and
 Laboratory of Demography, University of Geneva.
 }

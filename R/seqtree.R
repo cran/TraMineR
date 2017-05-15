@@ -1,4 +1,10 @@
-seqtree <- function(formula, data=NULL, weighted=TRUE, minSize=0.05, maxdepth=5, R=1000, pval=0.01, weight.permutation="replicate", seqdist_arg=list(method="LCS", norm=TRUE), diss=NULL, squared=FALSE, first=NULL){
+seqtree <- function(formula, data = NULL, weighted = TRUE, min.size = 0.05,
+  max.depth = 5, R = 1000, pval = 0.01, weight.permutation = "replicate",
+  seqdist.args = list(method = "LCS", norm = "auto"), diss = NULL, squared = FALSE,
+  first = NULL, minSize, maxdepth, seqdist_arg) {
+
+  checkargs(alist(min.size = minSize, max.depth = maxdepth, seqdist.args = seqdist_arg))
+
 	##formula.call <- formula
 	tterms <- terms(formula)
 	seqdata <- eval(formula[[2]], data, parent.frame()) # to force evaluation
@@ -6,8 +12,8 @@ seqtree <- function(formula, data=NULL, weighted=TRUE, minSize=0.05, maxdepth=5,
 		stop("Left hand term in formula should be a stslist object (see seqdef)")
  	}
 	if(is.null(diss)){
-		seqdist_arg$seqdata <- seqdata
-		diss <- do.call(seqdist, seqdist_arg)
+		seqdist.args$seqdata <- seqdata
+		diss <- do.call(seqdist, seqdist.args)
 	}
 	if(weighted){
 		weights <- attr(seqdata, "weights")
@@ -19,13 +25,13 @@ seqtree <- function(formula, data=NULL, weighted=TRUE, minSize=0.05, maxdepth=5,
 	formula[[2]] <- NULL
 	## Model matrix from forumla
 	predictor <- as.data.frame(model.frame(formula, data, drop.unused.levels = TRUE, na.action=NULL))
-	tree <- DTNdisstree(dissmatrix=dissmatrix, predictor=predictor, terms=tterms, 
-						weights=weights, minSize=minSize, maxdepth=maxdepth, R=R, 
-						pval=pval, object=seqdata, weight.permutation=weight.permutation, 
+	tree <- DTNdisstree(dissmatrix=dissmatrix, predictor=predictor, terms=tterms,
+						weights=weights, min.size=min.size, max.depth=max.depth, R=R,
+						pval=pval, object=seqdata, weight.permutation=weight.permutation,
 						squared=squared, first=first)
 	class(tree) <- c("seqtree", class(tree))
 	return(tree)
-	
+
 }
 
 

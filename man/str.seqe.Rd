@@ -1,7 +1,7 @@
-\name{str.seqe}
-\alias{str.seqe}
+\name{str.eseq}
+\alias{str.eseq}
 \alias{str.seqelist}
-\alias{as.character.seqe}
+\alias{as.character.eseq}
 \alias{as.character.seqelist}
 
 \title{String representation of an event sequence object}
@@ -15,14 +15,14 @@
   Where time is the time elapsed from previous set of events and (e1,e2,...) a non empty list of simultaneous events.
   The function also works on list.
   Use \code{str.seqelist} to get a single string for a whole list, and \code{as.character.seqelist} to get a vector of strings.
-  \code{str.seqe} and \code{as.character.seqe} have mainly an internal purpose (they are called by print methods for example).
+  \code{str.eseq} and \code{as.character.eseq} have mainly an internal purpose (they are called by print methods for example).
 }
 
 \seealso{\code{\link{seqecreate}} for a full example }
 \examples{
 data(actcal.tse)
-actcal.seqe <- seqecreate(actcal.tse)
-as.character(actcal.seqe)
+actcal.eseq <- seqecreate(actcal.tse)
+as.character(actcal.eseq)
 }
 
 \author{Matthias Studer (with Gilbert Ritschard for the help page)}

@@ -63,7 +63,7 @@ seqalign <- function(seqdata, indices, indel=1, sm, with.missing = FALSE) {
 			# dest_j <- j
 		# }
 		operationlist[opi] <- op
-		
+
 		if(op=="S" || op=="E") {
 			seq1c[opi] <- as.character(seq1[1,i-1])
 			seq2c[opi] <- as.character(seq2[1,j-1])
@@ -86,13 +86,13 @@ seqalign <- function(seqdata, indices, indel=1, sm, with.missing = FALSE) {
 			break
 		}
 	}
-		
-	
-	
+
+
+
 	revopi <- function(l){
 		return(rev(l[1:(opi-1)]))
 	}
-	
+
 	ret <- list()
 	ret$operation <- revopi(operationlist)
 	ret$seq1 <- revopi(seq1c)

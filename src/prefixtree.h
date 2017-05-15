@@ -27,7 +27,7 @@ public:
     void addSequence(Sequence *s, Constraint *cst, const int& k);
     void simplifyTree(double minSup);
     int countSubsequence(double minSup);
-    //Give an overview of this tree (param�tre prof==profondeur, interne)
+    //Give an overview of this tree (paramètre prof==profondeur, interne)
     void print();
     //Type of this event
     void getSubsequences(SEXP result,double * support, int *index, SEXP classname, EventDictionary * ed);

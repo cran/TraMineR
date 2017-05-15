@@ -1,4 +1,7 @@
-plot.stslist.meant <- function(x, cpal=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, cex.plot=1, ylim=NULL, ...) {
+plot.stslist.meant <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
+  xaxis = TRUE, cex.axis = 1, ylim = NULL, cex.plot, ...) {
+
+  checkargs(alist(cex.axis = cex.plot))
 
   n <- attr(x,"nbseq")
   seql <- length(attr(x,"xtlab"))
@@ -21,8 +24,8 @@ plot.stslist.meant <- function(x, cpal=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, 
   barplot(mt,
           ## mgp=c(2.5,0.6,0),
           names.arg=if (xaxis) rownames(x) else NULL,
-          cex.names=cex.plot,
-          cex.axis=cex.plot,
+          cex.names=cex.axis,
+          cex.axis=cex.axis,
           col=cpal,
           ylim=ylim,
           ylab=ylab,
@@ -30,10 +33,10 @@ plot.stslist.meant <- function(x, cpal=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, 
           ...)
 
   ## Plotting the axes
-  ## axis(1, at=1:nbstat, labels=ltext, cex.axis=cex.plot)
+  ## axis(1, at=1:nbstat, labels=ltext, cex.axis=cex.axis)
 
   if (yaxis)
-    axis(2, at=round(seq(0, max(ylim), length.out=6),0), cex.axis=cex.plot)
+    axis(2, at=round(seq(0, max(ylim), length.out=6),0), cex.axis=cex.axis)
 
   if (errbar){
     se.mt <- x[,"SE"]

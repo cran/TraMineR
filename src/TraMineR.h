@@ -20,8 +20,6 @@
 #include <R_ext/Rdynload.h>
 #include <Rmath.h>
 
-
-
 //Macros for matrix indices
 //Using C indices
 #define MINDICE(ligne, colone,len) ((ligne)+(colone)*(len))
@@ -49,7 +47,7 @@
 	#define TRAMINER_DEBUG_LEVEL_DEFAULT 4
 #elif defined(TRAMINER_DEBUG_LEVEL_5)
 	#define TRAMINER_DEBUG_LEVEL_DEFAULT 5
-#else 
+#else
 	#define TRAMINER_DEBUG_LEVEL_DEFAULT 0
 #endif
 
@@ -81,10 +79,23 @@ extern int TRAMINER_DEBUG_LEVEL;
 				}\
 			}\
 		}while(false)
+  #define TMRLOGMATRIXINT(level,  mat, row, col, matsize) do{\
+  	if(level<TRAMINER_DEBUG_LEVEL){                           \
+  	  REprintf("%s %d: ", __FILE__, __LINE__);                \
+  	  REprintf("Row: %d, Col:%d\n", row, col);                \
+  	  for(int i=0; i<row; i++){                               \
+  	    for(int j=0; j<col; j++){                             \
+  	      REprintf("%d\t", mat[MINDICE(i,j,matsize)]);        \
+  	    }                                                     \
+  	    REprintf("\n");                                       \
+  	  }                                                       \
+  	}                                                         \
+  }while(false)
 #else
 	#define TMRLOG(level,...) do{}while(false)
 	#define TMRASSERT(exp) do{}while(false)
 	#define TMRLOGMATRIX(level,  mat, row, col, matsize) do{}while(false)
+  #define TMRLOGMATRIXINT(level,  mat, row, col, matsize) do{}while(false)
 #endif
 
 

@@ -14,8 +14,8 @@ extern "C"{
 class TreeEventNode;
 //Iterateur pour la map
 typedef std::map<int,TreeEventNode*>::iterator TreeEventMapIterator;
-//Définition de type pour aleger le code
-//Une map sur le type d'événements, et la classe événement
+//DÃ©finition de type pour aleger le code
+//Une map sur le type d'Ã©vÃ©nements, et la classe Ã©vÃ©nement
 class TreeEventMap: public std::map<int,TreeEventNode*> {
 
 public:

@@ -24,4 +24,4 @@ TraMineR.checkupdates()
 % R documentation directory.
 \keyword{package}
 
-\author{Nicolas S. Müller}
+\author{Nicolas S. MÃ¼ller}

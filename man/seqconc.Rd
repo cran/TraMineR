@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{seqconc}
 \alias{seqconc}
 \title{Concatenate vectors of states or events into a character string}
@@ -25,7 +24,7 @@ seqconc(data, var=NULL, sep="-", vname="Sequence", void=NA)
 \author{Alexis Gabadinho}
 
 \references{
-Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
+Gabadinho, A., G. Ritschard, M. Studer and N. S. MÃ¼ller (2009). Mining Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
 }
 
 \seealso{

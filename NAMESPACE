@@ -4,6 +4,7 @@ importFrom("grDevices", "col2rgb", "colorRamp", "dev.off", "rgb")
 importFrom("stats", "chisq.test", "complete.cases", "density", "dnorm", "dunif", "formula", "median", "model.frame", "model.matrix", "na.omit", "na.pass", "pnorm", "qnorm", "quantile", "reshape", "runif", "terms", "weighted.mean", "xtabs")
 importFrom("utils", "combn", "download.file", "read.table", packageDescription, packageVersion)
 importFrom("Hmisc", "errbar")
+importFrom("cluster", "daisy")
 
 export(
     alphabet,
@@ -15,6 +16,7 @@ export(
     seqalign,
     seqcomp,
     seqconc,
+    seqcost,
     seqdecomp,
     seqdef,
     seqdiff,
@@ -122,9 +124,7 @@ S3method(hist ,TraMineRPermut)
 export(
     dissassoc,
     disscenter,
-    dissreg,
     dissrep,
-    dissmfac,
     dissmfacw,
     disstreedisplay,
     disstree2dot,
@@ -139,7 +139,6 @@ export(
 )
 S3method(hist,dissassoc)
 S3method(print,dissassoc)
-S3method(print,dissregression)
 S3method(print,dissmultifactor)
 S3method(print,disstree)
 S3method(print,seqtree)
@@ -156,17 +155,17 @@ S3method(Math,seqelist)
 S3method(Ops,seqelist)
 S3method(plot,seqelist)
 S3method(Summary,seqelist)
-S3method(Math,seqe)
-S3method(Ops,seqe)
-S3method(plot,seqe)
-S3method(Summary,seqe)
-S3method(levels,seqe)
+S3method(Math,eseq)
+S3method(Ops,eseq)
+S3method(plot,eseq)
+S3method(Summary,eseq)
+S3method(levels,eseq)
 S3method(levels,seqelist)
 S3method(str,seqelist)
-S3method(str,seqe)
-S3method(as.character,seqe)
+S3method(str,eseq)
+S3method(as.character,eseq)
 S3method(as.character,seqelist)
-S3method(print,seqe)
+S3method(print,eseq)
 S3method(print,seqelist)
 S3method(print,seqeconstraint)
 S3method(print,subseqelist)
@@ -182,48 +181,12 @@ export(
     seqefsub,
     seqeid,
     seqelength,
-    seqesetlength,
     "seqelength<-",
     seqeweight,
     "seqeweight<-",
-    is.seqe,
+    is.eseq,
     is.seqelist,
     seqetm
 )
 
-
-useDynLib(TraMineR,
-##Debug
-TMR_getTraMineRDebugLevel = getTraMineRDebugLevel,
-TMR_setTraMineRDebugLevel = setTraMineRDebugLevel,
-##Inertia
-TMR_tmrsubmatrixinertia=tmrsubmatrixinertia,
-TMR_tmrWeightedInertiaDist = tmrWeightedInertiaDist,
-TMR_tmrWeightedInertiaContrib = tmrWeightedInertiaContrib,
-TMR_tmrWeightedInertiaContribExt = tmrWeightedInertiaContribExt,
-TMR_tmrinertiacontribext = tmrinertiacontribext,
-TMR_tmrWeightedInterInertia = tmrWeightedInterInertia,
-##Distance
-TMR_cLCP = cLCP,
-TMR_dist2matrix = dist2matrix,
-TMR_checktriangleineq = checktriangleineq,
-TMR_cLCS = cLCS,
-TMR_cLEVEN = cLEVEN,
-TMR_cstringdistance = cstringdistance,
-##Seqe
-TMR_tmrsequencegetdictionary = tmrsequencegetdictionary,
-TMR_tmrsequencestring = tmrsequencestring,
-TMR_tmrmatrixsubseqinseq = tmrmatrixsubseqinseq,
-TMR_tmrsequencecontainevent = tmrsequencecontainevent,
-TMR_tmrsequenceseveral = tmrsequenceseveral,
-TMR_tmrsequence = tmrsequence,
-TMR_tmrseqedist = tmrseqedist,
-TMR_tmreventinseq = tmreventinseq,
-TMR_tmrfindsubsequences = tmrfindsubsequences,
-TMR_tmrsequencegetid = tmrsequencegetid,
-TMR_tmrsequencegetlength = tmrsequencegetlength,
-TMR_tmrsequencesetlength = tmrsequencesetlength,
-TMR_tmrsequencegetweight = tmrsequencegetweight,
-TMR_tmrsequencesetweight = tmrsequencesetweight
-)
-
+useDynLib(TraMineR, .registration = TRUE, .fixes = "C_")

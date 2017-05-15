@@ -42,10 +42,6 @@ extern "C" {
         {"tmrmatrixsubseqinseq", (DL_FUNC) tmrmatrixsubseqinseq, 8},
         {NULL}
     };*/
-    void R_init_TraMineR(DllInfo *info) {
-        //   TMRSEQUENCE_type_tag= install("TMRSEQUENCE_TYPE_TAG");
-        //R_registerRoutines(info, NULL, TMRSEQUENCE_CallDefs, NULL, 0);
-    }
 
     /**
     	Build one sequence obect, a given idpers, time should be double and event integer
@@ -220,31 +216,32 @@ extern "C" {
     }
     /**Return a string representation of a sequence*/
     SEXP tmrsequencestring(SEXP seq) {
-        SEXP str=tmrsequencestringinternal(seq);
+        SEXP str;
+        PROTECT(str = tmrsequencestringinternal(seq));
         SEXP ret;
         PROTECT(ret = allocVector(STRSXP, 1));
         SET_STRING_ELT(ret, 0, str);
-        UNPROTECT(1);
+        UNPROTECT(2);
         return ret;
     }
 
 
     /**Main function find frequent subsequences*/
   SEXP tmrfindsubsequences(SEXP seqs, SEXP maxGap, SEXP windowSize,
-			   SEXP ageMinBegin, SEXP ageMaxBegin, 
-			   SEXP ageMaxEnd, SEXP countMethod, 
-			   SEXP minSupport, SEXP maxSubseqSize, 
-			   SEXP classname) 
+			   SEXP ageMinBegin, SEXP ageMaxBegin,
+			   SEXP ageMaxEnd, SEXP countMethod,
+			   SEXP minSupport, SEXP maxSubseqSize,
+			   SEXP classname)
   {
     //Initializing parameters
     Constraint * cst = new Constraint(REAL(maxGap)[0],REAL(windowSize)[0],
 				      REAL(ageMinBegin)[0],
 				      REAL(ageMaxBegin)[0],
-				      REAL(ageMaxEnd)[0], 
+				      REAL(ageMaxEnd)[0],
 				      REAL(countMethod)[0]);
     //REprintf((char*)"branches/nico 1\n\n");
-    
-    double mGap = cst->getmaxGap();;
+
+    double mGap = cst->getmaxGap();
     double wSize = cst->getwindowSize();
     double aMin = cst->getageMinBegin();
     double aMax = cst->getageMaxBegin();
@@ -258,7 +255,7 @@ extern "C" {
     // REprintf((char*)"ageMaxEnd = %f\n",aMaxEnd);
     // REprintf((char*)"countMethod = %i\n",cMethod);
 
-    int maxK = INTEGER(maxSubseqSize)[0]; 
+    int maxK = INTEGER(maxSubseqSize)[0];
     int k = 1;
     double mSupport=REAL(minSupport)[0];
 
@@ -270,8 +267,8 @@ extern "C" {
     PrefixTree * root= new PrefixTree();
     EventDictionary * ed=NULL;
     // adding one event to subseq at a time
-        
-    for (k=1; k<=maxK; k++) 
+
+    for (k=1; k<=maxK; k++)
       {
 	// clear support stored in tree
 	root->clearSupport();
@@ -279,7 +276,7 @@ extern "C" {
 	// REprintf((char*)"Step %i:\n     Adding sequences (size: %i)\n",
 	// 	 k,TreeEventNode::getNodeCount());
 	// add every sequence to the tree
-	for (int i=0; i<numseq; i++) 
+	for (int i=0; i<numseq; i++)
 	  {
 	    seq=VECTOR_ELT(seqs,i);
 	    ASSIGN_TMRSEQ_TYPE(s,seq);
@@ -296,7 +293,7 @@ extern "C" {
 	// simplify tree
 	root->simplifyTree(mSupport);
 	// REprintf((char*)"     Tree simplified (size: %i [added: %i])\n",
-	// 	 TreeEventNode::getNodeCount(), 
+	// 	 TreeEventNode::getNodeCount(),
 	// 	 (TreeEventNode::getNodeCount()-lastNodeCount));
 	if (TreeEventNode::getNodeCount()-lastNodeCount==0) break;
       }
@@ -314,20 +311,20 @@ extern "C" {
     int index=0;
     // REprintf((char*)"(%i)\nRetrieving subsequences...",returnsize);
     // extracting all subsequences
-    root->getSubsequences(subseq,REAL(supp),&index,classname,ed); 
+    root->getSubsequences(subseq,REAL(supp),&index,classname,ed);
     // REprintf((char*)"OK\n");
 
 
     // ----------------------------------------------------- //
-    // Reto Buergin, June 2011: Counting subsequences using 
+    // Reto Bürgin, June 2011: Counting subsequences using
     // different methods
 
     double *dsupp = REAL(supp);
     double *dcnt = REAL(cnt);
     SEXP subseqR;
     subseqR = VECTOR_ELT(subseq,0);
-    Sequence * subseqC = NULL;    
-    
+    Sequence * subseqC = NULL;
+
     for (int j=0; j<returnsize; j++)
       {
     	subseqR = VECTOR_ELT(subseq,j);
@@ -361,6 +358,7 @@ extern "C" {
     SET_VECTOR_ELT(ans,2,subseq); // list of subsequences
     UNPROTECT(4);
     delete root;
+    delete cst;
     return ans;
   }
 
@@ -373,13 +371,13 @@ extern "C" {
     		2: presence-absence
     		3: age at first occurrence
     */
-  SEXP tmrmatrixsubseqinseq(SEXP subseqs, SEXP seqs,SEXP maxGap, 
-			    SEXP windowSize,SEXP ageMinBegin, 
-			    SEXP ageMaxBegin,SEXP ageMaxEnd, 
-			    SEXP countMethod) 
+  SEXP tmrmatrixsubseqinseq(SEXP subseqs, SEXP seqs,SEXP maxGap,
+			    SEXP windowSize,SEXP ageMinBegin,
+			    SEXP ageMaxBegin,SEXP ageMaxEnd,
+			    SEXP countMethod)
   {
     double wSize=REAL(windowSize)[0],mGap=REAL(maxGap)[0];
-    double aMin=REAL(ageMinBegin)[0],aMax=REAL(ageMaxBegin)[0], 
+    double aMin=REAL(ageMinBegin)[0],aMax=REAL(ageMaxBegin)[0],
       aMaxEnd=REAL(ageMaxEnd)[0];
     int cMethod = REAL(countMethod)[0];
     if (wSize==-1) wSize=DBL_MAX;
@@ -396,19 +394,19 @@ extern "C" {
     double *matrix=REAL(ans);
     PROTECT(namesubseq= allocVector(STRSXP, nsub));
     PROTECT(nameseq= allocVector(STRSXP, ns));
-    for (int j=0;j<ns;j++) 
+    for (int j=0;j<ns;j++)
       {
 	seq=VECTOR_ELT(seqs,j);
 	SET_STRING_ELT(nameseq, j,tmrsequencestringinternal(seq));
       }
-    for (int i=0;i<nsub;i++) 
+    for (int i=0;i<nsub;i++)
       {
 	subseq=VECTOR_ELT(subseqs,i);
 	ASSIGN_TMRSEQ_TYPE(sub,subseq);
 	SET_STRING_ELT(namesubseq, i,tmrsequencestringinternal(subseq));
 	//Rprintf("Processing ");
 	//sub->print();
-	for (int j=0;j<ns;j++) 
+	for (int j=0;j<ns;j++)
 	  {
 	    seq=VECTOR_ELT(seqs,j);
 	    ASSIGN_TMRSEQ_TYPE(s,seq);
@@ -466,7 +464,7 @@ extern "C" {
             if(s->hasEvent()){
 				sen=s->getEvent();
 				age=0;
-              
+
 				while(sen!=NULL){
 					age += sen->getGap();
 					if(sen->getType()==event){

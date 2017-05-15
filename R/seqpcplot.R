@@ -1,14 +1,12 @@
-seqpcplot <- function(seqdata, group = NULL, weights = NULL,
-                      cex = 1, lwd = 1/4, cpal = NULL, grid.scale = 1/5,
-                      ltype = "unique", embedding = "most-frequent",
-                      lorder = NULL , lcourse = "upwards",
-                      filter = NULL, hide.col = "grey80",
-                      alphabet = NULL, missing = "auto", order.align = "first",
-                      title = NULL, xlab = NULL, ylab = NULL,
-                      xaxis = TRUE, yaxis = TRUE, axes = "all",
-                      xtlab = NULL, cex.plot = 1,
-                      rows = NA, cols = NA, plot = TRUE, seed = NULL,
-                      ...) {
+seqpcplot <- function(seqdata, group = NULL, weights = NULL, cex = 1, lwd = 1/4,
+  cpal = NULL, grid.scale = 1/5, ltype = "unique", embedding = "most-frequent",
+  lorder = NULL , lcourse = "upwards", filter = NULL, hide.col = "grey80",
+  alphabet = NULL, missing = "auto", order.align = "first", main = NULL,
+  xlab = NULL, ylab = NULL, xaxis = TRUE, yaxis = TRUE, axes = "all",
+  xtlab = NULL, cex.lab = 1, rows = NA, cols = NA, plot = TRUE, seed = NULL,
+  title, cex.plot, ...) {
+
+  checkargs(alist(main = title, cex.lab = cex.plot))
 
   seqpcplot_private(seqdata = seqdata, group = group, weights = weights,
                     cex = cex, lwd = lwd, cpal = cpal,
@@ -18,10 +16,10 @@ seqpcplot <- function(seqdata, group = NULL, weights = NULL,
                     filter = filter, hide.col = hide.col,
                     alphabet = alphabet, missing = missing,
                     order.align = order.align,
-                    title = title, xlab = xlab, ylab = ylab,
+                    main = main, xlab = xlab, ylab = ylab,
                     xaxis = xaxis, yaxis = yaxis,
                     axes = axes, xtlab = xtlab,
-                    cex.plot = cex.plot,
+                    cex.lab = cex.lab,
                     rows = rows, cols = cols, plot = plot, seed = seed,
                     ...)
 
@@ -38,14 +36,14 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
                               filter = NULL, alpha = 1,
                               ltype = "unique", embedding = "most-frequent",
                               sf.cex = 1, sf.cex.leaves = 1,
-                              title = NULL, xlab = NULL, ylab = NULL,
+                              main = NULL, xlab = NULL, ylab = NULL,
                               xlim, ylim,
                               alphabet = NULL, alphabet.optim = FALSE,
                               missing = c("auto", "show", "hide"),
                               R = 1000, order.align = NULL, maxit = 300,
                               xtlab = xtlab,
                               xaxis = TRUE, yaxis = TRUE, axes = "all",
-                              cex.plot = 1, rows = NA, cols = NA,
+                              cex.lab = 1, rows = NA, cols = NA,
                               plot = TRUE, seed = NULL, add = FALSE,
                               verbose = FALSE, ...) {
 
@@ -74,13 +72,13 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
     if (!(lorder %in% c("background", "foreground"))) {
       stop("[!] invalid lorder input")
     }
-    
+
     if (!is.null(filter)) {
       filter <- construct.filter(x = filter)
     }
 
     missing <- match.arg(missing)
-    
+
     mtext <- NULL
     if (is.list(filter) && # text below the title
         filter$type == "function" &&
@@ -99,8 +97,8 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
 
     if (!missing(seqdata)) {
 
-      ## seqe format
-      if (inherits(seqdata, "seqelist")) { # convert seqe data
+      ## eseq format
+      if (inherits(seqdata, "seqelist")) { # convert eseq data
 
         ##TMP <- TraMineR:::seqe2TSE(seqdata)
         TMP <- seqe2TSE(seqdata)
@@ -119,7 +117,7 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
           y <- y[subs]
           y <- factor(y, levels = levels(y)[levels(y) != "_end"])
         }
-        
+
         if (is.null(weights)) weights <- seqeweight(seqdata)
 
         ## STS format (STS or DSS representation)
@@ -129,7 +127,7 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
           seqdata <- seqdss(seqdata)
         }
         TMP <- as.data.frame(seqdata)
-        
+
         TMP <- reshape(data = TMP, ids = 1:nrow(TMP), times = colnames(TMP), timevar = "time", varying = list(state = colnames(TMP)), v.names = "state", direction = "long")
         TMP$id <- factor(TMP$id)
         TMP <- TMP[TMP$state %in% c(attr(seqdata, "alphabet"), attr(seqdata, "nr")), ]
@@ -152,7 +150,7 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
             y <- factor(y, levels = levels(y)[levels(y) != attr(seqdata, "nr")])
           }
         }
-        
+
         if (is.null(weights)) weights <- attr(seqdata, "weights")
 
         if (is.null(xlab)) {
@@ -682,7 +680,7 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
 
           ## colour subsequences
           TMP <- seqecreate(timestamp = pts$x, event = factor(pts$y, 1:ny, ylevs), id = pts$traj)
-          subseq <- seqefsub(TMP, strsubseq = filter$value, minSupport = 0)
+          subseq <- seqefsub(TMP, str.subseq = filter$value, min.support = 0)
           msubcount <- seqeapplysub(subseq)
           SUBS <- unique(pts$traj)[apply(msubcount, 1, sum) > 0]
           pts[!pts$traj %in% SUBS, colcols] <- hide.col
@@ -691,13 +689,13 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
     }
 
     ## title(s)
-    if (is.null(title)) {
+    if (is.null(main)) {
       if (ngroup > 1) {
-        title <- paste(grouplev, ", n = ", round(wid.group.unscaled, 1), sep = "")
-      } else title <- paste("n = ", round(wid.group.unscaled, 1), sep = "")
+        main <- paste(grouplev, ", n = ", round(wid.group.unscaled, 1), sep = "")
+      } else main <- paste("n = ", round(wid.group.unscaled, 1), sep = "")
     } else {
-      if ((ngroup > 1) & (length(title) < ngroup)) {
-        title <- rep(title, length.out = ngroup)
+      if ((ngroup > 1) & (length(main) < ngroup)) {
+        main <- rep(main, length.out = ngroup)
       }
     }
 
@@ -801,7 +799,7 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
 
     ## reset seed
     assign(".Random.seed", oldSeed, envir=globalenv())
-    
+
     ## plot data object
 
     x <- list(pts = pts, # pointdata
@@ -818,7 +816,7 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
               lwdcols = lwdcols,
               use.layout = !add, nx = nx, ny = ny,
               xlevs = xlevs, ylevs = ylevs, grouplev = grouplev,
-              title = title, mtext = mtext, xlab = xlab, ylab = ylab,
+              main = main, mtext = mtext, xlab = xlab, ylab = ylab,
               xlim = xlim, ylim = ylim,
               nxl = nxl, nyl = nyl, # layout
               ngrid = ngrid, ngrid0 = ngrid0,
@@ -830,7 +828,7 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
               lwd = lwd, lorder = lorder, col.nobs = col.nobs,
               sf.cex = sf.cex, sf.cex.leaves = sf.cex.leaves,
               add = add, xaxis = xaxis, yaxis = yaxis, axes = axes,
-              cex.plot = cex.plot)
+              cex.lab = cex.lab)
     class(x) <- "seqpcplot" # to allow replot
 
   }
@@ -865,7 +863,8 @@ plot.seqpcplot <- function(x, add = NULL, which = NULL, ...) {
     layout(matrix(1:(x$nxl * x$nyl), ncol = x$nxl, nrow = x$nyl, byrow = TRUE))
   }
 
-  par(cex.lab = x$cex.plot)
+  op <- par(cex.lab = x$cex.lab)
+
   plist <- list(x = 1, y = 1, xlab = x$xlab, ylab = x$ylab, xlim = x$xlim, ylim = x$ylim, type = "n", axes = FALSE)
   plist <- c(plist, list(...)[!names(list(...)) %in% names(plist)])
 
@@ -880,7 +879,7 @@ plot.seqpcplot <- function(x, add = NULL, which = NULL, ...) {
       if (x$yaxis & ((par("mar")[2] > 0) | (((i-1) %% x$nxl) == 0))) {
         axis(2, 1:x$ny, x$ylevs, las = 2)
       }
-      title(main = x$title[i])
+      title(main = x$main[i])
       if (length(x$mtext) != 0) mtext(x$mtext[i], side = 3)
     }
 
@@ -960,6 +959,7 @@ plot.seqpcplot <- function(x, add = NULL, which = NULL, ...) {
       box()
     }
   }
+  par(op)
 }
 
 ## create ordering of events
@@ -1020,7 +1020,7 @@ construct.filter <- function(x) {
     stopifnot(x >= 0 & x <= 1)
     x <- list(type = "function", value = "minfreq", level = x)
   }
-  
+
   if (is.list(x) | inherits(x, "seqpcfilter")) {
     if (sum(names(x) %in% c("type", "value")) != 2) stop("[!] filter must contain a type and a value object")
     if (!x$type %in% c("sequence", "subsequence", "value", "density", "function")) stop("[!] unknown input for filter$type")
@@ -1080,7 +1080,7 @@ colourize <- function(value, col1, col2) { # define colouring function
 seqpcfilter <- function(method = c("minfreq", "cumfreq", "linear"), level = 0.05) {
   value <- match.arg(method)
   if (is.null(level) && method %in% c("minfreq", "cumfreq"))
-    stop("'seqpcfilter' requires an inpute for 'level'.")
+    stop("'seqpcfilter' requires a valid 'level' value.")
   return(structure(list(type = "function", value = value,
                         level = level), class = "seqpcfilter"))
 }

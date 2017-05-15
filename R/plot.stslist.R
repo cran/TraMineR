@@ -2,8 +2,12 @@
 ## PLot of STS sequence objects
 ## =============================
 
-plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
-	cpal=NULL, missing.color=NULL, ylab=NULL, yaxis=TRUE, xaxis=TRUE, ytlab=NULL, ylas=0, xtlab=NULL, xtstep=NULL, cex.plot=1, ...) {
+plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
+  cpal = NULL, missing.color = NULL, ylab = NULL, yaxis = TRUE, xaxis = TRUE,
+  ytlab = NULL, ylas = 0, xtlab = NULL, xtstep = NULL, cex.axis = 1, tlim,
+  cex.plot, ...) {
+
+  checkargs(alist(idxs = tlim, cex.axis = cex.plot))
 
 	n <- nrow(x)
 	seql <- ncol(x)
@@ -20,15 +24,15 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 	}
 
 	## Range
-	if (is.null(tlim)) {
-		if (n>=10) tlim <- 1:10
-		else tlim=1:n
+	if (is.null(idxs)) {
+		if (n>=10) idxs <- 1:10
+		else idxs=1:n
 	}
-	else if (tlim[1]==0)
-			tlim <- 1:n
-	else if (max(tlim) > n)
-			tlim <- 1:n
-	
+	else if (idxs[1]==0)
+			idxs <- 1:n
+	else if (max(idxs) > n)
+			idxs <- 1:n
+
 	## Sorting
 	if (!is.null(sortv)) {
 		if (length(sortv)==1 && sortv %in% c("from.start", "from.end")) {
@@ -45,7 +49,7 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 		}
 
 		sortlab <- paste(", sorted")
-		
+
 	} else { sortlab <- NULL }
 
 	##
@@ -62,7 +66,7 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 	## Storing the optional parameters in a list
 	olist <- list(...)
 
-	ssamp <- x[tlim,]
+	ssamp <- x[idxs,]
 	seqbar <- apply(ssamp, 1, seqgbar, statl=statl, seql=seql)
 
 	## WEIGHTS
@@ -82,7 +86,7 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 	else {wlab <- NULL}
 
 	if (is.null(ylab)) {
-		ylab <- paste(length(tlim)," seq. ", "(", wlab,"n=", round(sum(weights),2),")",
+		ylab <- paste(length(idxs)," seq. ", "(", wlab,"n=", round(sum(weights),2),")",
 			sortlab, sep="")
 	}
 
@@ -101,7 +105,7 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 		tpos <- seq(1,seql, xtstep)
 		axis(1, at=tpos-0.5, labels=xtlab[tpos],
 		# mgp=c(3,0.5,0),
-		cex.axis=cex.plot)
+		cex.axis=cex.axis)
 	}
 
 	## Plotting the y axis
@@ -109,8 +113,8 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 		if ("space" %in% names(olist)) sp <- olist[["space"]]
 		else sp <- 0.2
 
-		idxmax <- length(tlim)
-		
+		idxmax <- length(idxs)
+
 		if (!weighted) {
 			y.lab.pos <- sp+0.5
 
@@ -130,12 +134,12 @@ plot.stslist <- function(x, tlim=NULL, weighted=TRUE, sortv=NULL,
 			}
 		}
 
-		if (is.null(ytlab)) {ytlab <- tlim}
+		if (is.null(ytlab)) {ytlab <- idxs}
 		else if (length(ytlab)==1) {
-            if(ytlab=="id") {ytlab <- rownames(x)[tlim]}
+            if(ytlab=="id") {ytlab <- rownames(x)[idxs]}
         }
 
-		axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=ylas, tick=FALSE, cex.axis=cex.plot)
+		axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=ylas, tick=FALSE, cex.axis=cex.axis)
 	}
 
 }

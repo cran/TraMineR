@@ -15,29 +15,29 @@ transition[4,1:4] <- c("Start,FullTime", "Start,PartTime",
 		"Start,LowPartTime", "NoActivity")
 print(transition)
 
-actcal.seqe <- seqecreate(actcal.seq, tevent=transition)
+actcal.eseq <- seqecreate(actcal.seq, tevent=transition)
 
-fsubseq <- seqefsub(actcal.seqe, minSupport=100)
+fsubseq <- seqefsub(actcal.eseq, min.support=100)
 msubcount <- seqeapplysub(fsubseq, method="count")
 #First lines...
 msubcount[1:9, 6:7]
 ## Using time constraints
 ## Searching subsequences starting in summer (between June and September)
-fsubseq <- seqefsub(actcal.seqe, minSupport=10,
-		constraint=seqeconstraint(ageMin=6, ageMax=9))
+fsubseq <- seqefsub(actcal.eseq, min.support=10,
+		constraint=seqeconstraint(age.min=6, age.max=9))
 fsubseq[1:10]
 ## Searching subsequences occurring in summer (between June and September)
-fsubseq <- seqefsub(actcal.seqe, minSupport=10,
-		constraint=seqeconstraint(ageMin=6, ageMax=9, ageMaxEnd=9))
+fsubseq <- seqefsub(actcal.eseq, min.support=10,
+		constraint=seqeconstraint(age.min=6, age.max=9, age.max.end=9))
 fsubseq[1:10]
 ## Searching subsequences enclosed in a 6 months period
 ## and with a maximum gap of 2 months
-fsubseq <- seqefsub(actcal.seqe, minSupport=10,
-		constraint=seqeconstraint(maxGap=2, windowSize=6))
+fsubseq <- seqefsub(actcal.eseq, min.support=10,
+		constraint=seqeconstraint(max.gap=2, window.size=6))
 fsubseq[1:10]
 
 ## Looking for frequent subsequences
-fsubseq <- seqefsub(actcal.seqe, pMinSupport=0.01)
+fsubseq <- seqefsub(actcal.eseq, pmin.support=0.01)
 ## Frequences of 10 first subsequences
 omar <- par(mar=c(5,4,4,2)+.1)
 plot(fsubseq[1:10], col="cyan")

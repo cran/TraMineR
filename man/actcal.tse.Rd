@@ -32,7 +32,7 @@ actcal.tse <- seqformat(actcal,var=13:24, from='STS',to='TSE',
 	tevent=transition)
 
 ## Defining the event sequence object
-actcal.seqe <- seqecreate(id=actcal.tse$id,
+actcal.eseq <- seqecreate(id=actcal.tse$id,
 	time=actcal.tse$time, event=actcal.tse$event)
 }
 \keyword{Datasets}

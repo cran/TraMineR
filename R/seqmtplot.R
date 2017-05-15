@@ -2,7 +2,7 @@
 ## PLOT OF THE STATES DISTRIBUTION BY TIME UNIT
 ## ============================================
 
-seqmtplot <- function(seqdata, group=NULL, title=NULL, ...) {
-	seqplot(seqdata, group=group, type="mt", title=title, ...)
+seqmtplot <- function(seqdata, group = NULL, main = NULL, ...) {
+	seqplot(seqdata, group=group, type="mt", main=main, ...)
 
 }

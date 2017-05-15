@@ -24,7 +24,7 @@ The following discrimination test functions are implemented:
 \value{
   An objet of type \code{subseqelistchisq} (subtype of \code{subseqelist}) with the following elements
   \item{subseq}{Sorted list of found discriminating subsequences}
-  \item{seqe}{The event sequence object on which the tests were computed}
+  \item{eseq}{The event sequence object on which the tests were computed}
   \item{constraint}{Time constraints used for searching the subsequences (see \code{\link{seqeconstraint}})}
   \item{labels}{Levels (value labels) of the target group variable}
   \item{type}{Type of test used}
@@ -32,7 +32,7 @@ The following discrimination test functions are implemented:
 }
 
 \references{
-    Studer, M., Müller, N.S., Ritschard, G. & Gabadinho, A. (2010), "Classer, discriminer et visualiser des séquences d'événements", In Extraction et gestion des connaissances (EGC 2010), \emph{Revue des nouvelles technologies de l'information} RNTI. Vol. E-19, pp. 37-48.
+    Studer, M., MÃ¼ller, N.S., Ritschard, G. & Gabadinho, A. (2010), "Classer, discriminer et visualiser des sÃ©quences d'Ã©vÃ©nements", In Extraction et gestion des connaissances (EGC 2010), \emph{Revue des nouvelles technologies de l'information} RNTI. Vol. E-19, pp. 37-48.
 }
 
 %\author{ ~~who you are~~ }
@@ -43,10 +43,10 @@ The following discrimination test functions are implemented:
 \seealso{See also \code{\link{plot.subseqelistchisq}} to plot the results}
 \examples{
 data(actcal.tse)
-actcal.seqe <- seqecreate(actcal.tse)
+actcal.eseq <- seqecreate(actcal.tse)
 
 ##Searching for frequent subsequences, that is, appearing at least 20 times
-fsubseq <- seqefsub(actcal.seqe, pMinSupport=0.01)
+fsubseq <- seqefsub(actcal.eseq, pmin.support=0.01)
 
 ##searching for susbsequences discriminating the most men and women
 data(actcal)

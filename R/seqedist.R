@@ -1,9 +1,9 @@
-seqedist <- function(seqe, idcost, vparam, interval=TRUE, norm=TRUE){
+seqedist <- function(eseq, idcost, vparam, interval=TRUE, norm=TRUE){
     norm <- as.integer(norm)
     interval <- as.integer(interval)
-    return(.Call(TMR_tmrseqedist, seqe, idcost, vparam, norm, interval));
+    return(.Call(C_tmrseqedist, eseq, idcost, vparam, norm, interval));
 }
 
-seqeage <- function(seqe, eventList){
-	return(.Call(TMR_tmreventinseq, seqe, as.integer(eventList)))
+seqeage <- function(eseq, event.list) {
+	return(.Call(C_tmreventinseq, eseq, as.integer(event.list)))
 }

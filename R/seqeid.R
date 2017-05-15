@@ -2,20 +2,23 @@
 ## Return a id of given subsequences
 ## ========================================
 
-seqeid<-function(s){
-  tmrsequenceid.internal<-function(s){
-    if(is.seqe(s)){
-      return(.Call(TMR_tmrsequencegetid, s))
+seqeid <- function(eseq, s) {
+
+  checkargs(alist(eseq = s))
+
+  tmrsequenceid.internal <- function(eseq) {
+    if(is.eseq(eseq)){
+      return(.Call(C_tmrsequencegetid, eseq))
     }
     return(NA)
   }
   #message("Event sequence analysis module is still experimental")
-  if(is.seqelist(s)){
-    return(as.integer(sapply(unlist(s),tmrsequenceid.internal)))
-  }else if(is.seqe(s)){
-    return(tmrsequenceid.internal(s))
+  if(is.seqelist(eseq)){
+    return(as.integer(sapply(unlist(eseq),tmrsequenceid.internal)))
+  }else if(is.eseq(eseq)){
+    return(tmrsequenceid.internal(eseq))
   }else{
-    stop("seq should be a seqelist. See help on seqecreate.")
+    stop("eseq should be a seqelist. See help on seqecreate.")
   }
   return(NA)
 }

@@ -1,38 +1,48 @@
 ## ========================================
-## Get and set weight of seqe
+## Get and set weight of eseq
 ## ========================================
 
-seqeweight<-function(s){
-	seqeweight.internal<-function(s){
-		if(is.seqe(s)) {
-			return(.Call(TMR_tmrsequencegetweight, s))
+seqeweight <- function(eseq, s) {
+
+  checkargs(alist(eseq = s))
+
+	seqeweight.internal<-function(eseq){
+		if(is.eseq(eseq)) {
+			return(.Call(C_tmrsequencegetweight, eseq))
 		}
 		return(-1)
 	}
-	
-	if (is.seqelist(s)) {
-		as.numeric(sapply(unlist(s),seqeweight.internal))
-	}else if(is.seqe(s)) {
-		as.numeric(seqeweight.internal(s))
+
+	if (is.seqelist(eseq)) {
+		as.numeric(sapply(unlist(eseq),seqeweight.internal))
+	}else if(is.eseq(eseq)) {
+		as.numeric(seqeweight.internal(eseq))
 	} else {
-		stop(" [!] s should be a seqelist. See help on seqecreate.")
+		stop(" [!] eseq should be a seqelist. See help on seqecreate.")
 	}
-}
-"seqeweight<-" <- function(s, value){
-	if(!is.seqelist(s)) {
-		stop(" [!] s should be a seqelist. See help on seqecreate.")
-	}
-	if(length(s)!=length(value)) {
-		stop(" [!] s and weights should be of the same size.")
-	}
-	.Call(TMR_tmrsequencesetweight, s, as.double(value))
-	return(s)
 }
 
-seqeisweighted <- function(s) {
-	if(!is.seqelist(s)) {
-		stop(" [!] s should be a seqelist. See help on seqecreate.")
+"seqeweight<-" <- function(eseq, s, value) {
+
+  checkargs(alist(eseq = s))
+
+	if(!is.seqelist(eseq)) {
+		stop(" [!] eseq should be a seqelist. See help on seqecreate.")
 	}
-	weights <- seqeweight(s)
+	if(length(eseq)!=length(value)) {
+		stop(" [!] eseq and weights should be of the same size.")
+	}
+	.Call(C_tmrsequencesetweight, eseq, as.double(value))
+	return(eseq)
+}
+
+seqeisweighted <- function(eseq, s) {
+
+  checkargs(alist(eseq = s))
+
+	if(!is.seqelist(eseq)) {
+		stop(" [!] eseq should be a seqelist. See help on seqecreate.")
+	}
+	weights <- seqeweight(eseq)
 	return(any(weights!=1))
 }

@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{mvad}
 \docType{data}
 \alias{mvad}

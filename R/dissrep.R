@@ -2,8 +2,11 @@
 ## Extracting a set of representatives
 ## ====================================
 
-dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep=0.25, nrep=NULL, tsim=0.10, 
-	dmax=NULL, weights=NULL) {
+dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE,
+  coverage = 0.25, nrep = NULL, pradius = 0.10, dmax = NULL, weights = NULL,
+  trep, tsim) {
+
+  checkargs(alist(coverage = trep, pradius = tsim))
 
 	if (inherits(diss, "dist")) {
         diss <- dist2matrix(diss)
@@ -11,7 +14,7 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 
 	nbobj <- nrow(diss)
 
-	if (is.null(weights)) { weights <- rep(1, nbobj) } 
+	if (is.null(weights)) { weights <- rep(1, nbobj) }
 	else if (length(weights)!= nbobj) {
 		stop(" [!] number of provided weigths must equal the number of objects")
 	}
@@ -23,36 +26,36 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 	## Max theoretical distance
 	if (is.null(dmax)) { dmax <- max(diss) }
 
-	if (tsim<0 || tsim>1) { stop("tsim must be between 0 and 1", call.=FALSE) }
-	tsim <- dmax*tsim
+	if (pradius<0 || pradius>1) { stop("pradius must be between 0 and 1", call.=FALSE) }
+	pradius <- dmax*pradius
 
 	message(" [>] max. distance: ", round(dmax,2))
-	message(" [>] neighborhood radius: ", round(tsim,2))
+	message(" [>] neighborhood radius: ", round(pradius,2))
 
 	## =====================
 	## Neighbourhood density
 	## =====================
 	if (criterion=="density") {
- 
-		neighbours <- diss<tsim
+
+		neighbours <- diss<pradius
 		score <- as.vector(neighbours %*% weights)
 		decreasing <- TRUE
-	} 
+	}
 	## ===========
 	## Frequencies
 	## ===========
 	else if (criterion=="freq") {
- 
+
 		neighbours <- diss==0
 		score <- as.vector(neighbours %*% weights)
 
 		decreasing <- TRUE
-	} 
+	}
 	## ============
 	## Min distance
 	## ============
 	else if (criterion=="dist") {
-		## Sum of distances for all distinct sequences	
+		## Sum of distances for all distinct sequences
 		score <- as.vector(diss %*% weights)
 		decreasing <- FALSE
 	}
@@ -78,31 +81,31 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 
 	score.sort <- order(score, decreasing=decreasing)
 	rep.dist <- diss[score.sort, score.sort]
-	
+
 	## ==========================
 	## Selecting representatives
 	## ==========================
 	idx <- 0
 	idxrep <- NULL
-	
-	## Coverage fixed	
-	if (is.null(nrep) && trep>0) {
+
+	## Coverage fixed
+	if (is.null(nrep) && coverage>0) {
 		pctrep <- 0
 
-		while (pctrep<trep && idx < nbobj) {
+		while (pctrep<coverage && idx < nbobj) {
 			## Searching for next non-redundant sequence in candidate list
 			idx <- idx+1
-			if (idx==1 || all(rep.dist[idx, idxrep]>tsim)) {
+			if (idx==1 || all(rep.dist[idx, idxrep]>pradius)) {
 				idxrep <- c(idxrep, idx)
 				tempm <- as.matrix(rep.dist[, idxrep])
-				nbnear <- sum((rowSums(tempm<tsim)>0)*weights[score.sort])
+				nbnear <- sum((rowSums(tempm<pradius)>0)*weights[score.sort])
 				pctrep <- nbnear/weights.sum
 			}
 		}
 
 		nbkeep <- length(idxrep)
 		message(" [>] ", nbkeep, " representative(s) selected, coverage=",
-			round(pctrep,2)*100,"% (threshold=",round(trep,2)*100,"%)")
+			round(pctrep,2)*100,"% (threshold=",round(coverage,2)*100,"%)")
 	}
 	## Number of desired representative fixed
 	else {
@@ -111,7 +114,7 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 		while (repcount<nrep && idx<nbobj) {
 			## Searching for next non-redundant sequence in candidate list
 			idx <- idx+1
-			if (idx==1 || all(rep.dist[idx, idxrep]>tsim)) {
+			if (idx==1 || all(rep.dist[idx, idxrep]>pradius)) {
 				## message(" [>] Adding object with index", score.sort[idx], " to representative set")
 				idxrep <- c(idxrep, idx)
 				repcount <- repcount+1
@@ -135,11 +138,11 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 	if (nbkeep>1) {
 		tied <- 0
 		minidx <- apply(dist.repseq,1, which.min)
-		
+
 		for (i in 1:nbobj) {
 			dist.repseq[i,-minidx[i]] <- NA
 		}
-	
+
 		## message(" [>] ",tied," observations equaly distant from two or more representatives")
 
 		na <- colSums((!is.na(dist.repseq))*weights)
@@ -147,13 +150,13 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 		MD <- SD/na
 
 		## Number of similar sequences attributed to each representative
-		nb <- colSums((dist.repseq < tsim)*weights, na.rm=TRUE)
-		
+		nb <- colSums((dist.repseq < pradius)*weights, na.rm=TRUE)
+
 		## DC: Sum of distances to global center
     		## V: Inertia
 		DC <- matrix(nrow=nbkeep,ncol=1)
     		V <- matrix(nrow=nbkeep,ncol=1)
-		for (i in 1:nbkeep) { 
+		for (i in 1:nbkeep) {
       			sel <- !is.na(dist.repseq[,i])
 			DC[i] <- sum(dc.tot[sel]*weights[sel])
 			tmp <- as.matrix(diss[sel, sel])
@@ -164,13 +167,13 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 		na <- sum((!is.na(dist.repseq))*weights)
 		SD <- sum(dist.repseq*weights, na.rm=TRUE)
     		MD <- SD/sum(weights)
-		nb <- sum((dist.repseq < tsim)*weights, na.rm=TRUE)
+		nb <- sum((dist.repseq < pradius)*weights, na.rm=TRUE)
 		DC <- sum(dc.tot*weights)
 		V <- DC/sum(weights)
 	}
 
 	quality <- (sum(dc.tot*weights)-sum(dist.repseq*weights, na.rm=TRUE))/sum(dc.tot*weights)
-	
+
 	## Overall stats
 	na <- c(na,sum(na))
 	nb <- c(nb,sum(nb))
@@ -181,7 +184,7 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 
 	pcta <- (na/weights.sum)*100
 	pctb <- (nb/weights.sum)*100
-	Q <- (DC-SD)/DC*100	
+	Q <- (DC-SD)/DC*100
 
 	stats <- data.frame(na, pcta, nb, pctb, SD, MD, DC, V, Q)
 	colnames(stats) <- c("na", "na(%)", "nb", "nb(%)", "SD", "MD", "DC", "V", "Q")
@@ -199,8 +202,8 @@ dissrep <- function(diss, criterion="density", score=NULL, decreasing=TRUE, trep
 	attr(res, "Scores") <- score
 	attr(res, "Distances") <- dist.repseq
 	attr(res, "Statistics") <- stats
-	attr(res, "Quality") <- quality 
+	attr(res, "Quality") <- quality
 
 	return(res)
-}	
-	
+}
+

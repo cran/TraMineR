@@ -4,15 +4,19 @@
 
 
 #tmrsequence<-function(id,timestamp,event){
-#  .Call("tmrsequence",as.integer(id),as.double(timestamp),as.integer(event), PACKAGE="TraMineR")
+#  .Call(C_tmrsequence,as.integer(id),as.double(timestamp),as.integer(event))
 #}
-seqecreate <- function(data=NULL, id=NULL,timestamp=NULL, event=NULL, endEvent=NULL,
-						tevent="transition", use.labels=TRUE, weighted=TRUE){
+seqecreate <- function(data = NULL, id = NULL,timestamp = NULL, event = NULL,
+  end.event = NULL, tevent = "transition", use.labels = TRUE, weighted = TRUE,
+  endEvent) {
+
+  checkargs(alist(end.event = endEvent))
+
 	return(seqecreate.internal(data=data, id=id, timestamp=timestamp, event=event,
-								endEvent=endEvent, tevent=tevent, use.labels=use.labels,
+								end.event=end.event, tevent=tevent, use.labels=use.labels,
 								order.before=FALSE, weighted=weighted))
 }
-seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent,
+seqecreate.internal <- function(data, id, timestamp, event, end.event, tevent,
 								use.labels, order.before, weighted){
 	if (!is.null(data)) {
 		if (inherits(data,"stslist")) {
@@ -53,21 +57,21 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent,
 		stop(" [!] Missing values not supported")
 	}
 	#  warning("Event sequence analysis module is still experimental", call.=FALSE)
-	classname <- c("seqe")
+	classname <- c("eseq")
 	intEvent <- NULL
 	if(!is.factor(event)){
 		event <- factor(event)
 	}
 	if (is.factor(event)) {
 		dictionnary <- levels(event)
-		if (!is.null(endEvent)) {
+		if (!is.null(end.event)) {
 			for(i in 1:length(dictionnary)){
-				if (dictionnary[i] == endEvent) {
+				if (dictionnary[i] == end.event) {
 					intEvent <- i
 				}
 			}
 			if (is.null(intEvent)) {
-				stop(" [!] endEvent not found in event dictionary")
+				stop(" [!] end.event not found in event dictionary")
 				return(invisible())
 			}
 		}
@@ -81,8 +85,8 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent,
 	timestamp <- as.double(timestamp)
 	event <- as.integer(event)
 
-	
-	ret <- .Call(TMR_tmrsequenceseveral, as.integer(id),
+
+	ret <- .Call(C_tmrsequenceseveral, as.integer(id),
 		as.double(timestamp), as.integer(event),
 		as.integer(c(intEvent)), classname, as.character(dictionnary))
 
@@ -101,15 +105,15 @@ seqecreate.internal <- function(data, id, timestamp, event, endEvent, tevent,
 }
 #SEXP tmrsequence(SEXP idpers, SEXP time, SEXP event, SEXP classname, SEXP seq)
 
-seqecreatesub <- function(subseq, seqe){
+seqecreatesub <- function(subseq, eseq){
 #  warning("Event sequence analysis module is still experimental", call.=FALSE)
-	if (!is.seqelist(seqe)) {
-		stop(" [!] seqe should be a seqelist. See help on seqecreate.")
+	if (!is.seqelist(eseq)) {
+		stop(" [!] eseq should be a seqelist. See help on seqecreate.")
 	}
-	classname <- c("seqe")
+	classname <- c("eseq")
 	irow <- 1
 	ret <- list()
-	codebase <- levels(seqe)
+	codebase <- levels(eseq)
 	iseq <- 1
 	for (subseqstr in subseq) {
 		mystr <- gsub("(^\\()|(\\)$)", "", unlist(strsplit(subseqstr, "\\)[[:space:]]*-[[:space:]]*\\(")))
@@ -135,14 +139,14 @@ seqecreatesub <- function(subseq, seqe){
 		timestamp <- as.double(timestamp)
 		events <- as.integer(events)
 		sortedindex <- order(timestamp, events)
-		
-		ret[[iseq]]<-.Call(TMR_tmrsequence, as.integer(-1),
+
+		ret[[iseq]]<-.Call(C_tmrsequence, as.integer(-1),
 			as.double(timestamp[sortedindex]), as.integer(events[sortedindex]),
-			classname, seqe[[1]])
+			classname, eseq[[1]])
 			iseq <- iseq + 1
 	}
 #  e<-factor(event,levels=levels(seq))
- # ret<-list(.Call("tmrsequence",as.integer(-1),as.double(timestamp),as.integer(e),classname,seq, PACKAGE="TraMineR"))
+ # ret<-list(.Call(C_tmrsequence,as.integer(-1),as.double(timestamp),as.integer(e),classname,seq))
 	class(ret) <- c("seqelist", "list")
 	return(ret)
 }

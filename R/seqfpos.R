@@ -2,13 +2,13 @@
 ## Search for the first occurence of a given element in a sequence
 ## ===============================================================
 
-statefpos <- function (seq, state) {
-	pos <- which(seq==state)
+statefpos <- function (seqdata, state) {
+	pos <- which(seqdata==state)
 	if (length(pos)==0) fpos <- NA
 	else fpos <- min(pos)
 	return(fpos)
 	}
-	
+
 
 seqfpos <- function (seqdata, state) {
 

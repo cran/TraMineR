@@ -1,15 +1,14 @@
 ## SEQUENCE TRUNCATION
 
-TraMineR.trunc <- function(seq, mstate, sl, 
-	left="DEL", right="DEL", gaps="DEL", 
-	neutral="#", void="%") {
+TraMineR.trunc <- function(seqdata, mstate, sl, left = "DEL", right = "DEL",
+  gaps = "DEL", neutral = "#", void = "%") {
 
 	sidx <- 1:sl
 
 	## Index des missing et index des etats valides
 	na.pos <- sidx[mstate]
 	notna.pos <- sidx[!mstate]
-	
+
 	## Position du premier etat valide
 	c1 <- notna.pos[1]
 
@@ -20,32 +19,32 @@ TraMineR.trunc <- function(seq, mstate, sl,
 	rc <- max(notna.pos)+1
 	mm <- na.pos[na.pos > lc+1 & na.pos < rc-1]
 
-	seq.trunc <- seq
-	
+	seqdata.trunc <- seqdata
+
 	if (!is.na(left) & lc>0) {
-		if (left=="DEL") seq.trunc[1:lc] <- void
-		else if (left=="NEUTRAL") seq.trunc[1:lc] <- neutral
-		else seq.trunc[1:lc] <- left
+		if (left=="DEL") seqdata.trunc[1:lc] <- void
+		else if (left=="NEUTRAL") seqdata.trunc[1:lc] <- neutral
+		else seqdata.trunc[1:lc] <- left
 	}
 
 	if (!is.na(right) & rc<=sl) {
-		if (right=="DEL") seq.trunc[rc:sl] <- void
-		else if (right=="NEUTRAL") seq.trunc[rc:sl] <- neutral
-		else seq.trunc[rc:sl] <- right
+		if (right=="DEL") seqdata.trunc[rc:sl] <- void
+		else if (right=="NEUTRAL") seqdata.trunc[rc:sl] <- neutral
+		else seqdata.trunc[rc:sl] <- right
 	}
 
 	if (!is.na(gaps) & length(mm>0)) {
-		if (gaps=="DEL") seq.trunc[mm] <- void
-		else if (gaps=="NEUTRAL") seq.trunc[mm] <- neutral
-		else seq.trunc[mm] <- gaps
-	}
-	
-	ndel <- sum(seq.trunc==void, na.rm=TRUE)
-	
-	if (ndel>0) {
-		seq.trunc <- seq.trunc[seq.trunc!=void]
-		seq.trunc <- c(seq.trunc,rep(void,ndel))
+		if (gaps=="DEL") seqdata.trunc[mm] <- void
+		else if (gaps=="NEUTRAL") seqdata.trunc[mm] <- neutral
+		else seqdata.trunc[mm] <- gaps
 	}
 
-	return(seq.trunc)
-} 
+	ndel <- sum(seqdata.trunc==void, na.rm=TRUE)
+
+	if (ndel>0) {
+		seqdata.trunc <- seqdata.trunc[seqdata.trunc!=void]
+		seqdata.trunc <- c(seqdata.trunc,rep(void,ndel))
+	}
+
+	return(seqdata.trunc)
+}

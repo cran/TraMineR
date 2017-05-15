@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{seqrep}
 \alias{seqrep}
 \alias{seqrplot}
@@ -15,9 +14,10 @@ Returns either an as small as possible set of non redundant representatives cove
 %set, the goal being to easily get sounded interpretation of the set of sequences.
 %}
 
-\usage{ seqrep(seqdata, criterion="density", score=NULL,
-    decreasing=TRUE, trep=0.25, nrep=NULL,
-    tsim=0.1, dmax=NULL, dist.matrix=NULL, weighted=TRUE, ...)
+\usage{
+seqrep(seqdata, criterion = "density", score = NULL, decreasing = TRUE,
+  coverage = 0.25, nrep = NULL, pradius = 0.10, dmax = NULL, diss = NULL,
+  weighted = TRUE, trep, tsim, dist.matrix, ...)
 }
 
 \arguments{
@@ -34,27 +34,29 @@ Returns either an as small as possible set of non redundant representatives cove
       ascending or descending order of this score. Default is \code{TRUE}, i.e. descending. The first object in the candidate list
       is then supposed to be the most representative. }
 
-  \item{trep}{coverage threshold, i.e., minimum proportion of sequences that should have a representative in their
-      neighborhood (neighborhood radius is defined by \code{tsim}).}
+  \item{coverage}{coverage threshold, i.e., minimum proportion of sequences that should have a representative in their
+      neighborhood (neighborhood radius is defined by \code{pradius}).}
 
  \item{nrep}{number of representative sequences. If \code{NULL} (default), the size of the representative set is
-     controlled by \code{trep}.}
+     controlled by \code{coverage}.}
 
-  \item{tsim}{neighborhood
+  \item{pradius}{neighborhood
 radius as a percentage of the maximum (theoretical)
 distance \code{dmax}. Defaults to 0.1 (10\%). Sequence \eqn{y} is
 redundant to sequence \eqn{x} when it is in the neighborhood of \eqn{x}, i.e., within a distance
-\code{tsim*dmax} from \eqn{x}.}
+\code{pradius*dmax} from \eqn{x}.}
 
-  \item{dmax}{maximum theoretical distance. Used to derive the neighborhood radius as \code{tsim*dmax}. If \code{NULL}, the value of \code{dmax} is derived from the dissimilarity matrix.}
+  \item{dmax}{maximum theoretical distance. Used to derive the neighborhood radius as \code{pradius*dmax}. If \code{NULL}, the value of \code{dmax} is derived from the dissimilarity matrix.}
 
-  \item{dist.matrix}{matrix of pairwise dissimilarities between sequences in \code{seqdata}. If \code{NULL}, the
+  \item{diss}{matrix of pairwise dissimilarities between sequences in \code{seqdata}. If \code{NULL}, the
       matrix is computed by calling the \code{\link{seqdist}} function. In that case, optional arguments to be passed to
       the \code{seqdist} function (see \code{...} hereafter) should also be provided.}
 
   \item{weighted}{logical: Should weights assigned to the state sequence object be accounted for? (See \code{\link{seqdef}}.)
   Set as \code{FALSE} to ignore the weights.}
-
+  \item{trep}{Deprecated. Use \code{coverage} instead.}
+  \item{tsim}{Deprecated. Use \code{pradius} instead.}
+  \item{dist.matrix}{Deprecated. Use \code{diss} instead.}
   \item{...}{optional arguments to be passed to the \code{seqdist} function, mainly \code{dist.method} specifying the
       metric for computing the distance matrix, \code{norm} for normalizing the distances, \code{indel} and \code{sm} for
       indel and substitution costs when Optimal Matching metric is chosen. See \code{\link{seqdist}} manual page for
@@ -72,7 +74,7 @@ sequence the more representative it is supposed to be. Therefore, sequences are 
 The \emph{neighborhood density} is the
 number---density---of sequences in the neighborhood of the
 sequence. This requires to set the neighborhood radius
-\code{tsim}.  Sequences are
+\code{pradius}.  Sequences are
 sorted in decreasing density order.
 
 The \emph{mean state frequency} criterion is the mean value of the transversal frequencies of the successive states.
@@ -83,7 +85,7 @@ sequence length
 \deqn{
 MSF(s)=\frac{1}{\ell} \sum_{i=1}^{\ell} f_{s_{i}}
 }{
-	MSF(s)=1/l sum f(s_i)
+	MSF(s) = sum f(s_i) / l
 }
 %
 The lower and upper boundaries of \eqn{MSF} are \eqn{0} and \eqn{1}. \eqn{MSF} is equal to \eqn{1} when all the sequences
@@ -106,11 +108,11 @@ with \eqn{P(s_{t},t)}{P(s_t,t)} the probability to observe state \eqn{s_t} at po
 The question is how to determinate the state probabilities \eqn{P(s_{t},t)}{P(s_t,t)}. One commonly used method for
 computing them is to postulate a Markov Chain model, which can be of various order. The implemented criterion considers the
 probabilities derived from the first order Markov model, that is each \eqn{P(s_{t},t)}{P(s_t,t)}, \eqn{t>1} is set to the
-transition rate \eqn{p(s_t|s_{t-1})}{p(s_t)|s_t-1} estimated across sequences from the observations at positions \eqn{t}
+transition rate \eqn{p(s_t|s_{t-1})}{p(s_t|s_(t-1))} estimated across sequences from the observations at positions \eqn{t}
 and \eqn{t-1}. For \eqn{t=1}, we set \eqn{P(s_1,1)} to the observed frequency of the state \eqn{s_1} at position 1.
 
 The likelihood \eqn{P(s)} being generally very small, we use
-\eqn{-\log P(s)} as sorting criterion. The latter quantity reaches its minimum for
+\eqn{-\log P(s)}{-log P(s)} as sorting criterion. The latter quantity reaches its minimum for
 \eqn{P(s)} equal to 1, which leads to sort the sequences in
 ascending order of their score.
 
@@ -134,10 +136,10 @@ are produced by the \code{\link{seqplot}} function using the \code{type="r"}
 argument, or the \code{\link{seqrplot}} alias. }
 
 \references{
-{Gabadinho A, Ritschard G (2013). "Searching for typical life trajectories applied to child birth histories", In R Lévy, E. Widmer (eds.), \emph{Gendered Life Courses}, pp. 287-312. Vienna: LIT.}
+{Gabadinho A, Ritschard G (2013). "Searching for typical life trajectories applied to child birth histories", In R LÃ©vy, E. Widmer (eds.), \emph{Gendered Life Courses}, pp. 287-312. Vienna: LIT.}
 
 
-{Gabadinho A, Ritschard G, Studer M, Müller NS (2011). "Extracting and Rendering Representative Sequences", In A Fred, JLG Dietz, K Liu, J Filipe (eds.), \emph{Knowledge Discovery, Knowledge Engineering and Knowledge Management}, volume 128 of \emph{Communications in Computer and Information Science (CCIS)}, pp. 94-106. Springer-Verlag.}
+{Gabadinho A, Ritschard G, Studer M, MÃ¼ller NS (2011). "Extracting and Rendering Representative Sequences", In A Fred, JLG Dietz, K Liu, J Filipe (eds.), \emph{Knowledge Discovery, Knowledge Engineering and Knowledge Management}, volume 128 of \emph{Communications in Computer and Information Science (CCIS)}, pp. 94-106. Springer-Verlag.}
 }
 
 \seealso{\code{\link{seqplot}}, \code{\link{plot.stslist.rep}}, \code{\link{dissrep}}, \code{\link{disscenter}}}
@@ -155,7 +157,7 @@ costs <- seqsubm(biofam.seq, method="TRATE")
 biofam.om <- seqdist(biofam.seq, method="OM", sm=costs)
 
 ## Representative set using the neighborhood density criterion
-biofam.rep <- seqrep(biofam.seq, dist.matrix=biofam.om, criterion="density")
+biofam.rep <- seqrep(biofam.seq, diss=biofam.om, criterion="density")
 biofam.rep
 summary(biofam.rep)
 plot(biofam.rep)

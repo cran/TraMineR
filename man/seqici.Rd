@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{seqici}
 \alias{seqici}
 \title{Complexity index of individual sequences}
@@ -51,11 +50,11 @@ sequence.
 
 \references{
 
-Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
+Gabadinho, A., G. Ritschard, N. S. MÃ¼ller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
 
- Gabadinho, A., Ritschard, G., Studer, M. and Müller,
-N.S. (2010). "Indice de complexité pour le tri et la comparaison de
-séquences catégorielles", In \emph{Extraction et gestion des
+ Gabadinho, A., Ritschard, G., Studer, M. and MÃ¼ller,
+N.S. (2010). "Indice de complexitÃ© pour le tri et la comparaison de
+sÃ©quences catÃ©gorielles", In \emph{Extraction et gestion des
 connaissances (EGC 2010), Revue des nouvelles technologies de
 l'information RNTI}. Vol. E-19, pp. 61-66. }
 
@@ -85,4 +84,4 @@ seqici(ex1.seq, with.missing=TRUE)
 \author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
 
 \keyword{Longitudinal characteristics}
-\keyword{State sequences} 
+\keyword{State sequences}

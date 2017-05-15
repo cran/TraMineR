@@ -8,9 +8,9 @@ Plotting a seqdiff object.
   Plot method for the sliding values returned by \code{\link{seqdiff}}. Plots a statistic (the Pseudo R2 by default) along the position axis.
 }
 \usage{
-\method{plot}{seqdiff}(x, stat = "Pseudo R2", type = "l", ylab = stat, xlab = "",
-     legendposition = "top", ylim = NULL,
-     xaxt = TRUE, col = NULL, xtstep=NULL, ...)
+\method{plot}{seqdiff}(x, stat = "Pseudo R2", type = "l", ylab = stat,
+  xlab = "", legend.pos = "top", ylim = NULL, xaxis = TRUE, col = NULL,
+  xtstep = NULL, legendposition, xaxt, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,11 +19,13 @@ Plotting a seqdiff object.
   \item{type}{the line \code{type}, see \code{\link{lines}} }
   \item{ylab}{character: y-axis label.}
   \item{xlab}{character: x-axis label.}
-  \item{legendposition}{character: position of the line legend, see \code{\link{legend}}}
+  \item{legend.pos}{character: position of the line legend, see \code{\link{legend}}}
   \item{ylim}{numeric: if not \code{NULL}, range of the y-axis.}
-  \item{xaxt}{logical: if \code{TRUE} an x-axis is plotted.}
+  \item{xaxis}{logical: if \code{TRUE} an x-axis is plotted.}
   \item{col}{list of colors to use for each line.}
   \item{xtstep}{integer: optional step between tick-marks and labels on the x-axis. If unspecified, the \code{xtstep} attribute of the sequence object \code{x} is used. (see \code{\link{seqdef}})}
+  \item{legendposition}{Deprecated. Use \code{legend.pos} instead.}
+  \item{xaxt}{Deprecated. Use \code{xaxis} instead.}
   \item{\dots}{Additional parameters passed to \code{\link{lines}}}
 }
 \details{

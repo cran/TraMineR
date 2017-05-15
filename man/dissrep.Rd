@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{dissrep}
 \alias{dissrep}
 %- Also NEED an '\alias' for EACH other topic documented here.
@@ -7,9 +6,9 @@
 The function extracts a set of representative objects that exhibits the key features of the whole data set, the goal being to get easy sounded interpretation of the latter. The user can set either the desired coverage level (the proportion of objects having a representative in their neighborhood) or the desired number of representatives.
 }
 \usage{
-dissrep(diss, criterion="density",
-    score=NULL, decreasing=TRUE,
-    trep=0.25, nrep=NULL, tsim=0.1, dmax=NULL, weights=NULL)
+dissrep(diss, criterion = "density", score = NULL, decreasing = TRUE,
+  coverage = 0.25, nrep = NULL, pradius = 0.10, dmax = NULL,
+  weights = NULL, trep, tsim)
 }
 %- maybe also 'usage' for other objects documented here.
 
@@ -32,24 +31,26 @@ the objects in the candidate list must be sorted in ascending or
 decreasing order of this score. The first object in the candidate
 list is supposed to be the most representative.}
 
-  \item{trep}{controls the size of the representative set by setting
+  \item{coverage}{controls the size of the representative set by setting
 the desired coverage level, i.e the proportion of objects having a
 representative in their neighborhood. Neighborhood radius is defined
-by \code{tsim}.}
+by \code{pradius}.}
 
   \item{nrep}{number of representatives. If \code{NULL} (default),
-\code{trep} argument is used to control the size of the
+\code{coverage} argument is used to control the size of the
 representative set.}
 
-  \item{tsim}{neighborhood
+  \item{pradius}{neighborhood
 radius as a percentage of the maximum (theoretical)
 distance  \code{dmax}. Defaults to 0.1 (10\%). Object \eqn{y} is
 redundant to object \eqn{x} when it is in the neighborhood of \eqn{x}, i.e., within a distance
-\code{tsim*dmax} from \eqn{x}.}
+\code{pradius*dmax} from \eqn{x}.}
 
-  \item{dmax}{maximum theoretical distance. Used to derive the neighborhood radius as \code{tsim*dmax}. If \code{NULL}, the value of \code{dmax} is derived from the dissimilarity matrix.}
+  \item{dmax}{maximum theoretical distance. Used to derive the neighborhood radius as \code{pradius*dmax}. If \code{NULL}, the value of \code{dmax} is derived from the dissimilarity matrix.}
 
     \item{weights}{vector of weights of length equal to the number of rows of the dissimilarity matrix. If \code{NULL}, equal weights are assigned.}
+  \item{trep}{Deprecated. Use \code{coverage} instead.}
+  \item{tsim}{Deprecated. Use \code{pradius} instead.}
  }
 
 \details{
@@ -66,7 +67,7 @@ order. Indeed, this criterion is the neighborhood (see below)
 criterion with the neighborhood diameter set to 0.
 
 The \emph{neighborhood density} is the
-number---density---of sequences in the neighborhood of the object. This requires to set the neighborhood radius \code{tsim}.  Objects are
+number---density---of sequences in the neighborhood of the object. This requires to set the neighborhood radius \code{pradius}.  Objects are
 sorted in decreasing density order.
 
 
@@ -92,9 +93,9 @@ Print and summary methods are available.
 }
 
 \references{
-{Gabadinho A, Ritschard G (2013). "Searching for typical life trajectories applied to child birth histories", In R Lévy, E. Widmer (eds.), \emph{Gendered Life Courses}, pp. 287-312. Vienna: LIT.}
+{Gabadinho A, Ritschard G (2013). "Searching for typical life trajectories applied to child birth histories", In R LÃ©vy, E. Widmer (eds.), \emph{Gendered Life Courses}, pp. 287-312. Vienna: LIT.}
 
-Gabadinho A, Ritschard G, Studer M, Müller NS (2011). "Extracting and Rendering Representative Sequences", In A Fred, JLG Dietz, K Liu, J Filipe (eds.), \emph{Knowledge Discovery, Knowledge Engineering and Knowledge Management}, volume 128 of \emph{Communications in Computer and Information Science (CCIS)}, pp. 94-106. Springer-Verlag.
+Gabadinho A, Ritschard G, Studer M, MÃ¼ller NS (2011). "Extracting and Rendering Representative Sequences", In A Fred, JLG Dietz, K Liu, J Filipe (eds.), \emph{Knowledge Discovery, Knowledge Engineering and Knowledge Management}, volume 128 of \emph{Communications in Computer and Information Science (CCIS)}, pp. 94-106. Springer-Verlag.
 }
 
 \seealso{\code{\link{seqrep}}, \code{\link{disscenter}}}

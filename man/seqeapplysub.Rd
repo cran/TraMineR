@@ -1,4 +1,3 @@
-\encoding{latin1}
 \name{seqeapplysub}
 \alias{seqeapplysub}
 \title{Checking for the presence of given event subsequences}
@@ -33,7 +32,7 @@ The cells of the matrix contain the requested values (count, presence-absence in
 \seealso{\code{\link{seqecreate}} for more information on event sequence object and \cite{Gabadinho et al. (2009)} on how to use the event sequence analysis module.}
 
 \references{
-Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide. Department of Econometrics and Laboratory of Demography, University of Geneva.
+Gabadinho, A., G. Ritschard, M. Studer and N. S. MÃ¼ller (2009). Mining Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide. Department of Econometrics and Laboratory of Demography, University of Geneva.
 }
 
 
@@ -42,13 +41,13 @@ Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence 
 data(actcal.tse)
 
 ## Creating the event sequence object
-actcal.seqe <- seqecreate(actcal.tse)
+actcal.eseq <- seqecreate(actcal.tse)
 
 ## Printing sequences
-actcal.seqe[1:10]
+actcal.eseq[1:10]
 
 ## Looking for frequent subsequences
-fsubseq <- seqefsub(actcal.seqe,pMinSupport=0.01)
+fsubseq <- seqefsub(actcal.eseq,pmin.support=0.01)
 
 ## Counting the number of occurrences of each subsequence
 msubcount <- seqeapplysub(fsubseq,method="count")
@@ -65,7 +64,7 @@ msubage <- seqeapplysub(fsubseq,method="age")
 ## First lines...
 msubage[1:10,1:10]
 }
-\author{Matthias Studer and Reto Bürgin (alternative counting methods) (with Gilbert Ritschard for the help page)}
+\author{Matthias Studer and Reto BÃ¼rgin (alternative counting methods) (with Gilbert Ritschard for the help page)}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{Event sequences}

@@ -52,7 +52,7 @@ void PrefixTree::simplifyTree(double minSup) {
     this->child.simplifyTreeMap(minSup);
 }
 
-//Give an overview of this tree (param�tre prof==profondeur, interne)
+//Give an overview of this tree (paramètre prof==profondeur, interne)
 void PrefixTree::print() {
     this->child.print(0,true);
 }

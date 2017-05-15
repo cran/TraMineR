@@ -1,18 +1,20 @@
 ## ========================================
 ## Check if subsequence
 ## ========================================
-is.seqe<-function(s){
-#   return(.Call("istmrsequence",s, PACKAGE="TraMineR"))
-    return(inherits(s,"seqe"))
+is.eseq <- function(eseq, s) {
+  checkargs(alist(eseq = s))
+#   return(.Call(C_istmrsequence,eseq))
+    return(inherits(eseq,"eseq"))
 }
-is.seqelist<-function(s){
-#   return(.Call("istmrsequence",s, PACKAGE="TraMineR"))
-   return(inherits(s,"seqelist"))
+is.seqelist <- function(eseq, s) {
+  checkargs(alist(eseq = s))
+#   return(.Call(C_istmrsequence,eseq))
+  return(inherits(eseq,"seqelist"))
 }
-#as.seqelist<-function(s){
-#   return(.Call("istmrsequence",s, PACKAGE="TraMineR"))
-#    class(s)<-c("seqelist","list")
-#    return(s)
+#as.seqelist<-function(eseq){
+#   return(.Call(C_istmrsequence,eseq))
+#    class(eseq)<-c("seqelist","list")
+#    return(eseq)
 #}
 
 ###Methods taken from survival package
@@ -42,24 +44,24 @@ Ops.seqelist  <- function(...){
 Summary.seqelist<-function(...) {
   stop("Invalid operation on event sequences")
 }
-Math.seqe <- function(...)  {
+Math.eseq <- function(...)  {
   stop("Invalid operation on event sequences")
 }
-Ops.seqe  <- function(...)  {
+Ops.eseq  <- function(...)  {
   stop("Invalid operation on event sequences")
 }
-Summary.seqe<-function(...) {
+Summary.eseq<-function(...) {
   stop("Invalid operation on event sequences")
 }
 
-levels.seqe<-function(x,...){
-  if(!is.seqe(x))stop("x should be a seqe object. See help on seqecreate.")
-  return(.Call(TMR_tmrsequencegetdictionary,x))
+levels.eseq<-function(x,...){
+  if(!is.eseq(x))stop("x should be a eseq object. See help on seqecreate.")
+  return(.Call(C_tmrsequencegetdictionary,x))
 }
 
 levels.seqelist<-function(x,...){
   if(!is.seqelist(x))stop("x should be a seqelist. See help on seqecreate.")
-  if(length(x)>0) return(.Call(TMR_tmrsequencegetdictionary,x[[1]]))
+  if(length(x)>0) return(.Call(C_tmrsequencegetdictionary,x[[1]]))
 }
 ## ========================================
 ## Return a string representation of a sequence
@@ -69,33 +71,33 @@ str.seqelist<-function(object,...){
 #message("Event sequence analysis module is still experimental")
   if(is.seqelist(object)){
       object<-cat(as.character(object),"\n")
-  }else if (is.seqe(object)){
+  }else if (is.eseq(object)){
     object<-cat(as.character(object),"\n")
   }else{
     stop("object should be a seqelist. See help on seqecreate.")
   }
   NextMethod("str")
 }
-str.seqe<-function(object,...){
-#  seqestr(s)
-  if(!is.seqe(object))stop("object should be a seqe object. See help on seqecreate.")
-  object <- .Call(TMR_tmrsequencestring, object)
+str.eseq<-function(object,...){
+#  seqestr(eseq)
+  if(!is.eseq(object))stop("object should be a eseq object. See help on seqecreate.")
+  object <- .Call(C_tmrsequencestring, object)
   NextMethod("str")
 }
 
-as.character.seqe<-function(x, ...){
-#  seqestr(s)
-  if(!is.seqe(x))stop("x should be a seqe object. See help on seqecreate.")
-  x<-.Call(TMR_tmrsequencestring,x)
+as.character.eseq<-function(x, ...){
+#  seqestr(eseq)
+  if(!is.eseq(x))stop("x should be a eseq object. See help on seqecreate.")
+  x<-.Call(C_tmrsequencestring,x)
   NextMethod("as.character")
 }
 
 as.character.seqelist<-function(x, ...){
-  tmrsequencestring.internal<-function(s){
-    if(is.seqe(s)){
-      return(.Call(TMR_tmrsequencestring, s))
+  tmrsequencestring.internal<-function(eseq){
+    if(is.eseq(eseq)){
+      return(.Call(C_tmrsequencestring, eseq))
     }
-    return(as.character(s))
+    return(as.character(eseq))
   }
   if(!is.seqelist(x))  stop("x should be a seqelist object. See help on seqecreate.")
   x <- as.character(sapply(unlist(x), tmrsequencestring.internal))
@@ -106,10 +108,10 @@ as.character.seqelist<-function(x, ...){
 ## Print sequences
 ## ========================================
 
-#seqeprint<-function(s){
-#  print(seqestr(s))
+#seqeprint<-function(eseq){
+#  print(seqestr(eseq))
 #}
-print.seqe<-function(x,quote = FALSE, ...){
+print.eseq<-function(x,quote = FALSE, ...){
   x <- as.character(x)
   print(x, quote=quote, ...)
 }
@@ -122,7 +124,7 @@ print.seqelist<-function(x, quote = FALSE, ...){
 ## Plot sequences
 ## ========================================
 
-plot.seqe <- function(x, type = "pc", ...) {
+plot.eseq <- function(x, type = "pc", ...) {
   if (type == "pc") {
     seqpcplot(x, ...)
   }

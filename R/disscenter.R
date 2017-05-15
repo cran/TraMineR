@@ -60,21 +60,21 @@ disscentertrim <- function(diss, group=NULL, medoids.index=NULL, allcenter=FALSE
 	keep=1-trim
 	## pour chaque valeur du groupe
 	for (i in 1:length(lgrp)) {
-		## on crée le groupe en question
+		## on crÃ©e le groupe en question
 		cond <- grp==lgrp[i]
 		grpindiv <- sort(ind[cond])
 		## on calcul la contribution a l'inertie intraclasse
 		if (allcenter) {
 			ret[, i] <- 0
 			others <- sort(ind[!cond])
-			dT <- .Call(TMR_tmrWeightedInertiaContribExt, diss, grpindiv, others,weights)
+			dT <- .Call(C_tmrWeightedInertiaContribExt, diss, grpindiv, others,weights)
 			dTindiv <- 1:sum(cond)
 			dT <- dT - weighted.mean(dT[dTindiv], weights[grpindiv])
 			ret[grpindiv, i] <- dT[dTindiv]
 			ret[others, i] <- dT[-(dTindiv)]
 		}
 		else {
-			dc <- .Call(TMR_tmrWeightedInertiaContrib, diss, as.integer(grpindiv),weights)
+			dc <- .Call(C_tmrWeightedInertiaContrib, diss, as.integer(grpindiv),weights)
 			dc <- dc-weighted.mean(dc, weights[cond])/2
 			
 			ret[grpindiv] <- dc
@@ -82,7 +82,7 @@ disscentertrim <- function(diss, group=NULL, medoids.index=NULL, allcenter=FALSE
 			if (trim>0) {
 					maxdist <- quantile(dc, probs=keep)
 					trimmedcond <- dc<=maxdist
-					dT <- .Call(TMR_tmrinertiacontribext, diss, grpindiv[trimmedcond], grpindiv[!trimmedcond])
+					dT <- .Call(C_tmrinertiacontribext, diss, grpindiv[trimmedcond], grpindiv[!trimmedcond])
 					ntrimmed <- sum(trimmedcond)
 					dT <- dT-mean(dT[1:ntrimmed])/2
 					mindc <- min(dT)

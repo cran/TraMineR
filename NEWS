@@ -1,5 +1,119 @@
 ## =========
-Version 1.8-13 
+Version 2.0-5 [2017-05-13] (Stable version)
+
+Note:
+  - This is a major update of the CRAN version of TraMineR.
+  - Check also changes in versions 1.9-14, 2.0-0, 2.0-1, 2.0-2, 2.0-3, 
+    and 2.0-4 that have not been released on the CRAN.
+
+Bug fixes:
+  - seqtrate(): now accepts a sequence object ('seqdata') containing only one sequence.
+  - seqdist(): now accepts a reference sequence object ('refseq') containing
+    missing values while the main sequence object ('seqdata') doesn't.
+
+Misc:
+  - Replaced default deprecated values of 'norm' in 
+    seqdistmc() and seqtree().
+  - Fixed issues with examples in documentation page of
+    seqtree().
+
+
+## =========
+Version 2.0-4 [2017-04-13] (Unreleased version)
+
+Changes in existing functions:
+  - Rename several argument names to increase consistency within TraMineR and
+    between TraMineR and R. The aim is also to have a common naming 
+    convention within TraMineR.
+    A new internal function - checkargs() - is used to guarantee backward
+    compatibility. If the old argument name is used instead of the new one,
+    a warning message with an explanation is displayed and the execution
+    continues. If the new and old argument names are used together, an error
+    message is displayed and the execution stops.
+    The following functions have at least one renamed argument: dissrep(),
+    disstree(), disstree2dot(), disstree2dotp(), disstreedisplay(), is.eseq(),
+    is.seqelist(), seqdiff(), seqeconstraint(), seqecontain(), seqecreate(),
+    seqefsub(), seqeid(), seqelength(), seqelength<-, seqetm(), seqeweight(),
+    seqeweight<-, seqlegend(), seqpcplot(), seqplot(), seqrep(), seqtab(),
+    seqtrate(), seqtree(), seqtree2dot(), seqtreedisplay(), seqeisweighted(),
+    plot.seqalign(), plot.seqdiff(), plot.stslist(), plot.stslist.freq(),
+    plot.stslist.meant(), plot.stslist.modst(), plot.stslist.rep(),
+    plot.stslist.statd(), plot.subseqelistchisq(). See the help page of each of
+    these functions for the mapping between old and new argument names.
+  - Renamed function: is.seqe() was renamed as is.eseq().
+
+Misc:
+  - Fixed an issue with an example in the documentation page of seqpcplot().
+  - Fix equation typing errors in seqrep() documentation.
+
+
+## =========
+Version 2.0-3 [2017-04-06] (Unreleased version)
+
+Misc:
+  - In src/tmrsequence.cpp from TraMineR 1.8-13:
+    - Fix two memory errors detected by Valgrind.
+    - Fix a PROTECT error.
+  - Fixed issues with examples in documentation pages of
+    dissmfacw, disstree, seqtree, and plot.stslist.meant.
+
+
+## =========
+Version 2.0-2 [2017-03-28] (Unreleased version)
+
+Misc:
+  - Change character encoding from latin1 (ISO-8859-1) to UTF-8.
+  - Normalize line endings: LF.
+
+
+## =========
+Version 2.0-1 [2017-03-27] (Unreleased version)
+
+Misc:
+  - Remove the following unused functions: vidx(), seqmatsaltt(), seqmathenikoff().
+  - Remove the functions deprecated in TraMineR 1.x: seqesetlength(), dissreg(), dissmfac().
+
+
+## =========
+Version 2.0-0 [2017-03-27] (Unreleased version)
+
+New function:
+  - seqcost(): Evolution of seqsubm() that offers different ways (CONSTANT,
+    TRATE, INDELS, INDELSLOG, FUTURE, FEATURES) to determine indel and
+    substitution costs (see the documentation of seqcost() for details). Unlike
+    seqsubm(), seqcost() returns both the indel and the substitution costs.
+
+Changes in existing functions:
+  - seqdist():
+    - New major version with many new features and an new extensible, robust
+      and documented implementation (R code).
+    - New methods: localized OM (OMloc), spell length sensitive OM (OMslen),
+      OM of spells (OMspell), OM of sequences of transitions (OMstran),
+      Time Warp Edit Distance (TWED), Number of Matching Subsequences (NMS),
+      Number of Matching Subsequences weighted by the Minimum Shared Time (NMSMST),
+      Subsequence Vectorial Representation (SVRspell), Euclidean distance (EUCLID),
+      Chi-squared distance (CHI2).
+    - New arguments: 'kweights', 'tpow', 'expcost', 'context', 'link', 'h', 'nu',
+      'transindel', 'otto', 'previous', 'add.column', 'breaks', 'step', 'overlap',
+      'weighted', 'prox'.
+    - 'sm': value "CONSTANT" has been removed for DHD as it doesn't make sense
+      and the values "INDELS" and "INDELSLOG" have been added (see seqcost()
+      documentation).
+    - 'norm': value TRUE is replaced by "auto" and FALSE by "none".
+    - See the updated documentation of seqdist() for details.
+  - seqsubm(): This now an alias for seqcost(...)$sm.
+
+
+## =========
+Version 1.9-14 [2017-03-20] (Unreleased version)
+
+Misc:
+  - Registration of native routines for R 3.4.x.
+    See https://stat.ethz.ch/pipermail/r-devel/2017-February/073755.html.
+
+
+## =========
+Version 1.8-13
 
 Misc:
   - Changes in C-code for the seqefsub function: replaced call
@@ -278,8 +392,8 @@ Bug fixes:
         the plotting function.
   - dissrep(), seqrep(): error when 'nrep' cannot be reached (reported by M. Studer)
   - seqefsub(): when using strsubseq argument, countMethod of seqeconstraint
-        was not taken into account (Reported by Reto Buergin).
-  - seqeconstraint(): added consistency checks to avoid misuses (Reported by Reto Buergin).
+        was not taken into account (Reported by Reto Bürgin).
+  - seqeconstraint(): added consistency checks to avoid misuses (Reported by Reto Bürgin).
   - print.seqelist() and as.character.seqelist(): generated segfault when
         converting long event sequences to character (Reported by Pierre Molinier).
   - seqsubm(): Very small rounding errors (1e-16) were sometimes leading to non symmetric
