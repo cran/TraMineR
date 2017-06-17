@@ -38,7 +38,7 @@ seqtree <- function(formula, data = NULL, weighted = TRUE, min.size = 0.05,
 print.seqtree <- function(x, digits = getOption("digits") - 2, medoid=TRUE, ...){
 	stslistmedoid <- function(object, index) {
 		x <- seqconc(object[index,], void=attr(object,"void"))
-		x <- suppressMessages(seqformat(x, from='STS', to='SPS', compressed=TRUE))
+		x <- suppressMessages(seqformat(x, from = "STS", to = "SPS", compress = TRUE))
 		return(x)
 	}
 	print.disstree(x, digits = digits, medoid=medoid, medoid.fun=stslistmedoid,...)

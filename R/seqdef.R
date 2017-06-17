@@ -30,7 +30,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		}
 	}
 	else if (informat %in% c("SPS","SPELL")) {
-		seqdata <- seqformat(seqdata,from=informat,to='STS',stsep=stsep, ...)
+		seqdata <- seqformat(seqdata, from = informat, to = "STS", stsep = stsep, ...)
 		## if (is.null(cnames)) cnames <- colnames(seqdata)
 	}
 

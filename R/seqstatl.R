@@ -5,14 +5,14 @@
 seqstatl <- function(data, var=NULL, format='STS') {
 
 	listform <- c("STS","SPS","SPELL","DSS")
-	if (!format %in% listform) 
+	if (!format %in% listform)
 		stop("Input format must be one of: ", listform)
 
 	## Extracting the sequences from the data set
 	seqdata <- seqxtract(data, var)
 
-	## 
-	if (format=='SPS') seqdata <- seqformat(seqdata, from='SPS', to='STS')
+	##
+	if (format=='SPS') seqdata <- seqformat(seqdata, from = "SPS", to = "STS")
 
 	## Convert into the extended format to list states/events
 	if (seqfcheck(seqdata) %in% c(":","-"))

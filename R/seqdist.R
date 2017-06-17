@@ -71,7 +71,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
       if (!identical(seqdata.nr, refseq.nr))
         msg.stop("'refseq' and 'seqdata' must have the same code for missing values")
       refseq.type <- "sequence"
-    } else if (is.positive.integer(refseq)) {
+    } else if (is.a.positive.integer(refseq)) {
       if (refseq > nseqs)
         msg.stop("'refseq' must be less than the number of sequences in 'seqdata'")
       refseq.type <- if (refseq == 0) "most frequent" else "index"
@@ -158,7 +158,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     msg.stop.in("link", links)
 
   # step
-  if (!is.positive.integer(step))
+  if (!is.a.positive.integer(step))
     msg.stop("'step' must be a positive integer")
 
   #### Check arguments not yet implemented ####
@@ -203,7 +203,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
       msg.stop.na("link")
     # According to Marteau, we should have h >= 0
     if (!is.a.number(h) || h < 0)
-      msg.stop("'h' must be a numeric greater than or equal to 0")
+      msg.stop("'h' must be a number greater than or equal to 0")
   }
   # OMstran
   else if (method == "OMstran") {
@@ -212,8 +212,8 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     if (missing(otto))
       msg.stop.miss("otto")
     else if (!is.a.number(otto) || otto < 0 || otto > 1)
-      msg.stop("'otto' must be a numeric in [0, 1]")
-    # TODO
+      msg.stop("'otto' must be a number in [0, 1]")
+    # TODO Implement in future versions
     if (length(seqs.dlens) > 1)
       msg.stop(method, "currently works only with sequences of equal length")
   }
@@ -244,9 +244,9 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
       msg.stop.miss("nu")
     # According to Marteau, we should have h >= 0 and nu > 0
     if (!is.a.number(h) || h < 0)
-      msg.stop("'h' must be a numeric greater than or equal to 0")
+      msg.stop("'h' must be a number greater than or equal to 0")
     if (!is.a.number(nu) || nu <= 0)
-      msg.stop("'nu' must be a numeric strictly greater than 0")
+      msg.stop("'nu' must be a number strictly greater than 0")
   }
 
   # HAM, DHD
@@ -444,7 +444,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     else {
       msg.stop.ie("no known preparation for this 'refseq' type")
     }
-    refseq.sps <- suppressMessages(seqformat(refseq.raw, from = "STS", to = "SPS", compressed = TRUE))
+    refseq.sps <- suppressMessages(seqformat(refseq.raw, from = "STS", to = "SPS", compress = TRUE))
     msg("using reference sequence", refseq.sps)
     rm(refseq.raw)
     rm(refseq.sps)

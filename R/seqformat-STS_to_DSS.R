@@ -1,8 +1,10 @@
+# Should only be used through seqformat()
+
 ## ==============================
 ## Convert from STS to DSS format
 ## ==============================
 
-STS_to_DSS <- function(seqdata, 
+STS_to_DSS <- function(seqdata,
 	left=NA, right="DEL", gaps=NA, missing=NA, void="%", nr="*") {
 
 	nbseq <- seqdim(seqdata)[1]
@@ -21,16 +23,16 @@ STS_to_DSS <- function(seqdata,
 		j <- 1
 		tmpseq <- seqdata[i,]
 		sl <- TraMineR.length(tmpseq, void)
-		
+
 		while (j <= sl) {
 			iseq <- tmpseq[j]
-			
+
 			out[i,idx] <- iseq
 
-			while (j < sl & tmpseq[j+1]==iseq) { 
+			while (j < sl & tmpseq[j+1]==iseq) {
 				j <- j+1
 			}
-	
+
 			j <- j+1
 			idx <- idx+1
 		}

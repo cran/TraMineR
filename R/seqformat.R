@@ -1,157 +1,313 @@
-## ============================================
-## TRANSLATION BETWEEN SEQUENCE REPRESENTATIONS
-## ============================================
+# Author for TraMineR 2: Pierre-Alexandre Fonta (2016-2017)
 
-seqformat <- function(data, var=NULL, id=NULL,
-	from, to, compressed=FALSE,
-	nrep=NULL, tevent, stsep=NULL, covar=NULL,
-	SPS.in=list(xfix="()", sdsep=","),
-	SPS.out=list(xfix="()", sdsep=","),
-	begin=NULL, end=NULL, status=NULL,
-	process=TRUE, pdata=NULL, pvar=NULL, limit=100, overwrite=TRUE,
-	fillblanks=NULL, tmin=NULL, tmax=NULL, nr="*") {
+seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
+  tevent, stsep = NULL, covar = NULL, SPS.in = list(xfix = "()", sdsep = ","),
+  SPS.out = list(xfix = "()", sdsep = ","), id = 1, begin = 2, end = 3,
+  status = 4, process = TRUE, pdata = NULL, pvar = NULL, limit = 100,
+  overwrite = TRUE, fillblanks = NULL, tmin = NULL, tmax = NULL, missing = "*",
+  with.missing = TRUE, compressed, nr) {
 
-	## Checking the format
-	list.from <- c("STS","SPS","SPELL")
-	list.to <- c("STS","SPS","DSS","SRS","TSE")
+  checkargs(alist(compress = compressed, missing = nr))
 
-	if (inherits(data,"stslist")) {
-		message(" [>] input is a sequence object, converting from STS format")
-		from <- "STS"
-	} else if (missing(from) || !from %in% list.from)	
-		stop("input format must be one of: ", paste(list.from), call.=FALSE)
+  is.stslist <- if (inherits(data, "stslist")) TRUE else FALSE
 
-	if (missing(to) || !to %in% list.to)	
-		stop("output format must be one of: ", paste(list.to), call.=FALSE)
+  #### Check arguments with deprecated values ####
 
-	##
-	if (!is.null(covar)) covariates <- subset(data,,covar)
+  if (is.a.string(data)) {
+    data <- as.matrix(data)
+    msg.warn("'data' as a string is deprecated, use as.matrix() to convert it")
+  }
 
-	if (!is.null(id)) ident <- as.matrix(subset(data,,id))
-	else ident <- NULL
+  #### Check for arguments that need to be defined ####
 
-	## ========
-	## From STS
-	## ========
-	if (from=="STS") {
-		## Extracting the sequences from the data set
-		seqdata <- seqxtract(data, var)
+  # from
+  if (missing(from)) {
+    if (is.stslist) {
+      from <- "STS"
+      msg("'from' set to 'STS' as 'data' is a sequence object")
+    } else {
+      msg.stop.miss("from")
+    }
+  }
 
-		if (inherits(data,"stslist")) {
-			message(" [>] converting special codes for missing states to NA's")
-			seqdata[seqdata==attr(data,"nr")] <- NA
-			seqdata[seqdata==attr(data,"void")] <- NA
-		}
-		else {
-			if (is.null(stsep)) {
-				stsep <- seqfcheck(seqdata)
-				if (stsep %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=stsep)
-			}
-			else {
-				seqdata <- seqdecomp(seqdata,sep=stsep)
-			}
-		}
+  # to
+  if (missing(to))
+    msg.stop.miss("to")
 
-		trans <- seqdata
-	}
+  #### Check argument types ####
 
-	## ========
-	## From SPS
-	## ========
-	else if (from=="SPS") {
-		## Extracting the sequences from the data set
-		seqdata <- seqxtract(data, var)
+  # from
+  # Add new input format names here
+  formats.from <- c("STS", "SPS", "SPELL")
+  if (! from %in% formats.from)
+    msg.stop.in("from", formats.from)
 
-		if (is.null(stsep))	{	
-			stsep <- seqfcheck(seqdata)
-			if (stsep %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=stsep)
-		}
-		else {
-			seqdata <- seqdecomp(seqdata,sep=stsep)
-		}
+  # to
+  # Add new output format names here
+  formats.to <- c("STS", "DSS", "SPS", "SRS", "TSE", "SPELL")
+  if (! to %in% formats.to)
+    msg.stop.in("to", formats.to)
 
-		trans <- SPS_to_STS(seqdata, spsformat=SPS.in, nr=nr)
-	}
+  # data
+  if (from == "STS" && !any(is.stslist, is.data.frame(data), is.matrix(data)))
+    msg.stop("'data' must be a state sequence object, a data frame, or a matrix")
 
-	## ==========
-	## From SPELL
-	## ==========
-	else if (from=="SPELL") {
-		if (!is.null(var)) data <- subset(data,,var)
+  if (from == "SPS" && (is.stslist || !any(is.data.frame(data), is.matrix(data))))
+    msg.stop("'data' must be a data frame or a matrix")
 
-		if (!is.null(id)) ident <- as.matrix(subset(data,,id))
-		else ident <- as.matrix(subset(data,,1))
+  if (from == "SPELL" && (is.stslist || !all(is.data.frame(data), ncol(data) >= 3)))
+    msg.stop("'data' must be a data frame with at least three columns")
 
-		if (!is.null(begin)) sp2 <- as.matrix(subset(data,,begin))
-		else sp2 <- as.matrix(subset(data,,2))
+  # var
+  if (!is.null(var))
+    checkindexes(var)
 
-		if (!is.null(end)) sp3 <- as.matrix(subset(data,,end))
-		else sp3 <- as.matrix(subset(data,,3))
+  # missing
+  if (!is.a.string(missing))
+    msg.stop.na("missing")
 
-		if (!is.null(status)) sp4 <- as.matrix(subset(data,,status))
-		else sp4 <- as.matrix(subset(data,,4))
+  #### Check format specific arguments ####
 
-		seqdata <- data.frame(ident, sp2, sp3, sp4)
+  # from STS or SPS
+  if (from %in% c("STS", "SPS") && !is.null(stsep) && !is.a.character(stsep))
+    msg.stop("'stsep' must be a character")
 
-		## Extracting the sequences from the data set
-		## seqdata <- seqxtract(data, var, data.frame=TRUE)
-		
-		trans <- BIOSPELL_to_STS(seqdata=seqdata,
-			process=process, pdata=pdata, pvar=pvar,
-			limit=limit, overwrite=overwrite, fillblanks=fillblanks,
-			tmin=tmin, tmax=tmax)	
-		## ident <- unique(ident)
-	}
+  # to SRS
+  if (!is.null(covar))
+    checkindexes(covar)
 
-	## ===============
-	## INTERNAL FORMAT
-	## ===============
-	rm(seqdata)
-	nbin <- nrow(trans)
-	if (from != "STS") message(" [>] ", from," data converted into ",nbin," STS sequences")
+  # to TSE
+  if (to == "TSE" && missing(tevent))
+    msg.stop.miss("tevent")
 
-	## =============
-	## OUTPUT FORMAT
-	## =============
-	if (to=="SPS") {
-		out <- STS_to_SPS(seqdata=trans, spsformat=SPS.out)
-		nbout <- seqdim(out)[1]
+  # from SPELL
+  if (from == "SPELL") {
+    checkindex(id, "id")
+    checkindex(begin, "begin")
+    checkindex(end, "end")
+    checkindex(status, "status")
+    if (!is.a.number(limit))
+      msg.stop("'limit' must be a number")
+    if (!is.null(fillblanks) && !is.a.character(fillblanks))
+      msg.stop("'fillblanks' must be a character")
+  }
 
-		if (compressed) out <- seqconc(out)
-		}
+  # from / to SPELL
+  if (from == "SPELL" || to == "SPELL") {
+    if (!is.null(pvar)) {
+      checkindexes(pvar)
+      if (!is.data.frame(pdata))
+        msg.stop("'pdata' must be a data frame to use 'pvar'")
+    } else {
+      if (is.data.frame(pdata))
+        msg.stop("'pvar' must be specified when 'pdata' is a data frame")
+    }
+  }
 
-	## To Distinct-State-Sequence format
-	else if (to=="DSS") {
-		out <- STS_to_DSS(trans)
-		nbout <- seqdim(out)[1]
+  #### Compute format specific values ####
 
-		if (compressed) out <- seqconc(out)
-	}
+  # STS
+  if (is.stslist) {
+    missing <- attr(data, "nr")
+    void <- attr(data, "void")
+    msg.warn0("'missing' set to \"", missing, "\", the 'nr' code from 'data' as it is a state sequence object")
+  }
 
-	## STS
-	else if (to=="STS") {
-		out <- trans
-		nbout <- nrow(out)
+  # TSE
+  if (to == "TSE") {
+    if (from != "SPELL") {
+      if (missing(id)) {
+        uids <- NULL
+        msg.warn("'id' set to NULL as it is not specified (backward compatibility TraMineR 1.8)")
+      } else if (is.null(id)) {
+        uids <- NULL
+      } else if (!is.null(id)) {
+        lid <- length(id)
+        if (lid == 1) {
+          uids <- unique(data[, id])
+        } else if (lid > 1) {
+          if (length(unique(id)) != lid)
+            msg.stop("'id' must contain unique IDs")
+          else
+            uids <- id
+        } else {
+          msg.stop.na("id")
+        }
+      }
+    }
+    if (from != "SPELL" && is.null(uids))
+      msg.warn("replacing original IDs in the output by the sequence indexes")
+    else
+      msg("using original IDs in the output")
+  }
 
-		if (compressed) out <- seqconc(out)
-		}
+  #### Convert input format into internal STS format ####
 
-	else if (to=="SRS") {
-		out <- STS_to_SRS(trans,nrep)
-		if (!is.null(covar)) out <- merge(out,data.frame(id=seq(1:nbin),covariates))
-		nbout <- nrow(out)
-	}
+  # Extract sequence data from the dataset
+  seqdata <- if (!is.null(var)) subset(data, , var) else data
 
-	else if (to=="TSE") {
-		if (missing(tevent))
-			stop(" [!] you must provide a transition-definition matrix (see seqetm)", call.=FALSE)
-		out <- STS_to_TSE(trans, ident, tevent)
-		nbout <- nrow(out)
-		}
-	else
-		stop("Output format is unsupported")
+  ncols <- ncol(seqdata)
+  if (ncols == 0)
+    msg.stop("'data' must contain at least one column after 'var' filtering")
 
-	if (to!="STS") message(" [>] STS sequences converted to ",nbout," ", to," seq./rows")
-	return(out)
+  if (from != "SPELL") {
+    # Check if the input data are compressed
+    # Add new compressed formats here
+    if (from %in% c("STS", "SPS") && ncols == 1)
+      is.compressed <- TRUE
+    else
+      is.compressed <- FALSE
 
+    # Convert input data to a matrix
+    # No need to reformat columns here as sequence data are expected to be characters
+    mseqdata <- as.matrix(seqdata)
+
+    # Check if the separator of compressed data is '-' or ':'
+    if (is.compressed && is.null(stsep)) {
+      stsep.auto <- seqfcheck(mseqdata)
+      if (! stsep.auto %in% c("-", ":")) {
+        msg.stop("'stsep' must be specified as it is not '-' or ':'")
+      } else {
+        stsep <- stsep.auto
+        msg0("setting 'stsep' to \"", stsep, "\" (autodetected)")
+      }
+    }
+
+    # Decompress compressed data
+    # Replace 'missing' code by NA
+    if (is.compressed)
+      mseqdata <- seqdecomp(mseqdata, sep = stsep, miss = as.character(missing))
+    # Note: seqdecomp() inserts neither 'nr' nor 'void' codes
+    # TODO seqdecomp() uses NA as 'void' code
+  }
+
+  # Replace 'missing' code by NA
+  # For from SPS, see SPS_to_STS()
+  if (from != "SPS") {
+    if (from != "SPELL") {
+      mseqdata[mseqdata == missing] <- NA
+    } else {
+      seqdata[, status][seqdata[, status] == missing] <- NA
+    }
+  }
+
+  # Call input format specific processing functions
+  # Add new input format processing functions here
+  msts <- switch(from,
+    STS = mseqdata,
+    SPS = SPS_to_STS(mseqdata, SPS.in, missing),
+    SPELL = SPELL_to_STS(seqdata, id, begin, end, status, process, pdata, pvar,
+      limit, overwrite, fillblanks, tmin, tmax))
+  # Note: In mseqdata, 'nr' and 'void' codes are unchanged
+  # Note: SPS_to_STS() insert neither 'nr' nor 'void' codes
+  # Note: SPELL_to_STS() insert neither 'nr' nor 'void' codes
+  # TODO SPELL_to_STS() uses NA as 'void' code
+
+  nseqs.in <- nrow(msts)
+
+  # Add new long formats here
+  if (from %in% c("SPELL"))
+    msg("converting", from, "data into", nseqs.in, "STS sequences (internal format)")
+
+  #### Convert internal STS format into output format ####
+
+  # to SPELL
+  if (to == "SPELL")
+    ssts <- suppressMessages(seqdef(msts, missing = NA))
+  # Note: seqdef() should use the default 'nr' code because of [1]
+  # Note: seqdef() replaces the 'missing' code by the 'nr' code
+  # Note: seqdef() inserts 'void' codes
+
+  # from SPELL with to TSE
+  if (from == "SPELL" && to == "TSE")
+    uids <- unique(rownames(msts))
+  # Note: SPELL_to_STS() stores IDs in the row names
+
+  # Call output format specific processing functions
+  # Output is a data frame for SRS, TSE, and SPELL, otherwise a matrix
+  # Add new output format processing functions here
+  converted <- switch(to,
+    STS = msts,
+    DSS = suppressMessages(STS_to_DSS(msts, missing = NA)),
+    SPS = suppressMessages(STS_to_SPS(msts, SPS.out, missing = NA)),
+    SRS = STS_to_SRS(msts, nrep),
+    TSE = STS_to_TSE(msts, uids, tevent),
+    SPELL = STS_to_SPELL(ssts, pdata, pvar, with.missing))
+  # Note: In msts, 'nr' and 'void' codes are unchanged
+  # Note: STS_to_DSS() and STS_to_SPS(): error if 'nr = NA', suppressMessages() for seqprep()
+  # Note: STS_to_DSS() and STS_to_SPS() replace 'missing' code by 'nr' code and insert 'void' codes
+  # Note: STS_to_SRS() doesn't insert 'nr' nor 'void' codes
+  # Note: STS_to_TSE() doesn't insert 'nr' nor 'void' codes
+  # Note: [1] STS_to_SPELL() replaces 'nr' code by 'void' code if with.missing = FALSE
+  # and 'nr' code is included as a factor level otherwise
+
+  #### Post-processing ####
+
+  # to SRS
+  if (to == "SRS" && !is.null(covar)) {
+    # Use subset() to keep the column name when there is olny one 'covar' column
+    converted <- merge(converted, data.frame(id = seq(1:nseqs.in), subset(data, , covar)))
+    msg("adding covariates", paste(covar, collapse = ", "))
+  }
+
+  # Modify existing or add new final message depending on the output format here
+  # Must be before compressing for a meaningful succession of information messages
+  nseqs.out <- nrow(converted)
+  if (! to %in% c("STS", "SPELL"))
+    msg("converting STS sequences to", nseqs.out, to, "sequences")
+  else if (to == "SPELL")
+    msg("converting STS sequences to", nseqs.out, "spells")
+
+  # TODO Harmonize output type.
+  # TODO Experiments, Pierre-Alexandre Fonta (2016-2017).
+  # TODO Commented because too much projects use the unharmonized output types.
+  # Convert output data frame to a matrix
+  # Reformat colums to avoid insertion of white spaces
+  # Don't encode NA to avoid having them as characters in the compressed strings
+  # if (is.data.frame(converted)) {
+  #   converted <- sapply(converted, format, trim = TRUE, justify = "none", na.encode = FALSE)
+  #   converted <- as.matrix(converted)
+  # } else if (!is.matrix(converted)) {
+  #   msg.stop("output value must be a data frame or a matrix")
+  # }
+
+  # TODO Harmonize 'nr' / 'missing' code handling.
+  # TODO Experiments, Pierre-Alexandre Fonta (2016-2017).
+  # TODO Commented because too much implicit logic uses the unharmonized missing
+  #      values handling.
+  # Replace 'nr' code by NA
+  # Must be done before potential compression with seqconc() to avoid having 'nr'
+  # in the strings.
+  # 'nr' is obtained from 'data' if it is a state sequence object, otherwise it
+  # is assumed to be the default 'nr', "*" (see seqprep() and seqdef()).
+  # converted[converted == missing] <- NA
+
+  # to STS, DSS, SPS
+  # Compression
+  # Add new compressible formats here
+  if (isTRUE(compress)) {
+    if (to %in% c("STS", "DSS", "SPS")) {
+      converted <- seqconc(converted)
+      # Note: seqconc() returns a matrix
+      # Note: seqconc() data must not have factors columns because of paste()
+      # Note: [2] seqconc() doesn't include 'void' elements in the string
+      msg("compressing", to, "sequences")
+    } else {
+      msg.stop(to, "is not a compressible format")
+    }
+  }
+
+  # TODO Harmonize 'void' code handling (including in the input data).
+  # TODO Experiments, Pierre-Alexandre Fonta (2016-2017).
+  # TODO Commented because too much implicit logic uses the unharmonized 'void'
+  #      code handling.
+  # Replace 'void' code by NA
+  # Must be done after potential compression with seqconc() because of [2].
+  # 'void' is obtained from 'data' if it is a state sequence object, otherwise
+  # it is assumed to be the default, "%" (see seqprep() and seqdef()).
+  # if (!is.stslist)
+  #   void <- "%"
+  # converted[converted == void] <- NA
+
+  return(converted)
 }

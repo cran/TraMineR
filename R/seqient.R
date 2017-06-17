@@ -13,16 +13,14 @@ seqient <- function(seqdata, norm=TRUE, base=exp(1), with.missing=FALSE) {
 		statl <- c(statl, attr(seqdata,"nr"))
 	}
 
-	nbstat <- length(statl)
-
 	message(" [>] computing entropy for ",nrow(seqdata)," sequences ...")
 
 	iseqtab <- seqistatd(seqdata, with.missing=with.missing)
-	
+
 	ient <- apply(iseqtab,1,entropy, base=base)
 	ient <- as.matrix(ient)
 	if (norm==TRUE) {
-		emax <- entropy(rep(1/nbstat,nbstat), base=base) 
+		emax <- log(length(statl))
 		ient <- ient/emax
 		}
 
@@ -31,4 +29,4 @@ seqient <- function(seqdata, norm=TRUE, base=exp(1), with.missing=FALSE) {
 
 	return(ient)
 
-	}	
+	}

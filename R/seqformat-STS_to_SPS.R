@@ -1,8 +1,10 @@
+# Should only be used through seqformat()
+
 ## ==============================
 ## Convert from STS to SPS format
 ## ==============================
 
-STS_to_SPS <- function(seqdata, spsformat, 
+STS_to_SPS <- function(seqdata, spsformat,
 	left=NA, right="DEL", gaps=NA, missing=NA, void="%", nr="*") {
 
 	nbseq <- seqdim(seqdata)[1]
@@ -28,12 +30,12 @@ STS_to_SPS <- function(seqdata, spsformat,
 
 		tmpseq <- seqdata[i,]
 		sl <- TraMineR.length(tmpseq, void)
-	
+
 		while (j <= sl) {
 			iseq <- tmpseq[j]
 
 			dur <- 1
-			while (j < sl & tmpseq[j+1]==iseq) { 
+			while (j < sl & tmpseq[j+1]==iseq) {
 				dur <- dur+1
 				j <- j+1
 			}

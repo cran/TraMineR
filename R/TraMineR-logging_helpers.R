@@ -9,7 +9,7 @@
 # @author Pierre-Alexandre Fonta (2017)
 
 
-### Generic
+#### Generic ####
 
 # stop
 msg.stop <- function(msg, ...) {
@@ -17,20 +17,29 @@ msg.stop <- function(msg, ...) {
 }
 
 # warn
+f.warn <- function(f, msg, ...) {
+  message(paste(" [!]", f(msg, ...)))
+}
 msg.warn <- function(msg, ...) {
-  message(paste(" [!]", paste(msg, ...)))
+  f.warn(paste, msg, ...)
+}
+msg.warn0 <- function(msg, ...) {
+  f.warn(paste0, msg, ...)
 }
 
 # info
+f.info <- function(f, msg, ...) {
+  message(paste(" [>]", f(msg, ...)))
+}
 msg <- function(msg, ...) {
-  message(paste(" [>]", paste(msg, ...)))
+  f.info(paste, msg, ...)
 }
 msg0 <- function(msg, ...) {
-  message(paste(" [>]", paste0(msg, ...)))
+  f.info(paste0, msg, ...)
 }
 
 
-### Arguments
+#### Arguments ####
 
 # utils
 aprint <- function(arg) {

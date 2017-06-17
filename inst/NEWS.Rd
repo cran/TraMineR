@@ -1,8 +1,109 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
-\section{Changes in version 2.0-5 [2017-05-13]}{
 
+\section{Changes in version 2.0-6 [2017-06-17]}{
+  \subsection{Changes in existing functions:}{
+    \itemize{
+      \item
+      \code{seqformat()}:
+      \itemize{
+        \item
+        Redesigned version of the function with a new extensible, robust and documented
+        implementation.
+        \item
+        Rewritten documentation with argument types, default values, scopes and
+        detailed explanations.
+        \item
+        Added and generalized conversion to \code{"SPELL"} from TraMineRextras;
+        added a \code{with.missing} argument specifically for this conversion.
+        \item
+        Added the possibility to pass directly the unique individual IDs (row names)
+        of the input sequences with \code{id} when converting to \code{"TSE"}.
+        \item
+        Clarified the meaning of the \code{id} argument and changed its position in the
+        list of arguments to reflect this.
+        \item
+        Changed the default value of the \code{id}, \code{begin}, \code{end}, and
+        \code{status} arguments (now \code{"SPELL"} oriented).
+        \item
+        Renamed \code{compressed} argument as \code{compress} to avoid
+        confusion (here it applies to the output, not to input data).
+        \item
+        Renamed \code{nr} argument as \code{missing} to avoid confusion (here
+        it specifies the code to consider as missing values in input data,
+        which is not the TraMineR internal code for missing values in state
+        sequence objects).
+        \item
+        Adapted function calls to match the renamed argument names
+        (\code{compressed}, \code{nr}) and the new input type checking (ie.
+        single strings are deprecated).
+        \item
+        See the updated documentation of \code{seqformat()} for details.
+      }
+      \item
+      \code{SPS_to_STS()}: renamed \code{nr} argument as \code{missing} to match
+      \code{seqformat()} argument names renaming.
+    }
+  }
+  \subsection{Bug fixes:}{
+    \itemize{
+      \item
+      \code{seqformat()}:
+      \itemize{
+        \item
+        From \code{"SPELL"} to \code{"TSE"}: output IDs were incorrect.
+        \item
+        From \code{"SPELL"} to \code{"STS"}: states not appearing in the
+        data were dropped from the output column levels.
+      }
+    }
+  }
+  \subsection{Misc:}{
+    \itemize{
+      \item
+      Added new internal helper functions:
+      \itemize{
+        \item
+        \code{msg.warn0()}: same as the existing \code{msg.warn()} but without
+        white space insertion.
+        \item
+        \code{is.positive.integers()}: check if an object is a vector of
+        positive integers.
+        \item
+        \code{is.a.character()}: check if an object is a (unique) character.
+        \item
+        \code{is.a.string()}: check if an object is a string.
+        \item
+        \code{is.strings()}: check if an object is a vector of strings.
+        \item
+        \code{is.index()}: check if an object is a positive integer or a string.
+        \item
+        \code{is.indexes()}: check if an object is a vector of positive integers
+        or strings.
+        \item
+        \code{checkindex()}: check if an object is a valid data frame or matrix
+        index; otherwise, an error is raised and an information message is
+        displayed.
+        \item
+        \code{checkindexes()}: check if an object is a vector of valid data
+        frame or matrix indexes; otherwise, an error is raised and an information
+        message is displayed.
+      }
+      \item
+      Grouped internal \code{is.xxx} helper functions into a single
+      TraMineR-is_helpers.R file.
+      \item
+      Generalized \code{msg.warn()} / \code{msg.warn0()} and \code{msg()} /
+      \code{msg0()} code.
+      \item
+      Internal C/C++ function \code{tmrWeightedInertiaDist()} made public as the R function \code{TraMineRInternalWeightedInertiaDist()}. (Used by package \code{Weightedcluster})
+    }
+  }
+}
+
+
+\section{Changes in version 2.0-5 [2017-05-13]}{
 
 \subsection{Note:}{
   \itemize{
@@ -26,9 +127,9 @@
 \subsection{Misc:}{
   \itemize{
     \item
-    Replaced default deprecated values of \code{norm} in 
+    Replaced default deprecated values of \code{norm} in
     \code{seqdistmc()} and \code{seqtree()}.
-    
+
     \item
     Fixed issues with examples in documentation page of
     \code{seqtree()}.
@@ -41,7 +142,7 @@
 \subsection{Changes in existing functions:}{
   \itemize{
     \item
-    Rename several argument names to increase consistency within TraMineR and
+    Renamed several argument names to increase consistency within TraMineR and
     between TraMineR and R. The aim is also to have a common naming
     convention within TraMineR.
     A new internal function (\code{checkargs()})is used to guarantee
@@ -72,7 +173,7 @@
     \item
     Fixed an issue with an example in the documentation page of \code{seqpcplot()}.
     \item
-    Fix equation typing errors in \code{seqrep()} documentation.
+    Fixed equation typing errors in \code{seqrep()} documentation.
     }
 }
 }
@@ -86,9 +187,9 @@
     In \code{src/tmrsequence.cpp} from TraMineR 1.8-13:
     \itemize{
       \item
-      Fix two memory errors detected by Valgrind.
+      Fixed two memory errors detected by Valgrind.
       \item
-      Fix a PROTECT error.
+      Fixed a PROTECT error.
       }
     \item
     Fixed issues with examples in documentation pages of
@@ -101,9 +202,9 @@
 \subsection{Misc:}{
   \itemize{
     \item
-    Change character encoding from latin1 (ISO-8859-1) to UTF-8.
+    Changed character encoding from latin1 (ISO-8859-1) to UTF-8.
     \item
-    Normalize line endings: LF.
+    Normalized line endings: LF.
     }
 }
 }
@@ -113,9 +214,9 @@
 \subsection{Misc:}{
   \itemize{
     \item
-    Remove the following unused functions: \code{vidx()}, \code{seqmatsaltt()}, \code{seqmathenikoff()}.
+    Removed the following unused functions: \code{vidx()}, \code{seqmatsaltt()}, \code{seqmathenikoff()}.
     \item
-    Remove the functions deprecated in TraMineR 1.x: \code{seqesetlength()}, \code{dissreg()}, \code{dissmfac()}.
+    Removed the functions deprecated in TraMineR 1.x: \code{seqesetlength()}, \code{dissreg()}, \code{dissmfac()}.
     }
 }
 }
@@ -139,7 +240,7 @@
     \code{seqdist()}:
       \itemize{
         \item
-        New major version with many new features and an new extensible, robust
+        New major version with many new features and a new extensible, robust
         and documented implementation (R code).
         \item
         New methods: localized OM (\code{OMloc}), spell length sensitive OM (\code{OMslen}),
@@ -1241,4 +1342,4 @@ New \code{diss} module for analysing a dissimilarity matrix (such as the one ret
     \code{seqgen()}: generates a random sequence.
     }
 }
-} 
+}

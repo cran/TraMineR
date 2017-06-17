@@ -27,7 +27,7 @@ seqecreate.internal <- function(data, id, timestamp, event, end.event, tevent,
 					tevent <- seqetm(data, use.labels=use.labels)
 				}
 			}
-			data.tse <- suppressMessages(seqformat(data, from='STS',to='TSE', tevent=tevent))
+			data.tse <- suppressMessages(seqformat(data, from = "STS", to = "TSE", tevent = tevent))
 			id <- data.tse$id
 			timestamp <- data.tse$time
 			event <- data.tse$event

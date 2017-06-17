@@ -28,8 +28,8 @@ transition[4,1:4] <- c("Start,FullTime"   , "Start,PartTime"   ,
 transition
 
 ## Converting STS data to TSE
-actcal.tse <- seqformat(actcal,var=13:24, from='STS',to='TSE',
-	tevent=transition)
+actcal.tse <- seqformat(actcal, 13:24, from = "STS",to = "TSE",
+  tevent = transition)
 
 ## Defining the event sequence object
 actcal.eseq <- seqecreate(id=actcal.tse$id,

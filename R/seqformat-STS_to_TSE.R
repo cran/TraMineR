@@ -1,3 +1,5 @@
+# Should only be used through seqformat()
+
 ## ================================
 ## Convert from STS to TSE format
 ## Version 1.3
@@ -10,8 +12,6 @@ STS_to_TSE <- function(seqdata, id=NULL, tevent) {
 	## Ceci accélère énormément la fonction
 	seqdata <- as.matrix(seqdata)
 
-	message(" [>] converting ",nseq, " sequences to TSE format ...")
- 
 	if (is.null(id)) id <- 1:nseq
 	maxsize <- nseq*slength
 	ids <- vector(mode=mode(id),length=maxsize)

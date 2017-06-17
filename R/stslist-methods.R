@@ -12,11 +12,11 @@ print.stslist <- function(x,format='STS', extended=FALSE, ...) {
 	}
 	if (format=='SPS') {
 		x <- seqconc(x, void=attr(x,"void"))
-		
+
 		if (extended==FALSE)
-			x <- suppressMessages(seqformat(x,from='STS', to='SPS', compressed=TRUE))
+			x <- suppressMessages(seqformat(x, from = "STS", to = "SPS", compress = TRUE))
 		else if (extended==TRUE)
-			x <- suppressMessages(seqformat(x,from='STS', to='SPS', compressed=FALSE))
+			x <- suppressMessages(seqformat(x, from = "STS", to = "SPS", compress = FALSE))
 
 		print(x, quote=FALSE)
 	}
@@ -36,7 +36,7 @@ print.stslist <- function(x,format='STS', extended=FALSE, ...) {
 
 		## Applying method
 	     x <- NextMethod("[")
-	
+
 		## Adapting column names
 		x.attributes$names <- x.attributes$names[j]
 
@@ -57,7 +57,7 @@ print.stslist <- function(x,format='STS', extended=FALSE, ...) {
 
 	if (!missing(i))
 		attr(x,"weights") <- attr(x,"weights")[i]
-	
+
 	return(x)
  }
 

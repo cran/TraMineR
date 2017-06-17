@@ -28,8 +28,8 @@ seqtab <- function(seqdata, idxs = 1:10, weighted = TRUE, format = "SPS", tlim) 
 		warning("'-' character in states codes may cause invalid results")
 
 	if (format=="SPS") {
-		seqlist <- suppressMessages(seqformat(seqdata, from='STS', to='SPS',
-			SPS.out=list(xfix="", sdsep="/"), compressed=TRUE))
+		seqlist <- suppressMessages(seqformat(seqdata, from = "STS", to = "SPS",
+		  SPS.out = list(xfix = "", sdsep = "/"), compress = TRUE))
 	}
 	else if (format=="STS")
 		seqlist <- seqconc(seqdata)

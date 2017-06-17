@@ -21,3 +21,7 @@ TraMineRInternalLegend <- function(...){
 TraMineRInternalSeqgbar <- function(...){
 	return(seqgbar(...))
 }
+
+TraMineRInternalWeightedInertiaDist <- function(diss, diss.size, is.dist, individuals, sweights, var) {
+  return(.Call(C_tmrWeightedInertiaDist, diss, diss.size, is.dist, individuals, sweights, var))
+}

@@ -1,8 +1,10 @@
+# Should only be used through seqformat()
+
 ## ================================
 ## Convert from SPELL to STS format
 ## ================================
 
-BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
+SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	process=TRUE, pdata=NULL, pvar=NULL,
 	limit=100, overwrite=TRUE, fillblanks=NULL,
 	tmin=NULL, tmax=NULL) {
@@ -23,10 +25,11 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		stop(" [!] Found one or more spell with ending time < starting time", call.=FALSE)
 	}
 
-	
+
 	frmoption <- NULL
 
-	if (!is.null(pdata) && !is.null(pvar) && pdata!="auto") pdata <- pdata[, pvar]
+	if (is.data.frame(pdata))
+	  pdata <- pdata[, pvar]
 
 	if (process==TRUE) {
 		if (!is.null(pdata)) frmoption <- "year2age"
@@ -37,7 +40,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		if (is.null(pdata)) frmoption <- "year2year"
 		else frmoption <- "age2year"
 	}
-	
+
 	## =========================
 	## creation of the dataframe
 	## =========================
@@ -57,7 +60,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 			if(is.na(tmin) || is.na(tmax)) {
 				stop("Could not find the minimum or maximum year automatically, please use tmin/tmax options")
 			}
-		}	
+		}
 		limit <- (tmax - tmin) + 1
 		year <- tmin
 		names.seqresult <- NULL
@@ -71,7 +74,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		#names.seqresult <- c((paste("a", seq(1:limit), sep="")),"id")
 		names.seqresult <- c((paste("a", seq(1:limit), sep="")))
 	}
-	
+
 	#seqresult <- matrix(nrow=1, ncol=limit+1)
         # on récupère la liste des individus
 	lid <- unique(seqdata[,id])
@@ -91,14 +94,14 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		}
 	}
   #  if (!is.null(fillblanks)) {
-		
+
 #		fillblanksv <- nlevels(status.orig)+1
 #	}
 	#names(seqresult) <- names.seqresult
 	## ================================
 	## end of creation of the dataframe
 	## ================================
-	
+
 
 	#print(paste("nbseq = ", nbseq))
 	# si un dataframe avec les années de naissances a été donné en argument, on récupère les ID et les années
@@ -136,7 +139,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 			else {
 				stop(" [>] pdata must be either a vector with a birth year by individual or set to \"auto\"")
 			}
-			
+
 		}
 		# if we convert from ages to years, we need the birthyear, but don't need to substract it to the time of beginning
 		if (frmoption=="age2year") {
@@ -146,13 +149,13 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 			age1 <- spell[1,begin]
 		}
 		if (is.na(age1)) {
-			message(" [>] warning, start time is missing for case ", i,", skipping sequence creation")
+			message(" [!] start time is missing for case ", i,", skipping sequence creation")
 			age1 <- -1
 		}
 
 		# we fill the line with NAs
 		seqresult[i,1:(limit)] <- c(rep(NA,(limit)))
-		
+
 	    if (age1 >= 0) {
 			if (idxmax>0) {
 				# by default, the most recent episode erases the one before
@@ -167,7 +170,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 				for (j in spelllist) {
 					#####################
 					# definition of starting and ending point of the spell
-					
+
 					# spell are allready in age format, and we want age sequences
 					if(frmoption=="age2age") {
 						sstart <- spell[j,begin]
@@ -184,7 +187,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 						#print(sstart)
 						#print(sstop)
 					}
-					
+
 					# spell are in year format, and we want age sequences
 					if(frmoption=="year2age") {
 						sstart <- spell[j,begin] - birthy + 1
@@ -221,7 +224,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 						}
 					#
 					#########################
-					
+
 					#########################
 					# conversion from episode to subsequence
 						dur <- sstop - sstart + 1
@@ -233,7 +236,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 							# if (dur == 0 && (sstop < limit) ) {
 							#	seqresult[i,sstart] <- state
                             #                            }
-				
+
 									if(sstop <= limit) {
 									# if the sequence begins at age 0, we delete the first state
 									# if (sstart==0) {
@@ -243,7 +246,7 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 										seqresult[i,sstart:sstop] <- rep(state, dur)
 
 									}
-							
+
 					   		 }
 						}
 					}
@@ -266,6 +269,6 @@ BIOSPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 
 	## setting id as rowname
 	row.names(seqresult) <- lid
-	
+
 	return(seqresult)
 }

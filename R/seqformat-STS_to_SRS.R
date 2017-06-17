@@ -1,3 +1,5 @@
+# Should only be used through seqformat()
+
 ## ==============================
 ## Convert from STS to SRS format
 ## ==============================

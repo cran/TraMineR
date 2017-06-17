@@ -25,7 +25,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   \item{method}{
     String.
     The dissimilarity measure to use.
-    It could be \code{"OM"}, \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
+    It can be \code{"OM"}, \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
     \code{"OMstran"}, \code{"HAM"}, \code{"DHD"}, \code{"CHI2"}, \code{"EUCLID"},
     \code{"LCS"}, \code{"LCP"}, \code{"RLCP"}, \code{"NMS"}, \code{"NMSMST"},
     \code{"SVRspell"}, or \code{"TWED"}. See the Details section.
@@ -50,7 +50,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
     Default: \code{"none"}.
     The normalization to use when \code{method} is one of \code{"OM"},
     \code{"HAM"}, \code{"DHD"}, \code{"CHI2"}, \code{"EUCLID"}, \code{"LCS"},
-    \code{"LCP"}, or \code{"RLCP"}. It could be \code{"none"}, \code{"auto"},
+    \code{"LCP"}, or \code{"RLCP"}. It can be \code{"none"}, \code{"auto"},
     or, except for \code{"CHI2"} and \code{"EUCLID"}, \code{"maxlength"},
     \code{"gmean"}, \code{"maxdist"}, or \code{"YujianBo"}. \code{"auto"} is
     equivalent to \code{"maxlength"} when \code{method} is one of \code{"OM"},
@@ -89,7 +89,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
     The name of a \code{\link{seqcost}} method when a string and \code{method}
     is one of \code{"OM"}, \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
     \code{"OMstran"}, \code{"HAM"}, \code{"DHD"}, or \code{"TWED"}. The method
-    is used to build \code{sm}. It could be \code{"INDELS"} or \code{"INDELSLOG"}
+    is used to build \code{sm}. It can be \code{"INDELS"} or \code{"INDELSLOG"}
     for \code{"OM"}, \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
     \code{"OMstran"}, \code{"HAM"}, and \code{"TWED"}, \code{"CONSTANT"} for
     \code{"OM"} and \code{"HAM"}, \code{"TRATE"} for \code{"OM"}, \code{"HAM"},
@@ -225,7 +225,8 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   \item{prox}{
     \code{NULL} or Matrix.
     Default: \code{NULL}.
-    The matrix of state proximities when \code{method = "SVRspell"}.
+    The matrix of state proximities when \code{method = "NMS"} or
+    \code{method = "SVRspell"}.
   }
 }
 \details{
@@ -396,7 +397,7 @@ biofam.dref1 <- seqdist(biofam.seq, method = "LCS",
   refseq = 0, norm = "auto")
 
 ## LCS distances to an external sequence
-ref <- seqdef("(0,5)-(3,5)-(4,6)", informat = "SPS",
+ref <- seqdef(as.matrix("(0,5)-(3,5)-(4,6)"), informat = "SPS",
   alphabet = alphabet(biofam.seq))
 biofam.dref2 <- seqdist(biofam.seq, method = "LCS",
   refseq = ref)
