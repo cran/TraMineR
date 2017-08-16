@@ -73,7 +73,7 @@ considered as missing values.}
 
     \item{void}{the internal
 code used by TraMineR for representing void elements in the
-sequences. Default is\code{"\%"}.}
+sequences. Default is \code{"\%"}. Must be different from \code{left}, \code{gaps}, and \code{right}.}
 
 	\item{nr}{the internal code used by TraMineR for representing real
 missing elements in the sequences. Default is\code{"*"}.}

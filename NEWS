@@ -1,5 +1,45 @@
 ## =========
-Version 2.0-6 [2017-06-17] 
+Version 2.0-7 [2017-08-15] 
+
+Changes in existing functions:
+  - alphabet(): the get form now also applies to event sequences.
+    In addition, an error is now raised when the argument is not
+    a state sequence object, an event sequence object, or a
+    probabilistic suffix tree (see the PST package for the latter).
+  - seqdecomp(): the 'miss' argument can now also be a vector,
+    e.g. miss = c("*", "%")
+  - seqformat() has a new 'right' argument to be used with
+    to = 'SPELL'. The default right = 'DEL' suppresses the
+    end spells of missing values. Set right = NA to keep the
+    end spells of missing values.
+  - seqdef() now rises an error message when 'void' is not a character
+    different from 'left', 'gaps', and 'right'.
+  - seqtrate() gains a new argument 'count'. When 'count = TRUE',
+    the function returns counts of transitions instead of transition
+    probabilities.
+
+Bug fixes:
+  - seqpcplot(): Due to a change in the R tapply function,
+    option ltype="non-embeddable" did no longer work.
+  - seqefsub() with non-null str.subseq argument: multiple partial
+    matches between events in str.subseq and the alphabet of events of
+    the eseq event sequence object crashed the R session. Fixed by a change
+    in the internal seqecreatesub function.
+  - seqformat(): to="TSE" and to="SPELL" produced errors or unexpected
+    results in presence of missing and/or void states. Now, when
+    to = "SPELL", the missing and void codes are both converted
+    to NA before conversion while they are kept as is when to = "TSE".
+  - seqetm() produced an error in presence of void elements.
+  - An error occurred in the internal \code{implicativestat} function 
+    when a same condition subsequence was present in all subsequences.
+
+Misc:
+  - Documentation of seqformat() and seqecreate(): added examples
+    of the handling of missings in conversion into TSE and SPELL format.
+
+
+## =========
+Version 2.0-6 [2017-06-17]
 
 Changes in existing functions:
   - seqformat():
@@ -54,7 +94,7 @@ Misc:
 
 
 ## =========
-Version 2.0-5 [2017-05-13] 
+Version 2.0-5 [2017-05-13] (Stable version)
 
 Note:
   - This is a major update of the CRAN version of TraMineR.

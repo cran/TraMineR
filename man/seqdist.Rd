@@ -343,7 +343,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   Department of Econometrics and Laboratory of Demography, University of Geneva
 
   Halpin, B. (2014). Three Narratives of Sequence Analysis, in Blanchard, P.,
-  B?hlmann, F. and Gauthier, J.-A. (Eds.) \emph{Advances in Sequence Analysis:
+  Bühlmann, F. and Gauthier, J.-A. (Eds.) \emph{Advances in Sequence Analysis:
   Theory, Method, Applications}, Vol 2 of Series \emph{Life Course Research and
   Social Policies}, pages 75--103, Heidelberg: Springer. DOI:
   \url{http://dx.doi.org/10.1007/978-3-319-04969-4_5}

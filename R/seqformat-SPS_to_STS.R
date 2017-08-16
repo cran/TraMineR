@@ -12,7 +12,7 @@ SPS_to_STS <- function(seqdata, spsformat, missing = "*") {
     for (s in 1:length(tmpseq)) {
       sps <- strsplit(gsub(xfix, "", tmpseq[s]), split = sdsep)[[1]]
       seq <- sps[1]
-      if (seq == missing)
+      if (seq %in% missing)
         seq <- NA
       dur <- as.integer(sps[2])
       trans[i] <-

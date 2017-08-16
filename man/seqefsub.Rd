@@ -14,11 +14,11 @@
   By default, the support is counted per sequence and not per occurrence, i.e. when a sequence contains twice a same subsequence it is counted only once. Use the \code{count.method} argument of \code{\link{seqeconstraint}} to change that. The minimal required support can be set with \code{pmin.support} as a proportion (between 0 and 1) in which case it will be rounded, or through min.support as a number of sequences.
   Time constraints can also be imposed with the \code{constraint} argument, which must be the outcome of a call to the \code{\link{seqeconstraint}} function).
 
-  The second possibility is for searching sequences that contain specified subsequences. This is done by passing the list of subsequences with the \code{str.subseq} argument. The subsequences must be in the same format as that used to display subsequences (see \code{\link{str.seqelist}}).
+  The second possibility is for searching sequences that contain specified subsequences. This is done by passing the list of subsequences with the \code{str.subseq} argument. The subsequences must contain only events from the alphabet of events of \code{eseq} and must be in the same format as that used to display subsequences (see \code{\link{str.seqelist}}).
   Each transition (group of events) should be enclosed in parentheses () and separated with commas, and the succession of transitions should be denoted by a '-' indicating a time gap.
   For instance "(FullTime)-(PartTime, Children)" stands for the subsequence "FullTime" followed by the transition defined by the two simultaneously occurring events "PartTime" and "Children".
 
-  Information about the sequences that contain the subsequences can then be obtained with the \code{\link{seqeapplysub}} function.
+  To get information such as the number of occurrences of the subsequences returned by \code{seqefsub} or the sequences that contain each subsequence use the function \code{\link{seqeapplysub}}.
 
   Subsets of the returned \code{subseqelist} can be accessed with the \code{[]} operator (see example). There are print and plot methods for \code{subsequelist}.
 }

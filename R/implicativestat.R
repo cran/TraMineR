@@ -11,9 +11,11 @@ implicativestat <- function(x, y, type="intensity", resid="standard") {
 		stop("resid should be one of standard, deviance, Freeman-Tukey or ajusted")
 	}
 	x <- factor(x)
+  if (length(levels(x)==1)) x <- factor(x, levels=c("0","1"))
 	y <- factor(y)
+  if (length(levels(y)==1)) y <- factor(y, levels=c("0","1"))
 	xgrp <- levels(x)
-	ygrp <- levels(y)
+  ygrp <- levels(y)
 	result <- matrix(0, nrow=length(xgrp), ncol=length(ygrp))
 	n <- length(x)
 	rownames(result) <- xgrp

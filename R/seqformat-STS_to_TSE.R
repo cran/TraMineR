@@ -9,7 +9,7 @@ STS_to_TSE <- function(seqdata, id=NULL, tevent) {
 	nseq <- nrow(seqdata)
 	slength <- ncol(seqdata)
 
-	## Ceci accélère énormément la fonction
+	## Transforming into a matrix dramatically increases speed
 	seqdata <- as.matrix(seqdata)
 
 	if (is.null(id)) id <- 1:nseq
@@ -73,5 +73,3 @@ STS_to_TSE <- function(seqdata, id=NULL, tevent) {
 	trans <- data.frame(id=ids[sel],time=times[sel],event=events[sel])
 	return(trans)
 }
-
-

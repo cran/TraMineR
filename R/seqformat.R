@@ -5,7 +5,7 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
   SPS.out = list(xfix = "()", sdsep = ","), id = 1, begin = 2, end = 3,
   status = 4, process = TRUE, pdata = NULL, pvar = NULL, limit = 100,
   overwrite = TRUE, fillblanks = NULL, tmin = NULL, tmax = NULL, missing = "*",
-  with.missing = TRUE, compressed, nr) {
+  with.missing = TRUE, right="DEL", compressed, nr) {
 
   checkargs(alist(compress = compressed, missing = nr))
 
@@ -63,7 +63,7 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
     checkindexes(var)
 
   # missing
-  if (!is.a.string(missing))
+  if (!is.a.string(missing[1]))
     msg.stop.na("missing")
 
   #### Check format specific arguments ####
@@ -108,9 +108,10 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
 
   # STS
   if (is.stslist) {
-    missing <- attr(data, "nr")
     void <- attr(data, "void")
-    msg.warn0("'missing' set to \"", missing, "\", the 'nr' code from 'data' as it is a state sequence object")
+    missing <- attr(data, "nr")
+    msg.warn0("'missing' set as \"c(\'",missing,"\',\'",void,"\')\", the 'nr' and 'void' code from the 'data' state sequence object")
+    missing <- c(missing, void)
   }
 
   # TSE
@@ -185,9 +186,11 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
   # For from SPS, see SPS_to_STS()
   if (from != "SPS") {
     if (from != "SPELL") {
-      mseqdata[mseqdata == missing] <- NA
+      if (to != "TSE") {
+        mseqdata[mseqdata %in% missing] <- NA
+      }
     } else {
-      seqdata[, status][seqdata[, status] == missing] <- NA
+      seqdata[, status][seqdata[, status] %in% missing] <- NA
     }
   }
 
@@ -213,7 +216,7 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
 
   # to SPELL
   if (to == "SPELL")
-    ssts <- suppressMessages(seqdef(msts, missing = NA))
+    ssts <- suppressMessages(seqdef(msts, missing = NA, right = right))
   # Note: seqdef() should use the default 'nr' code because of [1]
   # Note: seqdef() replaces the 'missing' code by the 'nr' code
   # Note: seqdef() inserts 'void' codes

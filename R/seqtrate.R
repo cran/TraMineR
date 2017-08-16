@@ -3,13 +3,15 @@
 ## =========================
 
 seqtrate <- function(seqdata, sel.states = NULL, time.varying = FALSE,
-  weighted = TRUE, lag = 1, with.missing = FALSE, statl) {
+  weighted = TRUE, lag = 1, with.missing = FALSE, count = FALSE, statl) {
 
   checkargs(alist(sel.states = statl))
 
 	if (!inherits(seqdata,"stslist")) {
 		stop(" [!] seqdata is NOT a sequence object, see seqdef function to create one")
 	}
+
+  if (count) outcome <- "counts" else outcome <- "probabilities"
 
 	## State list if not specified
 	if (is.null(sel.states)){
@@ -42,7 +44,7 @@ seqtrate <- function(seqdata, sel.states = NULL, time.varying = FALSE,
 	## time varying transition rates
 	## =================================
 	if (time.varying) {
-		message(" [>] computing time varying transition rates for states ",paste(sel.states,collapse="/")," ...",sep="")
+		message(" [>] computing time varying transition ", outcome, " for states ",paste(sel.states,collapse="/")," ...",sep="")
 		## Dimension names
 		dnames <- list()
 		dnames[[1]] <- paste("[",sel.states," ->]",sep="")
@@ -66,7 +68,13 @@ seqtrate <- function(seqdata, sel.states = NULL, time.varying = FALSE,
 				else {
 					for (y in 1:nbetat) {
 						PAB <- sum(weights[colxcond & seqdata[,sl+lag]==sel.states[y]])
-						tmat[x,y,sl] <- PAB/PA
+  					##tmat[x,y,sl] <- PAB/PA
+  					if (count) {
+              tmat[x,y,sl] <- PAB
+            }
+            else {
+              tmat[x,y,sl] <- PAB/PA
+            }
 					}
 				}
 			}
@@ -76,7 +84,7 @@ seqtrate <- function(seqdata, sel.states = NULL, time.varying = FALSE,
 	## Non time varying transition rates
 	## =================================
 	else {
-		message(" [>] computing transition rates for states ",paste(sel.states,collapse="/")," ...",sep="")
+		message(" [>] computing transition ", outcome, " for states ",paste(sel.states,collapse="/")," ...",sep="")
 		tmat <- matrix(0, nrow=nbetat, ncol=nbetat)
 		row.names(tmat) <- paste("[",sel.states," ->]",sep="")
 		colnames(tmat) <- paste("[-> ",sel.states,"]",sep="")
@@ -104,7 +112,12 @@ seqtrate <- function(seqdata, sel.states = NULL, time.varying = FALSE,
 					} else{
 						PAB <- sum(weights * (colxcond & seqdata[,alltransition+lag]==sel.states[y]))
 					}
-					tmat[x,y] <- PAB/PA
+					if (count) {
+            tmat[x,y] <- PAB
+          }
+          else {
+            tmat[x,y] <- PAB/PA
+          }
 				}
 			}
 		}

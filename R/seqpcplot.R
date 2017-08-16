@@ -974,7 +974,7 @@ ordering <- function(x, align = "first") {
 createstring <- function(y, x = 1:length(y),
                          pa.left = "(", pa.right = ")",
                          pot= "^" ,con = "-") {
-  subscripts <- !is.na(y);
+  subscripts <- !is.na(y) & !is.null(y) & y != "";
   ret <- paste(pa.left, y, pa.right, pot, x, sep = "");
   ret <- ret[subscripts];
   ret <- paste(ret, collapse = con)

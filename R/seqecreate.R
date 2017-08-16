@@ -126,9 +126,16 @@ seqecreatesub <- function(subseq, eseq){
 			for (mmm in mm) {
 				mmm <- sub('[[:space:]]+$', '', mmm)
 				mmm <- sub('^[[:space:]]+', '', mmm)
-				ecode <- charmatch(mmm, codebase)
-				if (is.na(ecode)) {
-					stop(" [!] Couldn't interpret '", mmm,"' as an event. It should be in (", paste(codebase, collapse=","),")")
+      ##ecode <- charmatch(mmm, codebase)
+      ##if (is.na(ecode)) {
+      #### charmatch allows for partial matches and
+      #### returns 0 in case of multiple partial matches
+      ####
+      #### with the code below we exclude partial matches
+      ecode <- which(mmm==codebase)
+      if(length(ecode) != 1){
+					##stop(" [!] Couldn't interpret '", mmm,"' as an event. It should be in (", paste(codebase, collapse=","),")")
+          stop(" [!] '", mmm,"' not found in the alphabet of events: ", paste(codebase, collapse=","))
 				}
 				timestamp[irow] <- tindex
 				events[irow] <- ecode

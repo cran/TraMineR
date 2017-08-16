@@ -12,7 +12,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   SPS.out = list(xfix = "()", sdsep = ","), id = 1, begin = 2, end = 3,
   status = 4, process = TRUE, pdata = NULL, pvar = NULL, limit = 100,
   overwrite = TRUE, fillblanks = NULL, tmin = NULL, tmax = NULL, missing = "*",
-  with.missing = TRUE, compressed, nr)
+  with.missing = TRUE, right="DEL", compressed, nr)
 }
 \arguments{
   \item{data}{
@@ -156,12 +156,12 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     time axis, if \code{FALSE}, create sequences on a calendar time axis.
     %If times are ages in \code{data}, only \code{process = FALSE} is currently
     %implemented. %% gr: I do not understand this and have to check.
-    
+
     This \code{process} argument as well as the associated \code{pdata} and \code{pvar}
-    arguments are intended for \code{data} containing spell data with calendar begin 
-    and end times. When those times are ages, use \code{process = FALSE} with 
-    \code{pdata=NULL} to use those ages as process times. Option \code{process = TRUE} 
-    does currently not work for age times. 
+    arguments are intended for \code{data} containing spell data with calendar begin
+    and end times. When those times are ages, use \code{process = FALSE} with
+    \code{pdata=NULL} to use those ages as process times. Option \code{process = TRUE}
+    does currently not work for age times.
   }
   \item{pdata}{
     % from SPELL
@@ -246,6 +246,12 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     Default: \code{TRUE}.
     When \code{to = "SPELL"}, should the spells of missing states be included?
   }
+  \item{right}{
+    % to SPELL
+    One of \code{"DEL"} or \code{NA}.
+    Default: \code{"DEL"}.
+    When \code{to = "SPELL"} and \code{with.missing=TRUE}, set \code{right=NA} to include the end spells of missing states.
+  }
   \item{compressed}{
     Deprecated. Use \code{compress} instead.
   }
@@ -262,7 +268,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   plotting and mining sequences (use the \code{\link{seqdef}} function for that).
   See \cite{Gabadinho et al. (2009)} and \cite{Ritschard et al. (2009)} for more
   details on longitudinal data formats and converting between them.
-  
+
   When data are in \code{"SPELL"} format, the begin and end times expected
   to be positions in the sequences. Therefore they should be strictly positive integers.
 }
@@ -279,8 +285,8 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   \emph{Advances in Data Management}, Springer, 2009, 223, 155-175.
 }
 \author{
-  Alexis Gabadinho, Pierre-Alexandre Fonta, Nicolas S. Müller, Matthias Studer
-  (and Gilbert Ritschard for the help page).
+  Alexis Gabadinho, Pierre-Alexandre Fonta, Nicolas S. Müller, Matthias Studer,
+  and Gilbert Ritschard.
 }
 \seealso{\code{\link{seqdef}}}
 \examples{
@@ -347,5 +353,30 @@ bf.sts <- seqformat(bfspell20, from = "SPELL", to = "STS",
   limit = 16)
 names(bf.sts) <- paste0("a", 15:30)
 head(bf.sts)
+
+
+## ==================================
+## Examples for TSE and SPELL output 
+## in presence of missing values 
+## ==================================
+
+data(ex1) ## STS data with missing values
+## creating the state sequence object with by default
+## the end missings coded as void ('%')
+sqex1 <- seqdef(ex1[,1:13])
+as.matrix(sqex1)
+
+## Creating state-event transition matrices
+ttrans <- seqetm(sqex1, method='transition')
+tstate <- seqetm(sqex1, method='state')
+
+## Converting into time stamped events 
+seqformat(sqex1, from = "STS", to = "TSE", tevent = ttrans)
+seqformat(sqex1, from = "STS", to = "TSE", tevent = tstate)
+
+## Converting into vertical spell data
+seqformat(sqex1, from = "STS", to = "SPELL", with.missing=TRUE)
+seqformat(sqex1, from = "STS", to = "SPELL", with.missing=TRUE, right=NA)
+seqformat(sqex1, from = "STS", to = "SPELL", with.missing=FALSE)
 }
 \keyword{Data handling}

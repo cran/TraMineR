@@ -2,6 +2,49 @@
 \title{NEWS file for the TraMineR package}
 
 
+\section{Changes in version 2.0-7 [2017-08-15]}{
+  \subsection{Changes in existing functions:}{
+    \itemize{
+      \item
+      \code{alphabet()}: the get form now also applies to event sequences.
+      In addition, an error is now raised when the argument is not a state sequence object, an event sequence object, or a probabilistic suffix tree (see the PST package for the latter).
+      \item
+      \code{seqdecomp()}: the \code{miss} argument can now also be a vector, e.g. \code{miss = c("*", "\%")}
+      \item
+      \code{seqformat()} has a new \code{right} argument to be used with
+      \code{to = 'SPELL'}. The default \code{right = 'DEL'} suppresses the end spells of missing values. Set \code{right = NA} to keep the end spells of missing values.
+      \item
+      \code{seqdef()} now rises an error message when \code{void} is not a character different from \code{left}, \code{gaps}, and \code{right}.
+      \item
+      \code{seqtrate()} gains a new argument \code{count}. When \code{count = TRUE}, the function returns counts of transitions instead of transition probabilities.
+    }
+  }
+
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+      \code{seqpcplot()}:
+      Due to a change in the R \code{tapply} function, option \code{ltype="non-embeddable"} did no longer work.
+      \item
+      \code{seqefsub()} with non-null \code{str.subseq} argument:
+       multiple partial matches between events in \code{str.subseq} and the alphabet of events of
+      the \code{eseq} event sequence object crashed the R session. Fixed by a change in the internal \code{seqecreatesub} function.
+      \item
+      \code{seqformat()}: \code{to="TSE"} and \code{to="SPELL"} produced errors or unexpected results in presence of missing and/or void states. Now, when \code{to = "SPELL"}, the missing and void codes are both converted to \code{NA} before conversion while they are kept as is when \code{to = "TSE"}.
+      \item
+      \code{seqetm()} produced an error in presence of void elements.
+      \item
+      An error occurred in the internal \code{implicativestat} function when a same condition subsequence was present in all subsequences.
+    }
+  }
+  \subsection{Misc:}{
+    \itemize{
+      \item
+      Documentation of \code{seqformat()} and \code{seqecreate()}: added examples of the handling of missings in conversion into TSE and SPELL format.
+    }
+  }
+}
+
 \section{Changes in version 2.0-6 [2017-06-17]}{
   \subsection{Changes in existing functions:}{
     \itemize{

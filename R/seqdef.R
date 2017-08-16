@@ -10,6 +10,10 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	## Parameters
 	maxstatedisplay <- 12
 
+  ## Checking some parameters
+  if (!is.character(void) || void %in% c(left,gaps,right))
+    msg.stop("'void' must be a character different from left, gaps, and right!")
+
 	## ===================
 	## Extracting the data
 	## ===================

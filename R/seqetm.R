@@ -9,6 +9,11 @@ seqetm <- function(seqdata, method = "transition", use.labels = TRUE, sep = ">",
 	if (has.nr) {
 		statl <- c(statl, nr)
 	}
+	void <- attr(seqdata, "void")
+	has.void <- any(seqdata==void)
+	if (has.void) {
+		statl <- c(statl, void)
+	}
 	nbstat <- length(statl)
 	tevent <- matrix(nrow=nbstat, ncol=nbstat)
 	rownames(tevent) <- statl
@@ -19,6 +24,9 @@ seqetm <- function(seqdata, method = "transition", use.labels = TRUE, sep = ">",
 		label <- attr(seqdata, "labels")
 		if (has.nr) {
 			label <- c(label, nr)
+		}
+		if (has.void) {
+			label <- c(label, void)
 		}
 		if(length(label)==length(alphabet)){
 			alphabet <- label
