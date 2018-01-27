@@ -68,6 +68,7 @@ export(
   seqtrate,
   stlab,
   "stlab<-",
+  TraMineR.check.depr.args,
   TraMineR.checkupdates,
   TraMineRInternalLayout,
   TraMineRInternalLegend,
@@ -75,7 +76,8 @@ export(
   TraMineRInternalSeqeage,
   TraMineRInternalSeqgbar,
   TraMineRInternalSplitInit,
-  TraMineRInternalWeightedInertiaDist)
+  TraMineRInternalWeightedInertiaDist
+  )
 
 ## stslist methods
 S3method(summary, stslist)

@@ -77,7 +77,7 @@ disstreedisplay <- function(tree, filename = NULL, image.data = NULL,
   title.cex, imageformat, withquality, quality.fontsize, legendtext, showtree,
   showdepth, ...) {
 
-  checkargs(alist(image.data = imagedata, image.fun = imagefunc,
+  TraMineR.check.depr.args(alist(image.data = imagedata, image.fun = imagefunc,
     only.leaf = imgLeafOnly, cex.main = title.cex, image.format = imageformat,
     with.quality = withquality, cex.quality = quality.fontsize,
     legend.text = legendtext, show.tree = showtree, show.depth = showdepth))
@@ -196,7 +196,7 @@ seqtreedisplay <- function(tree, filename = NULL, seqdata = tree$info$object,
   imgLeafOnly, dist.matrix, title.cex, withlegend, legend.fontsize, imageformat,
   withquality, quality.fontsize, legendtext, showtree, showdepth, ...) {
 
-  checkargs(alist(only.leaf = imgLeafOnly, diss = dist.matrix,
+  TraMineR.check.depr.args(alist(only.leaf = imgLeafOnly, diss = dist.matrix,
     cex.main = title.cex, with.legend = withlegend, cex.legend = legend.fontsize,
     image.format = imageformat, with.quality = withquality,
     cex.quality = quality.fontsize, legend.text = legendtext, show.tree = showtree,
@@ -231,7 +231,7 @@ seqtree2dot <- function(tree, filename, seqdata = tree$info$object,
   cex.legend = cex.main, with.quality = FALSE, cex.quality = cex.main, axes = FALSE,
   imgLeafOnly, dist.matrix, title.cex, withlegend, withquality,  ...) {
 
-  checkargs(alist(only.leaf = imgLeafOnly, diss = dist.matrix,
+  TraMineR.check.depr.args(alist(only.leaf = imgLeafOnly, diss = dist.matrix,
     cex.main = title.cex, with.legend = withlegend, with.quality = withquality))
 
 	image.legend <- DTNseqlegend(filename=filename, seqdata=seqdata, cex.legend=cex.legend, with.legend=with.legend, ...)
@@ -252,7 +252,7 @@ disstree2dotp <- function(tree, filename, image.data = NULL, only.leaf = FALSE,
   title.outer = FALSE, imagedata, imgLeafOnly, imagefunc, title.cex, withquality,
   quality.fontsize, ...) {
 
-  checkargs(alist(image.data = imagedata, only.leaf = imgLeafOnly,
+  TraMineR.check.depr.args(alist(image.data = imagedata, only.leaf = imgLeafOnly,
     image.fun = imagefunc, cex.main = title.cex, with.quality = withquality,
     cex.quality = quality.fontsize))
 
@@ -306,7 +306,7 @@ disstree2dot <- function(tree, filename, digits = 3, image.fun = NULL,
   imagedata, imgLeafOnly, devicefunc, imageext, device.arg, label.loc, node.loc,
   split.loc, title.cex, legendtext, legendimage, qualityimage, showdepth, ...) {
 
-  checkargs(alist(image.fun = imagefunc, image.data = imagedata,
+  TraMineR.check.depr.args(alist(image.fun = imagefunc, image.data = imagedata,
     only.leaf = imgLeafOnly, device = devicefunc, image.format = imageext,
     device.args = device.arg, label.pos = label.loc, node.pos = node.loc,
     split.pos = split.loc, cex.main = title.cex, legend.text = legendtext,

@@ -5,7 +5,7 @@
 plot.stslist.modst <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
   xaxis = TRUE, xtlab = NULL, xtstep = NULL, cex.axis = 1,  cex.plot, ...) {
 
-  checkargs(alist(cex.axis = cex.plot))
+  TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
 	seql <- ncol(x)
 	statl <- attr(x,"alphabet")

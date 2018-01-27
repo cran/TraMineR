@@ -3,8 +3,8 @@ TraMineR.checkupdates <- function() {
   suppressWarnings(descr<-packageDescription("TraMineR"))
   if(!inherits(descr, "packageDescription")) stop(" [>] TraMineR is not installed")
   tmp <- tempfile(pattern = "file", tmpdir = tempdir())
-  #suppressWarnings(z <- try(source("http://mephisto.unige.ch/traminer/VERSIONS", local=T), T))
-  suppressWarnings(z <- try(download.file("http://mephisto.unige.ch/traminer/VERSIONS", destfile=tmp, quiet=T),T))
+  #suppressWarnings(z <- try(source("http://traminer.unige.ch/VERSIONS", local=T), T))
+  suppressWarnings(z <- try(download.file("http://traminer.unige.ch/VERSIONS", destfile=tmp, quiet=T),T))
 
   if(inherits(z, "try-error")) {
 	stop(" [>] Connection error")

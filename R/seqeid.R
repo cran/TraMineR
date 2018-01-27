@@ -4,7 +4,7 @@
 
 seqeid <- function(eseq, s) {
 
-  checkargs(alist(eseq = s))
+  TraMineR.check.depr.args(alist(eseq = s))
 
   tmrsequenceid.internal <- function(eseq) {
     if(is.eseq(eseq)){

@@ -6,7 +6,7 @@ dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE
   coverage = 0.25, nrep = NULL, pradius = 0.10, dmax = NULL, weights = NULL,
   trep, tsim) {
 
-  checkargs(alist(coverage = trep, pradius = tsim))
+  TraMineR.check.depr.args(alist(coverage = trep, pradius = tsim))
 
 	if (inherits(diss, "dist")) {
         diss <- dist2matrix(diss)

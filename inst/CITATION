@@ -15,13 +15,13 @@ citEntry(entry = "Article",
   volume       = "40",
   number       = "4",
   pages        = "1--37",
-  url          = "http://www.jstatsoft.org/v40/i04/",
+  doi          = "10.18637/jss.v040.i04",
 
   textVersion  =
   paste("Gabadinho, A., Ritschard, G., M\u00FCller, N. S., & Studer, M. (2011).",
         "Analyzing and Visualizing State Sequences in R with TraMineR.",
         "Journal of Statistical Software, 40(4), 1-37.",
-        "URL http://www.jstatsoft.org/v40/i04/."),
+        "DOI http://dx.doi.org/10.18637/jss.v040.i04."),
         header="For state sequences:\n"
 )
 
@@ -30,9 +30,9 @@ citEntry(entry="Article",
     title = "What matters in differences between life trajectories: a comparative review of sequence dissimilarity measures",
     journal = "Journal of the Royal Statistical Society, Series A",
     year    = "2016",
-  volume       = "179",
-  number       = "2",
-  pages        = "481--511",
+    volume       = "179",
+    number       = "2",
+    pages        = "481--511",
     doi = "10.1111/rssa.12125",
 
     textVersion="Studer, M. & Ritschard, G. (2016). What matters in differences between life trajectories: A comparative review of sequence dissimilarity measures, Journal of the Royal Statistical Society, Series A, 179(2), 481-511. DOI http://dx.doi.org/10.1111/rssa.12125",
@@ -64,6 +64,7 @@ citEntry(entry="incollection",
     address = "Berlin",
     note = "292",
     pages = "3-19",
+    
     textVersion="Studer, M., Ritschard, G., Gabadinho, A. & M\u00FCller, N.S. (2010), Discrepancy analysis of complex objects using dissimilarities, In Guillet, F., Ritschard, G., Zighed, D.A. & Briand, H. (eds) Advances in Knowledge Discovery and Management. Series: Studies in Computational Intelligence. Volume 292, pp. 3-19. Berlin: Springer.",
 )
 
@@ -75,6 +76,7 @@ citEntry(entry="incollection",
   year = "2013",
   editor = "R. L\u00E9vy and  E. Widmer",
   pages = "287-312",
+  
   textVersion="Gabadinho, A. & Ritschard, G. (2013), Searching for typical life trajectories applied to child birth histories, In R. L\u00E9vy & E. Widmer (eds.), Gendered life courses.  pp. 287-312. Vienna: LIT",
   header="For representative sequences:"
 )
@@ -85,8 +87,8 @@ citEntry(entry="article",
   journal = "Revue des nouvelles technologies de l'information (RNTI)",
   year = "2010",
   volume = "E-19",
-  booktitle = "Extraction et gestion des connaissances (EGC 2010)",
   pages = "61-66",
+  
   textVersion="Gabadinho, A., Ritschard, G., Studer, M. & M\u00FCller, N.S. (2010), Indice de complexit\u00E9 pour le tri et la comparaison de s\u00E9quences cat\u00E9gorielles, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 61-66.",
   header="For longitudinal characteristics and the complexity index:"
 )
@@ -98,6 +100,7 @@ citEntry(entry="incollection",
   year = "2013",
   editor = "J.J. McArdle and  G. Ritschard",
   pages = "221-253",
+  
   textVersion="Ritschard, G., B\u00FCrgin, R. & Studer, M. (2013), Exploratory Mining of Life Event Histories, In J.J. McArdle & G. Ritschard (eds.), Contemporary Issues in Exploratory Data Mining in the Behavioral Sciences.  pp. 221-253. New York: Routledge",
   header="For event sequences:"
 )
@@ -110,6 +113,7 @@ citEntry(entry="article",
   pages = "98-103",
   number = "2",
   doi = "10.1080/00031305.2014.887591",
+  
   textVersion="B\u00FCrgin, R. & Ritschard, G. (2014), A decorated parallel coordinate plot for categorical longitudinal data, The American Statistician 68(2), 98-103.  DOI http://dx.doi.org/10.1080/00031305.2014.887591",
 )
 

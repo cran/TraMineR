@@ -2,7 +2,7 @@
 #
 # For each specified pair of new and old argument names, check if the old
 # argument name is specified. If so but the new one not, show a warning message
-# and use the value. If one of the name declared in checkargs() arguments
+# and use the value. If one of the name declared in TraMineR.check.depr.args() arguments
 # doesn't exist or if the new and old argument names are specified together,
 # show an error message and exit.
 #
@@ -22,7 +22,7 @@
 #
 # @author Pierre-Alexandre Fonta (2016-2017)
 
-checkargs <- function(arg.pairs) {
+TraMineR.check.depr.args <- function(arg.pairs) {
   new.names <- names(arg.pairs)
   old.names <- as.character(arg.pairs)
   pf <- parent.frame()
@@ -62,3 +62,7 @@ checkargs <- function(arg.pairs) {
     }
   }
 }
+
+######### For backward compatibility: used by TraMineRextras v 4.1
+
+checkargs <- TraMineR.check.depr.args

@@ -6,7 +6,7 @@ plot.seqalign <- function(x, cpal = NULL, missing.color = NULL, ylab = NULL,
   yaxis = TRUE, xaxis = TRUE, ytlab = NULL, ylas = 0, xtlab = NULL, cex.axis = 1,
   cex.plot, ...) {
 
-  checkargs(alist(cex.axis = cex.plot))
+  TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
 	showop <- "bars"
 	n <- 2

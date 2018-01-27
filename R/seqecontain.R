@@ -1,7 +1,7 @@
 seqecontain <- function(eseq, event.list, unknown.exclude = FALSE, seq,
   eventList, exclude) {
 
-  checkargs(alist(eseq = seq, event.list = eventList, unknown.exclude = exclude))
+  TraMineR.check.depr.args(alist(eseq = seq, event.list = eventList, unknown.exclude = exclude))
 
   if(is.subseqelist(eseq))eseq <- eseq$subseq
   if(!is.seqelist(eseq))stop("eseq should be a seqelist. See help on seqecreate.")

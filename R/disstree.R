@@ -171,7 +171,7 @@ disstree <- function(formula, data = NULL, weights = NULL, min.size = 0.05,
   weight.permutation = "replicate", squared = FALSE, first = NULL, minSize,
   maxdepth) {
 
-  checkargs(alist(min.size = minSize, max.depth = maxdepth))
+  TraMineR.check.depr.args(alist(min.size = minSize, max.depth = maxdepth))
 
 	##formula.call <- formula
 	tterms <- terms(formula)

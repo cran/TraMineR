@@ -7,7 +7,7 @@ plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
   ytlab = NULL, ylas = 0, xtlab = NULL, xtstep = NULL, cex.axis = 1, tlim,
   cex.plot, ...) {
 
-  checkargs(alist(idxs = tlim, cex.axis = cex.plot))
+  TraMineR.check.depr.args(alist(idxs = tlim, cex.axis = cex.plot))
 
 	n <- nrow(x)
 	seql <- ncol(x)

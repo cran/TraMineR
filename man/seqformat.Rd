@@ -281,7 +281,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   Department of Econometrics and Laboratory of Demography, University of Geneva.
 
   Ritschard, G., A. Gabadinho, M. Studer and N. S. Müller. Converting between
-  various sequence representations. in Ras, Z. & Dardzinska, A. (ed.)
+  various sequence representations. in Ras, Z. & Dardzinska, A. (eds.)
   \emph{Advances in Data Management}, Springer, 2009, 223, 155-175.
 }
 \author{
@@ -356,8 +356,8 @@ head(bf.sts)
 
 
 ## ==================================
-## Examples for TSE and SPELL output 
-## in presence of missing values 
+## Examples for TSE and SPELL output
+## in presence of missing values
 ## ==================================
 
 data(ex1) ## STS data with missing values
@@ -370,7 +370,7 @@ as.matrix(sqex1)
 ttrans <- seqetm(sqex1, method='transition')
 tstate <- seqetm(sqex1, method='state')
 
-## Converting into time stamped events 
+## Converting into time stamped events
 seqformat(sqex1, from = "STS", to = "TSE", tevent = ttrans)
 seqformat(sqex1, from = "STS", to = "TSE", tevent = tstate)
 

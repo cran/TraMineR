@@ -1,5 +1,5 @@
 #include "NMSdistance.h"
-
+#include <math.h>       /* log1p */
 	
 void SUBSEQdistance::setParameters(SEXP params){
 	kweights = REAL(getListElement(params, "kweights"));

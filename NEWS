@@ -1,5 +1,32 @@
 ## =========
-Version 2.0-7 [2017-08-15] 
+Version 2.0-8 [2018-01-26]
+
+Changes in existing functions:
+  - seqcost()}: argument 'miss.cost.fixed' is now NULL by
+    default and will be set as FALSE when method = "INDELS" or
+    "INDELSLOG", and as TRUE otherwise.
+  - seqpcplot(): new logical 'weighted' argument to control
+    whether weights should be used or not.
+
+Bug fixes:
+  - seqrplot() and seqplot(..., type="r", ...): the method and
+    other related arguments for computing the diss matrix when
+    the later was not provided was not recognized.
+  - seqplot(): Fixed some unused argument issues.
+
+Misc:
+  - Vignette: Suppressed the loading of two unused LaTeX packages
+    (subfigure and afterpage) that prevented the vignette to be built
+    under OSX.
+  - Declaring use of C++11 for log1p: 'SystemRequirements: C++11'
+    declaration in DESCRIPTION and math.h header in NMSdistance.cpp.
+  - Internal function checkargs() renamed as TraMineR.check.depr.args() 
+    and made public for use in TraMineRextras.
+
+
+
+## =========
+Version 2.0-7 [2017-08-15]
 
 Changes in existing functions:
   - alphabet(): the get form now also applies to event sequences.
@@ -30,7 +57,7 @@ Bug fixes:
     to = "SPELL", the missing and void codes are both converted
     to NA before conversion while they are kept as is when to = "TSE".
   - seqetm() produced an error in presence of void elements.
-  - An error occurred in the internal \code{implicativestat} function 
+  - An error occurred in the internal \code{implicativestat} function
     when a same condition subsequence was present in all subsequences.
 
 Misc:

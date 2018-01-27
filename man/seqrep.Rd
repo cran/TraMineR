@@ -1,6 +1,6 @@
 \name{seqrep}
 \alias{seqrep}
-\alias{seqrplot}
+%%\alias{seqrplot} alias in seqplot
 \title{Extracting sets of representative sequences}
 
 \description{
@@ -126,9 +126,9 @@ state sequence object (containing a list of state sequences) with the
 following additional attributes:
   \item{Scores}{a vector with the representative score of each sequence in the original set given the chosen criterion.}
   \item{Distances}{a matrix with the distance of each sequence to its nearest representative.}
-  \item{Statistics}{a data frame with quality measures for each representative sequence: number of sequences
-      attributed to the representative, number of sequence in the representative's neighborhood, mean distance to the
-      representative.}
+  \item{Statistics}{a data frame with quality measures for each representative sequence: number \eqn{na} of sequences
+      attributed to the representative, number \eqn{nb} of sequences in the representative's neighborhood, mean distance \eqn{MD} to the
+      representative and a few other indexes.}
   \item{Quality}{overall quality measure.}
 
 Print, plot and summary methods are available. More elaborated plots

@@ -23,6 +23,7 @@ seqpcplot(seqdata, group = NULL, weights = NULL, cex = 1, lwd = 1/4,
   missing = "auto", order.align = "first", main = NULL, xlab = NULL,
   ylab = NULL, xaxis = TRUE, yaxis = TRUE, axes = "all", xtlab = NULL,
   cex.lab = 1, rows = NA, cols = NA, plot = TRUE, seed = NULL,
+  weighted = TRUE, with.missing = TRUE,
   title, cex.plot, ...)
 
 seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
@@ -40,7 +41,8 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
     different membership value.}
 
   \item{weights}{a numeric vector of weights of length equal the number
-  of sequences. Overrides weights in the \code{seqdata} object.}
+    of sequences. When \code{NULL}, the \code{weights} are taken from 
+    the \code{seqdata} object.}
 
   \item{cex}{Plotting text and symbols magnification. See \code{\link{par}}.}
 
@@ -80,7 +82,9 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
     displayed. Available are \code{"auto"}, \code{"show"} and
     \code{"hide"}. If \code{"auto"}, the plot will show missings only if
     present. \code{"hide"} will fade out missings and \code{"show"} will
-    always show missings.}
+    always show missings.} If \code{with.missing} is set as \code{FALSE},
+    \code{missing} is turned into \code{"hide"}. If \code{with.missing=TRUE}
+    and \code{missing="hide"}, \code{missing} is turned into \code{"auto"}.
 
   \item{order.align}{Aligning method. For aligning on order positions use either \code{"first"} (default) or
   \code{"last"}. Option \code{"first"} numbers the positions from the beginning
@@ -101,12 +105,15 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 
   \item{cex.lab}{x and y labels magnification. See \code{\link{par}}.}
 
-  \item{rows,cols}{integers to arrange the plot panel design.}
+  \item{rows,cols}{integers. Number of rows and columns of the plot panel.}
 
-  \item{plot}{logical. If \code{FALSE} nothing is plotted and an object
-    of class \code{seqpcplot} is returned by default.}
+  \item{plot}{logical. Should the plot be displayed? Set as \code{FALSE} to retrieve the \code{seqpcplot} object without plotting it.}
 
   \item{seed}{integer. Start seed value.}
+
+  \item{weighted}{logical. Should weights be accounted for? Default is \code{TRUE}.}
+
+  \item{with.missing}{logical. Should we care about possible missings? Default is \code{TRUE}. See also the \code{missing} argument.}
 
   \item{method}{character string. Defines the filtering
      function. Available are \code{"minfreq"}, \code{"cumfreq"} and
@@ -114,6 +121,7 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 
   \item{level}{numeric scalar between 0 and 1. The frequency threshold
     for the filtering methods \code{"minfreq"} and \code{"cumfreq"}.}
+
   \item{title}{Deprecated. Use \code{main} instead.}
   \item{cex.plot}{Deprecated. Use \code{cex.lab} instead.}
   \item{...}{arguments to be passed to other methods, such as graphical
@@ -171,9 +179,9 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 }
 
 \value{
-  \code{seqpcplot} returns an object of \code{class} \code{"seqpcplot"}
-  with various information for constructing the plot,
-  e.g. coordinates. There is also a \code{summary} method for such
+  An object of \code{class} \code{"seqpcplot"}
+  with various information necessary for constructing the plot,
+  e.g. coordinates. There is a \code{summary} method for such
   objects.
 }
 

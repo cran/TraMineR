@@ -2,7 +2,7 @@
 
 seqcost <- function(seqdata, method, cval = NULL, with.missing = FALSE,
   miss.cost = NULL, time.varying = FALSE, weighted = TRUE, transition = "both",
-  lag = 1, miss.cost.fixed = TRUE, state.features = NULL, feature.weights = NULL,
+  lag = 1, miss.cost.fixed = NULL, state.features = NULL, feature.weights = NULL,
   feature.type = list(), proximities = FALSE) {
 
   if (!inherits(seqdata, "stslist")) {
@@ -28,6 +28,13 @@ seqcost <- function(seqdata, method, cval = NULL, with.missing = FALSE,
   }
   if (is.null(miss.cost)) {
     miss.cost <- cval
+  }
+  if (is.null(miss.cost.fixed)){
+    if (method %in% c("INDELS","INDELSLOG")) {
+      miss.cost.fixed <- FALSE
+    } else {
+      miss.cost.fixed <- TRUE
+    }
   }
   ## Adding an entry for for missing state
   if (with.missing) {

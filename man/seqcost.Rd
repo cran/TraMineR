@@ -49,7 +49,7 @@ For all methods but \code{INDELS} and \code{INDELSLOG}, the indel is set as \eqn
 \usage{
 seqcost(seqdata, method, cval = NULL, with.missing = FALSE, miss.cost = NULL,
   time.varying = FALSE, weighted = TRUE, transition = "both", lag = 1,
-  miss.cost.fixed = TRUE, state.features = NULL, feature.weights = NULL,
+  miss.cost.fixed = NULL, state.features = NULL, feature.weights = NULL,
   feature.type = list(), proximities = FALSE)
 
 seqsubm(...)
@@ -71,7 +71,7 @@ seqsubm(...)
 
     \item{miss.cost}{Scalar or vector. Cost for substituting the missing state. Default is \code{cval}.}
 
-    \item{miss.cost.fixed}{Logical. Should the substitution cost for missing be set as the \code{miss.cost} value. Default is \code{TRUE}.}
+    \item{miss.cost.fixed}{Logical. Should the substitution cost for missing be set as the \code{miss.cost} value. When \code{NULL} (default) it will be set as \code{FALSE} when \code{method = "INDELS"} or \code{"INDELSLOG"}, and \code{TRUE} otherwise.}
 
     \item{time.varying}{Logical. If \code{TRUE} return an \code{\link{array}} with a distinct matrix for each time unit. Time is the third dimension (subscript) of the returned array.}
 
@@ -117,9 +117,9 @@ Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2010). Mining Sequence
 \code{R} with the \code{TraMineR} package: A user's guide. Department of Econometrics and
 Laboratory of Demography, University of Geneva.
 
-Studer, M. & Ritschard, G. (2016), "What matters in differences between life trajectories: A comparative review of sequence dissimilarity measures", \emph{Journal of the Royal Statistical Society, Series A}. \bold{179}(2), 481-511. DOI: \url{http://dx.doi.org/10.1111/rssa.12125}
+Studer, M. & Ritschard, G. (2016), "What matters in differences between life trajectories: A comparative review of sequence dissimilarity measures", \emph{Journal of the Royal Statistical Society, Series A}. \bold{179}(2), 481-511. DOI: \href{http://dx.doi.org/10.1111/rssa.12125}{10.1111/rssa.12125}
 
-Studer, M. and G. Ritschard (2014). "A Comparative Review of Sequence Dissimilarity Measures". \emph{LIVES Working Papers}, \bold{33}. NCCR LIVES, Switzerland, 2014. DOI: \url{http://dx.doi.org/10.12682/lives.2296-1658.2014.33}
+Studer, M. and G. Ritschard (2014). "A Comparative Review of Sequence Dissimilarity Measures". \emph{LIVES Working Papers}, \bold{33}. NCCR LIVES, Switzerland, 2014. DOI: \href{http://dx.doi.org/10.12682/lives.2296-1658.2014.33}{10.12682/lives.2296-1658.2014.33}
 }
 
 \examples{

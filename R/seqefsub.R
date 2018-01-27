@@ -6,7 +6,7 @@ seqefsub <- function(eseq, str.subseq = NULL, min.support = NULL,
   pmin.support = NULL, constraint = seqeconstraint(), max.k = -1,
   weighted = TRUE, seq, strsubseq, minSupport, pMinSupport, maxK) {
 
-  checkargs(alist(eseq = seq, str.subseq = strsubseq, min.support = minSupport,
+  TraMineR.check.depr.args(alist(eseq = seq, str.subseq = strsubseq, min.support = minSupport,
     pmin.support = pMinSupport, max.k = maxK))
 
   if (!weighted) {

@@ -328,11 +328,11 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   Studer, M. and G. Ritschard (2016), "What matters in differences between life
   trajectories: A comparative review of sequence dissimilarity measures",
   \emph{Journal of the Royal Statistical Society, Series A}. \bold{179}(2),
-  481-511. DOI: \url{http://dx.doi.org/10.1111/rssa.12125}
+  481-511. DOI: \href{http://dx.doi.org/10.1111/rssa.12125}{10.1111/rssa.12125}
 
   Studer, M. and G. Ritschard (2014). "A Comparative Review of Sequence
   Dissimilarity Measures". \emph{LIVES Working Papers}, \bold{33}. NCCR LIVES,
-  Switzerland. DOI: \url{http://dx.doi.org/10.12682/lives.2296-1658.2014.33}
+  Switzerland. DOI: \href{http://dx.doi.org/10.12682/lives.2296-1658.2014.33}{10.12682/lives.2296-1658.2014.33}
 
   Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and
   Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical
@@ -346,16 +346,16 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   Bühlmann, F. and Gauthier, J.-A. (Eds.) \emph{Advances in Sequence Analysis:
   Theory, Method, Applications}, Vol 2 of Series \emph{Life Course Research and
   Social Policies}, pages 75--103, Heidelberg: Springer. DOI:
-  \url{http://dx.doi.org/10.1007/978-3-319-04969-4_5}
+  \href{http://dx.doi.org/10.1007/978-3-319-04969-4_5}{10.1007/978-3-319-04969-4_5}
 
   Marteau, P.-F. (2009). Time Warp Edit Distances with Stiffness Adjustment for
   Time Series Matching. \emph{IEEE Transactions on Pattern Analysis and Machine
-  Learning Intelligence}, \bold{31}(2), 306--318. DOI:
-  \url{http://dx.doi.org/10.1109/TPAMI.2008.76}
+  Intelligence}, \bold{31}(2), 306--318. DOI:
+  \href{http://dx.doi.org/10.1109/TPAMI.2008.76}{10.1109/TPAMI.2008.76}
 
   Yujian, L. and Bo, L. (2007). A normalized Levenshtein distance metric.
-  \emph{IEEE Transactions On Pattern Analysis And Machine Intelligence},
-  \bold{29}(6), 1091--1095. DOI: \url{http://dx.doi.org/10.1109/TPAMI.2007.1078}
+  \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  \bold{29}(6), 1091--1095. DOI: \href{http://dx.doi.org/10.1109/TPAMI.2007.1078}{10.1109/TPAMI.2007.1078}
 
   See also all references in \cite{Studer and Ritschard (2014, 2016)}
 }

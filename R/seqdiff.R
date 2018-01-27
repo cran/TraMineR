@@ -5,7 +5,7 @@ seqdiff <- function(seqdata, group, cmprange = c(0, 1),
   seqdist.args = list(method = "LCS", norm = TRUE), with.missing = FALSE,
   weighted = TRUE, squared = FALSE, seqdist_arg) {
 
-  checkargs(alist(seqdist.args = seqdist_arg))
+  TraMineR.check.depr.args(alist(seqdist.args = seqdist_arg))
 
 	if (!inherits(seqdata, "stslist")) {
 			stop("seqdata should be a stslist, see seqdef")
@@ -85,7 +85,7 @@ plot.seqdiff <- function(x, stat = "Pseudo R2", type = "l", ylab = stat,
   xlab = "", legend.pos = "top", ylim = NULL, xaxis = TRUE, col = NULL,
   xtstep = NULL, legendposition, xaxt, ...) {
 
-  checkargs(alist(legend.pos = legendposition, xaxis = xaxt))
+  TraMineR.check.depr.args(alist(legend.pos = legendposition, xaxis = xaxt))
 
 	if(is.null(xtstep)){
 		xtstep <- ifelse(!is.null(attr(x, "xtstep")), attr(x, "xtstep"), 1)

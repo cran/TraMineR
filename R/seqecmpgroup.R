@@ -107,7 +107,7 @@ plot.subseqelistchisq <- function(x, ylim = "uniform", rows = NA, cols = NA,
   vlegend = NULL, cex.legend = 1, ptype = "freq", legend.title = NULL,
   residlevels, legendcol, legend.cex, ...) {
 
-  checkargs(alist(resid.levels = residlevels, vlegend = legendcol, cex.legend = legend.cex))
+  TraMineR.check.depr.args(alist(resid.levels = residlevels, vlegend = legendcol, cex.legend = legend.cex))
 
 	if(!inherits(x,"subseqelistchisq")) {
 		stop(" [!] x should be a result of seqecmpgroup")

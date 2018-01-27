@@ -6,7 +6,7 @@ seqrep <- function(seqdata, criterion = "density", score = NULL,
   decreasing = TRUE, coverage = 0.25, nrep = NULL, pradius = 0.10, dmax = NULL,
   diss = NULL, weighted = TRUE, trep, tsim, dist.matrix, ...) {
 
-  checkargs(alist(coverage = trep, pradius = tsim, diss = dist.matrix))
+  TraMineR.check.depr.args(alist(coverage = trep, pradius = tsim, diss = dist.matrix))
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, see seqdef function to create one", call.=FALSE)

@@ -7,7 +7,7 @@
 \alias{seqHtplot}
 \alias{seqmsplot}
 \alias{seqmtplot}
-%%\alias{seqrplot} %% alias in seqrep
+\alias{seqrplot} %% alias in seqrep
 
 \title{Plot state sequence objects}
 \description{
@@ -27,13 +27,13 @@ seqIplot(seqdata, group = NULL, main = NULL, ...)
 seqHtplot(seqdata, group = NULL, main = NULL, ...)
 seqmsplot(seqdata, group = NULL, main = NULL, ...)
 seqmtplot(seqdata, group = NULL, main = NULL, ...)
-%%seqrplot(seqdata, group = NULL, main = NULL, ...)
+seqrplot(seqdata, group = NULL, main = NULL, ...)
 }
 \arguments{
-    \item{seqdata}{a state sequence object created with the \code{\link{seqdef}} function.}
+    \item{seqdata}{State sequence object created with the \code{\link{seqdef}} function.}
 
-    \item{group}{Plots one plot for each level of the factor given as argument.}
-
+    \item{group}{Grouping variable of length equal to the number of sequences. When not \code{NULL}, a distinct plot is generated for each level of \code{group}.}
+        
     \item{type}{the type of the plot. Available types are \code{"d"}
     for state distribution plots (chronograms), \code{"f"} for sequence frequency
     plots, \code{"Ht"} for transversal entropy plots, \code{"i"} for
@@ -42,37 +42,38 @@ seqmtplot(seqdata, group = NULL, main = NULL, ...)
     \code{"mt"} for mean times plots, \code{"pc"} for parallel
     coordinate plots and \code{"r"} for representative sequence plots.}
 
-    \item{main}{title for the graphic. Default is \code{NULL}.}
+    \item{main}{Character string. Title for the graphic. Default is \code{NULL}.}
 
-    \item{cpal}{Color palette used for the states. By default, the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}). If user specified, a vector of colors with number of elements equal to the number of distinct states.}
+    \item{cpal}{Color palette used for the states. By default, the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}). If user specified, a vector of colors of length and order corresponding to \code{alphabet(seqdata)}.}
 
-    \item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the \code{missing.color} attribute of the plotted sequence object.}
+    \item{missing.color}{Color for representing missing values inside the sequences. By default, this color is taken from the \code{missing.color} attribute of \code{seqdata}.}
 
-    \item{ylab}{an optional label for the y-axis. If set to \code{NA}, no label is drawn.}
+    \item{ylab}{Character string. an optional label for the y-axis. If set to \code{NA}, no label is drawn.}
 
-    \item{yaxis}{controls whether a y-axis is plotted. When set to \code{TRUE} (default value), sequence indexes are displayed for \code{"i"} and \code{"I"}, mean time values for \code{"mt"} and percentages for \code{"d"} and \code{"f"}. }
+    \item{yaxis}{Logical. Should the y-axis be plotted? When set as \code{TRUE} (default value), sequence indexes are displayed for \code{"i"} and \code{"I"}, mean time values for \code{"mt"}, percentages for \code{"d"} and \code{"f"}, and state/event labels for \code{"pc"}. Ignored for \code{"r"}. }
 
-    \item{axes}{if set to \code{"all"} (default value) x axes are drawn for each plot in the graphic. If set to \code{"bottom"} and \code{group} is used, axes are drawn only under the plots located at the bottom of the graphic area. If \code{FALSE}, no x-axis is drawn.}
+    \item{axes}{Character string or logical. If set as \code{"all"} (default value) x axes are drawn for each plot in the graphic. If set as \code{"bottom"} and \code{group} is used, axes are drawn only under the plots located at the bottom of the graphic area. If \code{FALSE}, no x-axis is drawn.}
 
-    \item{xtlab}{optional labels for the x-axis tick labels. If unspecified, the column names of the \code{seqdata} sequence object are used (see \code{\link{seqdef}}).}
+    \item{xtlab}{Vector of length equal to the number of columns of \code{seqdata}. Optional labels for the x-axis tick labels. If unspecified, the column names of the \code{seqdata} sequence object are used (see \code{\link{seqdef}}).}
 
-  \item{cex.axis}{
-    Axis annotation magnification. When \code{type = "r"} and for seqrplot(),
-    it also configures the plotting text and symbols magnification.
-    See \code{\link{par}}.
-  }
+    \item{cex.axis}{Real value.
+      Axis annotation magnification. When \code{type = "r"} and for \code{seqrplot()},
+      it also determines the magnification of the plotted text and symbols.
+      See \code{\link{par}}.
+    }
 
-  \item{with.legend}{defines if and where the legend of the state colors is plotted. The default value \code{"auto"} sets the position of the legend automatically. Other possible value is \code{"right"}. Obsolete value \code{TRUE} is equivalent to \code{"auto"}.}
+    \item{with.legend}{Character string or logical. Defines if and where the legend of the state colors is plotted. The default value \code{"auto"} sets the position of the legend automatically. Other possible value is \code{"right"}. Obsolete value \code{TRUE} is equivalent to \code{"auto"}.}
 
-  \item{ltext}{optional description of the states to appear in the legend. Must be a vector of character strings with number of elements equal to the size of the alphabet. If unspecified, the \code{label} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}).}
+    \item{ltext}{Vector of character strings of length and order corresponding to  \code{alphabet(seqdata)}. Optional description of the states to appear in the legend. If unspecified, the \code{label} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}).}
 
-  \item{cex.legend}{Legend magnification. See \code{\link{legend}}.}
+    \item{cex.legend}{Real. Legend magnification. See \code{\link{legend}}.}
 
- \item{use.layout}{if \code{TRUE}, \code{\link[graphics]{layout}} is used to arrange plots when using the group option or plotting a legend. When layout is activated, the standard '\code{\link[graphics]{par}(mfrow=....)}' for arranging plots does not work. With \code{with.legend=FALSE} and \code{group=NULL}, layout is automatically deactivated and '\code{par(mfrow=....)}' can be used.}
+    \item{use.layout}{Logical. Should \code{\link[graphics]{layout}} be used to arrange plots when using the group option or plotting a legend? When layout is activated, the standard '\code{\link[graphics]{par}(mfrow=....)}' for arranging plots does not work. With \code{with.legend=FALSE} and \code{group=NULL}, layout is automatically deactivated and '\code{par(mfrow=....)}' can be used.}
 
- \item{legend.prop}{sets the proportion of the graphic area used for plotting the legend when \code{use.layout=TRUE} and \code{with.legend=TRUE}. Default value is set according to the place (bottom or right of the graphic area) where the legend is plotted. Values from 0 to 1.}
+    \item{legend.prop}{Real in range [0,1]. Proportion of the graphic area devoted to the legend plot when \code{use.layout=TRUE} and \code{with.legend=TRUE}. Default value is set according to the place (bottom or right of the graphic area) where the legend is plotted.}
 
- \item{rows,cols}{optional arguments to arrange plots when \code{use.layout=TRUE}.}
+    \item{rows,cols}{Integers. Number of rows and columns of the plot panel when \code{use.layout=TRUE}.}
+      
   \item{title}{Deprecated. Use \code{main} instead.}
   \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
   \item{withlegend}{Deprecated. Use \code{with.legend} instead.}
@@ -104,12 +105,14 @@ The \emph{modal state sequence plot} (\code{type="ms"}) displays the sequence of
 
 The \emph{mean time plot} (\code{type="mt"}) displays the mean time spent in each state of the alphabet as computed by the \code{\link{seqmeant}} function. The \code{\link{plot.stslist.meant}} plot method is used to plot the resulting statistics. Set \code{serr=TRUE} to display error bars on the mean time plot.
 
-The \emph{representative sequence plot} (\code{type="r"}) displays a reduced, non redundant set of representative sequences extracted from the provided state sequence object and sorted according to a representativeness criterion. The \code{\link{seqrep}} function is called to extract the representative set which is then plotted by calling the \code{\link{plot.stslist.rep}} method. A distance matrix is required that is passed with the \code{diss} argument or by calling the \code{seqdist} function if \code{diss=NULL}. The \code{criterion} argument sets the representativeness criterion used to sort the sequences. See examples below, the \code{\link{seqrep}} and \code{\link{plot.stslist.rep}} manual pages for a complete list of optional arguments and \cite{Gabadinho et al. (2009)} for more details on the extraction of representative sets.
+The \emph{representative sequence plot} (\code{type="r"}) displays a reduced, non redundant set of representative sequences extracted from the provided state sequence object and sorted according to a representativeness criterion. The \code{\link{seqrep}} function is called to extract the representative set which is then plotted by calling the \code{\link{plot.stslist.rep}} method. A distance matrix is required that is passed with the \code{diss} argument or by calling the \code{seqdist} function if \code{diss=NULL}. The \code{criterion} argument sets the representativeness criterion used to sort the sequences.  Refer to the \code{\link{seqrep}} and \code{\link{plot.stslist.rep}} manual pages for a complete list of optional arguments.  See \cite{Gabadinho and Ritschard (2013)} for more details on the extraction of representative sets. Also look at the examples below.
+
+For \emph{decorated parallel coordinate plots} (\code{type="pc"}) see the specific manual page of \code{\link{seqpcplot}}.
 }
 
 \seealso{
- \code{\link{plot.stslist.statd}}, \code{\link{plot.stslist.freq}}, \code{\link{plot.stslist}}, \code{\link{plot.stslist.modst}}, \code{\link{plot.stslist.meant}}, \code{\link{plot.stslist.rep}}
- \code{\link{seqpcplot}}, \code{\link{seqrplot}} .
+ \code{\link{plot.stslist.statd}}, \code{\link{plot.stslist.freq}}, \code{\link{plot.stslist}}, \code{\link{plot.stslist.modst}}, \code{\link{plot.stslist.meant}}, \code{\link{plot.stslist.rep}}, \code{\link{seqrep}},
+ \code{\link{seqpcplot}} .
 }
 
 
@@ -118,6 +121,8 @@ Billari, F. C. (2001). The analysis of early life courses: Complex description o
 the transition to adulthood. \emph{Journal of Population Research} \bold{18}(2), 119-142.
 
 Brzinsky-Fay C., U. Kohler, M. Luniak (2006). Sequence Analysis with Stata. \emph{The Stata Journal}, \bold{6}(4), 435-460.
+
+Gabadinho, A., and G. Ritschard (2013), "Searching for typical life trajectories applied to childbirth histories", In Levy, R. & Widmer, E. (eds) \emph{Gendered life courses - Between individualization and standardization. A European approach applied to Switzerland}, pp. 287-312. Vienna: LIT.
 
 Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
 
@@ -182,8 +187,8 @@ seqmsplot(biofam.seq)
 
 ## Computing a distance matrix
 ## with OM metric
-costs <- seqsubm(biofam.seq, method="TRATE")
-biofam.om <- seqdist(biofam.seq, method="OM", sm=costs)
+costs <- seqcost(biofam.seq, method="INDELSLOG")
+biofam.om <- seqdist(biofam.seq, method="OM", sm=costs$sm, indel=costs$indel)
 
 ## Plot of the representative sets grouped by sex
 ## using the default density criterion

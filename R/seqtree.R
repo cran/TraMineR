@@ -3,7 +3,7 @@ seqtree <- function(formula, data = NULL, weighted = TRUE, min.size = 0.05,
   seqdist.args = list(method = "LCS", norm = "auto"), diss = NULL, squared = FALSE,
   first = NULL, minSize, maxdepth, seqdist_arg) {
 
-  checkargs(alist(min.size = minSize, max.depth = maxdepth, seqdist.args = seqdist_arg))
+  TraMineR.check.depr.args(alist(min.size = minSize, max.depth = maxdepth, seqdist.args = seqdist_arg))
 
 	##formula.call <- formula
 	tterms <- terms(formula)

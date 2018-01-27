@@ -35,7 +35,7 @@ biofam.eseq <- seqecreate(biofam.seq, weighted=FALSE)
 ## Using the weights
 seqeweight(biofam.eseq) <- biofam$wp00tbgs
 
-## Now seqefsub accoounts for weights unless weighted is set to FALSE
+## Now seqefsub accounts for weights unless weighted is set to FALSE
 fsubseq <- seqefsub(biofam.eseq, pmin.support=0.01)
 
 ## Searching for weighted susbsequences which best

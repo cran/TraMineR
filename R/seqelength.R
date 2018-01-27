@@ -4,7 +4,7 @@
 
 seqelength <- function(eseq, s) {
 
-  checkargs(alist(eseq = s))
+  TraMineR.check.depr.args(alist(eseq = s))
 
 	seqelength.internal<-function(eseq){
 		if(is.eseq(eseq)){
@@ -23,7 +23,7 @@ seqelength <- function(eseq, s) {
 
 "seqelength<-" <- function(eseq, s, value){
 
-  checkargs(alist(eseq = s))
+  TraMineR.check.depr.args(alist(eseq = s))
 
 	if(!is.seqelist(eseq)) {
 		stop("eseq should be a seqelist. See help on seqecreate.")

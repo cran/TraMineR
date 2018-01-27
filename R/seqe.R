@@ -2,12 +2,12 @@
 ## Check if subsequence
 ## ========================================
 is.eseq <- function(eseq, s) {
-  checkargs(alist(eseq = s))
+  TraMineR.check.depr.args(alist(eseq = s))
 #   return(.Call(C_istmrsequence,eseq))
     return(inherits(eseq,"eseq"))
 }
 is.seqelist <- function(eseq, s) {
-  checkargs(alist(eseq = s))
+  TraMineR.check.depr.args(alist(eseq = s))
 #   return(.Call(C_istmrsequence,eseq))
   return(inherits(eseq,"seqelist"))
 }

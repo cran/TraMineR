@@ -1,7 +1,7 @@
 seqetm <- function(seqdata, method = "transition", use.labels = TRUE, sep = ">",
   bp = "", ep = "end", seq) {
 
-  checkargs(alist(seqdata = seq))
+  TraMineR.check.depr.args(alist(seqdata = seq))
 
 	statl <- alphabet(seqdata)#seqstatl(seqdata)
 	nr <- attr(seqdata, "nr")

@@ -5,7 +5,7 @@
 seqtrate <- function(seqdata, sel.states = NULL, time.varying = FALSE,
   weighted = TRUE, lag = 1, with.missing = FALSE, count = FALSE, statl) {
 
-  checkargs(alist(sel.states = statl))
+  TraMineR.check.depr.args(alist(sel.states = statl))
 
 	if (!inherits(seqdata,"stslist")) {
 		stop(" [!] seqdata is NOT a sequence object, see seqdef function to create one")

@@ -4,7 +4,7 @@
 
 seqtab <- function(seqdata, idxs = 1:10, weighted = TRUE, format = "SPS", tlim) {
 
-  checkargs(alist(idxs = tlim))
+  TraMineR.check.depr.args(alist(idxs = tlim))
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use seqdef function to create one")

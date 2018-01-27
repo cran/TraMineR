@@ -2,6 +2,49 @@
 \title{NEWS file for the TraMineR package}
 
 
+\section{Changes in version 2.0-8 [2018-01-26]}{
+
+  \subsection{Changes in existing functions:}{
+    \itemize{
+      \item
+      \code{seqcost()}: argument \code{miss.cost.fixed} is now \code{NULL} by
+      default and will be set as \code{FALSE} when \code{method = "INDELS"} or
+      \code{"INDELSLOG"}, and as \code{TRUE} otherwise.
+      \item
+      \code{seqpcplot()}: new logical \code{weighted} argument to control
+      whether weights should be used or not.
+    }
+  }
+
+  \subsection{Bug fixes:}{
+    \itemize{
+      \item
+      \code{seqrplot()} and \code{seqplot(..., type="r", ...)}: the \code{method}
+      and other related arguments for computing the \code{diss} matrix when the
+      later was not provided was not recognized.
+      \item
+      \code{seqplot()}: Fixed some unused argument issues.
+      arguments.
+    }
+  }
+
+  \subsection{Misc:}{
+    \itemize{
+      \item
+      Vignette: Suppressed the loading of two unused LaTeX packages
+      (subfigure and afterpage) that prevented the vignette to be built
+      under OSX.
+      \item
+      Declaring use of C++11 for log1p: \code{SystemRequirements: C++11} declaration
+      in \code{DESCRIPTION} and \code{math.h} header in \code{NMSdistance.cpp}
+      \item
+      Internal function \code{checkargs()} renamed as \code{TraMineR.check.depr.args()}
+      and made public for use in \code{TraMineRextras}.
+    }
+  }
+}
+
+
 \section{Changes in version 2.0-7 [2017-08-15]}{
   \subsection{Changes in existing functions:}{
     \itemize{

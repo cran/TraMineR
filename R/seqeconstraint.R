@@ -2,7 +2,7 @@ seqeconstraint <- function(max.gap = -1, window.size = -1, age.min = -1,
   age.max = -1, age.max.end = -1, count.method = 1, maxGap, windowSize, ageMin,
   ageMax, ageMaxEnd, countMethod) {
 
-  checkargs(alist(max.gap = maxGap, window.size = windowSize, age.min = ageMin,
+  TraMineR.check.depr.args(alist(max.gap = maxGap, window.size = windowSize, age.min = ageMin,
     age.max = ageMax, age.max.end = ageMaxEnd, count.method = countMethod))
 
 	## check that all constraints are coherent

@@ -31,11 +31,19 @@ seqecreate(data = NULL, id = NULL,timestamp = NULL, event = NULL,
 }
 \seealso{
  \code{\link{seqformat}} for converting between sequence formats,
+ \code{\link{seqeweight}} for retrieving or assigning weights,
  \code{\link{seqefsub}} for searching frequent subsequences,
  \code{\link{seqecmpgroup}} to search for discriminant subsequences,
  \code{\link{seqeapplysub}} for counting subsequence occurrences,
  \code{\link{seqelength}} for information about length (observation time) of event sequences,
  \code{\link{seqdef}} to create a state sequence object.
+}
+\references{
+  Ritschard, G., Bürgin, R., and Studer, M. (2014), "Exploratory Mining of Life Event Histories", In McArdle, J.J. & Ritschard, G. (eds) \emph{Contemporary Issues in Exploratory Data Mining in the Behavioral Sciences}. Series: Quantitative Methodology, pp. 221-253. New York: Routledge.
+  
+  Ritschard, G., A. Gabadinho, M. Studer and N. S. Müller. Converting between
+  various sequence representations. in Ras, Z. & Dardzinska, A. (eds.)
+  \emph{Advances in Data Management}, Springer, 2009, 223, 155-175.
 }
 \examples{
 ##Starting with states sequences

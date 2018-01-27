@@ -6,7 +6,7 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
   yaxis = TRUE, xaxis = TRUE, xtlab = NULL,xtstep = NULL, cex.axis = 1,
   space = 0, xlab = NULL, cex.plot, ...) {
 
-  checkargs(alist(cex.axis = cex.plot))
+  TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
 	n <- attr(x,"nbseq")
 	weighted <- attr(x, "weighted")

@@ -8,7 +8,7 @@ Check for TraMineR updates
 \description{ Check if the installed version of TraMineR is
 up-to-date. This function only prints a message and does not need any
 argument. It connects to the TraMineR webserver
-(\url{http://mephisto.unige.ch/traminer}). }
+(\url{http://traminer.unige.ch}). }
 
 \value{
 Return your current version number of TraMineR and the latest stable and

@@ -6,7 +6,7 @@ plot.stslist.freq <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE
   ylab = NULL, yaxis = TRUE, xaxis = TRUE, xtlab = NULL, xtstep = NULL,
   cex.axis = 1, cex.plot, ...) {
 
-  checkargs(alist(cex.axis = cex.plot))
+  TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
 	n <- attr(x,"nbseq")
 	weighted <- attr(x, "weighted")

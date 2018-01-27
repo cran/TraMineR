@@ -6,7 +6,7 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
   dmax = NULL, stats = TRUE, ylab = NULL, xaxis = TRUE, xtlab = NULL,
   xtstep = NULL, cex.with.axis = 1, cex.plot, ...) {
 
-  checkargs(alist(cex.with.axis = cex.plot))
+  TraMineR.check.depr.args(alist(cex.with.axis = cex.plot))
 
 	## Extracting attributes
 	n <- attr(x,"nbseq")

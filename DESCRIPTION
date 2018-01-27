@@ -1,6 +1,6 @@
 Package: TraMineR
-Version: 2.0-7
-Date: 2017-08-15
+Version: 2.0-8
+Date: 2018-01-26
 Title: Trajectory Miner: a Toolbox for Exploring and Rendering
         Sequences
 Authors@R: c(
@@ -15,13 +15,14 @@ Depends: R (>= 3.0.0)
 Imports: utils, RColorBrewer, boot, graphics, grDevices, stats, Hmisc,
         cluster
 Suggests: xtable
+SystemRequirements: C++11
 Description: Toolbox for the manipulation, description and rendering of sequences, and more generally the mining of sequence data in the field of social sciences. Although the toolbox is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers, its features also apply to many other kinds of categorical sequence data. It accepts many different sequence representations as input and provides tools for converting sequences from one format to another. It offers several functions for describing and rendering sequences, for computing distances between sequences with different metrics (among which optimal matching), original dissimilarity-based analysis tools, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them. A user's guide can be found on the TraMineR web page.
 License: GPL (>= 2)
 URL: http://traminer.unige.ch
 Encoding: UTF-8
 Maintainer: Gilbert Ritschard <gilbert.ritschard@unige.ch>
 NeedsCompilation: yes
-Packaged: 2017-08-15 13:06:09 UTC; adm
+Packaged: 2018-01-27 07:05:44 UTC; adm
 Author: Alexis Gabadinho [aut, cph],
   Matthias Studer [aut, cph],
   Nicolas Müller [aut],
@@ -29,4 +30,4 @@ Author: Alexis Gabadinho [aut, cph],
   Pierre-Alexandre Fonta [aut],
   Gilbert Ritschard [aut, cre, cph]
 Repository: CRAN
-Date/Publication: 2017-08-16 08:18:57 UTC
+Date/Publication: 2018-01-27 08:07:17 UTC

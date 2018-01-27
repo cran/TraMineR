@@ -1,7 +1,7 @@
 plot.stslist.meant <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
   xaxis = TRUE, cex.axis = 1, ylim = NULL, cex.plot, ...) {
 
-  checkargs(alist(cex.axis = cex.plot))
+  TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
   n <- attr(x,"nbseq")
   seql <- length(attr(x,"xtlab"))

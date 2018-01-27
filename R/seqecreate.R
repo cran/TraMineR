@@ -10,7 +10,7 @@ seqecreate <- function(data = NULL, id = NULL,timestamp = NULL, event = NULL,
   end.event = NULL, tevent = "transition", use.labels = TRUE, weighted = TRUE,
   endEvent) {
 
-  checkargs(alist(end.event = endEvent))
+  TraMineR.check.depr.args(alist(end.event = endEvent))
 
 	return(seqecreate.internal(data=data, id=id, timestamp=timestamp, event=event,
 								end.event=end.event, tevent=tevent, use.labels=use.labels,

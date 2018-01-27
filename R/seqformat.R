@@ -7,7 +7,7 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
   overwrite = TRUE, fillblanks = NULL, tmin = NULL, tmax = NULL, missing = "*",
   with.missing = TRUE, right="DEL", compressed, nr) {
 
-  checkargs(alist(compress = compressed, missing = nr))
+  TraMineR.check.depr.args(alist(compress = compressed, missing = nr))
 
   is.stslist <- if (inherits(data, "stslist")) TRUE else FALSE
 

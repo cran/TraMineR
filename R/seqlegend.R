@@ -5,7 +5,7 @@
 seqlegend <- function(seqdata, with.missing = "auto", cpal = NULL,
   missing.color = NULL, ltext = NULL, position = "topleft", cex = 1, fontsize, ...) {
 
-  checkargs(alist(cex = fontsize))
+  TraMineR.check.depr.args(alist(cex = fontsize))
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use seqdef function to create one")
