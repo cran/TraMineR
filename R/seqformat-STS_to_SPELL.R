@@ -20,6 +20,8 @@ STS_to_SPELL <- function(seqdata, pdata = NULL, pvar = NULL, with.missing = TRUE
 	nr <- attr(seqdata, "nr")
 
 	if (is.data.frame(pdata)) {
+    if (inherits(pdata[,pvar[2]], "Date") || is.character(pdata[,pvar[2]]) || is.factor(pdata[,pvar[2]]))
+      stop(" [!] Column ", pvar[2]," of pdata should contain integer (birth year) values", call.=FALSE)
 	  pids <- pdata[, pvar[1]]
 	  pbirths <- pdata[, pvar[2]] - 1
 	  if (length(pids) != nseqs)

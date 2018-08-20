@@ -64,6 +64,7 @@ seqdiff <- function(seqdata, group, cmprange = c(0, 1),
 		ret$discrepancy[i,rownames(tmp$groups)] <- tmp$groups$discrepancy
 	}
 	attr(ret, "xtstep") <- attr(seqdata, "xtstep")
+	attr(ret, "tick.last") <- attr(seqdata, "tick.last")
 	class(ret) <- "seqdiff"
 	return(ret)
 }
@@ -83,12 +84,15 @@ print.seqdiff <- function(x, ...) {
 ###########################
 plot.seqdiff <- function(x, stat = "Pseudo R2", type = "l", ylab = stat,
   xlab = "", legend.pos = "top", ylim = NULL, xaxis = TRUE, col = NULL,
-  xtstep = NULL, legendposition, xaxt, ...) {
+  xtstep = NULL, tick.last = NULL, legendposition, xaxt, ...) {
 
   TraMineR.check.depr.args(alist(legend.pos = legendposition, xaxis = xaxt))
 
 	if(is.null(xtstep)){
 		xtstep <- ifelse(!is.null(attr(x, "xtstep")), attr(x, "xtstep"), 1)
+	}
+	if(is.null(tick.last)){
+		tick.last <- ifelse(!is.null(attr(x, "tick.last")), attr(x, "tick.last"), FALSE)
 	}
 	if(length(stat)==1){
     	if (stat %in% c("Variance", "discrepancy", "Residuals","residuals")) {
@@ -114,7 +118,9 @@ plot.seqdiff <- function(x, stat = "Pseudo R2", type = "l", ylab = stat,
     		}
     		legend(legend.pos, fill = cpal, legend = colnames(x$discrepancy))
 			if(xaxis){
-				tpos <- seq(1,nrow(x$discrepancy), xtstep)
+        seql <- nrow(x$discrepancy)
+				tpos <- seq(1, seql, xtstep)
+        if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
 				axis(1, at=tpos-0.5, labels=rownames(x$stat)[tpos])
 			}
     		return(invisible())
@@ -155,7 +161,9 @@ plot.seqdiff <- function(x, stat = "Pseudo R2", type = "l", ylab = stat,
 		stop(" [!] Too many values for the 'stat' argument (max 2)")
 	}
 	if(xaxis){
-		tpos <- seq(1,nrow(x$discrepancy), xtstep)
+    seql <- nrow(x$discrepancy)
+		tpos <- seq(1, seql, xtstep)
+    if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
 		axis(1, at=tpos-0.5, labels=rownames(x$stat)[tpos])
 	}
 }

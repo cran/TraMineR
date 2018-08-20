@@ -36,7 +36,8 @@ sl[1:2000] <- 12
 seqelength(actcal.eseq) <- sl
 actcal.eseq[1:10]
 ## Retrieve lengths
-seqelength(actcal.eseq)
+slen <- seqelength(actcal.eseq)
+summary(slen)
 }
 %\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
 \author{Matthias Studer (with Gilbert Ritschard for the help page)}

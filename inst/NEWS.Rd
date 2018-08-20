@@ -1,6 +1,49 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.0-9 [2018-08-20]}{
+
+  \subsection{Changes in existing functions:}{
+    \itemize{
+      \item
+      \code{seqplot()} now supports the \code{ncol} argument for controlling the number of columns in the color legend.
+      \item
+      \code{seqdef()}: new argument \code{tick.last} to set the \code{tick.last} attribute of the state sequence object. Default is \code{tick.last = FALSE} to preserve the previous behavior.
+      \item
+      \code{plot.stslist()}, \code{plot.stslist.freq()}, \code{plot.stslist.statd()}, \code{plot.stslist.modst()}, \code{plot.stslist.rep()} (i.e. also \code{seqplot} with type \code{"i"}, \code{"I"}, \code{"f"}, \code{"d"}, \code{"Ht"}, \code{"ms"}, or \code{"r"}), and \code{plot.seqdiff()}: new argument \code{tick.last} that when set as \code{TRUE} allows to enforce a tick mark at the last position on the time x-axis. Has no effect when the last position is 1 + a multiple of \code{xtstep}. Default is to use the \code{tick.last} attribute of the state sequence object.
+      \item
+      \code{seqformat()}:
+      \itemize{
+        \item
+        For \code{from = "SPELL"} and \code{process = FALSE}, \code{pdata = "auto"} is now equivalent to \code{NULL} instead of raising an error. Also, using argument \code{pvar} with \code{pdata = NULL} now raises a warning instead of an error and \code{pvar} is simply ignored.
+        \item
+        For \code{from = "SPELL"} an error is raised when columns referred to
+        by \code{begin} and \code{end} are of class "Date".
+        Integer values are expected.
+        \item
+        When \code{from = "SPELL"} or \code{to = "SPELL"}, an error is raised
+        when the birth year column of \code{pdata} is of class "Date".
+        Integer values are expected.
+      }
+      \item
+      \code{seqplot()}: for \code{type = "r"} (\code{seqrplot}), an error is raised when
+      a group has less than two cases.
+
+    }
+  }
+  \subsection{Bug fixes:}{
+    \itemize{
+      \item
+      \code{seqformat()}: An unneeded warning was raised when data
+        was a matrix with a single string element.
+
+      \item
+      \code{seqdef()}: Bad handling of \code{missing} argument when
+      \code{informat = "SPS"} or \code{"SPELL"}.
+
+    }
+  }
+}
 
 \section{Changes in version 2.0-8 [2018-01-26]}{
 
@@ -24,7 +67,6 @@
       later was not provided was not recognized.
       \item
       \code{seqplot()}: Fixed some unused argument issues.
-      arguments.
     }
   }
 
@@ -57,7 +99,7 @@
       \code{seqformat()} has a new \code{right} argument to be used with
       \code{to = 'SPELL'}. The default \code{right = 'DEL'} suppresses the end spells of missing values. Set \code{right = NA} to keep the end spells of missing values.
       \item
-      \code{seqdef()} now rises an error message when \code{void} is not a character different from \code{left}, \code{gaps}, and \code{right}.
+      \code{seqdef()} now raises an error message when \code{void} is not a character different from \code{left}, \code{gaps}, and \code{right}.
       \item
       \code{seqtrate()} gains a new argument \code{count}. When \code{count = TRUE}, the function returns counts of transitions instead of transition probabilities.
     }

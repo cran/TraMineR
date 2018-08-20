@@ -11,7 +11,7 @@ representative sequence plot.
 \usage{
 \method{plot}{stslist.rep}(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
   dmax = NULL, stats = TRUE, ylab = NULL, xaxis = TRUE, xtlab = NULL,
-  xtstep = NULL, cex.with.axis = 1, cex.plot, ...)
+  xtstep = NULL, tick.last = NULL, cex.with.axis = 1, cex.plot, ...)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -28,6 +28,7 @@ representative sequence plot.
   \item{xaxis}{controls whether a x axis is plotted.}
   \item{xtlab}{optional labels for the x axis ticks labels. If unspecified, the column names of the object being plotted.}
   \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with \code{xtstep=3} a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
+  \item{tick.last}{Logical. Should a tick mark be enforced at the last position on the x-axis? If unspecified, the \code{tick.last} attribute of the \code{x} object is used.}
   \item{cex.with.axis}{
     Axis annotation and plotting text and symbols magnification.
     See \code{\link{par}}.

@@ -9,7 +9,7 @@ Plot method for output produced by the \code{seqtab} function, i.e objects of cl
 \usage{
 \method{plot}{stslist.freq}(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
   ylab = NULL, yaxis = TRUE, xaxis = TRUE,
-  xtlab = NULL, xtstep = NULL, cex.axis = 1,
+  xtlab = NULL, xtstep = NULL, tick.last = NULL, cex.axis = 1,
   cex.plot, ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -31,6 +31,8 @@ Plot method for output produced by the \code{seqtab} function, i.e objects of cl
   \item{xtlab}{optional labels for the ticks of the x-axis. If unspecified, the \code{names} attribute of the \code{x} object is used.}
 
   \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with xtstep=3 a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
+
+  \item{tick.last}{Logical. Should a tick mark be enforced at the last position on the x-axis? If unspecified, the \code{tick.last} attribute of the \code{x} object is used.}
 
   \item{cex.axis}{Axis annotation magnification. See \code{\link{par}}.}
 

@@ -15,7 +15,9 @@ seqeid(eseq, s)
 \examples{
 data(actcal.tse)
 actcal.eseq <- seqecreate(actcal.tse)
-seqeid(actcal.eseq)
+sid <- seqeid(actcal.eseq)
+length(sid)
+head(sid)
 }
 
 \author{Matthias Studer (with Gilbert Ritschard for the help page)}

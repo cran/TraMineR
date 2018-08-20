@@ -11,8 +11,8 @@ Create a state sequence object with attributes such as alphabet, color palette a
 seqdef(data, var=NULL, informat="STS", stsep=NULL,
        alphabet=NULL, states=NULL, id=NULL, weights=NULL, start=1,
        left=NA, right="DEL", gaps=NA, missing=NA, void="\%", nr="*",
-       cnames=NULL, xtstep=1, cpal=NULL, missing.color="darkgrey",
-       labels=NULL, ...)
+       cnames=NULL, xtstep=1, tick.last=FALSE, cpal=NULL, 
+       missing.color="darkgrey", labels=NULL, ...)
 }
 
 \arguments{
@@ -83,8 +83,10 @@ sequence data. Those names will be used by default in the graphics as
 axis labels. If \code{NULL} (default), names are taken from the
 original column names in the data.}
 
-	\item{xtstep}{step between displayed tick-marks and labels on the x-axis of state sequence plots.
+	\item{xtstep}{step between displayed tick-marks and labels on the time x-axis of state sequence plots.
 If not overridden by the user, plotting functions retrieve this parameter from the \code{xtstep} attribute of the sequence object. For example, with \code{xtstep=3} a tick-mark is displayed at positions 1, 4, 7, etc...  Default value is 1; i.e., a tick mark is displayed at each position. The display of the corresponding labels depends on the available space and is dealt with automatically.}
+
+  \item{tick.last}{Logical. Should a tick mark be enforced at the last position on the time x-axis?}
 
 	\item{cpal}{an optional color palette for representing the states
 in the graphics. If \code{NULL} (default), a color palette is created

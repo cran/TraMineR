@@ -8,7 +8,7 @@ This is the plot method for state sequence objects of class \code{stslist} creat
 \method{plot}{stslist}(x, idxs = NULL, weighted = TRUE, sortv = NULL,
   cpal = NULL, missing.color = NULL, ylab = NULL,
   yaxis = TRUE, xaxis = TRUE, ytlab = NULL, ylas = 0,
-  xtlab = NULL, xtstep = NULL, cex.axis = 1,
+  xtlab = NULL, xtstep = NULL, tick.last = NULL, cex.axis = 1,
   tlim, cex.plot, ...)
 }
 \arguments{
@@ -47,7 +47,10 @@ This is the plot method for state sequence objects of class \code{stslist} creat
 
   \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with \code{xtstep=3} a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
 
+  \item{tick.last}{Logical. Should a tick mark be enforced at the last position on the x-axis? If unspecified, the \code{tick.last} attribute of the \code{x} object is used.}
+
   \item{cex.axis}{Axis annotation magnification. See \code{\link{par}}.}
+
   \item{tlim}{Deprecated. Use \code{idxs} instead.}
   \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
 
@@ -73,15 +76,16 @@ The interest of sequence index plots has for instance been stressed by \cite{Sch
 ## Defining a sequence object with the data in columns 10 to 25
 ## (family status from age 15 to 30) in the biofam data set
 data(biofam)
+biofam <- biofam[500:600,] ## using a subsample only
 biofam.lab <- c("Parent", "Left", "Married", "Left+Marr",
-"Child", "Left+Child", "Left+Marr+Child", "Divorced")
+    "Child", "Left+Child", "Left+Marr+Child", "Divorced")
 biofam.seq <- seqdef(biofam, 10:25, labels=biofam.lab)
 
 ## Plot of the 10 most frequent sequences
 ## with bar width proportional to the frequency
 plot(biofam.seq)
 
-## Plotting the all data set
+## Plotting the whole data set
 ## with no borders
 plot(biofam.seq, idxs=0, space=0, border=NA)
 

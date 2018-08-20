@@ -36,7 +36,8 @@ seqmodst <- function(seqdata, weighted=TRUE, with.missing=FALSE) {
 		left=NA, gaps=NA, right=NA,
 		labels=stlab(seqdata),
 		cpal=cpal(seqdata), missing.color=attr(seqdata,"missing.color"),
-		xtstep=attr(seqdata, "xtstep")))
+		xtstep=attr(seqdata, "xtstep"),
+		tick.last=attr(seqdata, "tick.last")))
 
 	nbocc <- length(seqfind(res, seqdata))
 

@@ -2,21 +2,24 @@
 ## Plotting the legend
 ## ====================
 
-TraMineR.legend <- function(pos, text, colors, cex=1, ... ) {
+TraMineR.legend <- function(pos, text, colors, cex=1, leg.ncol = NULL, ... ) {
 
 	nbstat <- length(text)
 
-	## Computing some parameters for the legend's plotting
-	if (pos=="bottom") {
-		if (nbstat > 6) 
-			nbcol <- 3
-		else 
-			nbcol <- 2
+	## Computing some parameters for the legend's plotting '
 
-		leg.ncol <- ceiling(nbstat/nbcol) 
-	}
-	else 
-		leg.ncol <- 1
+  if (is.null(leg.ncol)) {
+	   if (pos=="bottom") {
+  		if (nbstat > 6)
+  			nbcol <- 3
+  		else
+  			nbcol <- 2
+
+  		leg.ncol <- ceiling(nbstat/nbcol)
+	   }
+	   else
+		  leg.ncol <- 1
+   }
 
 	## leg.inset <- -0.2 + ((2-leg.ncol)*0.025)
 
@@ -35,7 +38,7 @@ TraMineR.legend <- function(pos, text, colors, cex=1, ... ) {
 		fill=colors,
 		ncol=leg.ncol,
 		bty="o",
-		cex=cex, 
+		cex=cex,
 		...)
 
 }

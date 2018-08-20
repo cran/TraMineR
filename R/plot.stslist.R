@@ -4,8 +4,8 @@
 
 plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
   cpal = NULL, missing.color = NULL, ylab = NULL, yaxis = TRUE, xaxis = TRUE,
-  ytlab = NULL, ylas = 0, xtlab = NULL, xtstep = NULL, cex.axis = 1, tlim,
-  cex.plot, ...) {
+  ytlab = NULL, ylas = 0, xtlab = NULL, xtstep = NULL, tick.last = NULL,
+  cex.axis = 1, tlim, cex.plot, ...) {
 
   TraMineR.check.depr.args(alist(idxs = tlim, cex.axis = cex.plot))
 
@@ -21,6 +21,9 @@ plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
 		if (!is.null(attr(x,"xtstep"))) {xtstep <- attr(x,"xtstep")}
 		## For sequence objects created with previous versions
 		else {xtstep <- 1}
+	}
+	if(is.null(tick.last)){
+		tick.last <- ifelse(!is.null(attr(x, "tick.last")), attr(x, "tick.last"), FALSE)
 	}
 
 	## Range
@@ -102,7 +105,8 @@ plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
 
 	## Plotting the x axis
 	if (xaxis) {
-		tpos <- seq(1,seql, xtstep)
+		tpos <- seq(from=1, to=seql, by=xtstep)
+    if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
 		axis(1, at=tpos-0.5, labels=xtlab[tpos],
 		# mgp=c(3,0.5,0),
 		cex.axis=cex.axis)

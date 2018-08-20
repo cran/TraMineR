@@ -28,11 +28,14 @@ The following discrimination test functions are implemented:
   \item{constraint}{Time constraints used for searching the subsequences (see \code{\link{seqeconstraint}})}
   \item{labels}{Levels (value labels) of the target group variable}
   \item{type}{Type of test used}
-  \item{data}{A data frame with columns support, index (original order of the subsequence) and a pair of frequency and Pearson residual columns for each group}
+  \item{data}{A data frame with columns support, index (original rank of the subsequence, i.e., its position in the inputted \code{subseq}) and a pair of frequency and Pearson residual columns for each group}
 }
 
 \references{
     Studer, M., Müller, N.S., Ritschard, G. & Gabadinho, A. (2010), "Classer, discriminer et visualiser des séquences d'événements", In Extraction et gestion des connaissances (EGC 2010), \emph{Revue des nouvelles technologies de l'information} RNTI. Vol. E-19, pp. 37-48.
+
+    Ritschard, G., Bürgin, R., and Studer, M. (2014), "Exploratory Mining of Life Event Histories", In McArdle, J.J. & Ritschard, G. (eds) \emph{Contemporary Issues in Exploratory Data Mining in the Behavioral Sciences}. Series: Quantitative Methodology, pp. 221-253. New York: Routledge.
+
 }
 
 %\author{ ~~who you are~~ }
@@ -51,8 +54,8 @@ fsubseq <- seqefsub(actcal.eseq, pmin.support=0.01)
 ##searching for susbsequences discriminating the most men and women
 data(actcal)
 discr <- seqecmpgroup(fsubseq, group=actcal$sex, method="bonferroni")
-##Printing discriminating subsequences
-print(discr)
+##Printing the six most discriminating subsequences
+print(discr[1:6])
 ##Plotting the six most discriminating subsequences
 plot(discr[1:6])
 

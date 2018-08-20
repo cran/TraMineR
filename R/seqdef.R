@@ -5,7 +5,8 @@
 seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	alphabet=NULL, states=NULL, id=NULL, weights=NULL, start=1,
 	left=NA, right="DEL", gaps=NA, missing=NA, void="%", nr="*",
-	cnames=NULL, xtstep=1, cpal=NULL, missing.color="darkgrey", labels=NULL, ...) {
+	cnames=NULL, xtstep=1, tick.last=FALSE, cpal=NULL, missing.color="darkgrey",
+  labels=NULL, ...) {
 
 	## Parameters
 	maxstatedisplay <- 12
@@ -27,14 +28,16 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 			sf <- seqfcheck(seqdata)
 			if (sf %in% c("-",":")) seqdata <- seqdecomp(seqdata,sep=sf)
 			else if (sf=="-X")
-				message(" [!] found '-' character in states codes, not recommended")
+				message(" [!] found '-' character in state codes, not recommended")
 		}
 		else {
 			seqdata <- seqdecomp(seqdata,sep=stsep)
 		}
 	}
 	else if (informat %in% c("SPS","SPELL")) {
-		seqdata <- seqformat(seqdata, from = informat, to = "STS", stsep = stsep, ...)
+    if (is.na(missing)) missing <- "_!NA!_"  ## NA causes an error in seqformat
+		seqdata <- seqformat(seqdata, from = informat, to = "STS", stsep = stsep, missing = missing, ...)
+    missing <- NA  ## seqformat replaces missings with NA
 		## if (is.null(cnames)) cnames <- colnames(seqdata)
 	}
 
@@ -233,6 +236,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	}
 
 	attr(seqdata,"xtstep") <- xtstep
+	attr(seqdata,"tick.last") <- tick.last
 
 	if (!is.null(id)) {
 		if (length(id)==1 && id=="auto") {

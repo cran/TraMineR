@@ -28,10 +28,10 @@ seqstatd <- function(seqdata, weighted=TRUE, with.missing=FALSE, norm=TRUE) {
 	if (!weighted || is.null(weights)) {
 		weights <- rep(1.0, nrow(seqdata))
 	}
-	## Also takes into account that in unweighted sequence objects created with 
+	## Also takes into account that in unweighted sequence objects created with
 	## older TraMineR versions the weights attribute is a vector of 1
-	## instead of NULL  
-	if (all(weights==1)) 
+	## instead of NULL
+	if (all(weights==1))
 		weighted <- FALSE
 
 	for (i in 1:nbstat)
@@ -45,7 +45,7 @@ seqstatd <- function(seqdata, weighted=TRUE, with.missing=FALSE, norm=TRUE) {
 	E <- apply(sd,2,entropy)
 	## Maximum entropy is the entropy of the alphabet
 	if (norm==TRUE) {
-		E.max <- entropy(rep(1/nbstat,nbstat)) 
+		E.max <- entropy(rep(1/nbstat,nbstat))
 		E <- E/E.max
 	}
 
@@ -58,6 +58,7 @@ seqstatd <- function(seqdata, weighted=TRUE, with.missing=FALSE, norm=TRUE) {
 	attr(res,"cpal") <- col
 	attr(res,"xtlab") <- colnames(seqdata)
 	attr(res,"xtstep") <- attr(seqdata,"xtstep")
+	attr(res,"tick.last") <- attr(seqdata,"tick.last")
 	attr(res,"weighted") <- weighted
 
 	return(res)

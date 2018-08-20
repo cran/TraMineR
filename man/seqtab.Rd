@@ -41,7 +41,9 @@ seqtab(actcal.seq)
 
 ## With idxs=0, we get all distinct sequences in the data set
 ## sorted in decreasing order of their frequency
-seqtab(actcal.seq, idxs=0)
+stab <- seqtab(actcal.seq, idxs=0)
+head(stab)
+tail(stab)
 
 ## Example with weights
 ## from biofam data set using weigths

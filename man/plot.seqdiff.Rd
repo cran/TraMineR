@@ -10,7 +10,7 @@ Plotting a seqdiff object.
 \usage{
 \method{plot}{seqdiff}(x, stat = "Pseudo R2", type = "l", ylab = stat,
   xlab = "", legend.pos = "top", ylim = NULL, xaxis = TRUE, col = NULL,
-  xtstep = NULL, legendposition, xaxt, ...)
+  xtstep = NULL, tick.last = NULL, legendposition, xaxt, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,6 +24,7 @@ Plotting a seqdiff object.
   \item{xaxis}{logical: if \code{TRUE} an x-axis is plotted.}
   \item{col}{list of colors to use for each line.}
   \item{xtstep}{integer: optional step between tick-marks and labels on the x-axis. If unspecified, the \code{xtstep} attribute of the sequence object \code{x} is used. (see \code{\link{seqdef}})}
+  \item{tick.last}{Logical. Should a tick mark be enforced at the last position on the x-axis? If unspecified, the \code{tick.last} attribute of the \code{x} object is used.}
   \item{legendposition}{Deprecated. Use \code{legend.pos} instead.}
   \item{xaxt}{Deprecated. Use \code{xaxis} instead.}
   \item{\dots}{Additional parameters passed to \code{\link{lines}}}

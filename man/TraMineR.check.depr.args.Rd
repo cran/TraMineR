@@ -12,8 +12,8 @@ TraMineR.check.depr.args(arg.pairs)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{arg.pairs}{List of pairs of old and new argument names 
-  (e.g. \code{alist(newname1 = oldname1, newname2 = oldname2)})}
+  \item{arg.pairs}{List of pairs of old and new argument names
+  \cr(e.g. \code{alist(newname1 = oldname1, newname2 = oldname2)})}
 }
 
 \details{To be used inside functions. For developers only.

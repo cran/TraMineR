@@ -13,7 +13,7 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
 
   #### Check arguments with deprecated values ####
 
-  if (is.a.string(data)) {
+  if (is.a.string(data) & !is.matrix(data)) {
     data <- as.matrix(data)
     msg.warn("'data' as a string is deprecated, use as.matrix() to convert it")
   }
@@ -63,6 +63,7 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
     checkindexes(var)
 
   # missing
+  #missing <- as.character(missing)
   if (!is.a.string(missing[1]))
     msg.stop.na("missing")
 
@@ -97,10 +98,10 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
     if (!is.null(pvar)) {
       checkindexes(pvar)
       if (!is.data.frame(pdata))
-        msg.stop("'pdata' must be a data frame to use 'pvar'")
+        msg.warn0("'pvar' ignored because 'pdata' is not a data frame")
     } else {
       if (is.data.frame(pdata))
-        msg.stop("'pvar' must be specified when 'pdata' is a data frame")
+        msg.stop("'pvar' required when 'pdata' is a data frame")
     }
   }
 
@@ -119,7 +120,7 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
     if (from != "SPELL") {
       if (missing(id)) {
         uids <- NULL
-        msg.warn("'id' set to NULL as it is not specified (backward compatibility TraMineR 1.8)")
+        msg.warn("'id' set to NULL as it is not specified (backward compatibility with TraMineR 1.8)")
       } else if (is.null(id)) {
         uids <- NULL
       } else if (!is.null(id)) {
@@ -167,10 +168,10 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
     if (is.compressed && is.null(stsep)) {
       stsep.auto <- seqfcheck(mseqdata)
       if (! stsep.auto %in% c("-", ":")) {
-        msg.stop("'stsep' must be specified as it is not '-' or ':'")
+        msg.stop("'stsep' must be specified as it is neither '-' nor ':'")
       } else {
         stsep <- stsep.auto
-        msg0("setting 'stsep' to \"", stsep, "\" (autodetected)")
+        msg0("setting 'stsep' as \"", stsep, "\" (autodetected)")
       }
     }
 
@@ -202,8 +203,8 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
     SPELL = SPELL_to_STS(seqdata, id, begin, end, status, process, pdata, pvar,
       limit, overwrite, fillblanks, tmin, tmax))
   # Note: In mseqdata, 'nr' and 'void' codes are unchanged
-  # Note: SPS_to_STS() insert neither 'nr' nor 'void' codes
-  # Note: SPELL_to_STS() insert neither 'nr' nor 'void' codes
+  # Note: SPS_to_STS() inserts neither 'nr' nor 'void' codes
+  # Note: SPELL_to_STS() inserts neither 'nr' nor 'void' codes
   # TODO SPELL_to_STS() uses NA as 'void' code
 
   nseqs.in <- nrow(msts)

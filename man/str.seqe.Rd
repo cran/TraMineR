@@ -22,7 +22,7 @@
 \examples{
 data(actcal.tse)
 actcal.eseq <- seqecreate(actcal.tse)
-as.character(actcal.eseq)
+head(as.character(actcal.eseq))
 }
 
 \author{Matthias Studer (with Gilbert Ritschard for the help page)}

@@ -132,14 +132,16 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     Integer or String.
     Default: \code{2}.
     The index or the name of the column containing the spell start times in
-    \code{data} (after \code{var} filtering) when \code{from = "SPELL"}.
+    \code{data} (after \code{var} filtering) when \code{from = "SPELL"}. 
+    Start times should be positive integers.
   }
 	\item{end}{
 	  % from SPELL
     Integer or String.
     Default: \code{3}.
     The index or the name of the column containing the spell end times in
-    \code{data} (after \code{var} filtering) when \code{from = "SPELL"}.
+    \code{data} (after \code{var} filtering) when \code{from = "SPELL"}. 
+    End times should be positive integers.
   }
 	\item{status}{
 		% from SPELL
@@ -175,15 +177,15 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
 
     If \code{"auto"}, ages are computed using the start time of the first spell
     of each individual as her/his birthdate when \code{from = "SPELL"} and
-    \code{process = TRUE}.
+    \code{process = TRUE}. For \code{from = "SPELL"} and \code{process = FALSE}, \code{"auto"} is equivalent to \code{NULL}.
 
     A data frame containing the ID and the birth time of the individuals when
     \code{from = "SPELL"} or \code{to = "SPELL"}. Use \code{pvar} to specify
-    the column names. The ID is used to match the birth time of individuals
-    with the sequence data. The birth time is the start time from which the time
-    axis will be computed. It is used to compute \code{tmin} and to guess
-    \code{tmax}, if there are \code{NULL}, when \code{from = "SPELL"} and
-    \code{process = FALSE}.
+    the column names. The ID is used to match the birth time of each individual
+    with the sequence data. The birth time should be integer. It is the start 
+    time from which the positions on the time axis are computed. It also serves 
+    to compute \code{tmin} and to guess \code{tmax} when the latter are \code{NULL}, 
+    \code{from = "SPELL"}, and \code{process = FALSE}.
   }
   \item{pvar}{
     % from SPELL
@@ -269,8 +271,8 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   See \cite{Gabadinho et al. (2009)} and \cite{Ritschard et al. (2009)} for more
   details on longitudinal data formats and converting between them.
 
-  When data are in \code{"SPELL"} format, the begin and end times expected
-  to be positions in the sequences. Therefore they should be strictly positive integers.
+  When data are in \code{"SPELL"} format (\code{from = "SPELL"}), the begin and end times are expected to be positions in the sequences. Therefore they should be strictly positive integers.
+  With \code{process=TRUE}, the outcome sequences will be aligned on ages (process duration since birth), while with \code{process=FALSE} they will be aligned on dates (position on the calendar time). If \code{TRUE}, values in the \code{begin} and \code{end} columns of \code{data} are assumed to be integer dates when \code{pdata} is not \code{NULL}, and ages otherwise. If \code{FALSE}, begin and end values ares assumed to be dates when \code{pdata} is \code{NULL} and ages otherwise.
 }
 \value{
   A data frame for \code{SRS}, \code{TSE}, and \code{SPELL}, a matrix otherwise.
@@ -346,13 +348,19 @@ head(bf.spell)
 ## considered individuals were aged 15
 data(bfspell)
 
-## Converting to SPS format
-bf.sts <- seqformat(bfspell20, from = "SPELL", to = "STS",
+## Converting to STS format with alignement on calendar years
+bf.sts.y <- seqformat(bfspell20, from = "SPELL", to = "STS",
+  id = "id", begin = "begin", end = "end", status = "states",
+  process = FALSE)
+head(bf.sts.y)
+
+## Converting to STS format with alignement on ages
+bf.sts.a <- seqformat(bfspell20, from = "SPELL", to = "STS",
   id = "id", begin = "begin", end = "end", status = "states",
   process = TRUE, pdata = bfpdata20, pvar = c("id", "when15"),
   limit = 16)
-names(bf.sts) <- paste0("a", 15:30)
-head(bf.sts)
+names(bf.sts.a) <- paste0("a", 15:30)
+head(bf.sts.a)
 
 
 ## ==================================

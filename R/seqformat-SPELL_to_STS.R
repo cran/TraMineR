@@ -13,10 +13,16 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	begincolumn <- seqdata[,begin]
 	endcolumn <- seqdata[,end]
 
-    is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
+  if (inherits(seqdata[,begin], "Date") || is.character(begincolumn) || is.factor(begincolumn)
+    || inherits(seqdata[,end], "Date") || is.character(endcolumn) || is.factor(endcolumn))
+    stop(" [!] 'begin' and 'end' columns of seqdata should contain integer values", call.=FALSE)
 
-	if (any(!is.wholenumber(c(endcolumn,begincolumn)), na.rm=TRUE)) {
-		stop(" [!] Found non-integer values in colunms refer to by begin and/or end argument!", call.=FALSE)
+
+  ##is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
+  is.wholenumber <- function(x){as.integer(x) == x}
+
+	if (!all(is.wholenumber(c(endcolumn,begincolumn)), na.rm=TRUE)) {
+		stop(" [!] Found non-integer values in colunms referred to by begin and/or end argument!", call.=FALSE)
 	}
 	if (any(begincolumn<1, na.rm=TRUE)) {
 		stop(" [!] Found one or more spell with starting time < 1", call.=FALSE)
@@ -25,18 +31,23 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		stop(" [!] Found one or more spell with ending time < starting time", call.=FALSE)
 	}
 
+  ## print("Testing whether process==FALSE and pdata=='auto'")
+  if ( !process && !is.null(pdata) && !is.data.frame(pdata))  pdata <- NULL
 
 	frmoption <- NULL
 
-	if (is.data.frame(pdata))
+  ##print("Now testing pdata")
+	if (is.data.frame(pdata)){
+    if (inherits(pdata[,pvar[2]], "Date") || is.character(pdata[,pvar[2]]) || is.factor(pdata[,pvar[2]]))
+      stop(" [!] Column '",pvar[2],"' of pdata should contain integer (birth year) values", call.=FALSE)
+    #print("pdata ok")
 	  pdata <- pdata[, pvar]
-
+  }
 	if (process==TRUE) {
 		if (!is.null(pdata)) frmoption <- "year2age"
 		else frmoption <- "age2age"
 	}
-
-	if (process==FALSE) {
+  else { ## if(process==FALSE) {
 		if (is.null(pdata)) frmoption <- "year2year"
 		else frmoption <- "age2year"
 	}
@@ -58,21 +69,22 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 			}
 			message(paste(" [>] time axis:", tmin, "->", tmax))
 			if(is.na(tmin) || is.na(tmax)) {
-				stop("Could not find the minimum or maximum year automatically, please use tmin/tmax options")
+				stop(" [!] Could not find the minimum or maximum year automatically, please use tmin/tmax options")
 			}
 		}
 		limit <- (tmax - tmin) + 1
 		year <- tmin
-		names.seqresult <- NULL
-		for(i in 1:limit) {
-			names.seqresult <- c(names.seqresult, (paste("y", year, sep="")))
-			year <- year+1
-		}
-		#names.seqresult <- c(names.seqresult, "id")
+    #names.seqresult <- NULL
+		#for(i in 1:limit) {
+		#	names.seqresult <- c(names.seqresult, (paste("y", year, sep="")))
+		#	year <- year+1
+		#}
+    names.seqresult <- paste0("y", seq(from = year, to = year+limit-1))
+		##names.seqresult <- c(names.seqresult, "id")
 	}
 	else {
 		#names.seqresult <- c((paste("a", seq(1:limit), sep="")),"id")
-		names.seqresult <- c((paste("a", seq(1:limit), sep="")))
+		names.seqresult <- paste0("a", seq(from = 1, to = limit))
 	}
 
 	#seqresult <- matrix(nrow=1, ncol=limit+1)
@@ -80,11 +92,12 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	lid <- unique(seqdata[,id])
 	#print(lid)
 	nbseq <- length(lid)
-        seqresult <- matrix(nrow=nbseq, ncol=limit)
+  seqresult <- matrix(nrow=nbseq, ncol=limit)
 	#seqresult <- as.data.frame(seqresult)
-        status.orig <- seqdata[,status]
+  status.orig <- seqdata[,status]
+  ## if status is a factor, convert to integer for faster computation
 	if (is.factor(seqdata[,status])) {
-          seqdata[,status] <- as.integer(seqdata[,status])
+    seqdata[,status] <- as.integer(seqdata[,status])
         #	for (k in 1:(limit)) {
 	#		seqresult[,k] <- factor(seqresult[,k], levels=levels(seqdata[,status]), labels=levels(seqdata[,status]))
 	#	}
@@ -104,12 +117,12 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 
 
 	#print(paste("nbseq = ", nbseq))
-	# si un dataframe avec les années de naissances a été donné en argument, on récupère les ID et les années
+	# if birth year have been given in pdata dataframe, we retrieve ids and birth years
 	birthyrid1<-0
 	if((frmoption=="year2age" || frmoption=="age2year") && (!is.null(pdata) && pdata!="auto")) {
 		birthyrid1 <- pdata[,1]
 		birthyr1 <- pdata[,2]
-        }
+  }
 	## ===============
 	## individual loop
 	## ===============
@@ -120,7 +133,8 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		spell <- seqdata[seqdata[,id]==lid[i],]
 		# number of spell for individual i
 		idxmax <- nrow(spell)
-		# we check if the first episode looks normal (starting age/year > 0) (problèmes avec un fichier du panel)
+		# we check if the first episode looks normal (starting age/year > 0)
+    # (issues found with a file frome the Swiss panel)
 		if(frmoption=="age2age" || frmoption=="year2year" || frmoption=="age2year") {
 			age1 <- spell[1,begin]
 		}
@@ -137,7 +151,7 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 				age1 <- spell[1,begin] - birthy
 			}
 			else {
-				stop(" [>] pdata must be either a vector with a birth year by individual or set to \"auto\"")
+				stop(" [>] pdata must either contain a birth year per individual or be set as \"auto\"")
 			}
 
 		}
@@ -156,7 +170,7 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		# we fill the line with NAs
 		seqresult[i,1:(limit)] <- c(rep(NA,(limit)))
 
-	    if (age1 >= 0) {
+	  if (age1 >= 0) {
 			if (idxmax>0) {
 				# by default, the most recent episode erases the one before
 				if(overwrite==TRUE) {
@@ -199,11 +213,12 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 					else {
 					#######################
 					# fillblanks option
-					# if fillblanks is not null, the gaps between episodes is filled with its value
+					# if fillblanks is not null, gaps between episodes are filled with its value
 						if (!is.null(fillblanks)) {
 						#print(fillblanks)
 							if (j>1) {
-							# for every episode after the first one, we check if there is a gap between the one before and this one
+							# for every episode after the first one, we check if there is a gap
+              # between the previous and current episodes.
 								if(frmoption=="age2age" || frmoption=="age2year") {
 									previousend <- spell[j-1,end]
 								}
@@ -254,18 +269,18 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 			 }
 		}
 	}
-        seqresult <- as.data.frame(seqresult)
-        if(is.factor(status.orig)) {
-          for (k in 1:(limit)) {
-            if(is.null(fillblanks)) {
-				seqresult[,k] <- factor(seqresult[,k], levels=1:nlevels(status.orig), labels=levels(status.orig))
+  seqresult <- as.data.frame(seqresult)
+  if(is.factor(status.orig)) {
+    for (k in 1:(limit)) {
+      if(is.null(fillblanks)) {
+	      seqresult[,k] <- factor(seqresult[,k], levels=1:nlevels(status.orig), labels=levels(status.orig))
 			}
 			else {
 				seqresult[,k] <- factor(seqresult[,k], levels=1:(nlevels(status.orig)+1), labels=c(levels(status.orig), fillblanksF))
 			}
-		  }
-        }
-        names(seqresult) <- names.seqresult
+		}
+  }
+  names(seqresult) <- names.seqresult
 
 	## setting id as rowname
 	row.names(seqresult) <- lid

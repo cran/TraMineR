@@ -18,7 +18,7 @@ disstree2dot(tree, filename, digits = 3, image.fun = NULL, image.data = NULL,
   device.arg, label.loc, node.loc, split.loc, title.cex, legendtext,
   legendimage, qualityimage, showdepth, ...)
 
-  disstree2dotp(tree, filename, image.data = NULL, only.leaf = FALSE,
+disstree2dotp(tree, filename, image.data = NULL, only.leaf = FALSE,
   image.fun = plot, cex.main = 3, with.quality = TRUE,
   cex.quality = cex.main, title.outer = FALSE,
   imagedata, imgLeafOnly, imagefunc, title.cex, withquality,

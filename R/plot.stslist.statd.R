@@ -3,8 +3,8 @@
 ## ==============================
 
 plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
-  yaxis = TRUE, xaxis = TRUE, xtlab = NULL,xtstep = NULL, cex.axis = 1,
-  space = 0, xlab = NULL, cex.plot, ...) {
+  yaxis = TRUE, xaxis = TRUE, xtlab = NULL, xtstep = NULL, tick.last = NULL,
+    cex.axis = 1, space = 0, xlab = NULL, cex.plot, ...) {
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
@@ -19,6 +19,9 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
 		if (!is.null(attr(x,"xtstep"))) {xtstep <- attr(x,"xtstep")}
 		## For sequence objects created with previous versions
 		else {xtstep <- 1}
+	}
+	if(is.null(tick.last)){
+		tick.last <- ifelse(!is.null(attr(x, "tick.last")), attr(x, "tick.last"), FALSE)
 	}
 
 	seql <- length(xtlab)
@@ -44,6 +47,7 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
 		## Plotting the x axis
 		x.lab.pos <- NULL
 		tpos <- seq(1,seql, xtstep)
+    if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
 
 		for (p in tpos) {
 			x.lab.pos <- c(x.lab.pos, (p-1)+((p-1)*space)+(0.5+space))

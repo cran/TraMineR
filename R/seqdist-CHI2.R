@@ -15,7 +15,7 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE, we
 		}else{
 			bb <- seq(from=1, to=ncol(seqdata), by=step)
 			if(bb[length(bb)]!=(1+ncol(seqdata)-step)){
-				warning("[!] last episode is shorter than the other")
+				warning("[!] last episode is shorter than the others")
 			}
 			bb <- c(bb, ncol(seqdata)+1)
 

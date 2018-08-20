@@ -206,4 +206,3 @@ dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE
 
 	return(res)
 }
-

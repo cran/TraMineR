@@ -74,4 +74,3 @@ seqrep <- function(seqdata, criterion = "density", score = NULL,
 
 	return(res)
 }
-

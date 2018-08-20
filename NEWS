@@ -1,4 +1,40 @@
 ## =========
+Version 2.0-9 [2018-08-20]
+
+Changes in existing functions:
+  - seqplot()} now supports the 'ncol' argument for controlling 
+    the number of columns in the color legend.
+  - seqdef(): new argument 'tick.last' to set the 'tick.last'
+    attribute of the state sequence object. Default is
+    tick.last = FALSE to preserve the previous behavior.
+  - plot.stslist(), plot.stslist.freq(), plot.stslist.statd(),
+    plot.stslist.modst(), plot.stslist.rep() (i.e. also seqplot()
+    with type "i", "I", "f", "d", "Ht", "ms", or "r"),
+    and plot.seqdiff(): new argument 'tick.last' that when
+    set as TRUE enforces a tick mark at the last position on
+    the time x-axis. Has no effect when the last position is
+    1 + a multiple of xtstep.
+  - seqformat():
+    - For 'from = "SPELL"' and 'process = FALSE',
+      'pdata = "auto"' is now equivalent to NULL instead of
+      raising an error. Also, using argument 'pvar' with
+      'pdata = NULL' now raises a warning instead of
+      an error and 'pvar' is simply ignored.
+    - For 'from = "SPELL"', an error is raised when columns
+      referred to by 'begin' and 'end' are of class "Date".
+    - When 'from = "SPELL"' or 'to = "SPELL"', an error is
+      raised when the birth year column of pdata is of
+      class "Date". Integer values are expected.
+  - seqplot(): for type "r" (seqrplot), an error is raised
+      when a group has less than two cases.
+
+Bug fixes:
+  - seqformat(): An unneeded warning was raised when data
+      was a matrix with a single string element.
+  - seqdef(): Bad handling of 'missing' argument when
+      informat = "SPS" or "SPELL".
+
+## =========
 Version 2.0-8 [2018-01-26]
 
 Changes in existing functions:
@@ -20,7 +56,7 @@ Misc:
     under OSX.
   - Declaring use of C++11 for log1p: 'SystemRequirements: C++11'
     declaration in DESCRIPTION and math.h header in NMSdistance.cpp.
-  - Internal function checkargs() renamed as TraMineR.check.depr.args() 
+  - Internal function checkargs() renamed as TraMineR.check.depr.args()
     and made public for use in TraMineRextras.
 
 
@@ -39,7 +75,7 @@ Changes in existing functions:
     to = 'SPELL'. The default right = 'DEL' suppresses the
     end spells of missing values. Set right = NA to keep the
     end spells of missing values.
-  - seqdef() now rises an error message when 'void' is not a character
+  - seqdef() now raises an error message when 'void' is not a character
     different from 'left', 'gaps', and 'right'.
   - seqtrate() gains a new argument 'count'. When 'count = TRUE',
     the function returns counts of transitions instead of transition
