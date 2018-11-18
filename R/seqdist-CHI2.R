@@ -60,10 +60,11 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE, we
 		bindice <- lastbi:bi
 		blength <- ifelse(norm, length(bindice), 1)
 		mat <- matrix(0, nrow=nrow(seqdata), ncol=nalph)
+		ndot <- vector("numeric", length=nalph)
 		bseq <- seqdata[, bindice]
 		myrowSums <- function(x){
 			if(!is.null(ncol(x))){
-				return(weights*rowSums(x))
+				return(weights*rowSums(x, na.rm=TRUE))
 			}else{
 				return(weights*x)
 			}
@@ -71,6 +72,9 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE, we
 		for(i in 1:nalph){
 			mat[, i] <- myrowSums(bseq==alph[i])/blength
 		}
+    ndot <- colSums(mat, na.rm=TRUE) ##GR
+    mat <- rbind(mat,ndot) ## GR
+    mat <- mat/rowSums(mat, na.rm=TRUE)## GR
 		return(mat)
 	}
 	allmat <- list()
@@ -78,16 +82,19 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE, we
 		allmat[[b]] <- dummies(b)
 	}
 	allmat <- do.call(cbind, allmat)
-	ndotj <- colSums(allmat)
-	cond <- ndotj>0
+  ##print(allmat)
+  pdotj <- allmat[nrow(allmat),]
+  allmat <- allmat[-nrow(allmat),]
+	##ndotj <- colSums(allmat) ## pdotj computed in dummies
+	cond <- pdotj>0
 	allmat <- allmat[, cond]
 	if(euclid){
-		ndotj <- rep(1.0, ncol(allmat))
+		pdotj <- rep(1.0, ncol(allmat))
 	} else{
-		ndotj <- ndotj[cond]
+		pdotj <- pdotj[cond]
 	}
-	chdist <- function(i, j){
-		return(sqrt(sum((allmat[i, ]-allmat[j, ])^2/ndotj)))
+  chdist <- function(i, j){
+		return(sqrt(sum((allmat[i, ]-allmat[j, ])^2/pdotj)))
 	}
 	n <- nrow(seqdata)
 	if(notC){ ##Unused
@@ -99,7 +106,7 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE, we
 		}
 	}else{
 		## SEXP tmrChisq(SEXP ChiTableS, SEXP tdimS, SEXP margeS)
-		dd <- .Call(C_tmrChisq, as.double(allmat), as.integer(dim(allmat)), as.double(ndotj))
+		dd <- .Call(C_tmrChisq, as.double(allmat), as.integer(dim(allmat)), as.double(pdotj))
 	}
 	attributes(dd) <- list(Size = n, Labels = rownames(seqdata), Diag = FALSE,
         Upper = FALSE, method = "Chi square sequence", call = match.call(),

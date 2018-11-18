@@ -402,7 +402,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
       refseq.mat <- refseq.mat.ext
     }
     # Tell seqdef() that the seqdata.nr/refseq.nr code is the one for missing values
-    seqdata <- suppressMessages(seqdef(rbind(as.matrix(seqdata), refseq.mat), missing = seqdata.nr))
+    seqdata <- suppressMessages(seqdef(rbind(as.matrix(seqdata), refseq.mat), alphabet=alphabet(seqdata), missing = seqdata.nr))
   }
 
   # Transform the alphabet into numbers

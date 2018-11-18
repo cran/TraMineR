@@ -30,10 +30,6 @@ data(bfspell)
 }
 
 \format{A data set with two data frames: \code{bfspell20} with one row per spell and \code{bfpdata20} with one row per id. The \code{bfspell20} data frame contains the spell data themselves (4 variables \code{id}, \code{begin}, \code{end}, \code{states}) and \code{bfpdata20} the year when aged 15 (2 variables \code{id}, \code{when15}).
-\code{bfspell} contains two data frames.
-The \code{bfspell20} data frame with the first 20 sequences of \code{biofam} in spell format, and
-\code{bfpdata20} with two columns \code{id} and {when15} with respectively the id and year when aged 15 corresponding to the 20 sequences in bfspell20.
-
 }
 \seealso{
 \code{\link{biofam}}

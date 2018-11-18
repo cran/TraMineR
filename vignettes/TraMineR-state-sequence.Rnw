@@ -1,7 +1,8 @@
-% -*- TeX -*- -*- US -*-
+% -*- TeX:RNW -*- -*- US -*-
 
 %\VignetteIndexEntry{Analyzing and Visualizing State Sequences}
 
+\PassOptionsToPackage{svgnames}{xcolor}
 %\documentclass[article]{jss}
 \documentclass[article,nojss]{jss}
 \usepackage{thumbpdf}
@@ -16,7 +17,7 @@
         Nicolas S. M\"{u}ller\\University of Geneva \And
         Matthias Studer\\ University of Geneva}
 \title{\mbox{\ }
-\\[0ex]
+\\[2ex]
 Analyzing and Visualizing State Sequences in \proglang{R} with \pkg{TraMineR}}
 
 %% for pretty printing and a nice hypersummary also set:
@@ -168,7 +169,7 @@ graphdir <- "Graphics/"
 \begin{document}
 
 \raisebox{14.3cm}[0cm][0cm]{\parbox{\linewidth}{\small\normalfont This vignette is distributed with the \R package \traminer. Please cite as:\\[.5ex]
-Gabadinho, A., G. Ritschard, N.S. M\"{u}ller and M. Studer (2011). ``Analyzing and Visualizing State Sequences in \proglang{R} with \pkg{TraMineR}.'' \textit{Journal of Statistical Software}, \textbf{40}(4), 1--37. URL \url{http://www.jstatsoft.org/v40/i04}    }}
+Gabadinho, A., G. Ritschard, N.S. M\"{u}ller and M. Studer (2011). ``Analyzing and Visualizing State Sequences in \proglang{R} with \pkg{TraMineR}.'' \textit{Journal of Statistical Software}, \textbf{40}(4), 1--37. DOI \href{http://dx.doi.org/10.18637/jss.v040.i04}{10.18637/jss.v040.i04}}}
 
 \section{Introduction}
 
@@ -1186,7 +1187,7 @@ The vector containing the turbulences of the sequences in a sequence object is o
 
 The \emph{complexity index}, introduced in \citet{GabadinhoRitschardStuderMuller2010EGC}, is a composite measure that combines the number of transitions in the sequence with the longitudinal entropy. It reads
 \[
-	C(x)= \sqrt{\frac{\ell_d(x)}{\ell(x)} \, \frac{h(x)}{h_{max}}}
+	C(x)= \sqrt{\frac{(\ell_d(x)-1)}{(\ell(x)-1)} \, \frac{h(x)}{h_{max}}}
 \]
 where $h_{max}$ is the theoretical maximum value of the entropy given the alphabet; i.e., $h_{max}= \log a$. We get the vector of complexity indexes with the \Comt{seqici()} function.
 

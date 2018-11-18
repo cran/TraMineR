@@ -284,8 +284,9 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   indels. \code{"DHD"} is \code{"HAM"} with specific substitution costs at each
   position.
 
-  \code{"HAM"} and \code{"DHD"} apply only to sequences of equal length. Currently,
-  \code{"OM"} works only with sequences of equal lengths.
+  \code{"HAM"} and \code{"DHD"} apply only to sequences of equal length. 
+  
+  %%Currently, \code{"OM"} works only with sequences of equal lengths.
 
   When \code{sm = NULL}, the substitution-cost matrix is automatically created
   for \code{"HAM"} with a single substitution cost of 1 and for \code{"DHD"} with

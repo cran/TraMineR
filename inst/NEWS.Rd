@@ -1,6 +1,30 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.0-10 [2018-11-18]}{
+
+  \subsection{Bug Fixes:}{
+    \itemize{
+      \item
+      \code{seqdist()}: when \code{refseq} was passed as a state sequence
+      object wrong results were sometimes returned.
+      \item
+      \code{seqdist()}: CHI2 and EUCLID distances were computed using
+      counts instead of proportions.
+      \code{seqdist()}: CHI2 and EUCLID bad behavior in presence of missings.
+      \item
+      Vignette: Fixed issue with updated \code{fancyvrb.sty}.
+    }
+  }
+  \subsection{Misc.:}{
+     \itemize{
+       \item
+       Vignette: Error in formula for complexity index.
+       Also, now DOI instead of link to JSS article.
+     }
+  }
+}
+
 \section{Changes in version 2.0-9 [2018-08-20]}{
 
   \subsection{Changes in existing functions:}{
