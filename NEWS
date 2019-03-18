@@ -1,4 +1,21 @@
 ## =========
+Version 2.0-11 [2019-03-18] 
+
+Changes in existing functions:
+  - seqdef(). Speed improvement suggested by Jouni Helske.
+    Transparent for the user.
+  - seqdist(). An error is raised when the number of
+    unique sequences exceeds the maximal allowed.
+  - plot.ststlist.statd(). Now checks the 'type' argument and
+    returns the values plotted.
+
+Bug Fixes:
+  - seqtab(), seqxtract(), checkcost(), SPELL_to_STS(). Issues 
+    with length > 1 in coercion to logical.
+  - Warning about potential stack imbalanced PROTECT in relation
+    with TMRNumberFormat in the C++ code (eventseq.cpp).
+
+## =========
 Version 2.0-10 [2018-11-18] 
 
 Bug Fixes:
@@ -10,9 +27,8 @@ Bug Fixes:
   - Vignette: Fixed issue with updated \code{fancyvrb.sty}.
 
 Misc:
-  - Vignette: Error in formula for complexity index. 
+  - Vignette: Error in formula for complexity index.
     Also, now DOI instead of link to JSS article.
-
 
 ## =========
 Version 2.0-9 [2018-08-20]

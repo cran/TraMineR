@@ -9,6 +9,10 @@ seqtab <- function(seqdata, idxs = 1:10, weighted = TRUE, format = "SPS", tlim) 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, use seqdef function to create one")
 
+  if(is.null(idxs) || (length(idxs)>1 && min(idxs)<1) || any(idxs<0))
+		stop("idxs should be a non negative integer or a strictly positive vector.")
+
+
 	## Eliminating empty sequences
 	seqdata <- seqdata[rowSums(seqdata!=attr(seqdata,"nr"))!=0,]
 
@@ -42,7 +46,8 @@ seqtab <- function(seqdata, idxs = 1:10, weighted = TRUE, format = "SPS", tlim) 
 	Percent <- Freq/sum(Freq)*100
 
 	nbuseq <- length(Freq)
-	if (idxs==0 || max(idxs)>nbuseq) {
+
+  if (idxs[1]==0 || max(idxs)>nbuseq) {
 		idxs <- 1:nbuseq
 	}
 
@@ -70,4 +75,3 @@ seqtab <- function(seqdata, idxs = 1:10, weighted = TRUE, format = "SPS", tlim) 
 
 	return(res)
 }
-

@@ -22,7 +22,7 @@ checkcost <- function(sma, seqdata, with.missing, indel, tol = NULL) {
     }
   }
 
-  if (!missing(indel) && indel < 0) {
+  if (!missing(indel) && any(indel <= 0)) {
     stop(" [!] indel cost should be positive")
   }
 
@@ -59,26 +59,22 @@ checkcost <- function(sma, seqdata, with.missing, indel, tol = NULL) {
           triangleineq[2]] - sm[triangleineq[1], triangleineq[2]]), call. = FALSE)
     }
 
-    if (!missing(indel) && indel < 0) {
-      stop(" [!] indel should be greater than zero")
-    }
-
     if (!missing(indel)) {
       if (length(indel) > 1) {
         if (length(indel) != alphsize) {
-          stop(" [!] You should specify either one global indel or one indel per states.")
+          stop(" [!] You should specify either one global indel or one indel per state.")
         }
         sm2 <- cbind(sm, indel)
         sm2 <- rbind(sm2, c(indel, 0))
         triangleineq <- checktriangleineq(sm2, warn = FALSE, indices = TRUE, tol = tol)
-        ## triangleineq contain a vector of problematic indices.
+        ## triangleineq contains a vector of problematic indices.
         if (!is.logical(triangleineq)) {
-          warning(" [!] at least, one indel cost doesn't respect the triangle inequality.\n",
+          warning(" [!] at least, one indel cost does not respect the triangle inequality.\n",
           call. = FALSE)
         }
       } else if (any(sm > 2 * indel)) {
-        warning("Some substitution cost are greater that two times the indel cost.",
-          " Such substitution cost will thus never be used.", call. = FALSE)
+        warning("At least one substitution cost greater than twice the indel cost.",
+          " Such substitution costs will never be used.", call. = FALSE)
       }
     }
 

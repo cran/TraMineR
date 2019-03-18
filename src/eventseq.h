@@ -128,7 +128,7 @@ public:
     //virtual void print(const bool& start);
     ///Print a representation on a given string
     ///Return the number of char used
-    virtual void sprint(std::ostringstream &oss, const bool& start, const bool &printGap, const EventDictionary& ed, const double & remainingTime);
+    virtual void sprint(std::ostringstream &oss, const bool& start, const bool &printGap, const EventDictionary& ed, const double & remainingTime, SEXP formatSymb);
     ///Add an event at the end of the event chain
     void addEvent(const int &e,const double &t);
 

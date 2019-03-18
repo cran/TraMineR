@@ -1,6 +1,30 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.0-11 [2019-03-18]}{
+
+  \subsection{Changes in existing functions}{
+     \itemize{
+       \item
+       \code{seqdef()}. Speed improvement suggested by Jouni Helske. Transparent for the user.
+       \item
+       \code{seqdist()}. An error is raised when the number of unique sequences exceeds the maximal allowed.
+       \item
+       \code{plot.ststlist.statd()}. Now checks the \code{type} argument and returns the values plotted.
+     }
+  }
+  \subsection{Bug Fixes:}{
+    \itemize{
+      \item
+      \code{seqtab()}, \code{seqxtract(), checkcost(), SPELL_to_STS()}. Issues with \code{length > 1 in coercion to logical}.
+      \item
+      Warning about potential stack imbalanced \code{PROTECT} in relation with \code{TMRNumberFormat} in the C++ code (eventseq.cpp).
+    }
+  }
+
+}
+
+
 \section{Changes in version 2.0-10 [2018-11-18]}{
 
   \subsection{Bug Fixes:}{
@@ -11,6 +35,7 @@
       \item
       \code{seqdist()}: CHI2 and EUCLID distances were computed using
       counts instead of proportions.
+      \item
       \code{seqdist()}: CHI2 and EUCLID bad behavior in presence of missings.
       \item
       Vignette: Fixed issue with updated \code{fancyvrb.sty}.

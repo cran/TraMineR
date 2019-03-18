@@ -1,7 +1,7 @@
 #include "eventseq.h"
 #include <sstream>
 
-#include "tmrformat.h"
+//#include "tmrformat.h"
 using namespace std;
 
 /** Sequence finalizer, used by R to free memory
@@ -74,28 +74,37 @@ Sequence::~Sequence() {
 }
 
 string Sequence::sprint() {
+	SEXP formatSymb;
 	ostringstream oss;
+	PROTECT(formatSymb=lang2(findFun(install("format"), R_GlobalEnv), R_NilValue));
 	//oss.precision(2);
     //if(!this->isGeneric())n = sprintf(buffer, (char*)"[%i] ",this->idpers);
     //Rprintf((char*)"Current buffer %s\n",buffer);
     if (this->hasEvent()) {
-        this->event->sprint(oss, true, !this->isGeneric(), (*this->dict), this->obsTime);
+        this->event->sprint(oss, true, !this->isGeneric(), (*this->dict), this->obsTime, formatSymb);
     }
+	UNPROTECT(1);
     return oss.str();
 
 }
+SEXP TMRNumberFormat(const double &num, SEXP formatSymb){
+	if(formatSymb==NULL){
+		error(" [!!!!] TMRNumberFormat not initialized.\n");
+	}
+	SETCADR(formatSymb, ScalarReal(num));
+	return eval(formatSymb, R_GlobalEnv);
+}
+
 void Sequence::print() {
-	TMRNumberFormatInit();
     string r=this->sprint();
     //Rprintf((char *)"%s %i",buffer,r);
     REprintf((char *)"%s\n",r.c_str());
-	TMRNumberFormatClean();
 }
-void SequenceEventNode::sprint(ostringstream &oss, const bool& start, const bool &printGap, const EventDictionary& ed, const double & remainingTime) {
+void SequenceEventNode::sprint(ostringstream &oss, const bool& start, const bool &printGap, const EventDictionary& ed, const double & remainingTime, SEXP formatSymb) {
     if (start) {
         if (this->gap>0&&printGap) {
 			SEXP gg;
-			PROTECT(gg=asChar(TMRNumberFormat(gap)));
+			PROTECT(gg=asChar(TMRNumberFormat(gap, formatSymb)));
 			oss << CHAR(gg) << "-(" << ed.find(this->type)->second;
 			UNPROTECT(1);
             //tmp=sprintf(&buffer[index],(char*)"%.2f-",this->gap);
@@ -108,7 +117,7 @@ void SequenceEventNode::sprint(ostringstream &oss, const bool& start, const bool
     } else if (this->gap>0) {
         if (printGap) {
 			SEXP gg;
-			PROTECT(gg=asChar(TMRNumberFormat(gap)));
+			PROTECT(gg=asChar(TMRNumberFormat(gap, formatSymb)));
 			oss << ")-" << CHAR(gg)<< "-(" << ed.find(this->type)->second;
 			UNPROTECT(1);
         } else {
@@ -119,11 +128,11 @@ void SequenceEventNode::sprint(ostringstream &oss, const bool& start, const bool
 		oss << "," << ed.find(this->type)->second;
     }
     if (this->hasNext()) {
-        this->next->sprint(oss, false, printGap, ed, remainingTime-this->gap);
+        this->next->sprint(oss, false, printGap, ed, remainingTime-this->gap, formatSymb);
     } else {
     	if(remainingTime>0){
 			SEXP gg;
-			PROTECT(gg=asChar(TMRNumberFormat(remainingTime-this->gap)));
+			PROTECT(gg=asChar(TMRNumberFormat(remainingTime-this->gap, formatSymb)));
 			oss << ")-" << CHAR(gg);
 			UNPROTECT(1);
     	}

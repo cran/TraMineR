@@ -186,7 +186,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
   # OMloc
   if (method == "OMloc") {
     if (missing(context)) {
-      context <- 1 - 2 * expcost # Don't work in the function declaration
+      context <- 1 - 2 * expcost # Does not work in the function declaration
       msg("context set to 1 - 2 * expcost =", context)
     }
     if (context < 0)
@@ -380,7 +380,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
         msg.stop.miss("sm")
       }
     }
-  } # CHI2, EUCLID, LCP, RLCP, NMS, NMSMST, SVRspell don't use sm
+  } # CHI2, EUCLID, LCP, RLCP, NMS, NMSMST, SVRspell do not use sm
   else if (! method %in% c("CHI2", "EUCLID", "LCP", "RLCP", "NMS", "NMSMST", "SVRspell")) {
     msg.stop.ie("no known 'sm' preparation for", method)
   }
@@ -410,6 +410,11 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
 
   # Keep only distinct sequences
   dseqs.num <- unique(seqdata.num)
+  # Check that dseqs.num does not exceed the max allowed
+  max.allowed.seq <- floor(sqrt(.Machine$integer.max))
+  if (nrow(dseqs.num) > max.allowed.seq){
+    msg.stop(nrow(dseqs.num), " unique sequences exceeds max allowed of ", max.allowed.seq)
+  }
 
   #### Handle reference sequence ####
 
@@ -467,7 +472,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
   # OMspell, NMSMST (part 1/2), SVRspell (part 1/2)
   # Redefined dseqs.num
   else if (method %in% c("OMspell", "NMSMST", "SVRspell")) {
-    dseqs.dur <- seqdur(seqdata, with.missing) ^ tpow # Don't use dseqs.num
+    dseqs.dur <- seqdur(seqdata, with.missing) ^ tpow # Do not use dseqs.num
     dseqs.oidxs <- match(seqconc(dseqs.num), seqconc(seqdata.num))
     c <- if (method == "OMspell") 1 else 0
     dseqs.dur <- dseqs.dur[dseqs.oidxs, ] - c

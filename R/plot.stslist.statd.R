@@ -8,6 +8,10 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
+  if (!(type %in% c("d", "Ht"))){
+    msg.stop("type can only be 'd' or 'Ht'")
+  }
+
 	n <- attr(x,"nbseq")
 	weighted <- attr(x, "weighted")
 	if (weighted) {wlab <- "weighted "}
@@ -84,4 +88,7 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
 	##
 	if (is.null(yaxis) || yaxis)
 		axis(2, cex.axis=cex.axis)
+
+  if (type == 'Ht') return(invisible(x$Entropy))
+  else return(invisible(x$Frequencies))
 }

@@ -119,7 +119,7 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	#print(paste("nbseq = ", nbseq))
 	# if birth year have been given in pdata dataframe, we retrieve ids and birth years
 	birthyrid1<-0
-	if((frmoption=="year2age" || frmoption=="age2year") && (!is.null(pdata) && pdata!="auto")) {
+	if((frmoption=="year2age" || frmoption=="age2year") && (!is.null(pdata) && any(pdata!="auto"))) {
 		birthyrid1 <- pdata[,1]
 		birthyr1 <- pdata[,2]
   }
@@ -131,7 +131,7 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	#print(nbseq)
 	for (i in 1:nbseq) {
 		spell <- seqdata[seqdata[,id]==lid[i],]
-		# number of spell for individual i
+		# number of spells for individual i
 		idxmax <- nrow(spell)
 		# we check if the first episode looks normal (starting age/year > 0)
     # (issues found with a file frome the Swiss panel)
@@ -140,7 +140,7 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		}
 		# if we need to convert years to ages, we need the birthyear
 		if (frmoption=="year2age") {
-			if (length(birthyrid1)==1 && pdata=="auto") {
+			if (length(birthyrid1)==1 && all(pdata=="auto")) {
 				birthy <- spell[1,begin]
 				age1 <- 0
 			}
@@ -155,7 +155,7 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 			}
 
 		}
-		# if we convert from ages to years, we need the birthyear, but don't need to substract it to the time of beginning
+		# if we convert from ages to years, we need the birthyear, but do not need to substract it to the time of beginning
 		if (frmoption=="age2year") {
 			birthy <- birthyr1[birthyrid1==lid[i]]
 			#print("birthyr")

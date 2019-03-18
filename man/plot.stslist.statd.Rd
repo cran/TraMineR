@@ -40,6 +40,9 @@ This is the plot method for output produced by the \code{\link{seqstatd}} functi
 This method is called by the generic \code{\link{seqplot}} function (if \code{type="d"} or \code{type="Ht"}) that produces more sophisticated plots, allowing grouping and automatic display of the state color legend. The \code{seqdplot} and \code{seqHtplot} functions are shortcuts for calling \code{seqplot} with \code{type="d"} or \code{type="Ht"} respectively.
 }
 
+\value{The plotted values, i.e. for \code{type="d"} the cross-sectional distributions, and for \code{type="Ht"} the cross-sectional entropies.
+}
+
 \examples{
 ## Defining a sequence object with the data in columns 10 to 25
 ## (family status from age 15 to 30) in the biofam data set

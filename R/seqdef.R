@@ -53,7 +53,7 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	## PREPARING THE DATA
 	## ===================
 
-	## Turning missing values to NA's
+	## Turning missing values to NAs
 	## if (!is.na(missing)) seqdata[seqdata==missing] <- NA
 
 	statl <- seqstatl(seqdata)
@@ -135,17 +135,29 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		## stop("\n [!] alphabet contains only one state", call.=FALSE)
 		## warning("\n [!] alphabet contains only one state", call.=FALSE)
 	##else
-    if (nbstates>12 && missing(cpal))
-		warning(" [!] No color palette automatically assigned because number of states > 12.
+  if (nbstates>12 && missing(cpal))
+	warning(" [!] No automatic color palette assigned because number of states > 12.
                \n     Use 'cpal' argument to assign one.", call.=FALSE)
 
 	## Converting each column to a factor
-	for (i in 1:ncol(seqdata)) {
-		seqdata[,i] <- factor(seqdata[,i],
-			## levels=c(plevels,nr,void),
-			## labels=c(A,nr,void))
-			levels=c(A,nr,void))
-		}
+
+   ## Using factor() is slow
+##	for (i in 1:ncol(seqdata)) {
+##		seqdata[,i] <- factor(seqdata[,i],
+##			## levels=c(plevels,nr,void),
+##			## labels=c(A,nr,void))
+##			levels=c(A,nr,void))
+##		}
+
+  ## Much faster way proposed by Jouni Helske
+  newf <- list(levels = c(A, nr, void), class = "factor")
+  seqdata[] <- lapply(seqdata,
+    function(x) {
+      x <- match(x, newf$levels)
+      attributes(x) <- newf
+      x}
+    )
+
 
 	## STATES LABELS
 	if (!is.null(labels)) {
