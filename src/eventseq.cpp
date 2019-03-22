@@ -92,7 +92,11 @@ SEXP TMRNumberFormat(const double &num, SEXP formatSymb){
 		error(" [!!!!] TMRNumberFormat not initialized.\n");
 	}
 	SETCADR(formatSymb, ScalarReal(num));
-	return eval(formatSymb, R_GlobalEnv);
+	SEXP ans, gg;
+	PROTECT(ans = eval(formatSymb, R_GlobalEnv));
+	PROTECT(gg=asChar(ans));
+	UNPROTECT(2);
+	return gg;
 }
 
 void Sequence::print() {
@@ -104,7 +108,7 @@ void SequenceEventNode::sprint(ostringstream &oss, const bool& start, const bool
     if (start) {
         if (this->gap>0&&printGap) {
 			SEXP gg;
-			PROTECT(gg=asChar(TMRNumberFormat(gap, formatSymb)));
+			PROTECT(gg=TMRNumberFormat(gap, formatSymb));
 			oss << CHAR(gg) << "-(" << ed.find(this->type)->second;
 			UNPROTECT(1);
             //tmp=sprintf(&buffer[index],(char*)"%.2f-",this->gap);
@@ -117,7 +121,7 @@ void SequenceEventNode::sprint(ostringstream &oss, const bool& start, const bool
     } else if (this->gap>0) {
         if (printGap) {
 			SEXP gg;
-			PROTECT(gg=asChar(TMRNumberFormat(gap, formatSymb)));
+			PROTECT(gg=TMRNumberFormat(gap, formatSymb));
 			oss << ")-" << CHAR(gg)<< "-(" << ed.find(this->type)->second;
 			UNPROTECT(1);
         } else {
@@ -132,7 +136,7 @@ void SequenceEventNode::sprint(ostringstream &oss, const bool& start, const bool
     } else {
     	if(remainingTime>0){
 			SEXP gg;
-			PROTECT(gg=asChar(TMRNumberFormat(remainingTime-this->gap, formatSymb)));
+			PROTECT(gg=TMRNumberFormat(remainingTime-this->gap, formatSymb));
 			oss << ")-" << CHAR(gg);
 			UNPROTECT(1);
     	}

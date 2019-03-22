@@ -1,6 +1,6 @@
-1727553b233ffc82975eb6b43882314e *DESCRIPTION
+4c1da486cf8990825e61b8238617144d *DESCRIPTION
 ea088dea280496e6eb6b99b3e8f47156 *NAMESPACE
-b44846deba6b002b974128e7a29a4e47 *NEWS
+2f1fc70ff5678babbd1043b03d069923 *NEWS
 fb164502b8b9d432c48840745766de4c *R/TraMineR-check-depr-args.R
 4a92f33c9d59670f33dc5ab941eb76c8 *R/TraMineR-check_helpers.R
 c560fcb03e38a60930d73c848376d447 *R/TraMineR-checkcost.R
@@ -149,11 +149,11 @@ d7ff9a5633d429729d52296cd796bf07 *demo/Events.R
 057496f29e4cdc6b7c9ca6de6a27d4a8 *demo/Rendering.R
 aad9f294f54ceda390689d5899096bbe *demo/Seqdist.R
 67712948c67039e09e42acb81790aeb8 *inst/CITATION
-e58ee97580758d53696b0481371ca1cc *inst/NEWS.Rd
+1537d6720b4130ba32a62a682fd118b0 *inst/NEWS.Rd
 b50aef0051f119f501011415266e57c8 *inst/doc/TraMineR-state-sequence.R
 a640405a7c7ca8cc937752efa98d3c49 *inst/doc/TraMineR-state-sequence.Rnw
-b24786d403b2d6f3854f7cbd0a738018 *inst/doc/TraMineR-state-sequence.pdf
-0d62aa238affa68ae58fb94ad443ac7c *man/TraMineR-package.Rd
+44c1478e4b15fe9181afab1459e6a360 *inst/doc/TraMineR-state-sequence.pdf
+ff6af6684f4ff60d2b08a1bfbcf4265e *man/TraMineR-package.Rd
 04f6f0b594388862eda37ad2c6f987cc *man/TraMineR.check.depr.args.Rd
 3d17313adfc2e89a5ff10406030ff7b4 *man/TraMineR.checkupdates.Rd
 6bb4f7d0319ea80c98a30fcf91c9fb15 *man/TraMineRInternal.Rd
@@ -282,7 +282,7 @@ e426dbab250b6a80ed6a801504414ad4 *src/distancecalculator.h
 9969d2dc7d606930dc8a89100df1f3eb *src/distanceobject.h
 7a09d5c7196d3cb64c77484d31457909 *src/eventdictionary.cpp
 d5e13e4ab9901c3f1ea213f0cd3030a4 *src/eventdictionary.h
-4b1d75e1e8f0030d9fcf60adf945b9d5 *src/eventseq.cpp
+0075dba63599ae53df22b4eee4526fda *src/eventseq.cpp
 e079a0c9345d55279d112cd18359036d *src/eventseq.h
 6d4b08914e6f1256d649bb78579610a3 *src/ffunctions.c
 a5fcfbdbcfe56691c8a05d04e4e9d455 *src/inertiafunctions.c

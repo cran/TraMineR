@@ -1,9 +1,19 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.0-11.1 [2019-03-22]}{
+
+  \subsection{Bug Fixes:}{
+    \itemize{
+      \item
+      eventseq.cpp: rchk message 'calling allocating function \code{Rf_asChar} with argument allocated using \code{TMRNumberFormat}'.
+    }
+  }
+}
+
 \section{Changes in version 2.0-11 [2019-03-18]}{
 
-  \subsection{Changes in existing functions}{
+  \subsection{Changes in existing functions:}{
      \itemize{
        \item
        \code{seqdef()}. Speed improvement suggested by Jouni Helske. Transparent for the user.

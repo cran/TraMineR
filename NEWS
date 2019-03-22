@@ -1,4 +1,11 @@
 ## =========
+Version 2.0-11.1 [2019-03-22] 
+
+Bug Fixes:
+  - eventseq.cpp: rchk message 'calling allocating function 
+    Rf_asChar with argument allocated using TMRNumberFormat.
+
+## =========
 Version 2.0-11 [2019-03-18] 
 
 Changes in existing functions:
