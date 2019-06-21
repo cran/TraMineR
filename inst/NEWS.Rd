@@ -1,6 +1,40 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.0-12 [2019-06-21]}{
+
+  \subsection{Changes in existing functions:}{
+     \itemize{
+       \item
+       \code{seqdef()} now raises an error when argument \code{alphabet} contains duplicate elements.
+       \item
+       \code{alphabet()} in its assign form now raises an error
+        when the assigned vector contains duplicate elements.
+       \code{seqdist()} gains a new argument \code{global.pdotj}
+       to control the marginal distribution to be used for the \code{'CHI2'} distance.
+       \item
+       \code{seqdist()}, \code{'CHI2'} and \code{'EUCLID'} distances are now, when
+       \code{norm='auto'}, normalized by the maximal distance, which
+       for \code{'CHI2'} depends on the marginal state distribution.
+       \item
+       \code{seqici()}, \code{seqient()}, and \code{seqST()} gain a new argument \code{silent} to control whether messages about running operations should be displayed.
+       \item
+       \code{seqST()}: suppression of useless messages when \code{norm=TRUE}.
+     }
+  }
+
+  \subsection{Misc.:}{
+    \itemize{
+      \item
+      Suppressed unused argument \code{weighted} from internal \code{OMstran} function.
+      \item
+      Help page for \code{seqdist}: description of the \code{weighted} argument adjusted to reflect that it applies only to the \code{"CHI2"} distance.
+      \item
+      Updated links to Swiss Household Panel in \code{actcal} and \code{biofam} help pages.
+    }
+  }
+}
+
 \section{Changes in version 2.0-11.1 [2019-03-22]}{
 
   \subsection{Bug Fixes:}{

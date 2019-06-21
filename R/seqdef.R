@@ -64,8 +64,11 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 	if (is.null(alphabet)) {
 		plevels <- as.character(statl)
 	} else {
-		if (any(statl %in% alphabet==FALSE)) {
-			stop("\n [!] one or more states appearing in the data not included in 'alphabet'", call.=FALSE)
+    if (any(duplicated(alphabet))) {
+			stop("\n [!] duplicated element(s) in alphabet: ",alphabet[duplicated(alphabet)], call.=FALSE)
+    }
+		if (any(!statl %in% alphabet)) {
+			stop("\n [!] state(s) ", statl[!statl %in% alphabet], " found in 'data' should be in 'alphabet'", call.=FALSE)
 		}
 		plevels <- alphabet
 	}

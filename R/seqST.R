@@ -25,7 +25,7 @@ realvar <- function(x) {
 	}
 	
 
-seqST <- function(seqdata, norm=FALSE) {
+seqST <- function(seqdata, norm=FALSE, silent=TRUE) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("seqdata is NOT a sequence object, see 'seqdef' function to create one")
@@ -38,11 +38,11 @@ seqST <- function(seqdata, norm=FALSE) {
 		with.missing=TRUE
 	}
 
-	message(" [>] extracting symbols and durations ...")
+	if (!silent) message(" [>] extracting symbols and durations ...")
 	states <- seqdss(seqdata, with.missing=with.missing)
 	dur <- seqdur(seqdata, with.missing=with.missing)
 
-	message(" [>] computing turbulence for ",nrow(seqdata)," sequence(s) ...")
+	if (!silent) message(" [>] computing turbulence for ",nrow(seqdata)," sequence(s) ...")
 	phi <- suppressMessages(seqsubsn(states, DSS=FALSE))
 	s2.tx <- apply(dur, 1, realvar)
 	mean.tx <- rowMeans(dur, na.rm=TRUE)
@@ -59,7 +59,7 @@ seqST <- function(seqdata, norm=FALSE) {
         maxlength <- max(seqlength(seqdata))
         nrep <- ceiling(maxlength/length(alph))
 
-        turb.seq <- seqdef(t(rep(alph,nrep)[1:maxlength]))
+        turb.seq <- suppressWarnings(suppressMessages(seqdef(t(rep(alph,nrep)[1:maxlength]))))
         turb.states <- seqdss(turb.seq)
         turb.dur <- seqdur(turb.seq)
         turb.phi <- suppressMessages(seqsubsn(seqdss(turb.seq), DSS=FALSE))

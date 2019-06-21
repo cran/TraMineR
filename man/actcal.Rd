@@ -38,5 +38,5 @@ The data set contains also the following covariates:\cr
 \usage{data(actcal)}
 \format{A data frame with 2000 rows, 12 state variables, 1 id variable and 11 covariates.}
 \source{Swiss Household Panel}
-\references{\url{www.swisspanel.ch}}
+\references{\url{https://forscenter.ch/projects/swiss-household-panel/}}
 \keyword{Datasets}

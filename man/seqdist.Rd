@@ -14,7 +14,8 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   with.missing = FALSE, full.matrix = TRUE, kweights = rep(1.0, ncol(seqdata)),
   tpow = 1.0, expcost = 0.5, context, link = "mean", h = 0.5, nu,
   transindel = "constant", otto, previous = FALSE, add.column = TRUE,
-  breaks = NULL, step = 1, overlap = FALSE, weighted = TRUE, prox = NULL)
+  breaks = NULL, step = 1, overlap = FALSE, weighted = TRUE, 
+  global.pdotj = NULL, prox = NULL)
 }
 \arguments{
   \item{seqdata}{
@@ -49,15 +50,15 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
     String.
     Default: \code{"none"}.
     The normalization to use when \code{method} is one of \code{"OM"},
-    \code{"HAM"}, \code{"DHD"}, \code{"CHI2"}, \code{"EUCLID"}, \code{"LCS"},
-    \code{"LCP"}, or \code{"RLCP"}. It can be \code{"none"}, \code{"auto"},
-    or, except for \code{"CHI2"} and \code{"EUCLID"}, \code{"maxlength"},
+    \code{"HAM"}, \code{"DHD"}, \code{"LCS"},
+    \code{"LCP"}, \code{"RLCP"}, \code{"CHI2"}, \code{"EUCLID"}.
+    It can be \code{"none"}, \code{"auto"}, or, except for
+    \code{"CHI2"} and \code{"EUCLID"}, \code{"maxlength"},
     \code{"gmean"}, \code{"maxdist"}, or \code{"YujianBo"}. \code{"auto"} is
     equivalent to \code{"maxlength"} when \code{method} is one of \code{"OM"},
     \code{"HAM"}, or \code{"DHD"}, to \code{"gmean"} when \code{method} is one
-    of \code{"LCS"}, \code{"LCP"}, or \code{"RLCP"}, and to a specific
-    normalization for\code{"CHI2"} and \code{"EUCLID"}. See the Details section.
-    % Others: OMloc, OMslen, OMspell, OMstran, NMS, NMSMST, SVRspell, TWED.
+    of \code{"LCS"}, \code{"LCP"}, or \code{"RLCP"}. See the Details section.
+    % Others: CHI2, EUCLID, OMloc, OMslen, OMspell, OMstran, NMS, NMSMST, SVRspell, TWED.
   }
   \item{indel}{
     Double or Vector of Doubles.
@@ -218,9 +219,15 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   \item{weighted}{
     Logical.
     Default: \code{TRUE}.
-    When \code{method} is one of \code{"OMstran"}, \code{"CHI2"}, or
-    \code{"EUCLID"}, should the distributions account for the sequence weights
+    When \code{method} is \code{"CHI2"},
+    should the distributions of the states account for the sequence weights
     in \code{seqdata}? See \code{\link{seqdef}}.
+  }
+  \item{global.pdotj}{
+    Numerical vector, \code{"obs"}, or \code{NULL}.
+    Default: \code{NULL}.
+    Only for \code{method = "CHI2"}.
+    The vector of state proportions to be used as marginal distribution. When \code{NULL}, the state distribution on the corresponding interval is used. When \code{"obs"}, the overall state distribution in \code{seqdata} is used for all intervals. When a vector of proportions, it is used as marginal distribution for all intervals.
   }
   \item{prox}{
     \code{NULL} or Matrix.
@@ -255,7 +262,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
     }
   }
 
-  See \cite{Studer and Ritschard (2014)} for a description and the comparison
+  See \cite{Studer and Ritschard (2014, 2016)} for a description and the comparison
   of the above dissimilarity measures except \code{"TWED"} for which we refer to
   \cite{Marteau (2009)} and \cite{Halpin (2014)}.
 
@@ -268,9 +275,10 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
     \verb{OMloc} \tab \verb{sm, expcost, context, refseq} \cr
     \verb{OMslen} \tab \verb{sm, indel, link, h, refseq} \cr
     \verb{OMspell} \tab \verb{sm, indel, tpow, expcost, refseq} \cr
-    \verb{OMstran} \tab \verb{sm, indel, transindel, otto, previous, add.column, weighted} \cr
+    \verb{OMstran} \tab \verb{sm, indel, transindel, otto, previous, add.column} \cr
     \verb{HAM, DHD} \tab \verb{sm, norm, refseq}\cr
-    \verb{CHI2, EUCLID} \tab \verb{breaks, step, overlap, weighted, norm}\cr
+    \verb{CHI2} \tab \verb{breaks, step, overlap, norm, weighted, global.pdotj}\cr
+    \verb{EUCLID} \tab \verb{breaks, step, overlap, norm}\cr
     \verb{LCS, LCP, RLCP} \tab \verb{norm, refseq}\cr
     \verb{NMS} \tab \verb{prox, kweights, refseq}\cr
     \verb{NMSMST} \tab \verb{kweights, tpow, refseq}\cr
@@ -284,15 +292,15 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   indels. \code{"DHD"} is \code{"HAM"} with specific substitution costs at each
   position.
 
-  \code{"HAM"} and \code{"DHD"} apply only to sequences of equal length. 
-  
+  \code{"HAM"} and \code{"DHD"} apply only to sequences of equal length.
+
   %%Currently, \code{"OM"} works only with sequences of equal lengths.
 
   When \code{sm = NULL}, the substitution-cost matrix is automatically created
   for \code{"HAM"} with a single substitution cost of 1 and for \code{"DHD"} with
   the costs derived from the transition rates at the successive positions.
 
-  Distances can optionally be normalized by means of the \code{norm} argument.
+  Some distances can optionally be normalized by means of the \code{norm} argument.
   If set to \code{"auto"}, Elzinga's normalization (similarity divided by
   geometrical mean of the two sequence lengths) is applied to \code{"LCS"},
   \code{"LCP"} and \code{"RLCP"} distances, while Abbott's normalization (distance
@@ -302,7 +310,10 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   normalized by its maximal possible value. For more details, see
   \cite{Gabadinho et al. (2009, 2011)}. Finally, \code{"YujianBo"} is the
   normalization proposed by \cite{Yujian and Bo (2007)} that preserves the
-  triangle inequality.
+  triangle inequality.  The square of the \code{"CHI2"} and \code{"EUCLID"}
+  distances are normalized by the number of intervals and by the maximal distance
+  on each interval. Note that for 'CHI2' the maximal distance on each interval
+  depends on the state distribution on the interval.
 
   When sequences contain gaps and the \code{gaps = NA} option was passed to
   \code{\link{seqdef}} (i.e. when there are non deleted missing values), the

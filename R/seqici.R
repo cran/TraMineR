@@ -2,10 +2,12 @@
 ## Complexity index
 ## ================
 
-seqici <- function(seqdata, with.missing=FALSE) {
+seqici <- function(seqdata, with.missing=FALSE, silent=TRUE) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is NOT a sequence object, see seqdef function to create one")
+
+	if(!silent) message(" [>] computing complexity index for ",nrow(seqdata)," sequences ...")
 
 	## Number of transitions
 	trans <- seqtransn(seqdata, with.missing=with.missing, norm=TRUE)
@@ -16,7 +18,6 @@ seqici <- function(seqdata, with.missing=FALSE) {
 	)
 
 	## Complexity index
-	message(" [>] computing complexity index for ",nrow(seqdata)," sequences ...")
 	comp.index <- sqrt(trans * ient)
 
 	colnames(comp.index) <- "C"

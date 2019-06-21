@@ -5,7 +5,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
   kweights = rep(1.0, ncol(seqdata)), tpow = 1.0, expcost = 0.5, context,
   link = "mean", h = 0.5, nu, transindel = "constant", otto,
   previous = FALSE, add.column = TRUE, breaks = NULL, step = 1, overlap = FALSE,
-  weighted = TRUE, prox = NULL) {
+  weighted = TRUE, global.pdotj=NULL, prox = NULL) {
 
   gc(FALSE)
   ptime.begin <- proc.time()
@@ -175,6 +175,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
 
   # norm
   if (norm != "none" && ! method %in% c("OM", "HAM", "DHD", "CHI2", "EUCLID", "LCS", "LCP", "RLCP"))
+  ##if (norm != "none" && ! method %in% c("OM", "HAM", "DHD", "LCS", "LCP", "RLCP"))
     msg.stop.impl("norm", method)
 
   #### Check method specific arguments ####
@@ -671,7 +672,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     is.EUCLID <- if (method == "EUCLID") TRUE else FALSE
     distances <- CHI2(seqdata, breaks = breaks, step = step,
       with.missing = with.missing, norm = norm.chi2euclid,  weighted = weighted,
-      overlap = overlap, euclid = is.EUCLID)
+      overlap = overlap, euclid = is.EUCLID, global.pdotj=global.pdotj)
     result <- if (full.matrix) dist2matrix(distances) else distances
   }
   # OMstran
@@ -680,7 +681,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     # OMstran() calls seqdist() with 'method = "OM"'
     distances <- OMstran(seqdata, indel = indel, sm = sm,
       full.matrix = full.matrix, transindel = transindel, otto = otto,
-      previous = previous, add.column = add.column, weighted = weighted)
+      previous = previous, add.column = add.column)
     result <- distances
   }
   # Other methods

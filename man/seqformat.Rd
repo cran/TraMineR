@@ -24,7 +24,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     column, they are assumed to be in the compressed form (see \code{stsep}).
 
     A data frame with sequence data in one or more columns when \code{from = "SPELL"}.
-    If sequence data are not in four columns with the order individual ID, spell
+    If sequence data has not four columns ordered as individual ID, spell
     start time, spell end time, and spell state status, use \code{var} or
     \code{id} / \code{begin} / \code{end} / \code{status}.
 
@@ -45,8 +45,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   \item{to}{
     String.
     The format of the output data.
-    It can be \code{"STS"}, \code{"DSS"}, \code{"SPS"}, \code{"SRS"}, \code{"TSE"},
-    or \code{"SPELL"}.
+    It can be \code{"STS"}, \code{"DSS"}, \code{"SPS"}, \code{"SRS"}, \code{"SPELL"}, or \code{"TSE"}.
   }
   \item{compress}{
     % to STS, DSS, SPS
@@ -120,7 +119,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     individual IDs. If \code{id} is not manually specified, \code{id} is set as
     \code{NULL} for backward compatibility with TraMineR 1.8-13 behaviour. If
     \code{id} is manually or automatically set as \code{NULL}, the original
-    individual IDs are ignored and replaced by the index of the sequence in the
+    individual IDs are ignored and replaced by the indexes of the sequences in the
     input data.
 
     When \code{from = "SPELL"} and \code{to = "TSE"}, the index or the name of
@@ -132,7 +131,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     Integer or String.
     Default: \code{2}.
     The index or the name of the column containing the spell start times in
-    \code{data} (after \code{var} filtering) when \code{from = "SPELL"}. 
+    \code{data} (after \code{var} filtering) when \code{from = "SPELL"}.
     Start times should be positive integers.
   }
 	\item{end}{
@@ -140,14 +139,14 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     Integer or String.
     Default: \code{3}.
     The index or the name of the column containing the spell end times in
-    \code{data} (after \code{var} filtering) when \code{from = "SPELL"}. 
+    \code{data} (after \code{var} filtering) when \code{from = "SPELL"}.
     End times should be positive integers.
   }
 	\item{status}{
 		% from SPELL
     Integer or String.
     Default: \code{4}.
-    The index or the name of the column containing the spell status in
+    The index or the name of the column containing the spell statuses in
     \code{data} (after \code{var} filtering) when \code{from = "SPELL"}.
 	}
 	\item{process}{
@@ -182,9 +181,9 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     A data frame containing the ID and the birth time of the individuals when
     \code{from = "SPELL"} or \code{to = "SPELL"}. Use \code{pvar} to specify
     the column names. The ID is used to match the birth time of each individual
-    with the sequence data. The birth time should be integer. It is the start 
-    time from which the positions on the time axis are computed. It also serves 
-    to compute \code{tmin} and to guess \code{tmax} when the latter are \code{NULL}, 
+    with the sequence data. The birth time should be integer. It is the start
+    time from which the positions on the time axis are computed. It also serves
+    to compute \code{tmin} and to guess \code{tmax} when the latter are \code{NULL},
     \code{from = "SPELL"}, and \code{process = FALSE}.
   }
   \item{pvar}{
@@ -217,7 +216,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   }
 	\item{tmin}{
     % from SPELL
-    \code{NULL}, Integer.
+    \code{NULL} or Integer.
     Default: \code{NULL}.
     The start time of the axis when \code{from = "SPELL"} and \code{process = FALSE}.
     If \code{NULL}, the value is the minimum of the spell start times
@@ -226,7 +225,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   }
 	\item{tmax}{
     % from SPELL & !process
-    \code{NULL}, Integer.
+    \code{NULL} or Integer.
     Default: \code{NULL}.
     The end time of the axis when \code{from = "SPELL"} and \code{process = FALSE}.
     If \code{NULL}, the value is the maximum of the spell end times (see \code{end})
@@ -238,9 +237,8 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     String.
     Default: \code{"*"}.
     The code for missing states in \code{data}.
-    It will be replaced by \code{NA} in the output data. The code is obtained
-    from the attribute \code{nr} when \code{data} is a state sequence object
-    (see \code{\link{seqdef}}).
+    It will be replaced by \code{NA} in the output data. Ignored when \code{data} is a state sequence object
+    (see \code{\link{seqdef}}), in which case the attribute \code{nr} is used as missing value code.
   }
   \item{with.missing}{
     % to SPELL

@@ -51,7 +51,7 @@ Two additional weights variables are inserted for illustrative purpose ONLY (sin
 data(bfspell)
 }
 \format{A data frame with 2000 rows, 16 state variables, 1 id variable and 7 covariates and 2 weights variables.}
-\source{Swiss Household Panel \url{www.swisspanel.ch}}
+\source{Swiss Household Panel \url{https://forscenter.ch/projects/swiss-household-panel/}}
 \references{
   Müller, N. S., M. Studer, G. Ritschard (2007).
   Classification de parcours de vie à l'aide de l'optimal matching.

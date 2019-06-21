@@ -1,12 +1,41 @@
 ## =========
-Version 2.0-11.1 [2019-03-22] 
+Version 2.0-12 [2019-06-21]
 
-Bug Fixes:
-  - eventseq.cpp: rchk message 'calling allocating function 
-    Rf_asChar with argument allocated using TMRNumberFormat.
+Changes in existing functions:
+  - seqdef() now raises an error when argument 'alphabet'
+    contains duplicate elements.
+  - alphabet() in its assign form now raises an error
+    when the assigned vector contains duplicate elements.
+  - seqdist() gains a new argument 'global.pdotj'
+    to control the marginal distribution to be used
+    for the CHI2 distance.
+  - seqdist(), 'CHI2' and 'EUCLID' distances are now, when
+    norm='auto', normalized by the maximal distance, which
+    for 'CHI2' depends on the marginal state distribution.
+  - seqici(), seqient(), and seqST() gain a new argument
+    'silent' to control whether messages about running
+    operations should be displayed.
+  - seqST(). Suppression of useless messages when norm=TRUE.
+
+Misc.:
+  - Suppressed unused argument 'weighted' from
+    internal OMstran function.
+  - Help page for seqdist: description of the
+    weighted argument adjusted to reflect that it
+    applies only to the "CHI2" distance.
+  - Updated links to Swiss Household Panel in actcal and 
+    biofam help pages.
+
 
 ## =========
-Version 2.0-11 [2019-03-18] 
+Version 2.0-11.1 [2019-03-22]
+
+Bug Fixes:
+  - eventseq.cpp: rchk message 'calling allocating function
+    Rf_asChar with argument allocated using TMRNumberFormat'.
+
+## =========
+Version 2.0-11 [2019-03-18]
 
 Changes in existing functions:
   - seqdef(). Speed improvement suggested by Jouni Helske.
@@ -17,13 +46,13 @@ Changes in existing functions:
     returns the values plotted.
 
 Bug Fixes:
-  - seqtab(), seqxtract(), checkcost(), SPELL_to_STS(). Issues 
+  - seqtab(), seqxtract(), checkcost(), SPELL_to_STS(). Issues
     with length > 1 in coercion to logical.
   - Warning about potential stack imbalanced PROTECT in relation
     with TMRNumberFormat in the C++ code (eventseq.cpp).
 
 ## =========
-Version 2.0-10 [2018-11-18] 
+Version 2.0-10 [2018-11-18]
 
 Bug Fixes:
   - seqdist(): when 'refseq' was passed as a state sequence

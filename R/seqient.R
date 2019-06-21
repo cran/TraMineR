@@ -2,7 +2,7 @@
 ## Within Sequence Entropy
 ## =======================
 
-seqient <- function(seqdata, norm=TRUE, base=exp(1), with.missing=FALSE) {
+seqient <- function(seqdata, norm=TRUE, base=exp(1), with.missing=FALSE, silent=TRUE) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is NOT a sequence object, see seqdef function to create one")
@@ -13,9 +13,9 @@ seqient <- function(seqdata, norm=TRUE, base=exp(1), with.missing=FALSE) {
 		statl <- c(statl, attr(seqdata,"nr"))
 	}
 
-	message(" [>] computing entropy for ",nrow(seqdata)," sequences ...")
+	if (!silent) message(" [>] computing entropy for ",nrow(seqdata)," sequences ...")
 
-	iseqtab <- seqistatd(seqdata, with.missing=with.missing)
+	iseqtab <- suppressMessages(seqistatd(seqdata, with.missing=with.missing))
 
 	ient <- apply(iseqtab,1,entropy, base=base)
 	ient <- as.matrix(ient)

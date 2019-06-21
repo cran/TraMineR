@@ -1,7 +1,7 @@
 # Should only be used through seqdist()
 
 OMstran <- function(seqdata, indel, sm, full.matrix, transindel, otto, previous,
-  add.column, weighted) {
+  add.column) {
 
 	dimnames(sm) <- list(alphabet(seqdata), alphabet(seqdata))
 	if(length(indel)==1){
