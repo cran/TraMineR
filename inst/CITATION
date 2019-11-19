@@ -5,7 +5,8 @@ p2 <- person("Gilbert", "Ritschard", email = "gilbert.ritschard@unige.ch")
 p3 <- person("Matthias", "Studer", email = "matthias.studer@unige.ch")
 p4 <- person("Nicolas S.", "M\u00FCller", email = "nsmuller@gmail.com")
 p5 <- person("Reto", "B\u00FCrgin", email = "rbuergin@gmx.ch")
-
+p6 <- person("Marherita", "Bussi")
+p7 <- person("Jacqueline", "O'Reilly")
 
 citEntry(entry = "Article",
   title        = "Analyzing and Visualizing State Sequences in {R} with {TraMineR}",
@@ -93,6 +94,22 @@ citEntry(entry="article",
   header="For longitudinal characteristics and the complexity index:"
 )
 citEntry(entry="incollection",
+  author = personList(p1, p6, p7),
+  title = "An Index of Precarity for Measuring Early Employment Insecurity",
+  booktitle = "Sequence Analysis and Related Approaches: Innovative Methods and Applications",
+  publisher = "Springer",
+  year = "2018",
+  editor = "Gilbert Ritschard and Matthias Studer",
+  series = "Life Course Research and Social Policies",
+  address = "Cham",
+  volume = 10,
+  pages = "279-295",
+  doi = "10.1007/978-3-319-95420-2_16",
+
+  textVersion="Ritschard, G., Bussi, M. & O'Reilly, J. (2018), An Index of Precarity for Measuring Early Employment Insecurity, In Ritschard, G. & Studer, M. (eds) Sequence Analysis and Related Approaches: Innovative Methods and Applications. Series: Life Course Research and Social Policies. Vol. 10, pp. 279-295. Cham: Springer. DOI http://dx.doi.org/10.1007/978-3-319-95420-2_16",
+  header="For the precarity index:"
+)
+citEntry(entry="incollection",
   author = personList(p2, p5, p3),
   title = "Exploratory Mining of Life Event Histories",
   booktitle = "Contemporary Issues in Exploratory Data Mining in the Behavioral Sciences",
@@ -116,5 +133,6 @@ citEntry(entry="article",
 
   textVersion="B\u00FCrgin, R. & Ritschard, G. (2014), A decorated parallel coordinate plot for categorical longitudinal data, The American Statistician 68(2), 98-103.  DOI http://dx.doi.org/10.1080/00031305.2014.887591",
 )
+
 
 citFooter("See",sQuote("citation()"),"for citing R itself.")

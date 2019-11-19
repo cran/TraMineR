@@ -6,6 +6,7 @@ nsubs <- function (x, nbstat, statlist, void) {
 		l <- vector(mode="integer", nbstat)
 		x <- x[x!=void]
 		slength <- length(x)
+    if (slength == 0) return(1) ## empty sequence has one subseq (the empty one)
 
 		N <- vector(mode="integer",(slength+1))
 		N[1] <- 1
@@ -21,17 +22,18 @@ nsubs <- function (x, nbstat, statlist, void) {
 	}
 
 
-seqsubsn <- function(seqdata, DSS=TRUE) {
+seqsubsn <- function(seqdata, DSS=TRUE, with.missing=FALSE) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("data is not a sequence object, see seqdef function to create one")
 
-	with.missing=FALSE
+## Since v 2.0.13 we use thw with.missing argument
+	## with.missing=FALSE
 	nr <- attr(seqdata,"nr")
-	if (any(seqdata==nr)) {
-		message(" [!] found missing state in the sequence(s), adding missing state to the alphabet")
-		with.missing=TRUE
-	}
+	##if (any(seqdata==nr)) {
+	##	message(" [!] found missing state in the sequence(s), adding missing state to the alphabet")
+	##	with.missing=TRUE
+	##}
 
 	if (DSS==TRUE) {
 		seqdata <- suppressMessages(seqdss(seqdata, with.missing=with.missing))
@@ -47,7 +49,7 @@ seqsubsn <- function(seqdata, DSS=TRUE) {
 
 	void <- attr(seqdata,"void")
 		
-	result <- apply(seqdata,1,nsubs,nbstat=ns,statlist=sl, void=void)
+	result <- apply(seqdata, 1, nsubs, nbstat=ns, statlist=sl, void=void)
 
 	result <- as.matrix(result)
 	colnames(result) <- "Subseq."
@@ -55,4 +57,3 @@ seqsubsn <- function(seqdata, DSS=TRUE) {
 
 	return(result)
 }
-

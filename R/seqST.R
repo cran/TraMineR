@@ -25,25 +25,26 @@ realvar <- function(x) {
 	}
 	
 
-seqST <- function(seqdata, norm=FALSE, silent=TRUE) {
+seqST <- function(seqdata, norm=FALSE, silent=TRUE, with.missing=FALSE) {
 
 	if (!inherits(seqdata,"stslist"))
 		stop("seqdata is NOT a sequence object, see 'seqdef' function to create one")
 
 	nr <- attr(seqdata,"nr")
-	with.missing=FALSE
-	if (any(seqdata==nr)) {
-		message(" [!] found missing state in one or more sequences")
-		message("     [>] adding missing state to the alphabet")
-		with.missing=TRUE
-	}
+## Since v 2.0.13, we use the with.missing argument instead
+	##with.missing=FALSE
+	##if (any(seqdata==nr)) {
+	##	message(" [!] found missing state in one or more sequences")
+	##	message("     [>] adding missing state to the alphabet")
+	##	with.missing=TRUE
+	##}
 
 	if (!silent) message(" [>] extracting symbols and durations ...")
 	states <- seqdss(seqdata, with.missing=with.missing)
 	dur <- seqdur(seqdata, with.missing=with.missing)
 
 	if (!silent) message(" [>] computing turbulence for ",nrow(seqdata)," sequence(s) ...")
-	phi <- suppressMessages(seqsubsn(states, DSS=FALSE))
+	phi <- suppressMessages(seqsubsn(states, DSS=FALSE, with.missing=with.missing))
 	s2.tx <- apply(dur, 1, realvar)
 	mean.tx <- rowMeans(dur, na.rm=TRUE)
 	## sum.tx <- apply(dur, 1, sum, na.rm=TRUE)
@@ -55,6 +56,7 @@ seqST <- function(seqdata, norm=FALSE, silent=TRUE) {
 
     if(norm){
         alph <- alphabet(seqdata)
+        if (with.missing) alph <- c(alph,"$%!")
 
         maxlength <- max(seqlength(seqdata))
         nrep <- ceiling(maxlength/length(alph))

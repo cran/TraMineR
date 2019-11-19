@@ -32,7 +32,7 @@ where \eqn{q(s)} is the number of transitions in the sequence,
 \eqn{h(s)} the within entropy, and \eqn{h_{max}} the theoretical maximum
 entropy which is \eqn{h_{max} = -\log 1/|A|}{h_max = -log 1/|A|} with \eqn{|A|} the size of the alphabet.
 
-The index \eqn{C(s)} is the geometric mean of its two normalized components and is, 
+The index \eqn{C(s)} is the geometric mean of its two normalized components and is,
 therefore, itself normalized.
 The minimum value of 0 can only be reached by a
 sequence made of one distinct state, thus containing 0 transitions
@@ -50,7 +50,7 @@ sequence.
  }
 
 \seealso{
- \code{\link{seqdss}}, \code{\link{seqstatd}}. For other measures of sequence complexity see \code{\link{seqient}} and  \code{\link{seqST}}.
+ \code{\link{seqindic}}, \code{\link{seqient}}, \code{\link{seqipos}}, \code{\link{seqST}}.
 }
 
 \references{
@@ -87,4 +87,3 @@ seqici(ex1.seq, with.missing=TRUE)
 \author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
 
 \keyword{Longitudinal characteristics}
-\keyword{State sequences}

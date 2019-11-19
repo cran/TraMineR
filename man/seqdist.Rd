@@ -14,7 +14,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   with.missing = FALSE, full.matrix = TRUE, kweights = rep(1.0, ncol(seqdata)),
   tpow = 1.0, expcost = 0.5, context, link = "mean", h = 0.5, nu,
   transindel = "constant", otto, previous = FALSE, add.column = TRUE,
-  breaks = NULL, step = 1, overlap = FALSE, weighted = TRUE, 
+  breaks = NULL, step = 1, overlap = FALSE, weighted = TRUE,
   global.pdotj = NULL, prox = NULL)
 }
 \arguments{
@@ -351,7 +351,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   Software} \bold{40}(4), 1--37.
 
   Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining
-  Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide
+  Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide.
   Department of Econometrics and Laboratory of Demography, University of Geneva
 
   Halpin, B. (2014). Three Narratives of Sequence Analysis, in Blanchard, P.,

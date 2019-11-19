@@ -2,7 +2,7 @@
 \alias{seqtransn}
 \title{Number of transitions in a sequence}
 \description{
-Computes the number of transitions in each sequence of a sequence object.
+Computes the number of transitions (state changes) in each sequence of a sequence object.
 }
 \usage{
 seqtransn(seqdata, with.missing=FALSE, norm=FALSE, pweight=FALSE)
@@ -10,12 +10,13 @@ seqtransn(seqdata, with.missing=FALSE, norm=FALSE, pweight=FALSE)
 \arguments{
 	\item{seqdata}{a state sequence object as defined by the
 \code{\link{seqdef}} function.}
-	\item{with.missing}{logical. if set as \code{TRUE}, missing states (gaps
-in sequences) are considered as an additional state and included in
-the DSS sequence. See \code{\link{seqdss}}.}
+
+	\item{with.missing}{logical: should non-void missing values be treated as a regular state? If \code{FALSE} (default) missing values are ignored.}
+
 	\item{norm}{logical. If set as \code{TRUE}, the number of transitions is
 divided by its theoretical maximum, the length of the sequence minus
-1. When length of the sequence is 1, normalized value is set to 0 as in the non-normalized case.}
+1. When the length of the sequence is 1, the normalized value is set as 0 (non-normalized value).}
+
 	\item{pweight}{logical. EXPERIMENTAL! If set as \code{TRUE}, when counting transitions
 	each transition does not account for 1 but for its probability (transition rate) as observed in the data.}
 

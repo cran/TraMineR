@@ -23,7 +23,7 @@ Analyzing and Visualizing State Sequences in \proglang{R} with \pkg{TraMineR}}
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Alexis Gabadinho, Gilbert Ritschard, Nicolas S. M\"{u}ller, Matthias Studer} %% comma-separated
 \Plaintitle{Analyzing and Visualizing State Sequences in R with TraMineR} %% without formatting
-\Shorttitle{Analyzing and Visualizing State Sequences in \R with \traminer} %% a short title (if necessary)
+\Shorttitle{Analyzing and Visualizing State Sequences in \proglang{R} with \pkg{TraMineR}} %% a short title (if necessary)
 
 %% an abstract and keywords
 \Abstract{

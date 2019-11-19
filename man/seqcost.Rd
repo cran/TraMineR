@@ -16,7 +16,7 @@ The substitution-cost matrix is intended to serve as \code{sm} argument in the \
 The substitution-cost matrix has dimension \eqn{ns*ns}, where
 \eqn{ns} is the number of states in the \link{alphabet} of the
 sequence object. The element \eqn{(i,j)} of the matrix is the cost of
-substituting state \eqn{i} with state \eqn{j}. It defines the dissimilarity between
+substituting state \eqn{i} with state \eqn{j}. It defines the dissimilarity between the states \eqn{i} and \eqn{j}.
 
 With method \code{CONSTANT}, the substitution costs are all set equal to the \code{cval} value, the default value being 2.
 

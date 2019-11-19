@@ -6,7 +6,7 @@
 }
 
 \usage{
- seqST(seqdata, norm=FALSE, silent=TRUE)
+ seqST(seqdata, norm=FALSE, silent=TRUE, with.missing=FALSE)
 }
 \arguments{
   \item{seqdata}{a state sequence object as returned by the the \code{\link{seqdef}} function.}
@@ -14,6 +14,9 @@
   \item{norm}{logical: should the turbulence index be normalized?}
 
   \item{silent}{logical: should messages about running operations (extracting dss and durations, computing turbulence) be displayed?}
+
+	\item{with.missing}{logical: should non-void missing values be treated as a regular state? If \code{FALSE} (default) missing values are ignored.}
+
 }
 
 

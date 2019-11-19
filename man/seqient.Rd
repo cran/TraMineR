@@ -38,8 +38,7 @@ Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and V
 Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
 }
 
-\seealso{
- \code{\link{seqstatd}} for the entropy of the transversal state distributions by positions in the sequence, and the composite measures of complexity \code{\link{seqici}} and  \code{\link{seqST}}.
+\seealso{\code{\link{seqindic}}, \code{\link{seqici}}, \code{\link{seqST}}, and \code{\link{seqstatd}} for the entropy of the cross-sectional state distributions by positions in the sequence.
 }
 
 \examples{
@@ -63,4 +62,3 @@ seqient(ex1.seq, with.missing=TRUE)
 \author{Alexis Gabadinho}
 
 \keyword{Longitudinal characteristics}
-\keyword{State sequences}

@@ -1,6 +1,47 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.0-13 [2019-11-19] (Development version)}{
+
+  \subsection{New functions}{
+    \itemize{
+      \item
+      \code{seqindic()} returns a table with per sequence values of selected indicators.
+      \item
+      \code{seqipos()} proportion of positive spells/states per sequence.
+      \item
+      \code{seqprecarity()} precarity index (previously in TraMineRextras)
+      \item
+      \code{seqprecorr()} correction factor for precarity index (previously in TraMineRextras)
+      \item
+      \code{seqprecstart()} state precarity level for precarity index (previously in TraMineRextras)
+    }
+  }
+
+  \subsection{Changes in existing functions:}{
+    \itemize{
+      \item
+      \code{seqlength()}, \code{seqST()}, and \code{seqsubsn()} gain a \code{with.missing} argument to control how missing values should be treated.
+    }
+  }
+
+  \subsection{Bug Fixes:}{
+    \itemize{
+      \item
+      \code{seqST()} normalization did not account for non-void missing values when present.
+    }
+  }
+
+  \subsection{Misc.:}{
+    \itemize{
+      \item
+      Fixed issue with \code{\\traminer} in vignette.
+    }
+  }
+}
+
+
+
 \section{Changes in version 2.0-12 [2019-06-21]}{
 
   \subsection{Changes in existing functions:}{
@@ -10,6 +51,7 @@
        \item
        \code{alphabet()} in its assign form now raises an error
         when the assigned vector contains duplicate elements.
+       \item
        \code{seqdist()} gains a new argument \code{global.pdotj}
        to control the marginal distribution to be used for the \code{'CHI2'} distance.
        \item
