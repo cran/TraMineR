@@ -1,5 +1,6 @@
 \name{seqtab}
 \alias{seqtab}
+\alias{print.stslist.freq}
 \title{Frequency table of the sequences}
 \description{
 Computes the frequency table of the sequences (count and percent of each sequence).

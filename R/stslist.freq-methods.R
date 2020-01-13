@@ -2,9 +2,9 @@
 ## Methods for stsstatd objects
 ## ===========================
 
-print.stslist.freq <- function(x, digits=2, width=1, ...) {
+print.stslist.freq <- function(x, digits=2, ...) {
 	table <- attr(x,"freq")
-	print(table, digits=digits, width=width, ...)
+	print(table, digits=digits, ...)
 }
 
 "[.stslist.freq" <- function(x,i,j,drop=FALSE) {

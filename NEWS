@@ -1,5 +1,11 @@
 ## =========
-Version 2.0-13 [2019-11-19] (Development version)
+Version 2.0-14 [2020-01-13]
+
+Bug Fixes:
+  - print.stslist.freq() wrongly used 'width' argument
+
+## =========
+Version 2.0-13 [2019-11-19]
 
 New functions:
   - seqindic() returns a table with per sequence
@@ -21,8 +27,8 @@ Changes in existing functions:
 Bug Fixes:
   - seqST() normalization did not account for non-void
     missing values when present.
-    
-Misc.:
+
+Misc:
   - Fixed issue with \traminer in vignette.
 
 ## =========
@@ -87,7 +93,7 @@ Bug Fixes:
   - seqdist(): CHI2 and EUCLID distances were computed using
     counts instead of proportions.
   - seqdist(): CHI2 and EUCLID bad behavior in presence of missings.
-  - Vignette: Fixed issue with updated fancyvrb.sty.
+  - Vignette: Fixed issue with updated \code{fancyvrb.sty}.
 
 Misc:
   - Vignette: Error in formula for complexity index.
@@ -188,7 +194,7 @@ Bug fixes:
     to = "SPELL", the missing and void codes are both converted
     to NA before conversion while they are kept as is when to = "TSE".
   - seqetm() produced an error in presence of void elements.
-  - An error occurred in the internal implicativestat function
+  - An error occurred in the internal \code{implicativestat} function
     when a same condition subsequence was present in all subsequences.
 
 Misc:
@@ -247,7 +253,7 @@ Misc:
   - Grouped internal 'is.xxx' helper functions into a single
     TraMineR-is_helpers.R file.
   - Generalized msg.warn() / msg.warn0() and msg() / msg0() code.
-  - Internal C/C++ function tmrWeightedInertiaDist() made public as the R
+  - Internal C/C++ function \code{tmrWeightedInertiaDist()} made public as the R
     function TraMineRInternalWeightedInertiaDist(). (Used by package Weightedcluster).
 
 
