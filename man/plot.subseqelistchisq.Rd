@@ -44,4 +44,4 @@ Plot the result of \code{\link{seqecmpgroup}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{Event sequences}
-\keyword{Plot}
+\keyword{Method}

@@ -1,6 +1,7 @@
 \name{seqdef}
 \alias{seqdef}
-\alias{print.stslist}
+\alias{rbind.stslist}
+\alias{summary.stslist}
 \title{Create a state sequence object}
 
 \description{
@@ -11,7 +12,7 @@ Create a state sequence object with attributes such as alphabet, color palette a
 seqdef(data, var=NULL, informat="STS", stsep=NULL,
        alphabet=NULL, states=NULL, id=NULL, weights=NULL, start=1,
        left=NA, right="DEL", gaps=NA, missing=NA, void="\%", nr="*",
-       cnames=NULL, xtstep=1, tick.last=FALSE, cpal=NULL, 
+       cnames=NULL, xtstep=1, tick.last=FALSE, cpal=NULL,
        missing.color="darkgrey", labels=NULL, ...)
 }
 
@@ -94,10 +95,8 @@ by calling the \code{brewer.pal} function of the \code{RColorBrewer}
 package. If number of states is less or equal than 8, the
 \code{"Accent"} palette is used. If number of states is between 8 and
 12, the \code{"Set3"} palette is used. If the number of states in the
-data is greater than 12 you have to specify your own palette. The
-list of available colors is displayed by the \code{\link{colors}}
-function. You can also use alternatively some other palettes from the
-RColorBrewer package.}
+data is greater than 12, colors are set using \code{\link[colorspace]{qualitative_hcl}} with the "Set 3" palette. To specify your own palette use e.g. the \code{\link{colors}}
+function, or the RColorBrewer or colorspace packages.}
 
 	\item{missing.color}{alternative color for representing missing
 values inside the sequences. Defaults to \code{"darkgrey"}.}
@@ -107,7 +106,8 @@ TraMineR's graphics. If \code{NULL} (default), the state names in the
 alphabet are used as state labels as well.}
 
 	\item{...}{options passed to the \code{\link{seqformat}} function
-for handling input data that is not in STS format.}
+for handling input data that is not in STS format or print format.}
+
 }
 
 \details{Applying subscripts to sequence objects (eg. \code{seq[,1:5]
@@ -125,13 +125,15 @@ alpha-numeric order returned by the \code{\link{seqstatl}} function
 which may differ when you have different original codings. }
 
 \seealso{
- \code{\link{plot.stslist}} to plot state sequence objects,\cr
+ \code{\link{plot.stslist}} plot method for state sequence objects,\cr
+ \code{\link{print.stslist}} print method for state sequence objects,\cr
+ \code{\link{is.stslist}} to test whether an object is a proper \code{stslist} object,\cr
  \code{\link{seqplot}} for high level plots of state sequence objects,\cr
  \code{\link{seqecreate}} to create an event sequence object,\cr
  \code{\link{seqformat}} for converting between various longitudinal data formats. }
 
 \value{An object of class \code{stslist}. There are \code{print},
-\code{plot} and \code{summary} methods for such objects. State
+\code{plot}, \code{rbind}, and \code{summary} methods for such objects. State
 sequence objects are required as argument to other functions such as
 plotting functions (\code{seqdplot}, \code{seqiplot} or
 \code{seqfplot}), functions to compute distances (\code{seqdist}),
@@ -176,7 +178,12 @@ actcal.seq <- seqdef(actcal,13:24,
   alphabet=c("A","B","C","D","E"),
   states=c("FT","PT","LT","NO","TR"))
 alphabet(actcal.seq)
-actcal.seq[1:10,]
+
+## rbind and summary
+seq1 <- actcal.seq[1:10,]
+seq2 <- actcal.seq[20:25,]
+seq <- rbind(seq1,seq2)
+summary(seq)
 
 ## ============================
 ## Example with missing values
@@ -201,7 +208,7 @@ ex1.seq <- seqdef(ex1, 1:13, weights=ex1$weights)
 seqtab(ex1.seq)
 }
 
-\author{Alexis Gabadinho (with Gilbert Ritschard for help page)}
+\author{Alexis Gabadinho and Gilbert Ritschard}
 
 \keyword{Data handling}
 \keyword{State sequences}

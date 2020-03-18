@@ -8,16 +8,25 @@ TraMineR.trunc <- function(seqdata, mstate, sl, left = "DEL", right = "DEL",
 	## Index des missing et index des etats valides
 	na.pos <- sidx[mstate]
 	notna.pos <- sidx[!mstate]
+  lc <- 0
 
-	## Position du premier etat valide
-	c1 <- notna.pos[1]
+  if(length(notna.pos)<1) { ## only missing values in sequence
+    c1 <- 0
+    rc <- 1
+    mm <- NULL # most probably not used
+  }
+  else {
 
-	if (c1>1)
-		lc <- c1-1
-	else lc=0
+  	## Position of first valid state
+  	c1 <- notna.pos[1]
 
-	rc <- max(notna.pos)+1
-	mm <- na.pos[na.pos > lc+1 & na.pos < rc-1]
+  	if (c1>1)
+  		lc <- c1-1
+  	# else lc=0
+
+  	rc <- max(notna.pos)+1
+  	mm <- na.pos[na.pos > lc+1 & na.pos < rc-1]
+  }
 
 	seqdata.trunc <- seqdata
 

@@ -10,8 +10,8 @@ Determines the initial state precarity degree from the state ordering. (See deta
 }
 
 \usage{
-seqprecstart(seqdata, state.order=alphabet(seqdata), state.equiv=NULL, stprec=NULL,
-    with.missing=FALSE)
+seqprecstart(seqdata, state.order=alphabet(seqdata, with.missing), state.equiv=NULL, 
+    stprec=NULL, with.missing=FALSE)
 }
 
 \arguments{
@@ -22,7 +22,7 @@ seqprecstart(seqdata, state.order=alphabet(seqdata), state.equiv=NULL, stprec=NU
   \item{state.equiv}{List of state equivalence classes. The classes in the list are each set as the vector of the short labels of the states forming the class. }
 
   \item{stprec}{Vector of user defined state precarity degrees ordered conformably with the alphabet of seqdata.}
-      
+
   \item{with.missing}{Logical. Should the missing state be considered as an element of the alphabet?
       }
 

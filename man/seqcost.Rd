@@ -65,9 +65,8 @@ seqsubm(...)
   If \code{NULL}, \code{cval=2} is used, unless \code{transition}
   is \code{"both"} and \code{time.varying} is \code{TRUE}, in which case \code{cval=4}.}
 
-    \item{with.missing}{Logical. Should an additional entry be added in the matrix for the missing states?
-    If \code{TRUE}, the \sQuote{missing} state is also added to the state alphabet. Use this if you want to compute
-    distances with gaps (non deleted missing values) inside the sequences. See \cite{Gabadinho et al. (2010)} for more details on the options for handling missing values when creating state sequence objects.}
+  \item{with.missing}{Logical. Should an additional entry be added in the matrix for the missing states?
+  If \code{TRUE}, the \sQuote{missing} state is also added to the alphabet. Set as \code{TRUE} if you want to use the costs for distances between sequences containing non deleted (non void) missing values. Forced as \code{FALSE} when there are no non-void missing values in \code{seqdata}. See \cite{Gabadinho et al. (2010)} for more details on the options for handling missing values when creating the state sequence object with \code{\link{seqdef}}.}
 
     \item{miss.cost}{Scalar or vector. Cost for substituting the missing state. Default is \code{cval}.}
 
@@ -128,12 +127,15 @@ Studer, M. and G. Ritschard (2014). "A Comparative Review of Sequence Dissimilar
 data(biofam)
 biofam.seq <- seqdef(biofam[501:600,10:25])
 
-## Optimal matching using transition rates based substitution-cost matrix
-## and insertion/deletion costs of 3
-trcost <- seqcost(biofam.seq, method="TRATE")
-biofam.om <- seqdist(biofam.seq, method="OM", indel=3, sm=trcost$sm)
+## Indel and substitution costs based on log of inverse state frequencies
+lifcost <- seqcost(biofam.seq, method="INDELSLOG")
+## Here lifcost$indel is a vector
+biofam.om <- seqdist(biofam.seq, method="OM", indel=lifcost$indel, sm=lifcost$sm)
 
-## Using the insertion/deletion cost returned by seqcost
+## Optimal matching using transition rates based substitution-cost matrix
+## and the associated indel cost
+## Here trcost$indel is a scalar
+trcost <- seqcost(biofam.seq, method="TRATE")
 biofam.om <- seqdist(biofam.seq, method="OM", indel=trcost$indel, sm=trcost$sm)
 
 ## Using costs based on FUTURE with a forward lag of 4
@@ -152,15 +154,15 @@ biofam.om.c2[1:10,1:10]
 ## Example with weights and missings
 ## =================================
 data(ex1)
-ex1.seq <- seqdef(ex1,1:13, weights=ex1$weights)
+ex1.seq <- seqdef(ex1[,1:13], weights=ex1$weights)
 
 ## Unweighted
-subm <- seqcost(ex1.seq, method="TRATE", with.missing=TRUE, weighted=FALSE)
-ex1.om <- seqdist(ex1.seq, method="OM", sm=subm$sm, with.missing=TRUE)
+subm <- seqcost(ex1.seq, method="INDELSLOG", with.missing=TRUE, weighted=FALSE)
+ex1.om <- seqdist(ex1.seq, method="OM", indel=subm$indel, sm=subm$sm, with.missing=TRUE)
 
 ## Weighted
-subm.w <- seqcost(ex1.seq, method="TRATE", with.missing=TRUE, weighted=TRUE)
-ex1.omw <- seqdist(ex1.seq, method="OM", sm=subm.w$sm, with.missing=TRUE)
+subm.w <- seqcost(ex1.seq, method="INDELSLOG", with.missing=TRUE, weighted=TRUE)
+ex1.omw <- seqdist(ex1.seq, method="OM", indel=subm.w$indel, sm=subm.w$sm, with.missing=TRUE)
 
 ex1.om == ex1.omw
 }

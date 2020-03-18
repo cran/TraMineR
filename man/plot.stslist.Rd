@@ -16,19 +16,19 @@ This is the plot method for state sequence objects of class \code{stslist} creat
 
 	\item{idxs}{Indexes of the sequences to be plotted (default value is \code{1:10}), for instance \code{20:50} to plot sequences 20 to 50, \code{c(2,8,12,25)} to plot sequences 2,8,12 and 25 in \code{seqdata}. If set to \code{0}, all sequences in \code{seqdata} are plotted.}
 
-     \item{weighted}{Logical: Should the bar representing each sequence be proportional to its weight? Ignored when no weights are assigned to sequences (see \code{\link{seqdef}}.)}
+      \item{weighted}{Logical: Should the bar representing each sequence be proportional to its weight? Ignored when no weights are assigned to sequences (see \code{\link{seqdef}}.)}
 
 	\item{sortv}{A sorting variable or a sort method (one of \code{"from.start"} or \code{"from.end"}). See details.}
 
-	\item{cpal}{alternative color palette to use for the states. If user specified, a vector of colors with number of elements equal to the number of states in the alphabet. By default, the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}).}
+	\item{cpal}{Color palette for the states. A vector of colors of length equal to the number of states in the alphabet. If \code{NULL} (default), the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}).}
 
-	\item{missing.color}{alternative color for representing missing values inside the sequences. By default, this color is taken from the "missing.color" attribute of the \code{x} sequence  object.}
+	\item{missing.color}{Color for representing missing values inside the sequences. If \code{NULL} (default) the color is taken from the "missing.color" attribute of the \code{x} sequence object.}
 
-	\item{ylab}{An optional label for the y axis. If set to \code{NA}, no label is drawn.}
+	\item{ylab}{String. An optional label for the y axis. If set to \code{NA}, no label is drawn.}
 
-	\item{yaxis}{Controls whether the y axis is plotted or not. When set to \code{TRUE}, sequence indexes are displayed. }
+	\item{yaxis}{Logical. Should the y axis be plotted. When set as \code{TRUE}, sequence indexes are displayed.}
 
-	\item{xaxis}{if \code{TRUE} (default), the x (time) axis is plotted.}
+	\item{xaxis}{Logical. Should the x (time) axis be plotted? Default is \code{TRUE}.}
 
 	\item{ytlab}{the labels of the plotted sequences to display on the y axis. Default is the indexes of the sequences as defined by the \code{idxs} argument. Can be set to \code{"id"} for displaying the row names (id) of the sequences instead of their indexes; row names can be assigned to the sequence object with the  \code{id} argument of the \code{\link{seqdef}} function or afterwards with \code{\link{rownames}}. Otherwise \code{ytlab} can be set to a vector of length equal to the number of  sequences to be plotted.}
 
@@ -97,4 +97,8 @@ ex1.seq <- seqdef(ex1, 1:13, weights=ex1$weights)
 plot(ex1.seq)
 plot(ex1.seq, weighted=FALSE)
 }
-\keyword{Plot}
+
+\author{Gilbert Ritschard}
+
+\keyword{Method}
+\keyword{State sequences}

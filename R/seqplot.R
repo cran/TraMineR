@@ -19,6 +19,11 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
   	if ("sortv" %in% names(oolist)) {sortv <- oolist[["sortv"]]}
   	leg.ncol <- if ("ncol" %in% names(oolist)) { oolist[["ncol"]] } else { NULL }
     oolist <- oolist[names(oolist) != "ncol"]
+    if ("tlim" %in% names(oolist)) {
+      oolist[["idxs"]] <- oolist[["tlim"]]
+      msg.warn("'tlim' deprecated, use 'idxs' instead!")
+      oolist <- oolist[names(oolist) != "tlim"]
+    }
 
     diss <- NULL
   	if ("diss" %in% names(oolist)) {

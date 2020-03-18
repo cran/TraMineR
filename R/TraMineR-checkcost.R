@@ -1,6 +1,6 @@
 checkcost <- function(sma, seqdata, with.missing, indel, tol = NULL) {
 
-  msg("checking 'sm' (one value for each state, triangle inequality)")
+  msg("checking 'sm' (size and triangle inequality)")
 
   if (is.null(tol)) {
     tol <- 1e-07 * max(sma)
@@ -43,10 +43,10 @@ checkcost <- function(sma, seqdata, with.missing, indel, tol = NULL) {
 
     triangleineq <- checktriangleineq(sm, warn = FALSE, indices = TRUE, tol = tol)
 
-    ## triangleineq contain a vector of problematic indices.
+    ## triangleineq contains a vector of problematic indices.
     if (!is.logical(triangleineq)) {
-      warning(" [!] at least, one substitution cost doesn't respect the triangle inequality.\n",
-        " [!] replacing ", alphabet[triangleineq[1]], " with ", alphabet[triangleineq[3]],
+      message(" [!!] at least, one substitution cost doesn't respect the triangle inequality.\n",
+        " [!!] replacing ", alphabet[triangleineq[1]], " with ", alphabet[triangleineq[3]],
         " (cost=", format(sm[triangleineq[1], triangleineq[3]]), ") and then ",
         alphabet[triangleineq[3]], " with ", alphabet[triangleineq[2]], " (cost=",
         format(sm[triangleineq[3], triangleineq[2]]), ")\n [!] costs less than replacing directly ",
@@ -56,7 +56,7 @@ checkcost <- function(sma, seqdata, with.missing, indel, tol = NULL) {
         alphabet[triangleineq[3]], "=>", alphabet[triangleineq[2]], "] - [",
         alphabet[triangleineq[1]], "=>", alphabet[triangleineq[2]], "]): ",
         format(sm[triangleineq[1], triangleineq[3]] + sm[triangleineq[3],
-          triangleineq[2]] - sm[triangleineq[1], triangleineq[2]]), call. = FALSE)
+          triangleineq[2]] - sm[triangleineq[1], triangleineq[2]]))
     }
 
     if (!missing(indel)) {

@@ -19,9 +19,9 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
 }
 \arguments{
   \item{seqdata}{
-    State Sequence Object.
+    State sequence object of class \code{stslist}.
     The sequence data to use.
-    It can be created with the \code{\link{seqdef}} function.
+    Use \code{\link{seqdef}} to create such an object.
   }
   \item{method}{
     String.
@@ -87,14 +87,15 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
     \code{method = "DHD"}. They are grouped in a 3-dimensional array with the
     third index referring to the position in the sequence.
 
-    The name of a \code{\link{seqcost}} method when a string and \code{method}
-    is one of \code{"OM"}, \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
-    \code{"OMstran"}, \code{"HAM"}, \code{"DHD"}, or \code{"TWED"}. The method
-    is used to build \code{sm}. It can be \code{"INDELS"} or \code{"INDELSLOG"}
-    for \code{"OM"}, \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
-    \code{"OMstran"}, \code{"HAM"}, and \code{"TWED"}, \code{"CONSTANT"} for
-    \code{"OM"} and \code{"HAM"}, \code{"TRATE"} for \code{"OM"}, \code{"HAM"},
-    and \code{"DHD"}.
+    One of the strings \code{"CONSTANT"}, \code{"INDELS"}, \code{"INDELSLOG"},
+    or \code{"TRATE"}. Designates a \code{\link{seqcost}} method to be used
+    to build \code{sm}. For \code{"DHD"}, only \code{"TRATE"} applies. In this
+    latter case, the outcome is the same as with \code{sm=NULL}.
+
+    %for \code{"OM"}, \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
+    %\code{"OMstran"}, \code{"HAM"}, and \code{"TWED"}, \code{"CONSTANT"} for
+    %\code{"OM"} and \code{"HAM"}, \code{"TRATE"} for \code{"OM"}, \code{"HAM"},
+    %and \code{"DHD"}.
 
     \code{sm} is mandatory when \code{method} is one of \code{"OM"},
     \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"}, \code{"OMstran"},
@@ -111,8 +112,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   \item{with.missing}{
     Logical.
     Default: \code{FALSE}.
-    When \code{method} isn't \code{"OMslen"} or \code{"OMstran"}, should the
-    non-deleted gap (missing value) be added to the alphabet as an additional
+    Should the non-deleted missing value be added to the alphabet as an additional
     state? If \code{FALSE} and \code{seqdata} or \code{refseq} contains such
     gaps, an error is raised.
   }
@@ -195,7 +195,8 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
     Logical.
     Default: \code{TRUE}.
     When \code{method = "OMstran"}, should the last column (and also the first
-    column when \code{previous = TRUE}) be duplicated?
+    column when \code{previous = TRUE}) be duplicated? When sequences have different
+    lengths, should the last (first) valid state be duplicated.
   }
   \item{breaks}{
     \code{NULL}, List of pairs Integers.
@@ -380,83 +381,85 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = 1.0, sm = NULL,
   multichannel distances \code{\link{seqdistmc}}.
 }
 \examples{
-## ========================
-## Example without missings
-## ========================
+## =========================
+## Examples without missings
+## =========================
 
-## Defining a sequence object with columns 10 to 25 of a
-## subset of the 'biofam' data set
+## Defining a sequence object with columns 10 to 25
+## of a subset of the 'biofam' data set
 data(biofam)
 biofam.seq <- seqdef(biofam[501:600, 10:25])
 
-## OM distances with a substitution-cost matrix derived
-## from transition rates
-biofam.om <- seqdist(biofam.seq, method = "OM", indel = 3,
-  sm = "TRATE")
-
-## OM distances using the vector of estimated indels and
-## substitution costs derived from the estimated indels
+## OM distances using the vector of indels and substitution
+## costs derived from the estimated state frequencies
 costs <- seqcost(biofam.seq, method = "INDELSLOG")
 biofam.om <- seqdist(biofam.seq, method = "OM",
-  indel = costs$indel, sm = costs$sm)
+                     indel = costs$indel, sm = costs$sm)
+
+## OM between sequences of transitions
+biofam.omstran <- seqdist(biofam.seq, method = "OMstran",
+                     indel = costs$indel, sm = costs$sm,
+                     otto=.3, transindel="subcost")
 
 ## Normalized LCP distances
 biofam.lcp.n <- seqdist(biofam.seq, method = "LCP",
-  norm = "auto")
+                        norm = "auto")
 
 ## Normalized LCS distances to the most frequent sequence
 biofam.dref1 <- seqdist(biofam.seq, method = "LCS",
-  refseq = 0, norm = "auto")
+                        refseq = 0, norm = "auto")
 
 ## LCS distances to an external sequence
 ref <- seqdef(as.matrix("(0,5)-(3,5)-(4,6)"), informat = "SPS",
-  alphabet = alphabet(biofam.seq))
+              alphabet = alphabet(biofam.seq))
 biofam.dref2 <- seqdist(biofam.seq, method = "LCS",
-  refseq = ref)
+                        refseq = ref)
 
 ## Chi-squared distance over the full observed timeframe
 biofam.chi.full <- seqdist(biofam.seq, method = "CHI2",
-  step = max(seqlength(biofam.seq)))
+                           step = max(seqlength(biofam.seq)))
 
-## Chi-squared distance over successive overlaping
+## Chi-squared distance over successive overlapping
 ## intervals of length 4
 biofam.chi.ostep <- seqdist(biofam.seq, method = "CHI2",
-  step = 4, overlap = TRUE)
+                            step = 4, overlap = TRUE)
 
 
-## =====================
-## Example with missings
-## =====================
+## ======================
+## Examples with missings
+## ======================
 data(ex1)
-ex1.seq <- seqdef(ex1[, 1:13])
+## Ignore empty row 7
+ex1.seq <- seqdef(ex1[1:6, 1:13])
 
-## OM with substitution costs based on transition
-## probabilities and indel set as half the maximum
-## substitution cost
-costs.tr <- seqcost(ex1.seq, method = "TRATE",
-  with.missing = TRUE)
+## OM with indel and substitution costs based on
+## log of inverse state frequencies
+costs.ex1 <- seqcost(ex1.seq, method = "INDELSLOG",
+                     with.missing = TRUE)
 ex1.om <- seqdist(ex1.seq, method = "OM",
-  indel = costs.tr$indel, sm = costs.tr$sm,
-  with.missing = TRUE)
+                  indel = costs.ex1$indel, sm = costs.ex1$sm,
+                  with.missing = TRUE)
 
-## Localized OM
+## Localized OM 
 ex1.omloc <- seqdist(ex1.seq, method = "OMloc",
-  indel = costs.tr$indel, sm = costs.tr$sm,
-  with.missing = TRUE)
+                     sm = costs.ex1$sm, expcost=.1, context = .4,
+                     with.missing = TRUE)
 
+## OMspell works only with a scalar indel
+indel <- max(costs.ex1$indel)
 ## OM of spells
 ex1.omspell <- seqdist(ex1.seq, method = "OMspell",
-  sm = costs.tr$sm, indel = costs.tr$indel,
-  with.missing = TRUE)
+                       indel = indel, sm = costs.ex1$sm,
+                       with.missing = TRUE)
 
 ## Distance based on number of matching subsequences
 ex1.nms <- seqdist(ex1.seq, method = "NMS",
-  with.missing = TRUE)
+                   with.missing = TRUE)
 
-## Using the sequence vetorial representation metric
+## Using the sequence vectorial representation metric
 costs.fut <- seqcost(ex1.seq, method = "FUTURE", lag = 4,
-  proximities = TRUE, with.missing = TRUE)
+                     proximities = TRUE, with.missing = TRUE)
 ex1.svr <- seqdist(ex1.seq, method = "SVRspell",
-  prox = costs.fut$prox, with.missing = TRUE)
+                   prox = costs.fut$prox, with.missing = TRUE)
 }
 \keyword{Dissimilarity measures}

@@ -33,7 +33,7 @@ seqrplot(seqdata, group = NULL, main = NULL, ...)
     \item{seqdata}{State sequence object created with the \code{\link{seqdef}} function.}
 
     \item{group}{Grouping variable of length equal to the number of sequences. When not \code{NULL}, a distinct plot is generated for each level of \code{group}.}
-        
+
     \item{type}{the type of the plot. Available types are \code{"d"}
     for state distribution plots (chronograms), \code{"f"} for sequence frequency
     plots, \code{"Ht"} for transversal entropy plots, \code{"i"} for
@@ -73,7 +73,7 @@ seqrplot(seqdata, group = NULL, main = NULL, ...)
     \item{legend.prop}{Real in range [0,1]. Proportion of the graphic area devoted to the legend plot when \code{use.layout=TRUE} and \code{with.legend=TRUE}. Default value is set according to the place (bottom or right of the graphic area) where the legend is plotted.}
 
     \item{rows,cols}{Integers. Number of rows and columns of the plot panel when \code{use.layout=TRUE}.}
-      
+
   \item{title}{Deprecated. Use \code{main} instead.}
   \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
   \item{withlegend}{Deprecated. Use \code{with.legend} instead.}
@@ -90,16 +90,16 @@ with \code{type} argument set respectively to \code{"d"}, \code{"f"},
 \code{"i"}, \code{"I"}, \code{"Ht"}, \code{"ms"}, \code{"mt"},
 \code{"pc"} or \code{"r"}.
 
-State distribution plot (\code{type="d"}) represent the sequence of the cross-sectional state frequencies by position (time point) computed by the \code{\link{seqstatd}} function. Such plots are also known as chronograms.
+A \emph{State distribution plot} (\code{type="d"}) represents the sequence of the cross-sectional state frequencies by position (time point) computed by the \code{\link{seqstatd}} function and rendered with the \code{\link{plot.stslist.statd}} method. Such plots are also known as chronograms.
 
-\emph{Sequence frequency plots} (\code{type="f"}) display the most frequent sequences, each one with an horizontal stack bar of its successive states. Sequences are displayed bottom-up in decreasing order of their frequencies (computed by the \code{\link{seqtab}} function). The \code{\link{plot.stslist.freq}} plot method is called for producing the plot. \cr
-The \code{idxs} optional argument may be specified for selecting the sequences to be plotted (default is 1:10, i.e. the 10 most frequent sequences). The width of the bars representing the sequences is by default proportional to their frequencies, but this can be disabled with the \code{pbarw=FALSE} optional argument. If weights have been specified when creating \code{seqdata}, weighted frequencies will be returned by \code{seqtab} since the default option is \code{weighted=TRUE}. See examples below, the \code{\link{seqtab}} and \code{\link{plot.stslist.freq}} manual pages for a complete list of optional arguments and \cite{Müller et al., (2008)} for a description of sequence frequency plots.
+A \emph{Sequence frequency plots} (\code{type="f"}) displays the most frequent sequences, each one with an horizontal stack bar of its successive states. Sequences are displayed bottom-up in decreasing order of their frequencies (computed by the \code{\link{seqtab}} function). The \code{\link{plot.stslist.freq}} plot method is called for producing the plot. \cr
+The \code{idxs} optional argument may be specified for selecting the sequences to be plotted (default is 1:10, i.e. the 10 most frequent sequences). The width of the bars representing the sequences is by default proportional to their frequencies, but this can be disabled with the \code{pbarw=FALSE} optional argument. If weights have been specified when creating \code{seqdata}, weighted frequencies are used unless you set the \code{weighted=TRUE} option. See examples below, the \code{\link{seqtab}} and \code{\link{plot.stslist.freq}} manual pages for a complete list of optional arguments and \cite{Müller et al., (2008)} for a description of sequence frequency plots.
 
 In \emph{sequence index plots} (\code{type="i"} or \code{type="I"}), the requested individual sequences are rendered with horizontal stacked bars depicting the states over successive positions (time). Optional arguments are \code{idxs} for specifying the indexes of the sequences to be plotted (when \code{type="i"} defaults to the first ten sequences, i.e \code{idxs=1:10}). For plotting nicely a (big) whole set one can use \code{type="I"} which is the same as using \code{idxs=0} together with the additional graphical parameters \code{border=NA} and \code{space=0} to suppress bar borders and space between bars. The \code{sortv} argument can be used to pass a vector of numerical values for sorting the sequences or to specify a sorting method. See \code{\link{plot.stslist}} for a complete list of optional arguments and their description.
 
 The interest of sequence index plots has, for instance, been stressed by \cite{Scherer (2001)} and \cite{Brzinsky-Fay et al. (2006)}. Notice that index plots for thousands of sequences result in very heavy PDF or POSTSCRIPT graphic files. Dramatic file size reduction may be achieved by saving the figures in bitmap format with using for instance the \code{\link[grDevices]{png}} graphic device instead of \code{\link[grDevices]{postscript}} or \code{\link[grDevices]{pdf}}.
 
-The \emph{transversal entropy plot} (\code{type="Ht"}) displays the evolution over positions of the transversal entropies (\cite{Billari, 2001}). Transversal entropies are computed by calling \code{\link{seqstatd}} function and then plotted by calling the \code{\link{plot.stslist.statd}} plot method.
+The \emph{transversal entropy plot} (\code{type="Ht"}) displays the evolution over positions of the cross-sectional entropies (\cite{Billari, 2001}). Cross-sectional entropies are computed by calling \code{\link{seqstatd}} function and then plotted by calling the \code{\link{plot.stslist.statd}} plot method.
 
 The \emph{modal state sequence plot} (\code{type="ms"}) displays the sequence of the modal states with each mode proportional to its frequency at the given position. The \code{\link{seqmodst}} function is called which returns the sequence and the result is plotted by calling the \code{\link{plot.stslist.modst}} plot method.
 
@@ -112,7 +112,8 @@ For \emph{decorated parallel coordinate plots} (\code{type="pc"}) see the specif
 
 \seealso{
  \code{\link{plot.stslist.statd}}, \code{\link{plot.stslist.freq}}, \code{\link{plot.stslist}}, \code{\link{plot.stslist.modst}}, \code{\link{plot.stslist.meant}}, \code{\link{plot.stslist.rep}}, \code{\link{seqrep}},
- \code{\link{seqpcplot}} .
+ \code{\link{seqpcplot}},
+ \code{\link[TraMineRextras]{seqsplot}}.
 }
 
 

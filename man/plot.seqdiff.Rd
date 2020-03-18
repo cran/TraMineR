@@ -44,4 +44,4 @@ Plotting a seqdiff object.
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{Dissimilarity-based analysis}
-\keyword{Plot}
+\keyword{Method}

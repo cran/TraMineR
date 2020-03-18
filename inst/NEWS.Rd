@@ -1,6 +1,75 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.0-15 [2020-03-18] (Development version)}{
+
+  \subsection{New functions}{
+    \itemize{
+      \item
+      \code{seqintegration()} index of integrative potential of C. Brzinsky-Fay.
+      \item
+      \code{seqivolatility()} index of objective volatility of C. Brzinsky-Fay.
+      \item
+      \code{print.seqipos()} print method for objects returned by \code{seqipos()}.
+      \item
+      \code{is.stslist()} checks that the object is a proper \code{stslist} object.
+      \item
+      \code{rbind.stslist()} \code{rbind} method for state sequence objects.
+    }
+  }
+
+  \subsection{Changes in existing functions}{
+    \itemize{
+      \item
+      \code{seqdef()} now provides a default color palette (using colorspace) when number of states exceeds 12.
+      \item
+      \code{alphabet()} gains an argument \code{with.missing}.
+      \item
+      \code{seqipos()} gains an argument \code{index} to select between three types of indicators: share of positive states, volatility, or integrative potential for the positive state.
+      \item
+      \code{seqipos()} returned object has an attribute \code{sbinary} with the derived binary sequences.
+      \item
+      \code{seqindic()} possible values for argument \code{indic} include now the indicators of objective volatility and integrative potential both for the provided sequences and the positive-negative sequences derived from them.
+      \item
+      \code{seqdist()}: OMloc, OMslen, OMspell, and OMstran now also apply to sequences of different lengths.
+      \item
+      \code{seqdist()}: \code{with.missing=TRUE} now supported by all methods.
+      \item
+      \code{seqdist()} raises a warning when there are empty sequences except for OMloc where an error is raised.
+      \item
+      \code{seqcost()}: \code{with.missing} forced as \code{FALSE} (as in \code{seqdist}) when there are no non-void missings in the sequences.
+      \item
+      \code{seqprecorr()}: new methods \code{"FREQ+"}, \code{"TRATE+"}, \code{"TRATEDSS+"}, \code{"RANK+"}     that adjust the returned penalty for the mean transition weight.
+      \item
+      \code{seqprecorr()}, a same state value is assigned to equivalent states when counting transitions and computing transition probabilities (methods \code{FREQ}, \code{TRATE}, \code{TRATEDSS}).
+    }
+  }
+
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+      Print methods for \code{seqprec} and \code{seqprecorr} objects did not work.
+      \item
+      \code{print.stslist()} did not print ending missing values when \code{format='SPS'}.
+      \item
+      \code{print.stslist()}, when \code{format='SPS'}, additional parameters for controlling the format were ignored.
+      \item
+      \code{seqformat()} did not account for the \code{right} argument when \code{to='SPS'}.
+      \item
+      \code{seqdist()} with \code{method=CHI2}. Fixed issue with unexpected warnings when over an interval all sequences stay in the same state.
+      \item
+      \code{seqdist()} raised an error for some methods when the unused argument \code{indel} was a vector.
+      \item
+      \code{seqdist()}, argument \code{sm}: values \code{'CONSTANT'} and \code{'TRATE'} were only accepted for \code{method='OM'} and \code{'HAM'}. Now can be used with all methods that require the \code{sm} argument.
+      \item
+      \code{seqplot()} raised an error when deprecated \code{tlim} argument was used. Now a warning.
+      \item
+      \code{[]} subsetting of \code{stslist} objects with negative column
+      indexes produced unexpected results.
+    }
+  }
+}
+
 \section{Changes in version 2.0-14 [2020-01-13]}{
 
   \subsection{Bug Fixes:}{

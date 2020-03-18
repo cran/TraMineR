@@ -1,11 +1,18 @@
-## proportion of positive spells (or states)
+## indexes measuring structure of positive/negative spells (or states)
 
-seqipos <- function(seqdata, dss=TRUE, pos.states=NULL, neg.states=NULL, with.missing=FALSE){
+seqipos <- function(seqdata, dss=NULL, pos.states=NULL, neg.states=NULL, index="share",
+    pow=1, w=.5, with.missing=FALSE){
 
 	if (!inherits(seqdata,"stslist"))
 		stop(" [!] data is NOT a sequence object, see seqdef function to create one")
   if (is.null(pos.states) & is.null(neg.states))
 		stop(" [!] at least one of pos.states and neg.states should be non null!")
+  ind <- c("share","integration","volatility")
+  if (!index %in% ind)
+		stop(" [!] index should be one of share, integration, or volatility")
+  if (is.null(dss)){
+    dss <- index=="share"
+  }
 
   alph <- alphabet(seqdata)
   void <- attr(seqdata,"void")
@@ -17,7 +24,7 @@ seqipos <- function(seqdata, dss=TRUE, pos.states=NULL, neg.states=NULL, with.mi
     stop(" [!] invalid values in pos.states: ",paste(pos.states[!pos.states %in% alph], collapse=",
     "))
   }
-  if (!is.null(pos.states) & !all(neg.states %in% alph)){
+  if (!is.null(neg.states) & !all(neg.states %in% alph)){
     stop(" [!] invalid values in neg.states: ",paste(neg.states[!neg.states %in% alph], collapse=",
     "))
   }
@@ -30,7 +37,7 @@ seqipos <- function(seqdata, dss=TRUE, pos.states=NULL, neg.states=NULL, with.mi
   if (length(neg.states)!=length(unique(neg.states)))
     stop(" [!] Multiple occurrences of same state in neg.states")
 
-  recodes <- list("p"=pos.states, "m"=neg.states)
+  recodes <- list("p"=pos.states, "n"=neg.states)
 
   if (dss)
     s <- seqdss(seqdata, with.missing = with.missing)
@@ -39,8 +46,31 @@ seqipos <- function(seqdata, dss=TRUE, pos.states=NULL, neg.states=NULL, with.mi
 
   sbinary <- seqrecode(s, recodes = recodes, otherwise=attr(s,'void'))
 
-  npos <- rowSums(sbinary=="p")
-  nneg <- rowSums(sbinary=="m")
-  ratio <- npos/(nneg + npos)
-  return(ratio)
+  if (index == "share") {
+    npos <- rowSums(sbinary=="p")
+    nneg <- rowSums(sbinary=="n")
+    ret <- npos/(nneg + npos)
+  }
+  else if (index == "integration"){
+    ret <- as.vector(suppressMessages(
+      seqintegration(sbinary, state="p", pow=pow, with.missing = with.missing)))
+  }
+  else if (index == "volatility"){
+    ret <- suppressMessages(
+      seqivolatility(sbinary, w=w, with.missing = with.missing))
+  }
+  ret <- as.matrix(ret)
+  colnames(ret) <- index
+  attr(ret, "sbinary") <- sbinary
+  class(ret) <- c(class(ret), "seqipos")
+
+  return(ret)
+}
+
+print.seqipos <- function(x, ...){
+  names <- dimnames(x)
+  attributes(x) <- NULL
+  x <- as.matrix(x)
+  dimnames(x) <- names
+  print(x, ...)
 }

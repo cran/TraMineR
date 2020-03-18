@@ -264,13 +264,14 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   another. The input data is first converted into the STS format and then
   converted to the output format. Depending on input and output formats, some
   information can be lost in the conversion process. The output is a matrix or
-  a data frame, NOT a sequence object to be passed to TraMineR functions for
-  plotting and mining sequences (use the \code{\link{seqdef}} function for that).
+  a data frame, NOT a sequence \code{stslist} object. To process, print or plot 
+  the sequences with TraMineR functions, you will have to first transform the data frame 
+  into a \code{stslist} state sequence object with \code{\link{seqdef}}.  
   See \cite{Gabadinho et al. (2009)} and \cite{Ritschard et al. (2009)} for more
   details on longitudinal data formats and converting between them.
 
   When data are in \code{"SPELL"} format (\code{from = "SPELL"}), the begin and end times are expected to be positions in the sequences. Therefore they should be strictly positive integers.
-  With \code{process=TRUE}, the outcome sequences will be aligned on ages (process duration since birth), while with \code{process=FALSE} they will be aligned on dates (position on the calendar time). If \code{TRUE}, values in the \code{begin} and \code{end} columns of \code{data} are assumed to be integer dates when \code{pdata} is not \code{NULL}, and ages otherwise. If \code{FALSE}, begin and end values ares assumed to be dates when \code{pdata} is \code{NULL} and ages otherwise.
+  With \code{process=TRUE}, the outcome sequences will be aligned on ages (process duration since birth), while with \code{process=FALSE} they will be aligned on dates (position on the calendar time). If \code{TRUE}, values in the \code{begin} and \code{end} columns of \code{data} are assumed to be integer dates when \code{pdata} is not \code{NULL}, and ages otherwise. If \code{FALSE}, begin and end values are assumed to be dates when \code{pdata} is \code{NULL} and ages otherwise.
 }
 \value{
   A data frame for \code{SRS}, \code{TSE}, and \code{SPELL}, a matrix otherwise.

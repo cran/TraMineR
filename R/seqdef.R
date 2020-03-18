@@ -138,9 +138,11 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		## stop("\n [!] alphabet contains only one state", call.=FALSE)
 		## warning("\n [!] alphabet contains only one state", call.=FALSE)
 	##else
-  if (nbstates>12 && missing(cpal))
-	warning(" [!] No automatic color palette assigned because number of states > 12.
-               \n     Use 'cpal' argument to assign one.", call.=FALSE)
+  # if (nbstates>12 && is.null(cpal)) {
+	#   warning(" [!] No automatic color palette assigned because number of states > 12.
+  #              \n     Use 'cpal' argument to assign one.", call.=FALSE)
+
+  # }
 
 	## Converting each column to a factor
 
@@ -215,7 +217,8 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		else if (nbstates>8 & nbstates<=12)
 			attr(seqdata,"cpal") <- brewer.pal(nbstates,"Set3")
 		else if (nbstates>12)
-			message(" [>] no color palette attributed, provide one to use graphical functions")
+			# message(" [>] no color palette attributed, provide one to use graphical functions")
+      attr(seqdata,"cpal") <- qualitative_hcl(n=nbstates, palette="Set 3")
 	}
 	else {
 		## Controling if number of colors = number of states

@@ -16,7 +16,7 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE,
 		}else{
 			bb <- seq(from=1, to=ncol(seqdata), by=step)
 			if(bb[length(bb)]!=(1+ncol(seqdata)-step)){
-				message("[!] With step=",step," last episode is shorter than the others")
+				msg.warn("With step=",step," last episode is shorter than the others")
 			}
 			bb <- c(bb, ncol(seqdata)+1)
 
@@ -37,7 +37,7 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE,
 		}
 	}
 	if(!is.list(breaks)){
-		stop(" [!] breaks should be a list of couples: breaks=list(c(start1, end1), c(start2, end2), ...))")
+		msg.stop("breaks should be a list of couples: breaks=list(c(start1, end1), c(start2, end2), ...))")
 	}
 
 	labels <- attr(seqdata, "labels")
@@ -53,15 +53,15 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE,
   if (!is.null(global.pdotj)){
     if(length(global.pdotj)==1) {
       if (global.pdotj[1] != "obs"){
-        stop(" [!] global.pdotj shlould be either 'obs' or a vector of proportions summing up to 1")
+        msg.stop("global.pdotj shlould be either 'obs' or a vector of proportions summing up to 1")
       }else {
         global.pdotj <- seqmeant(seqdata, weighted=weighted, with.missing=with.missing, prop=TRUE)
       }
     } else {
       if (!is.numeric(global.pdotj) || sum(global.pdotj) != 1 || any(global.pdotj<0))
-        stop(" [!] When a vector, global.pdotj should be proportions summing up to 1")
+        msg.stop("When a vector, global.pdotj should be proportions summing up to 1")
       if (length(global.pdotj) != nalph)
-        stop(" [!] When a vector, global.pdotj should conform the size of the alphabet including the missing state when applicable")
+        msg.stop("When a vector, global.pdotj should conform the size of the alphabet including the missing state when applicable")
     }
   }
 
@@ -103,9 +103,13 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE,
         mat[nrow(mat),ndot==0] <- 0
       }
       pdot <- mat[nrow(mat),ndot!=0]
-      cmin <- c(min(pdot),min(pdot[-which.min(pdot)]))
-      maxd <- ifelse(norm, 1/cmin[1] + 1/cmin[2], 1)
-      mat[nrow(mat),] <- mat[nrow(mat),] * maxd
+      ## normalize if at least two different states occur in the interval
+      ## otherwise distance can only be zero or NA
+      if(length(pdot)>1){
+        cmin <- c(min(pdot),min(pdot[-which.min(pdot)]))
+        maxd <- ifelse(norm, 1/cmin[1] + 1/cmin[2], 1)
+        mat[nrow(mat),] <- mat[nrow(mat),] * maxd
+      }
     }
     return(mat)
 	}

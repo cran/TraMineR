@@ -16,10 +16,10 @@ The precarity index returned by the function \code{seqprecarity} is a modified c
 \usage{
 seqprecarity(seqdata, correction=NULL, otto=.2, a=1, b=1.2,
     stprec=NULL, method="TRATEDSS",
-    state.order=alphabet(seqdata), state.equiv=NULL,
+    state.order=alphabet(seqdata, with.missing), state.equiv=NULL,
     with.missing=FALSE, ...)
 
-seqprecorr(seqdata, state.order=alphabet(seqdata), state.equiv=NULL,
+seqprecorr(seqdata, state.order=alphabet(seqdata, with.missing), state.equiv=NULL,
     penalized="BOTH", method="TRATEDSS", weight.type="ADD", stprec=NULL,
     with.missing=FALSE, border.effect = 10, tr.type)
 }
@@ -41,7 +41,7 @@ seqprecorr(seqdata, state.order=alphabet(seqdata), state.equiv=NULL,
 
   \item{state.equiv}{List of state equivalence classes. Each class in the list is given as the vector of the short labels of the states forming the class. }
 
-  \item{method}{One of \code{'FREQ'}, \code{'TRATE'}, \code{'TRATEDSS'} (default), \code{'RANK'}, or \code{'ONE'}. Method for determining transition weights. Weights based on transition probabilities: \code{'FREQ'} overall frequency of the transitions, \code{'TRATE'} transition probabilities, and \code{'TRATEDSS'} transition probabilites in the DSS sequences. \code{'RANK'} differences between state precarity degrees. \code{'ONE'} no weight.}
+  \item{method}{One of \code{'FREQ'}, \code{'FREQ+'}, \code{'TRATE'}, \code{'TRATE+'}, \code{'TRATEDSS'} (default), \code{'TRATEDSS+'}, \code{'RANK'}, \code{'RANK+'}, or \code{'ONE'}. Method for determining transition weights. Weights based on transition probabilities: \code{'FREQ'} overall frequency of the transitions, \code{'TRATE'} transition probabilities, and \code{'TRATEDSS'} transition probabilites in the DSS sequences. \code{'RANK'} differences between state precarity degrees. \code{'ONE'} no weight. With the \code{+} form the returned penalty is adjusted by the mean transition weight in the sequence.}
 
   \item{weight.type}{One of \code{'ADD'} (default), \code{'INV'}, or \code{'LOGINV'}. When \code{method} is one of \code{'FREQ'}, \code{'TRATE'} or \code{'TRATEDSS'}, how weights are derived from the transition probabilities: \code{'ADD'} additive (1-p), \code{'INV'} inverse (1/p), and \code{'LOGINV'} log of inverse. Ignored when any other \code{method} is selected.}
 
@@ -51,7 +51,7 @@ seqprecorr(seqdata, state.order=alphabet(seqdata), state.equiv=NULL,
     }
 
   \item{border.effect}{Value (strictly greater than 1) used to adjust estimated transition probabilities to avoid border effect. Default is 10. See details.}
-
+      
   \item{tr.type}{Deprecated. Use \code{method} instead.}
 
 %  \item{norm}{Logical. Should the weights be normalized by the maximal number of transitions.
@@ -71,9 +71,9 @@ When \code{correction = NULL} (default), \eqn{r(x)} is determined as \eqn{r(x) =
 The argument \code{penalized} allows to chose between three strategies for computing \eqn{q(x)}: only penalizing negative weights (in which case \eqn{q(x)} is the proportion of negative transitions), only rewarding (with negative penalties) positive transitions, and applying both positive and negative penalties. The transitions can be weighted and the type of transition weights used is selected with the \code{method} argument.
 For weights based on transition probabilities, the way how theses probabilites are transformed into weights is controlled with \code{weight.type}. To avoid a border effect, when any computed transition probability \eqn{p} is close from 1 (\eqn{p > 1 - .1/d}), all \eqn{p}'s are adjusted as \eqn{p - p/d}, where \eqn{d} is the \code{border.effect} parameter.
 
-When equivalent classes are provided, the transitions between states of a same class are ignored and the class mean precarity degree is assigned to each state of the class (see \code{\link{seqprecstart}}).
+When equivalent classes are provided, the class mean precarity degree is assigned to each state of the class (see \code{\link{seqprecstart}}). For the count of transitions a same state value is assigned to all equivalent states.
 
-As for non-comparable states (those not listed on the \code{state.order} argument and not equivalent to a listed state), the transition to or from such states is ignored and they all receive the mean value (.5) as state precarity degree.
+Non-comparable states (those not listed on the \code{state.order} argument and not equivalent to a listed state) all receive the mean value (.5) as state precarity degree. Transitions from and to non-comparable states are ignored and replaced by a transition between the states that immediately precede and follow a spell in non-comparable states.
 
 When there are missing states in the sequences, set \code{with.missing = TRUE} to treat the missing state as an additional state. In that case the missing state will be considered as non-comparable unless you include the \code{nr} attribute of \code{seqdata} in \code{state.order} or \code{state.equiv}. With \code{with.missing = FALSE}, transitions to and from the missing state will just be ignored. However, when \code{with.missing = FALSE}, there will be no \code{stprec} value for the missing state and, as a result, the precarity value will be \code{NA} for sequences starting with a missing state. To drop these starting missing states, use \code{left='DEL'} in \code{\link{seqdef}} when defining the state sequence object.
 }

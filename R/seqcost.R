@@ -18,6 +18,11 @@ seqcost <- function(seqdata, method, cval = NULL, with.missing = FALSE,
     stop(" [!] transition must be one of: ", paste(transitionlist, collapse = " "))
   }
 
+  if (isTRUE(with.missing) && !any(seqdata==attr(seqdata,"nr"))) {
+    with.missing <- FALSE
+    msg.warn("seqcost: 'with.missing' set to FALSE as 'seqdata' has no non-void missing values")
+  }
+
   ret <- list()
   ret$indel <- 1
   alphabet <- attr(seqdata, "alphabet")

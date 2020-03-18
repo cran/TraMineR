@@ -1,4 +1,65 @@
 ## =========
+Version 2.0-15 [2020-03-18] (Development version)
+
+New functions:
+  - seqintegration(), index of integrative potential of C. Brzinsky-Fay
+  - seqivolatility(), index of objective volatility of C. Brzinsky-Fay
+  - print.seqipos() print method for objects returned by seqipos()
+  - is.stslist() checks that the object is a proper stslist object.
+  - rbind.stslist() checks that the object is a proper stslist object.
+
+Changes in existing functions
+  - seqdef() now provides a default color palette (using colorspace) 
+    when number of states exceeds 12.
+  - alphabet() gains an argument 'with.missing'.
+  - seqipos() gains an argument 'index' to select between three
+    types of indicators: share of positive states, volatility, or
+    integrative potential for the positive state.
+  - seqipos() returned object has an attribute 'sbinary' with
+    the derived binary sequences.
+  - seqindic() possible values for argument 'indic' include now
+    the indicators of objective volatility and integrative
+    potential both for the provided sequences and the
+    positive-negative sequences derived from them.
+  - seqdist(): OMloc, OMslen, OMspell, and OMstran now also
+    apply to sequences of different lengths.
+  - seqdist(): with.missing=TRUE now supported by all methods.
+  - seqdist() raises a warning when there are empty sequences
+    except for OMloc where an error is raised.
+  - seqcost(): 'with.missing' forced as FALSE (as in seqdist)
+    when there are no non-void missings in the sequences.
+  - seqprecorr(): new methods "FREQ+", "TRATE+", "TRATEDSS+", "RANK+"
+    that adjust the returned penalty for the mean transition weight.
+  - seqprecorr(), a same state value is assigned to equivalent
+    states when counting transitions and computing transition
+    probabilities (methods \code{FREQ}, \code{TRATE),
+    \code{TRATEDSS}).
+
+Bug fixes:
+  - Print methods for seqprec and seqprecorr objects
+    did not work.
+  - print.stslist() did not print ending missing values
+    when format='SPS'.
+  - print.stslist(), when format='SPS', additional parameters
+    for controlling the format were ignored.
+  - seqformat() did not account for the 'right' argument
+    when to='SPS'.
+  - seqdist() with 'method=CHI2'. Fixed issue with unexpected
+    warnings when over an interval all sequences stay in
+    the same state.
+  - seqdist() raised an error for some methods when the
+    unused argument indel was a vector.
+  - seqdist(), argument 'sm': values 'CONSTANT' and 'TRATE'
+    were only accepted for method='OM' and 'HAM'. Now can be
+    used with all methods that require the sm argument.
+  - seqplot() raised an error when deprecated 'tlim' argument
+    was used. Now a warning.
+  - [] subsetting of stslist objects with negative column 
+    indexes produced unexpected results.
+
+
+
+## =========
 Version 2.0-14 [2020-01-13]
 
 Bug Fixes:

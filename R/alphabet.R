@@ -2,10 +2,11 @@
 ## Retrieve the alphabet from a sequence object
 ## ============================================
 
-alphabet <- function(seqdata) {
+alphabet <- function(seqdata, with.missing=FALSE) {
 
 	if (inherits(seqdata,c("stslist","PSTf"))){
     statl <- attr(seqdata,"alphabet")
+    if (isTRUE(with.missing)) statl <- c(statl, attr(seqdata,"nr"))
   }
   else if (inherits(seqdata,"seqelist")){
     statl <- levels(seqdata)

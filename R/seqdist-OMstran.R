@@ -1,17 +1,20 @@
 # Should only be used through seqdist()
 
 OMstran <- function(seqdata, indel, sm, full.matrix, transindel, otto, previous,
-  add.column) {
+  add.column, with.missing) {
 
-	dimnames(sm) <- list(alphabet(seqdata), alphabet(seqdata))
+  alph <- alphabet(seqdata, with.missing=with.missing)
+  void <- attr(seqdata,"void")
+	dimnames(sm) <- list(alph, alph)
 	if(length(indel)==1){
-		indel <- rep(indel, length(alphabet(seqdata)))
+		indel <- rep(indel, length(alph))
 	}
-	names(indel) <- alphabet(seqdata)
+	names(indel) <- alph
 	if(transindel=="prob"){
-		tr <- seqtrate(seqdata)
-		dimnames(tr) <- list(alphabet(seqdata), alphabet(seqdata))
+		tr <- seqtrate(seqdata, with.missing=with.missing)
+		dimnames(tr) <- list(alph, alph)
 	}
+  sl <- seqlength(seqdata)
 	seqdata <- as.matrix(seqdata)
 	maxcol <- ncol(seqdata)
 	newseqdata <-matrix("", nrow=nrow(seqdata), ncol=maxcol)
@@ -21,9 +24,25 @@ OMstran <- function(seqdata, indel, sm, full.matrix, transindel, otto, previous,
 		minmax <- function(i){
 			return(max(1, min(i, maxcol)))
 		}
-		ret <- paste( seqdata[, minmax(i)], seqdata[, minmax(i+1)], sep=sep)
-		if(previous){
-			ret <- paste(seqdata[, minmax(i-1)],ret, sep=sep)
+    tostate <- seqdata[,minmax(i+1)]
+    # voids can only be at end of sequences
+    # when to state is void we set it as the previous state when add.column
+    if (add.column){
+      tostate[tostate==void] <- seqdata[tostate==void,minmax(i)]
+    }
+		ret <- paste( seqdata[, minmax(i)], tostate, sep=sep)
+    if (add.column){
+      # set transition as NA when from state is void
+      ret[seqdata[,minmax(i)]==void] <- NA
+    }else{
+      # set transition as NA when to state is void
+      ret[tostate==void] <- NA
+    }
+    if(previous){
+      ret.na <- is.na(ret)
+			ret <- paste(seqdata[, minmax(i-1)], ret, sep=sep)
+      ret[ret.na] <- NA
+      ## ret[seqdata[,minmax(i-1)]==void] <- NA  ## cannot happen for !ret.na
 		}
 		return(ret)
 	}
@@ -37,10 +56,13 @@ OMstran <- function(seqdata, indel, sm, full.matrix, transindel, otto, previous,
 			newseqdata <- newseqdata[, -1]
 		}
 	}
-	## Setting void states back to NA  (nr will be considered as a distinct state)
+	## transition to void states have been set as NA  (to/from nr will be considered as a distinct transition)
 
-	alphabet_size <- length(unique(as.character(newseqdata)))
-	suppressMessages(newseqdata <- seqdef(newseqdata, cpal=rep("blue", alphabet_size)))
+  newalph <- unique(as.character(newseqdata))
+  newalph <- newalph[!is.na(newalph)] ## deleting NAs
+	alphabet_size <- length(newalph)
+	suppressMessages(newseqdata <- seqdef(newseqdata, cpal=rep("blue", alphabet_size),
+                                      left='DEL', gaps='DEL', right='DEL') )
 	transweight <- 1 - otto
 	if(previous){
 		transweight <- transweight/2
@@ -54,9 +76,10 @@ OMstran <- function(seqdata, indel, sm, full.matrix, transindel, otto, previous,
 	## Building the new substitution cost matrix
 	## =========================================
 
-	## Build subsitution matrix and new alphabet
+	## Build substitution matrix and new alphabet
 	alphabet <- alphabet(newseqdata)
 	alphabet_size <- length(alphabet)
+	msg("Creating", alphabet_size, "distinct transition states")
 	## Recomputing the subsitution matrix
 	indels <- numeric(alphabet_size)
 	names(indels) <- alphabet
@@ -109,5 +132,5 @@ OMstran <- function(seqdata, indel, sm, full.matrix, transindel, otto, previous,
 			newsm[j, i] <- cost
 		}
 	}
-	return(seqdist(newseqdata, method = "OM", indel = indels, sm = newsm, full.matrix = full.matrix))
+	suppressMessages(return(seqdist(newseqdata, method = "OM", indel = indels, sm = newsm, full.matrix = full.matrix)))
 }

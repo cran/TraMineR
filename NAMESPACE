@@ -5,12 +5,14 @@ importFrom("stats", "chisq.test", "complete.cases", "density", "dnorm", "dunif",
 importFrom("utils", "combn", "download.file", "read.table", packageDescription, packageVersion)
 importFrom("Hmisc", "errbar")
 importFrom("cluster", "daisy")
+importFrom("colorspace","qualitative_hcl")
 
 export(
   alphabet,
   "alphabet<-",
   cpal,
   "cpal<-",
+  is.stslist,
   read.tda.mdist,
   recodef,
   seqalign,
@@ -36,10 +38,12 @@ export(
   seqici,
   seqient,
   seqindic,
+  seqintegration,
   seqiplot,
   seqIplot,
   seqipos,
   seqistatd,
+  seqivolatility,
   seqlegend,
   seqlength,
   seqLLCP,
@@ -89,6 +93,7 @@ S3method(summary, stslist)
 S3method(print, stslist)
 S3method("[", stslist)
 S3method(plot, stslist)
+S3method(rbind, stslist)
 
 ## seqalign methods
 S3method(plot, seqalign)
@@ -126,6 +131,13 @@ S3method("[", stslist.modst)
 S3method(print ,TraMineRPermut)
 S3method(summary ,TraMineRPermut)
 S3method(hist ,TraMineRPermut)
+
+## seqprecarity methods
+S3method(print , seqprecorr)
+S3method(print , seqprec)
+
+## seqipos methods
+S3method(print , seqipos)
 
 ## diss module
 export(

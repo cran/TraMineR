@@ -2,15 +2,17 @@
 ## Correction term
 ## =====================================
 
-seqprecorr <- function(seqdata, state.order=alphabet(seqdata), state.equiv = NULL,
+seqprecorr <- function(seqdata, state.order=alphabet(seqdata, with.missing), state.equiv = NULL,
       penalized="BOTH", method="TRATEDSS", weight.type="ADD", stprec=NULL,
       with.missing=FALSE, border.effect=10, tr.type) {
 
   TraMineR.check.depr.args(alist(method = tr.type))
 
 	if (!inherits(seqdata,"stslist"))
-		stop(" [!] seqdata is NOT a sequence object, see seqdef function to create one")
+		msg.stop("seqprecorr: seqdata is NOT a sequence object, see seqdef function to create one")
 
+  if(!is.null(stprec) && length(stprec) != length(alphabet(seqdata, with.missing)))
+    msg.stop("seqprecorr: length of stprec does not match the size of the alphabet!")
   if(is.null(stprec) && method=="RANK"){
     stprec <- suppressMessages(seqprecstart(seqdata, state.order=state.order,
                         state.equiv=state.equiv, with.missing=with.missing))
@@ -29,9 +31,9 @@ seqprecorr <- function(seqdata, state.order=alphabet(seqdata), state.equiv = NUL
 }
 
 
-seqprecorr.tr <- function(seqdata, state.order=alphabet(seqdata), state.equiv = NULL,
+seqprecorr.tr <- function(seqdata, state.order, state.equiv = NULL,
       method="TRATEDSS", weight.type="ADD", penalized="BOTH", stprec=NULL, with.missing=FALSE,
-      border.effect = 10) {
+      border.effect = 10, tr.ignore) {
 
   ## weight.type == "ADD"  : additive, i.e. 1-tr
   ##             == "INV"  : inverse, i.e. 1/tr
@@ -49,33 +51,39 @@ seqprecorr.tr <- function(seqdata, state.order=alphabet(seqdata), state.equiv = 
   ##           == "NO"  return a zero correction
 
 	if (!inherits(seqdata,"stslist"))
-		stop("seqdata is NOT a sequence object, see seqdef function to create one")
+		msg.stop("seqdata is NOT a sequence object, see seqdef function to create one")
 
 
-  method.names <- c("FREQ","TRATE","TRATEDSS","RANK","ONE")
+  method.names <- c("FREQ","TRATE","TRATEDSS","RANK","FREQ+","TRATE+","TRATEDSS+","RANK+","ONE")
   if (!(method %in% method.names))
-		stop(" [!] method should be one of ", paste(method.names, collapse=", "))
+		msg.stop.in("method", method.names)
+
+  use.mean.tr <- FALSE
+  if (method %in% c("FREQ+","TRATE+","TRATEDSS+","RANK+")) {
+    use.mean.tr <- TRUE
+    method <- switch(method, "FREQ+"="FREQ","TRATE+"="TRATE","TRATEDSS+"="TRATEDSS","RANK+"="RANK")
+  }
 
   if (method %in% c("FREQ","TRATE","TRATEDSS")){
     weight.names <- c('ADD','INV','LOGINV')
     if (!(weight.type %in% weight.names))
-  		stop(" [!] weight.type should be one of ", paste(weight.names, collapse=", "))
+  		msg.stop.in("weight.type", weight.names)
     if (!(border.effect > 1))
-  		stop(" [!] border.effect should be strictly greater than one!")
+  		msg.stop("border.effect should be strictly greater than one!")
   }
 
   pen.names <- c('NEG','POS','BOTH','NO')
   if (!(penalized %in% pen.names))
-		stop(" [!] penalized should be one of ", paste(method.names, collapse=", "))
+		msg.stop.in("penalized", pen.names)
 
   ## Checking that listed states are in alphabet
-  state.order <- states.check(seqdata, state.order, state.equiv, with.missing=with.missing)
+  state.order <- states.check(seqdata, state.order, state.equiv, with.missing)
 	
 	###################################
 	## setting signs according to the rank order of the states
 
-	alphabet <- alphabet(seqdata)
-  if (with.missing) alphabet <- c(alphabet, attr(seqdata,"nr"))
+	alphabet <- alphabet(seqdata, with.missing)
+  #if (with.missing) alphabet <- c(alphabet, attr(seqdata,"nr"))
   alph=length(alphabet)
   tr <- matrix(1, nrow=alph, ncol=alph)
   diag(tr) <- 0
@@ -92,7 +100,7 @@ seqprecorr.tr <- function(seqdata, state.order=alphabet(seqdata), state.equiv = 
     state.order.plus <- state.order
   }
 
-  ## To count an an indirect transition through incomparable states as
+  ## To count an indirect transition through incomparable states as
   ## a transition from the first to the last state
   ## we replace incomparable states with the previous state
   ## No need to replace initial incomparable state
@@ -134,14 +142,21 @@ seqprecorr.tr <- function(seqdata, state.order=alphabet(seqdata), state.equiv = 
     if(!is.matrix(iii)) iii <- as.matrix(t(iii))
     step <- step + 1
   }
+
+  ## Using same state value for all elements in a same equivalence class
+	if(!is.null(state.equiv)){
+    s <- as.matrix(seqdata)
+	  lc <- length(state.equiv)
+
+	  for (i in 1:lc) {
+      seqdata[matrix(s %in% state.equiv[[i]],nrow=nrow(s))] <- state.equiv[[i]][1]
+    }
+  }
 	
   ## Number of transitions
-  ##print(seqdata)
   dss <- seqdss(seqdata, with.missing=with.missing)
   dssl <- seqlength(dss)
   nbseq <- nrow(dss)
-  ##alphabet <- alphabet(seqdata)
-  ##if (with.missing) alphabet <- c(alphabet, attr(seqdata, "nr"))
 
 	##  default tr set above as 1s
   if (method %in% c('FREQ','TRATE','TRATEDSS')) {
@@ -180,8 +195,10 @@ seqprecorr.tr <- function(seqdata, state.order=alphabet(seqdata), state.equiv = 
   	tr <- tr/diag(tr) ## normalize by diagonal value
   }
   else if (method == "RANK"){
-      for (j in 1:length(stprec))
-        tr[,j] <- abs(stprec - stprec[j])
+      #for (j in 1:length(stprec))
+      #  tr[,j] <- abs(stprec - stprec[j])
+      tr <- matrix(rep(stprec,alph),alph,byrow=TRUE)
+      tr <- abs(tr-stprec)
       rownames(tr) <- colnames(tr) <- alphabet ##(seqdata)
   }
 
@@ -204,8 +221,7 @@ seqprecorr.tr <- function(seqdata, state.order=alphabet(seqdata), state.equiv = 
 
 	## resetting original order
 	#tr <- tr[ordo,ordo]
-	signs <- signs[ordo,ordo]	
-
+	signs <- signs[ordo,ordo]
 
   ## ignore transitions within equivalence classes
 	if(!is.null(state.equiv)){
@@ -213,43 +229,47 @@ seqprecorr.tr <- function(seqdata, state.order=alphabet(seqdata), state.equiv = 
 	  for (i in 1:lc) {
 	    iequiv <- match(state.equiv[[i]],alphabet)
 	    signs[iequiv,iequiv] <- 0
-	    tr[iequiv,iequiv] <- 0
+	    tr[iequiv,iequiv] <- 0 ## useless, such transitions have been suppressed
+      tr[,iequiv[-1]] <- 0  ## not used, just for clarity
+      tr[iequiv[-1],] <- 0
 	  }
-	}
+}
 
 	## ignore transitions to and from incomparable states
+  ## affects only first transition in sequence starting with an incomparable state
 	if (!is.null(state.noncomp)){
 	  signs[,inoncomp] <- 0
 	  signs[inoncomp,] <- 0
-	  tr[,inoncomp] <- 0
-	  tr[inoncomp,] <- 0
+  	  tr[,inoncomp] <- 0  ## never used (check)
+  	  tr[inoncomp,] <- 0
 	}
 
   diag(tr) <- 0
-
   	
 	transw <- matrix(0, nrow=nbseq, ncol=1)
 	rownames(transw) <- rownames(seqdata)
 	transpen <- transw
 	prop.transpen <- transw
 
-
   if (penalized != 'NO') {
 	  dss.num <- seqasnum(dss, with.missing=with.missing)+1
-	  ## sum of transition weights in the sequence
+	  ## sum of transition weights in each sequence
   	for (i in 1:nbseq) {
   		if (dssl[i]>1) {
   			for (j in 2:dssl[i]) {
   			  transw[i] <- transw[i] + tr[dss.num[i,j-1], dss.num[i,j]]
   			  transpen[i] <- transpen[i] + tr[dss.num[i,j-1], dss.num[i,j]] * signs[dss.num[i,j-1], dss.num[i,j]]
-  			  if(transw[i]>0){
-  			    prop.transpen[i] <- transpen[i]/transw[i]
-  			  }
-  			  ## else leave prop.transpen[i] <- 0
   			}
   		}
   	  ## else leave prop.transpen[i] <- 0
   	}
+    nz <- transw > 0
+    prop.transpen[nz] <- transpen[nz]/transw[nz]
+
+    if (use.mean.tr){
+      mean.transw <- transw/dssl ## mean transition weight per sequence
+      prop.transpen <- mean.transw * prop.transpen
+    }
   }
 	
 	dimnames(signs) <- dimnames(tr)
@@ -259,6 +279,7 @@ seqprecorr.tr <- function(seqdata, state.order=alphabet(seqdata), state.equiv = 
 	attr(prop.transpen,"state.noncomp") <- state.noncomp
 	attr(prop.transpen,"state.order") <- state.order.plus
 	##attr(prop.transpen,"seqdata") <- seqdata
+  class(prop.transpen) <- c("seqprecorr",class(prop.transpen))
 	
 	return(prop.transpen)
 }

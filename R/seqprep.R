@@ -2,7 +2,7 @@
 ## Treatment of missing values
 ## ===========================
 
-seqprep <- function(seqdata, left=NA, right="DEL", gaps=NA, 
+seqprep <- function(seqdata, left=NA, right="DEL", gaps=NA,
 	neutral="#", missing=NA, void="%", nr="*") {
 
 	nbseq <- nrow(seqdata)
@@ -21,18 +21,24 @@ seqprep <- function(seqdata, left=NA, right="DEL", gaps=NA,
 	allmiss <- NULL
 	for (i in 1:nbseq) {
 		nbmiss <- sum(mstate[i,], na.rm=TRUE)
-		if (nbmiss>0 && nbmiss<sl) {
+#		if (nbmiss>0 && nbmiss<sl) {
+#			seqdata[i,] <- TraMineR.trunc(seqdata=seqdata[i,], mstate=mstate[i,], sl=sl,
+#				left=left, right=right, gaps=gaps,
+#				neutral=neutral, void=void)
+#		}
+#		else
+    if (nbmiss==sl) {
+			allmiss <- c(allmiss,i)
+		}
+    if (nbmiss > 0){
 			seqdata[i,] <- TraMineR.trunc(seqdata=seqdata[i,], mstate=mstate[i,], sl=sl,
 				left=left, right=right, gaps=gaps,
 				neutral=neutral, void=void)
-		}
-		else if (nbmiss==sl) {
-			allmiss <- c(allmiss,i)
-		}
+    }
 	}
 
 	if (length(allmiss)>0) {
-		message(" [!] sequence with index: ", paste(allmiss, collapse=","), " contains only missing values.\n     This may produce inconsistent results.")
+		message(" [!] !! Only missing values in sequence(s) with index: ", paste(allmiss, collapse=","),".\n     This may produce inconsistent results.")
 	}
 
 	## Setting a new code for missing statuses
@@ -40,6 +46,4 @@ seqprep <- function(seqdata, left=NA, right="DEL", gaps=NA,
 	else seqdata[seqdata==missing] <- nr
 
 	return(seqdata)
-} 
-
-
+}

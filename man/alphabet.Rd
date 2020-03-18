@@ -11,12 +11,13 @@ The state names composing the alphabet are preferably short labels, since they a
 For an event sequence object---created with \code{\link{seqecreate}}---the get form of \code{alphabet} works as an alias for \code{levels}. The set form \code{alphabet <-} does not work and should not be used.
 }
 \usage{
-alphabet(seqdata)
+alphabet(seqdata, with.missing=FALSE)
 alphabet(seqdata) <- value
 }
 \arguments{
-  \item{seqdata}{a state sequence object as defined with the \code{\link{seqdef}} function or, for the get form only, an event sequence object as defined with \code{\link{seqecreate}}, or a probabilistic suffix tree generated with the PST package.}
+ \item{seqdata}{a state sequence object of class \code{stslist} as defined with the \code{\link{seqdef}} function or, for the get form only, an event sequence object as defined with \code{\link{seqecreate}} or a probabilistic suffix tree generated with the PST package.}
  \item{value}{For state sequences only. Vector of characters of the same length as the vector returned by the \code{alphabet} function, i.e. one label for each state in the alphabet.}
+ \item{with.missing}{Logical. When \code{seqdata} is a state sequence object (\code{stslist}), should the returned alphabet include the \code{nr} symbol standing for missing states?}
  }
 \value{For \sQuote{\code{alphabet}} a character vector containing the alphabet.
 

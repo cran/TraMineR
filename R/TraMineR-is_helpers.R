@@ -4,7 +4,20 @@
 #
 # @return TRUE if the object is a number, FALSE otherwise.
 #
-# @author Pierre-Alexandre Fonta (2016-2017)
+# @author Pierre-Alexandre Fonta (2016-2017), Gilbert Ritschard (2020)
+
+## GR: Check if an object is an stslist object
+
+is.stslist <- function(x) {
+  w <- attr(x,"weights")
+  ret <- inherits(x,"stslist") && (is.null(w) | length(w) == nrow(x))
+  if (ret && length(w) == nrow(x)) {
+    ret <- length(names(w))==length(w) && all(names(w) == rownames(x))
+  }
+  return(ret)
+}
+
+# Check if number
 
 is.a.number <- function(x) {
   return(is.numeric(x) && length(x) == 1)

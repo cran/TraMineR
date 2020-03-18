@@ -1,12 +1,11 @@
-seqprecstart <- function(seqdata, state.order=alphabet(seqdata), state.equiv=NULL, stprec=NULL, with.missing=FALSE) {
+seqprecstart <- function(seqdata, state.order=alphabet(seqdata, with.missing), state.equiv=NULL, stprec=NULL, with.missing=FALSE) {
   ## cost of starting state
 
   state.order <- states.check(seqdata, state.order, state.equiv, with.missing=with.missing)
 
   step <- 1/(length(state.order)-1)
 
-  alphabet <- alphabet(seqdata)
-  if (with.missing) alphabet <- c(alphabet, attr(seqdata,"nr"))
+  alphabet <- alphabet(seqdata, with.missing=with.missing)
 
   state.noncomp <- NULL
   if (length(unique(state.order)) < length(alphabet)){

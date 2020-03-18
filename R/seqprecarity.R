@@ -1,6 +1,6 @@
 seqprecarity <- function(seqdata, correction=NULL,
     otto=.2, a=1, b=1.2, stprec=NULL, method = "TRATEDSS",
-    state.order=alphabet(seqdata), state.equiv=NULL, with.missing=FALSE, ...){
+    state.order=alphabet(seqdata, with.missing), state.equiv=NULL, with.missing=FALSE, ...){
 
 	if (!inherits(seqdata,"stslist"))
 		stop(call.=FALSE, "seqprecarity: data is not a state sequence object, use seqdef function to create one")

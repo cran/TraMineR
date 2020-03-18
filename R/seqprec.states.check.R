@@ -3,30 +3,29 @@ states.check <- function(seqdata, state.order, state.equiv, with.missing=FALSE){
 
 
   if(length(state.order) != length(unique(state.order)))
-      stop(" [!] Multiple occurrences of same state in state.order: ", paste(state.order, collapse=" "))
+      msg.stop("Multiple occurrences of same state in state.order: ", paste(state.order, collapse=" "))
 
-  alphabet <- alphabet(seqdata)
-  if(with.missing) alphabet <- c(alphabet, attr(seqdata,"nr"))
+  alphabet <- alphabet(seqdata, with.missing)
   inexistant_al <- which(is.na(match(state.order, alphabet)))
   ## Check that the listed inexistant state is not NA
   if(length(inexistant_al)>0 && !is.numeric(seqdata)) {
     if(length(inexistant_al)>1 || !is.na(state.order[inexistant_al])) {
-      stop(" [!] Bad state.order, states not in the alphabet: ", paste(state.order[inexistant_al], collapse=" "))
+      msg.stop("Bad state.order, states not in the alphabet: ", paste(state.order[inexistant_al], collapse=" "))
     }
   }
 
   if (!is.null(state.equiv)){
     if(!is.list(state.equiv)){
-      stop(" [!] Bad state.equiv. A list is expected!")
+      msg.stop("Bad state.equiv. A list is expected!")
     }
     equiv_al <- unlist(state.equiv)
     if(length(equiv_al) != length(unique(equiv_al)))
-        stop(" [!] Multiple occurrence of same state in state.equiv")
+        msg.stop("Multiple occurrence of same state in state.equiv")
     inexistant_al <- which(is.na(match(equiv_al, alphabet)))
     ## Check that the listed inexistant state is not NA
     if(length(inexistant_al)>0 && !is.numeric(seqdata)) {
       if(length(inexistant_al)>1 || !is.na(equiv_al[inexistant_al])) {
-        stop(" [!] Bad state.equiv, states not in the alphabet: ", paste(equiv_al[inexistant_al], collapse=" "))
+        msg.stop("Bad state.equiv, states not in the alphabet: ", paste(equiv_al[inexistant_al], collapse=" "))
       }
     }
 
@@ -37,7 +36,7 @@ states.check <- function(seqdata, state.order, state.equiv, with.missing=FALSE){
     ## Changing status of uncomparable in the class to comparable
 
 ### ## When equiv.class include states not in the state order
-### ## we add in to state.order next to the first valid element of the equiv class
+### ## we add them to state.order next to the first valid element of the equiv class
 ###
     if (length(unique(state.order)) < length(alphabet)){
       inoncomp <- which(is.na(match(alphabet(seqdata),unique(state.order))))
@@ -48,7 +47,7 @@ states.check <- function(seqdata, state.order, state.equiv, with.missing=FALSE){
         state.noncomp.equiv <- equiv_al[ii.noncomp.equiv]
   ###
         ## In case a non comparable state belongs to an equiv class
-        ## we add in to state.order next to the first valid element of the equiv class
+        ## we add it to state.order next to the first valid element of the equiv class
         ##
         for (i in 1:length(state.noncomp.equiv)){
           for (k in 1:length(state.equiv)){
