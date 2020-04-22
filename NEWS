@@ -1,15 +1,58 @@
 ## =========
-Version 2.0-15 [2020-03-18] (Development version)
+Version 2.2-0 [2020-04-22] 
+
+Changes in existing functions:
+  - seqdist(), argument 'indel' can now be "auto" (new default)
+    in which case a suitable indel value is generated for the
+    provided sm.
+  - seqdist() now uses the rbind stslist method to add refseq to
+    the set of sequences when it is a sequence object.
+    (Transparent to the user.)
+  - seqdist() now gives a zero weight to the refseq when specified
+    as a state sequence object.
+  - seqdist() refseq including refseq as a state sequence
+    object can be used with all methods (did not work with
+    OMstran, CHI2, and EUCLID).
+  - seqdist() vector indel now supported by OMspell, OMslen,
+    and OMstran (previously only by OM).
+  - seqdist(), normalization now also possible for OMspell, OMslen,
+    OMstran, OMloc, and TWED.
+  - seqdist() now uses hcl.colors (grDevices) instead of
+    qualitative_hcl (colorspace) to set default colors when n>13.
+    (Transparent to the user.)
+
+Bug Fixes:
+  - rbind.stslist() bad handling of missing states.
+  - seqdist(), argument 'sm' did not recognize values "INDELS" and
+    "INDELSLOG".
+  - seqdist() raised warnings when method='OMslen' because of a
+    vector of conditions in an if test.
+  - seqdist() ignored the 'weighted' value when computing substitution
+    costs with the sm method.
+  - seqdist() for OMstran ignored the 'weighted' value when computing
+    probability-based indels (i.e. with transindel="prob").
+  - seqdist() TWED wrongly depended on the indel value. Now indel
+    serves only in the improbable case of empty sequences.
+  - seqdist() maxlength and gmean normalization generated negative
+    distances in some circumstances. Fixed by setting the 
+    maximum length as max length x max indel.
+
+Misc:
+  - Deleted unused OMVI2distance cpp and h files
+
+
+## =========
+Version 2.0-15 [2020-03-18]
 
 New functions:
   - seqintegration(), index of integrative potential of C. Brzinsky-Fay
   - seqivolatility(), index of objective volatility of C. Brzinsky-Fay
   - print.seqipos() print method for objects returned by seqipos()
   - is.stslist() checks that the object is a proper stslist object.
-  - rbind.stslist() checks that the object is a proper stslist object.
+  - rbind.stslist() rbind method for state sequence objects.
 
 Changes in existing functions
-  - seqdef() now provides a default color palette (using colorspace) 
+  - seqdef() now provides a default color palette (using colorspace)
     when number of states exceeds 12.
   - alphabet() gains an argument 'with.missing'.
   - seqipos() gains an argument 'index' to select between three
@@ -28,12 +71,12 @@ Changes in existing functions
     except for OMloc where an error is raised.
   - seqcost(): 'with.missing' forced as FALSE (as in seqdist)
     when there are no non-void missings in the sequences.
-  - seqprecorr(): new methods "FREQ+", "TRATE+", "TRATEDSS+", "RANK+"
-    that adjust the returned penalty for the mean transition weight.
+  - seqprecorr(): new methods "FREQ+", "TRATE+", "TRATEDSS+",
+    "RANK+" that adjust the returned penalty for the mean
+    transition weight.
   - seqprecorr(), a same state value is assigned to equivalent
     states when counting transitions and computing transition
-    probabilities (methods \code{FREQ}, \code{TRATE),
-    \code{TRATEDSS}).
+    probabilities (methods "FREQ", "TRATE", "TRATEDSS").
 
 Bug fixes:
   - Print methods for seqprec and seqprecorr objects
@@ -54,7 +97,7 @@ Bug fixes:
     used with all methods that require the sm argument.
   - seqplot() raised an error when deprecated 'tlim' argument
     was used. Now a warning.
-  - [] subsetting of stslist objects with negative column 
+  - [] subsetting of stslist objects with negative column
     indexes produced unexpected results.
 
 

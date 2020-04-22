@@ -20,7 +20,7 @@ seqcost <- function(seqdata, method, cval = NULL, with.missing = FALSE,
 
   if (isTRUE(with.missing) && !any(seqdata==attr(seqdata,"nr"))) {
     with.missing <- FALSE
-    msg.warn("seqcost: 'with.missing' set to FALSE as 'seqdata' has no non-void missing values")
+    msg.warn("seqcost: 'with.missing' set as FALSE as 'seqdata' has no non-void missing values")
   }
 
   ret <- list()

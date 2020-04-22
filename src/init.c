@@ -15,6 +15,7 @@ extern SEXP dist2matrix(SEXP, SEXP);
 extern SEXP getTraMineRDebugLevel();
 extern SEXP setTraMineRDebugLevel(SEXP);
 extern SEXP tmrChisq(SEXP, SEXP, SEXP);
+extern SEXP tmrChisqRef(SEXP, SEXP, SEXP, SEXP);
 extern SEXP tmreventinseq(SEXP, SEXP);
 extern SEXP tmrinertiacontribext(SEXP, SEXP, SEXP);
 extern SEXP tmrseqedist(SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -51,6 +52,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"getTraMineRDebugLevel",        (DL_FUNC) &getTraMineRDebugLevel,         0},
   {"setTraMineRDebugLevel",        (DL_FUNC) &setTraMineRDebugLevel,         1},
   {"tmrChisq",                     (DL_FUNC) &tmrChisq,                      3},
+  {"tmrChisqRef",                  (DL_FUNC) &tmrChisqRef,                   4},
   {"tmreventinseq",                (DL_FUNC) &tmreventinseq,                 2},
   {"tmrinertiacontribext",         (DL_FUNC) &tmrinertiacontribext,          3},
   {"tmrseqedist",                  (DL_FUNC) &tmrseqedist,                   5},

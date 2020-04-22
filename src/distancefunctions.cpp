@@ -4,7 +4,6 @@
 #include "LCPdistance.h"
 #include "OMdistance.h"
 #include "OMVIdistance.h"
-#include "OMVI2distance.h"
 #include "OMPerdistance.h"
 #include "TWEDdistance.h"
 #include "OMvdistance.h"
@@ -41,8 +40,6 @@ DistanceCalculator* getDistanceCalculatorObject(SEXP Ssequences, SEXP seqdim, SE
 			ds = new OMVIdistance(normS, Ssequences, seqdim, lenS);
 		} else if(disttype==8){
 			ds = new OMPerdistance(normS, Ssequences, seqdim, lenS);
-		} else if(disttype==9){
-			ds = new OMVI2distance(normS, Ssequences, seqdim, lenS);
 		} else if(disttype==10){
 			ds = new OMvdistance(normS, Ssequences, seqdim, lenS);
 		} else if(disttype==11){

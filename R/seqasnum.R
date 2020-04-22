@@ -1,4 +1,7 @@
 ## TRANSFORMATION DE SEQUENCES DE CARACTERES EN SEQUENCES NUMERIQUES
+## Returns a matrix with integer coding of the sequences
+
+## ToDo: Check if different from seqnum
 
 seqasnum <- function(seqdata, with.missing=FALSE) {
 

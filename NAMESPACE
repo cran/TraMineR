@@ -1,11 +1,10 @@
 import(boot, RColorBrewer)
 importFrom("graphics", "abline", "arrows", "axis", "barplot", "box", "hist", "layout", "legend", "lines", "mtext", "par", "plot", "plot.new", "points", "polygon", "rect", "segments", "text", "title")
-importFrom("grDevices", "col2rgb", "colorRamp", "dev.off", "rgb")
+importFrom("grDevices", "col2rgb", "colorRamp", "dev.off", "rgb", "hcl.colors")
 importFrom("stats", "chisq.test", "complete.cases", "density", "dnorm", "dunif", "formula", "median", "model.frame", "model.matrix", "na.omit", "na.pass", "pnorm", "qnorm", "quantile", "reshape", "runif", "terms", "weighted.mean", "xtabs")
 importFrom("utils", "combn", "download.file", "read.table", packageDescription, packageVersion)
 importFrom("Hmisc", "errbar")
 importFrom("cluster", "daisy")
-importFrom("colorspace","qualitative_hcl")
 
 export(
   alphabet,

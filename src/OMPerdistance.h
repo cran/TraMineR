@@ -5,14 +5,16 @@
 class OMPerdistance: public OMdistance{
 	double timecost;
 	double * seqdur;
+	double * indellist;
+	int * seqlen;
   public:
 	OMPerdistance(SEXP normS, SEXP Ssequences, SEXP seqdim, SEXP lenS);
 	OMPerdistance(OMPerdistance *dc);
 	virtual void setParameters(SEXP params);
     virtual ~OMPerdistance();
     virtual double distance(const int&is, const int& js);
-	inline double getIndel(const int& indice){
-		return this->indel+timecost*(seqdur[indice]);
+	inline double getIndel(const int& indice, const int& state){
+		return this->indellist[state]+timecost*(seqdur[indice]);
 	}
 	virtual DistanceCalculator* copy(){return new OMPerdistance(this);}
 	inline double getSubCost(const int& i_state, const int& j_state, const int& i_state_indice, const int& j_state_indice){

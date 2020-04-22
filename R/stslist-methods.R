@@ -44,7 +44,7 @@ print.stslist <- function(x,format='STS', extended=FALSE, ...) {
 		x.attributes <- attributes(x)
 
 		## Applying method
-	     x <- NextMethod("[")
+	  x <- NextMethod("[")
 
 		## Adapting column names
 		x.attributes$names <- x.attributes$names[j]
@@ -52,7 +52,7 @@ print.stslist <- function(x,format='STS', extended=FALSE, ...) {
 		## Redefining attributes
 		attributes(x) <- x.attributes
 
-	     attr(x,"start") <- x.attributes$start-1+j[1]
+    attr(x,"start") <- x.attributes$start-1+j[1]
 
 		if (!missing(i)) {
 			attr(x,"row.names") <- attr(x,"row.names")[i]
@@ -68,7 +68,7 @@ print.stslist <- function(x,format='STS', extended=FALSE, ...) {
 		attr(x,"weights") <- attr(x,"weights")[i]
 
 	return(x)
- }
+}
 
 
 ## "[.stslist" <- function(x,...) {
@@ -86,6 +86,8 @@ rbind.stslist <- function(..., deparse.level = 1) {
   alph <- alphabet(seqlist[[1]])
   kalph <- 1
   void <-attr(seqlist[[1]],"void")
+  nr <-attr(seqlist[[1]],"nr")
+  missing.char <-attr(seqlist[[1]],"missing")
 
   res <- seqlist[[1]]
   n.null <- ifelse(is.null(ww),1,0)
@@ -94,9 +96,17 @@ rbind.stslist <- function(..., deparse.level = 1) {
     weights <- attr(seqi,"weights")
     n.null <- n.null + is.null(weights)
     if (length(alph) < length(alphabet(seqi))) {
+      if (!all(alph %in% alphabet(seqi)))
+        stop("Alphabet mismatch between stslist objects!")
       alph <- alphabet(seqi)
       kalph <- i
     }
+    else {
+      if (!all(alphabet(seqi) %in% alph))
+        stop("Alphabet mismatch between stslist objects!")
+    }
+    if (nr != attr(seqi,"nr") || void!= attr(seqi,"void"))
+      stop("nr and/or void mismatch between stslist objects!")
     res <- as.matrix(res)
     ## when stslist do not have same number of columns
     ## we adjust with columns of voids
@@ -118,18 +128,24 @@ rbind.stslist <- function(..., deparse.level = 1) {
   if(n.null > 0 & n.null != l)
     stop("!! Cannot rbind stslist objects with and without weights!")
 
-  res <- seqdef(res,
-    alphabet=alph,
-    weights =ww,
-    start   =attr(seqlist[[1]],"start"),
-    missing =attr(seqlist[[1]],"missing"),
-    nr      =attr(seqlist[[1]],"nr"),
-    void    =attr(seqlist[[1]],"void"),
-    labels  =attr(seqlist[[kalph]],"labels"),
-    xtstep  =attr(seqlist[[1]],"xtstep"),
-    cpal    =attr(seqlist[[kalph]],"cpal"),
-    tick.last=attr(seqlist[[1]],"tick.last"),
-    Version =attr(seqlist[[1]],"Version")
+  is.void <- any(res==void)
+  res[res == nr] <- missing.char
+  res[res == void] <- missing.char
+
+  suppressMessages(
+    res <- seqdef(res,
+      alphabet=alph,
+      weights =ww,
+      start   =attr(seqlist[[1]],"start"),
+      missing =attr(seqlist[[1]],"missing"),
+      nr      =attr(seqlist[[1]],"nr"),
+      void    =attr(seqlist[[1]],"void"),
+      labels  =attr(seqlist[[kalph]],"labels"),
+      xtstep  =attr(seqlist[[1]],"xtstep"),
+      cpal    =attr(seqlist[[kalph]],"cpal"),
+      tick.last=attr(seqlist[[1]],"tick.last"),
+      right   =ifelse(is.void,"DEL",NA)
+    )
   )
 
   return(res)

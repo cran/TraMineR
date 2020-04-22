@@ -13,6 +13,11 @@ void TWEDdistance::setParameters(SEXP params){
 
 	nu = REAL(getListElement(params, "nu"))[0];
 	lambda = REAL(getListElement(params, "lambda"))[0];
+
+	// GR Initialize top and left margins of fmat
+	// FMAT[0,0] = 0
+	// FMAT[i,0] = FMAT[j,0] = infty according to Marteau (2007)
+	
 }
 
 TWEDdistance::~TWEDdistance(){
@@ -27,6 +32,8 @@ double minimum=0, i_warp=0, j_warp=0, sub=0;//, lenmax=0;
     int j=1;
     int m=slen[is]+1;
     int n=slen[js]+1;
+	double nl, ml;
+	
     int prefix=0;
 
     // BH Jun  2 2013 23:56:32: Stripping common prefixes is not appropriate for TWED
@@ -52,13 +59,13 @@ double minimum=0, i_warp=0, j_warp=0, sub=0;//, lenmax=0;
             j_state=sequences[MINDICE(js,j-1,nseq)];
             // printf("States: %d %d\n",i_state,j_state);
             if (i==1) { // BH: set previous to dummy value if before start, else previous
-              i_m1_state=1;
+              i_m1_state=0; // was 1, GR without effect but 1 would cause an error for alphabet of size 1
                 } else {
               i_m1_state=sequences[MINDICE(is,i-2,nseq)];
             }
             // printf("States i/j and - 1: %d %d %d %d\n",i_state,j_state,i_m1_state,j_m1_state);
             if (j==1) {
-              j_m1_state=1;
+              j_m1_state=0; // was 1
                 } else {
               j_m1_state=sequences[MINDICE(js,j-2,nseq)];
             }
@@ -72,17 +79,33 @@ double minimum=0, i_warp=0, j_warp=0, sub=0;//, lenmax=0;
                 //      				Rprintf("costs = %d %d, %d => %f \n",MINDICE(i_state,j_state,alphasize),i_state,j_state,cost);
             }
 
-            i_warp = fmat[MINDICE(i-prefix,j-1-prefix,fmatsize)] + 
-              scost[MINDICE(j_state,j_m1_state,alphasize)]
-              + nu + lambda;
-
-            j_warp = fmat[MINDICE(i-1-prefix,j-prefix,fmatsize)]+
-              scost[MINDICE(i_state,i_m1_state,alphasize)]
-              + nu + lambda;
-
             sub = fmat[MINDICE(i-1-prefix,j-1-prefix,fmatsize)]+ cost + 2*nu*abs(i-j);
-            //            printf("i j iw ij match: %d %d %5.2f %5.2f %5.2f\n",i,j,i_warp, j_warp, sub);
 
+			// GR test to prevent deriving fmat values from row and column 0 (indels)
+			if (j-1-prefix == 0) {
+				i_warp = 1000 * maxscost; // arbitrary high value
+				if (i-1-prefix > 0) {
+					sub = 1000 * maxscost;
+				}
+			} else {
+				i_warp = fmat[MINDICE(i-prefix,j-1-prefix,fmatsize)] + 
+				  scost[MINDICE(j_state,j_m1_state,alphasize)]
+				  + nu + lambda;
+			}
+
+			if (i-1-prefix == 0) {
+				j_warp = 1000 * maxscost; // arbitrary high value
+				if (j-1-prefix > 0) {
+					sub = 1000 * maxscost;
+				}
+			} else {
+				j_warp = fmat[MINDICE(i-1-prefix,j-prefix,fmatsize)]+
+				  scost[MINDICE(i_state,i_m1_state,alphasize)]
+				  + nu + lambda;
+			}
+
+            //            printf("i j iw ij match: %d %d %5.2f %5.2f %5.2f\n",i,j,i_warp, j_warp, sub);
+			
             minimum = i_warp;
             if (j_warp < minimum) minimum = j_warp;
 
@@ -92,14 +115,16 @@ double minimum=0, i_warp=0, j_warp=0, sub=0;//, lenmax=0;
             j++;
         }
         i++;
-    }//Fmat build
+    }
+	
+	//Fmat build
 
     // for (i=1; i<m; i++) {
     //   printf("%c", 65+sequences[MINDICE(is,i-1,nseq)]);
     // }
     // printf("\n");
-    // for (i=1; i<m; i++) {
-    //   printf("%c", 65+sequences[MINDICE(js,i-1,nseq)]);
+    // for (j=1; j<n; j++) {
+    //   printf("%c", 65+sequences[MINDICE(js,j-1,nseq)]);
     // }
     // printf("\n");
     // for (i=0; i<m; i++) {
@@ -114,8 +139,22 @@ double minimum=0, i_warp=0, j_warp=0, sub=0;//, lenmax=0;
 
     m--;
     n--;
+	
+	// GR Just in case there are empty sequences
+	if (m == 0) {
+		fmat[MINDICE(m-prefix,n-prefix,fmatsize)] = n * indel;
+	}
+	if (n == 0) {
+		fmat[MINDICE(m-prefix,n-prefix,fmatsize)] = m * indel;
+	}
+	
     //Warning! m and n decreased!!!!!
-    maxpossiblecost=abs(n-m)*lambda+maxscost*fmin2((double)m,(double)n); // BH: indel replaced with lambda, probably incorrect May 30 2013 15:57:59
-    return normalizeDistance(fmat[MINDICE(m-prefix,n-prefix,fmatsize)], maxpossiblecost, m, n);
+    //maxpossiblecost=abs(n-m)*lambda+maxscost*fmin2((double)m,(double)n); // BH: indel replaced with lambda, probably incorrect May 30 2013 15:57:59
+    maxpossiblecost=abs(n-m)*(nu + lambda+maxscost) + 2*(maxscost+nu)*fmin2((double)m,(double)n); // upper bound GR: April 14 2020!
+	
+	nl = double(n) * indel;
+	ml = double(m) * indel;
+	
+    return normalizeDistance(fmat[MINDICE(m-prefix,n-prefix,fmatsize)], maxpossiblecost, ml, nl);
 }
 

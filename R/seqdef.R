@@ -218,7 +218,8 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 			attr(seqdata,"cpal") <- brewer.pal(nbstates,"Set3")
 		else if (nbstates>12)
 			# message(" [>] no color palette attributed, provide one to use graphical functions")
-      attr(seqdata,"cpal") <- qualitative_hcl(n=nbstates, palette="Set 3")
+      #attr(seqdata,"cpal") <- qualitative_hcl(n=nbstates, palette="Set 3") ## colorspace
+      attr(seqdata,"cpal") <- hcl.colors(n=nbstates, palette="Set 3") ## grDevices
 	}
 	else {
 		## Controling if number of colors = number of states

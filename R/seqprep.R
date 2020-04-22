@@ -38,7 +38,7 @@ seqprep <- function(seqdata, left=NA, right="DEL", gaps=NA,
 	}
 
 	if (length(allmiss)>0) {
-		message(" [!] !! Only missing values in sequence(s) with index: ", paste(allmiss, collapse=","),".\n     This may produce inconsistent results.")
+		message(" [!!] Empty sequence(s) with index: ", paste(allmiss, collapse=","),"\n      may produce inconsistent results.")
 	}
 
 	## Setting a new code for missing statuses

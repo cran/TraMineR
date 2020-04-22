@@ -20,5 +20,5 @@ double LCPdistance::distance(const int&is, const int& js){
         }
         i--;
     }
-    return normalizeDistance((double)n+(double)m-2.0*(double)i, (double)n+(double)m, m, n);
+    return normalizeDistance((double)n+(double)m-2.0*(double)i, (double)n+(double)m, (double)m, (double)n);
 }

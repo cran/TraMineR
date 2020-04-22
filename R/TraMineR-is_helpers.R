@@ -10,7 +10,8 @@
 
 is.stslist <- function(x) {
   w <- attr(x,"weights")
-  ret <- inherits(x,"stslist") && (is.null(w) | length(w) == nrow(x))
+  ret <- inherits(x,"stslist") && (is.null(w) | length(w) == nrow(x)) &&
+            all(sapply(as.list(x)[1:ncol(x)],is.factor))
   if (ret && length(w) == nrow(x)) {
     ret <- length(names(w))==length(w) && all(names(w) == rownames(x))
   }

@@ -167,7 +167,7 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
     # Check if the separator of compressed data is '-' or ':'
     if (is.compressed && is.null(stsep)) {
       stsep.auto <- seqfcheck(mseqdata)
-      if (! stsep.auto %in% c("-", ":")) {
+      if (! stsep.auto %in% c("-", ":") && max(nchar(seqdata)>1)) {
         msg.stop("'stsep' must be specified as it is neither '-' nor ':'")
       } else {
         stsep <- stsep.auto

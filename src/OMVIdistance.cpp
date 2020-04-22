@@ -33,6 +33,7 @@ double OMVIdistance::distance(const int&is, const int& js){
     int j=1;
     int m=slen[is];
     int n=slen[js];
+	double ml, nl;
 	//int minlen = imin2(m, n);
 	int mSuf = m+1, nSuf = n+1;
     int prefix=0;
@@ -149,5 +150,9 @@ double OMVIdistance::distance(const int&is, const int& js){
 		TMRLOG(4,"is =%d, js=%d\n", is, js);
 	}
 	TMRLOGMATRIX(10,  fmat, mSuf-prefix, nSuf-prefix, fmatsize);
-    return normalizeDistance(fmat[MINDICE(mSuf-1-prefix,nSuf-1-prefix,fmatsize)], maxpossiblecost, m, n);
+
+	nl = double(n) * indel;
+	ml = double(m) * indel;
+
+    return normalizeDistance(fmat[MINDICE(mSuf-1-prefix,nSuf-1-prefix,fmatsize)], maxpossiblecost, ml, nl);
 }

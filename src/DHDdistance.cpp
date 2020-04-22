@@ -13,5 +13,8 @@ double DHDdistance::distance(const int&is, const int& js){
         cost += scost[ARINDICE(sequences[MINDICE(is,i,nseq)], sequences[MINDICE(js,i,nseq)], i, alphasize)];
     }
     TMRLOG(5, "DHD distance");
-    return normalizeDistance(cost, maxdist, m, n);
+	
+    //return normalizeDistance(cost, maxdist, ml, nl);
+	// GR maxdist is the sum of maximum scost per position, i.e the length weighted by max cost
+    return normalizeDistance(cost, maxdist, maxdist, maxdist);
 }

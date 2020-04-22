@@ -1,7 +1,7 @@
 # Author for TraMineR 2: Pierre-Alexandre Fonta (2016-2017)
 ## Fixes by Gilbert Ritschard (2017-2020)
 
-seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
+seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto",
   sm = NULL, with.missing = FALSE, full.matrix = TRUE,
   kweights = rep(1.0, ncol(seqdata)), tpow = 1.0, expcost = 0.5, context,
   link = "mean", h = 0.5, nu, transindel = "constant", otto,
@@ -70,7 +70,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
         msg.stop("'refseq' and 'seqdata' must have the same alphabet")
       refseq.nr <- attr(refseq, "nr")
       if (!identical(seqdata.nr, refseq.nr))
-        msg.stop("'refseq' and 'seqdata' must have the same code for missing values")
+        msg.stop("'refseq' and 'seqdata' must have same 'nr' attribute for missing values")
       refseq.type <- "sequence"
     } else if (is.a.positive.integer(refseq)) {
       if (refseq > nseqs)
@@ -117,7 +117,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     msg.stop.in("norm", norms)
 
   # indel
-  # indel.type: "number", "vector"
+  # indel.type: "number", "vector", "auto"
   # Must be after including missing values as an additional state (nstates)
   if (is.a.number(indel)) {
     indel.type <- "number"
@@ -125,6 +125,8 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     if (length(indel) != nstates)
       msg.stop("when a vector, 'indel' must contain a cost for each state")
     indel.type <- "vector"
+  } else if (length(indel)==1 && indel=="auto"){
+      indel.type <- "auto"
   } else {
     msg.stop.na("indel")
   }
@@ -179,13 +181,14 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     msg.stop.impl("sm", method, values = c("INDELS", "INDELSLOG")) # See seqcost()
 
   # refseq
-  if (refseq.type != "none" && method %in% c("OMstran", "CHI2", "EUCLID"))
-    msg.stop.impl("refseq", method)
-  if (refseq.type == "sequence" && ! method %in% c("OM", "HAM", "DHD", "LCS", "LCP", "RLCP"))
-    msg.stop.impl("refseq", method, when = "it is an external sequence object")
+  #if (refseq.type != "none" && method %in% c("OMstran", "CHI2", "EUCLID"))
+  #if (refseq.type != "none" && method %in% c("CHI2", "EUCLID"))
+  #  msg.stop.impl("refseq", method)
+  #if (refseq.type == "sequence" && ! method %in% c("OM", "OMstran", "HAM", "DHD", "LCS", "LCP", "RLCP", "CHI2", "EUCLID"))
+  #  msg.stop.impl("refseq", method, when = "it is an external sequence object")
 
   # norm
-  if (norm != "none" && ! method %in% c("OM", "HAM", "DHD", "CHI2", "EUCLID", "LCS", "LCP", "RLCP"))
+  if (norm != "none" && ! method %in% c("OM", "OMloc", "OMstran", "OMspell", "OMslen", "TWED", "HAM", "DHD", "CHI2", "EUCLID", "LCS", "LCP", "RLCP"))
   ##if (norm != "none" && ! method %in% c("OM", "HAM", "DHD", "LCS", "LCP", "RLCP"))
     msg.stop.impl("norm", method)
 
@@ -224,7 +227,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     if (missing(otto))
       msg.stop.miss("otto")
     else if (!is.a.number(otto) || otto < 0 || otto > 1)
-      msg.stop("'otto' must be a number in [0, 1]")
+      msg.stop("'otto' must be a number in ]0, 1]")
     # TODO Implement in future versions
     ##if (length(seqs.dlens) > 1)
     ##  msg.stop(method, "currently works only with sequences of equal length")
@@ -236,8 +239,6 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
   }
   # CHI2 + EUCLID
   else if (method %in% c("CHI2", "EUCLID")) {
-    if (! norm %in% c("auto", "none"))
-      msg.stop.na("norm")
     if (!is.null(breaks)) {
       msg.warn.ign2("step", "breaks")
       msg.warn.ign2("overlap", "breaks")
@@ -273,16 +274,32 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
 
   # OMloc, OMslen, OMspell, HAM, DHD, CHI2, EUCLID, LCS, LCP, RLCP, NMS, NMSMST, SVRspell, TWED
   ##if (! method %in% c("OM", "OMstran") && indel.type == "vector")
-  if (method %in% c("OMslen", "OMspell", "TWED") && indel.type == "vector")
-    msg.stop("indel vector not supported by the chosen method!")
+  ##if (method %in% c("OMslen","OMspell", "TWED") && indel.type == "vector"){
+
+  # TWED
+  if (method == "TWED" && indel.type == "vector"){
+    msg.warn("indel vector not supported by the chosen method, max(indel) used instead!")
+    indel <- max(indel)
+    indel.type <- "number"
+  }
+
 
   #### Configure norm ####
+
+  # OMslen
+  #if (method == "OMslen" && ! norm %in% c("none", "auto", "maxdist", "YujianBo"))
+  #  msg.stop("For",method,"norm can only be one of 'none', 'auto', 'maxdist', or 'YujianBo'")
+
+  if (method %in% c("EUCLID","CHI2") && ! norm %in% c("auto", "none"))
+    msg.stop("For",method,"norm can only be one of 'none' or 'auto'")
 
   if (norm == "auto") {
     if (method %in% c("OM", "HAM", "DHD"))
       norm <- "maxlength"
     else if (method %in% c("LCS", "LCP", "RLCP"))
       norm <- "gmean"
+    else if (method %in% c("OMloc", "OMstran", "OMspell", "OMslen", "TWED"))
+      norm <- "YujianBo"
     else if (! method %in% c("CHI2", "EUCLID"))
       msg.stop.ie("no known normalization method to select automatically for", method)
   }
@@ -315,14 +332,22 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     }
   }
 
-  #### Configure sm ####
+  #### Configure sm and indel ####
+
+  if (indel.type =="auto" && sm.type == "matrix"){
+    if (method == "TWED")
+      indel <- 2*max(sm) + nu + h
+    else
+      indel <- max(sm)/2
+    indel.type <- "number"
+  }
 
   # LCS
   if (method == "LCS") {
     # Autogenerate sm
     msg("creating a 'sm' with a substitution cost of 2")
     sm.type <- "matrix"
-    sm <- seqsubm(seqdata, "CONSTANT", with.missing, cval = 2, miss.cost = 2)
+    sm <- seqsubm(seqdata, "CONSTANT", with.missing=with.missing, cval = 2, miss.cost = 2)
   }
   # OM, OMloc, OMslen, OMspell, OMstran, HAM, DHD, TWED
   else if (method %in% c(om.methods, "HAM", "DHD", "TWED")) {
@@ -377,7 +402,20 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
       } #else {
         #msg.stop.na("sm")
       #}
-      sm <- seqsubm(seqdata, sm, with.missing, cval = cost, miss.cost = cost, time.varying = tv)
+      msg("Computing sm with seqcost using ",sm)
+      sm <- seqcost(seqdata, sm, with.missing = with.missing, cval = cost, miss.cost = cost, time.varying = tv, weighted = weighted)
+
+      if (indel.type=="auto"){
+        indel <- sm$indel
+        indel.type <- ifelse (length(indel) > 1, "vector", "number")
+        #if (method %in% c("OMslen", "OMspell", "TWED") && indel.type == "vector")
+        if (method == "TWED" ){
+          indel <- 2*max(sm$sm) + nu + h
+          indel.type <- "number"
+        }
+        msg("generated an indel of type ",indel.type)
+      }
+      sm <- sm$sm
       rm(cost)
       rm(tv)
     }
@@ -386,12 +424,12 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
       if (method == "HAM") {
         # Autogenerate sm
         msg("creating a 'sm' with a single substitution cost of 1")
-        sm <- seqsubm(seqdata, "CONSTANT", with.missing, cval = 1, miss.cost = 1)
+        sm <- seqsubm(seqdata, "CONSTANT", with.missing=with.missing, cval = 1, miss.cost = 1)
       } else if (method == "DHD") {
         # Autogenerate sm
         msg("creating a 'sm' with the costs derived from the transition rates")
         #sm.type <- "array" # Not used. Should be here if it changes.
-        sm <- seqsubm(seqdata, "TRATE", with.missing, cval = 4, miss.cost = 4, time.varying = TRUE)
+        sm <- seqsubm(seqdata, "TRATE", with.missing=with.missing, cval = 4, miss.cost = 4, time.varying = TRUE, weighted = weighted)
       } else {
         msg.stop.miss("sm")
       }
@@ -407,18 +445,28 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
   if (refseq.type == "sequence") {
     seqs.lens.max <- max(seqs.dlens)
     refseq.len <- seqlength(refseq)[1, 1]
-    refseq.mat <- as.matrix(refseq)
+    ##refseq.mat <- as.matrix(refseq)
     if (refseq.len > seqs.lens.max)
-      msg.stop("'refseq' must have a length less than or equal to the maximum 'seqdata' sequences length")
-    if (refseq.len < seqs.lens.max) {
-      void <- attr(seqdata, "void")
-      refseq.mat.ext <- matrix(void, nrow = 1, ncol = seqs.lens.max)
-      for (i in 1:refseq.len)
-        refseq.mat.ext[i] <- refseq.mat[i]
-      refseq.mat <- refseq.mat.ext
-    }
+      msg.stop("'refseq' cannot be longer than the longest 'seqdata' sequence!")
+   # if (refseq.len < seqs.lens.max) {
+   #   void <- attr(seqdata, "void")
+      #refseq.mat.ext <- matrix(void, nrow = 1, ncol = seqs.lens.max)
+      #for (i in 1:refseq.len)
+      #  refseq.mat.ext[i] <- refseq.mat[i]
+      #refseq.mat <- refseq.mat.ext
+    #}
     # Tell seqdef() that the seqdata.nr/refseq.nr code is the one for missing values
-    seqdata <- suppressMessages(seqdef(rbind(as.matrix(seqdata), refseq.mat), alphabet=alphabet(seqdata), missing = seqdata.nr))
+    ##seqdata <- suppressMessages(seqdef(rbind(as.matrix(seqdata), refseq.mat),
+    ##  alphabet=alphabet(seqdata),
+    ##  missing = seqdata.nr))
+    ## We use the rbind method available since v2.0-16
+    ##  and set a zero weight for refseq
+    if (is.null(attr(seqdata,"weights")) || !weighted) {
+      attr(seqdata,"weights") <- rep(1,nrow(seqdata))
+      weighted <- TRUE
+    }
+    attr(refseq,"weights") <- 0
+    seqdata <- rbind(seqdata,refseq)
   }
 
   # Transform the alphabet into numbers
@@ -443,7 +491,10 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     if (refseq.type == "sequence") {
       # TODO Temporary fix because seqdist2 C++ code use a sequence index, not a sequence object!
       refseq.raw <- refseq
-      refseq.id <- seqdata.didxs[nseqs + 1]
+      if (method %in% c("OMstran","CHI2", "EUCLID"))
+        refseq.id <- nseqs + 1
+      else
+        refseq.id <- seqdata.didxs[nseqs + 1]
     }
     # most frequent
     else if (refseq.type == "most frequent") {
@@ -452,7 +503,11 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
       msg("the most frequent sequence appears", length(mfseq.idxs), "time(s)")
       mfseq.idx <- mfseq.idxs[1]
       refseq.raw <- seqdata[mfseq.idx, ]
-      refseq.id <- seqdata.didxs[mfseq.idx]
+      if (method %in% c("OMstran","CHI2", "EUCLID"))
+        refseq.id <- mfseq.idx
+      else
+        refseq.id <- seqdata.didxs[mfseq.idx]
+
       rm(mfseq.freq)
       rm(mfseq.idxs)
       rm(mfseq.idx)
@@ -473,13 +528,18 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
 
   #### Compute method specific values ####
 
+  if (method %in% c("OMslen","OMspell") && indel.type == "number"){
+    indel <- rep(indel, nstates)
+    indel.type <- "vector"
+  }
+
   # OMslen
   if (method == "OMslen") {
     dseqs.dur <- seqdur(dseqs.num, with.missing=with.missing)
     dur.mat <- matrix(0, nrow = nrow(dseqs.num), ncol = ncol(dseqs.num))
     for (i in 1:nrow(dseqs.num)) {
       y <- dseqs.dur[i, !is.na(dseqs.dur[i, ])]
-      if(y>0) dur.mat[i, 1:sum(y)] <- rep(y, times = y)
+      if(length(y) > 0) dur.mat[i, 1:sum(y)] <- rep(y, times = y)
     }
     dur.mat <- dur.mat ^ (-1 * h)
     rm(dseqs.dur)
@@ -494,6 +554,10 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     dseqs.dur <- dseqs.dur[dseqs.oidxs, ] - c
     seqdata.dss <- seqdss(seqdata, with.missing)
     dseqs.num <- seqnum(seqdata.dss[dseqs.oidxs, ], with.missing)
+    if (method == "OMspell") {
+      seqlength <- seqlength(seqdata, with.missing)
+      seqlength <- seqlength[dseqs.oidxs]
+    }
     rm(dseqs.oidxs)
     rm(c)
     rm(seqdata.dss)
@@ -525,12 +589,13 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
   #### Pre-process data (part 2/2) ####
 
   # Modified dseqs.num for OMspell, NMSMST, SVRspell
-  dn <- nrow(dseqs.num)
+  ndn <- nrow(dseqs.num)
   # TODO Temporary fix because seqdist2 C++ code use a sequence index, not a sequence object!
-  ndn <- if (refseq.type == "sequence") dn-1 else dn
+  #ndn <- if (refseq.type == "sequence") dn-1 else dn
+  incl.refseq <- if (refseq.type == "sequence") "(including refseq)" else ""
   seq.or.spell <- if (method %in% c("OMspell", "SVRspell")) "spell sequences" else "sequences"
-  msg(ndn, "distinct ", seq.or.spell)
-  rm(dn)
+  msg(ndn, "distinct ", seq.or.spell, incl.refseq)
+  ##rm(dn)
   rm(ndn)
   rm(seq.or.spell)
 
@@ -560,7 +625,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
       # Also executed when 'method = "OMstran"' (no matter the type of 'indel')
       params[["indels"]] <- indel
       params[["indelmethod"]] <- as.integer(0)
-      params[["indel"]] <- 0 # TODO Remove from C++ code. Not used. Avoid a NPE.
+      params[["indel"]] <- max(indel) # GR for normalization. TODO Remove from C++ code. Not used. Avoid a NPE.
     } else {
       msg.stop.ie("no known configuration for this 'indel' type for OM")
     }
@@ -568,7 +633,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
   # OMloc
   else if (method == "OMloc") {
     params[["alphasize"]] <- nstates
-    params[["indel"]] <- max(sm) * (expcost + context)
+    params[["indel"]] <- max(sm) * expcost + context  ## for normalization, indels computed in C++
     params[["indelmethod"]] <- as.integer(1)
     params[["scost"]] <- sm
     params[["localcost"]] <- context
@@ -577,7 +642,8 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
   # OMslen
   else if (method == "OMslen") {
     params[["alphasize"]] <- nstates
-    params[["indel"]] <- indel
+    params[["indel"]] <- max(indel)
+    params[["indels"]] <- indel
     params[["seqdur"]] <- as.double(dur.mat)
 
     if (link == "mean") {
@@ -595,10 +661,12 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
   # OMspell
   else if (method == "OMspell") {
     params[["alphasize"]] <- nstates
-    params[["indel"]] <- indel
+    params[["indel"]] <- max(indel)
+    params[["indels"]] <- indel
     params[["scost"]] <- sm
     params[["seqdur"]] <- as.double(dseqs.dur)
     params[["timecost"]] <- expcost
+    params[["seqlength"]] <- as.integer(seqlength)
     rm(dseqs.dur)
   }
   # HAM + DHD
@@ -641,7 +709,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
   # TWED
   else if (method == "TWED") {
     params[["alphasize"]] <- nstates
-    params[["indel"]] <- indel
+    params[["indel"]] <- max(indel)
     params[["lambda"]] <- h
     params[["nu"]] <- nu
     params[["scost"]] <- sm
@@ -677,7 +745,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
 
   #### Compute distances ####
 
-  nm <- if (norm != "none") " normalized" else ""
+  nm <- if (norm != "none") paste("", norm,"normalized") else ""
   msg0("computing distances using the ", method, nm, " metric")
   rm(nm)
 
@@ -685,19 +753,45 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
   if (method %in% c("CHI2", "EUCLID")) {
     # TODO Integrate into C++ code instead of using CHI2()
     is.EUCLID <- if (method == "EUCLID") TRUE else FALSE
-    distances <- CHI2(seqdata, breaks = breaks, step = step,
-      with.missing = with.missing, norm = norm.chi2euclid,  weighted = weighted,
-      overlap = overlap, euclid = is.EUCLID, global.pdotj=global.pdotj)
-    result <- if (full.matrix) dist2matrix(distances) else distances
+    if (refseq.type == "none") {
+      distances <- CHI2(seqdata, breaks = breaks, step = step,
+        with.missing = with.missing, norm = norm.chi2euclid,  weighted = weighted,
+        overlap = overlap, euclid = is.EUCLID, global.pdotj=global.pdotj)
+      result <- if (full.matrix) dist2matrix(distances) else distances
+    }
+    else { ## dist to ref
+      result <- CHI2(seqdata, breaks = breaks, step = step,
+        with.missing = with.missing, norm = norm.chi2euclid,  weighted = weighted,
+        overlap = overlap, euclid = is.EUCLID, global.pdotj=global.pdotj, refseq=refseq.id)
+      names(result) <- rownames(seqdata)
+      if (refseq.type == "sequence") result <- result[-length(result)]
+    }
   }
   # OMstran
   else if (method == "OMstran") {
     # TODO Integrate into C++ code instead of using OMstran()
     # OMstran() calls seqdist() with 'method = "OM"'
-    distances <- OMstran(seqdata, indel = indel, sm = sm,
-      full.matrix = full.matrix, transindel = transindel, otto = otto,
-      previous = previous, add.column = add.column, with.missing=with.missing)
-    result <- distances
+
+    # Dissimilarities with a reference sequence
+    if (refseq.type != "none") {
+      result <- OMstran(seqdata, indel = indel, sm = sm,
+        full.matrix = full.matrix, transindel = transindel, otto = otto,
+        previous = previous, add.column = add.column, with.missing=with.missing,
+        weighted = weighted, refseq = refseq.id, norm = norm)
+
+      names(result) <- rownames(seqdata)
+
+      # TODO Temporary fix because seqdist2 C++ code use a sequence index, not a sequence object!
+      if (refseq.type == "sequence")
+        result <- result[-length(result)]
+    }
+    else {
+      distances <- OMstran(seqdata, indel = indel, sm = sm,
+        full.matrix = full.matrix, transindel = transindel, otto = otto,
+        previous = previous, add.column = add.column, with.missing=with.missing,
+        weighted = weighted, refseq = refseq, norm = norm)
+      result <- distances
+    }
   }
   # Other methods
   else {
@@ -712,6 +806,9 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = 1.0,
     if (refseq.type != "none") {
       distances <- .Call(C_cstringrefseqdistance, dseqs.mat.vect, dseqs.mat.dim,
         dseqs.lens.vect, params, norm.num, method.num, as.integer(refseq.id))
+
+      if (method %in% c("NMS", "NMSMST", "SVRspell"))
+        distances <- sqrt(distances)
 
       result <- distances[seqdata.didxs]
       names(result) <- NULL

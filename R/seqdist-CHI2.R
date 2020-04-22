@@ -1,7 +1,8 @@
 # Should only be used through seqdist()
 
 CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE,
-          weighted=TRUE, overlap=FALSE, notC=FALSE, euclid=FALSE, global.pdotj=NULL){
+          weighted=TRUE, overlap=FALSE, notC=FALSE, euclid=FALSE,
+          global.pdotj=NULL, refseq=NULL){
   if(euclid){
 		weighted <- FALSE
 	}
@@ -81,17 +82,18 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE,
 		bseq <- seqdata[, bindice]
 		myrowSums <- function(x){
 			if(!is.null(ncol(x))){
-				return(weights*rowSums(x, na.rm=TRUE))
+				return(rowSums(x, na.rm=TRUE))
 			}else{
-				return(weights*x)
+				return(x)
 			}
 		}
 		for(i in 1:nalph){
 			mat[, i] <- myrowSums(bseq==alph[i]) ##/blength
 		}
-    ndot <- colSums(mat, na.rm=TRUE) ##GR
+    ndot <- colSums(weights*mat, na.rm=TRUE) ##GR
     mat <- rbind(mat,ndot) ## GR
-    mat <- mat/rowSums(mat, na.rm=TRUE)## GR
+    non0rsum <- rowSums(mat, na.rm=TRUE) > 0 ##GR
+    mat[non0rsum,] <- mat[non0rsum,]/rowSums(mat[non0rsum,], na.rm=TRUE)## GR
     if (euclid) {
       maxd <- ifelse(norm, 2, 1)
       mat[nrow(mat),] <- rep(maxd, length(ndot))
@@ -121,7 +123,7 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE,
   ##print(allmat)
   pdotj <- allmat[nrow(allmat),]
   allmat <- allmat[-nrow(allmat),]
-	##ndotj <- colSums(allmat) ## pdotj computed in dummies
+	ndotj <- colSums(allmat) ## pdotj computed in dummies
 	cond <- pdotj>0
 	allmat <- allmat[, cond]
   #### pdotj defined in dummies for euclid and chi2
@@ -143,12 +145,19 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE,
 			}
 		}
 	}else{
-		## SEXP tmrChisq(SEXP ChiTableS, SEXP tdimS, SEXP margeS)
-		dd <- .Call(C_tmrChisq, as.double(allmat), as.integer(dim(allmat)), as.double(pdotj))
+    if (is.null(refseq)) {
+  		## SEXP tmrChisq(SEXP ChiTableS, SEXP tdimS, SEXP margeS)
+  		dd <- .Call(C_tmrChisq, as.double(allmat), as.integer(dim(allmat)), as.double(pdotj))
+    }
+    else{
+  		dd <- .Call(C_tmrChisqRef, as.double(allmat), as.integer(dim(allmat)), as.double(pdotj), as.integer(refseq))
+    }
 	}
   if (norm) dd <- dd/sqrt(length(breaks))
-	attributes(dd) <- list(Size = n, Labels = rownames(seqdata), Diag = FALSE,
-        Upper = FALSE, method = "Chi square sequence", call = match.call(),
-        class = "dist")
+  if (is.null(refseq)){
+    attributes(dd) <- list(Size = n, Labels = rownames(seqdata), Diag = FALSE,
+          Upper = FALSE, method = "Chi square sequence", call = match.call(),
+          class = "dist")
+  }
 	return(dd)
 }

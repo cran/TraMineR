@@ -38,9 +38,10 @@ public:
 	}
 };
 
-inline double DistanceCalculator::normalizeDistance(const double& rawdist, const double& maxdist, const int & l1, const int & l2) {
-	return this->normalizeDistance(rawdist, maxdist, (double)l1, (double) l2);
-}
+//inline double DistanceCalculator::normalizeDistance(const double& rawdist, const double& maxdist, const double & l1, const double & l2) {
+//	return this->normalizeDistance(rawdist, maxdist, (double)l1, (double) l2);
+//}
+
 inline double DistanceCalculator::normalizeDistance(const double& rawdist, const double& maxdist, const double & l1, const double & l2) {
     if (rawdist==0)return 0;
     switch (norm) {

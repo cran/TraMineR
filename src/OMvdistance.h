@@ -4,6 +4,7 @@
 
 class OMvdistance: public OMdistance{
 	double * seqdur;
+	double * indellist;
 	int sublink;
   public:
 	OMvdistance(SEXP normS, SEXP Ssequences, SEXP seqdim, SEXP lenS);
@@ -12,8 +13,8 @@ class OMvdistance: public OMdistance{
 	virtual void setParameters(SEXP params);
     virtual ~OMvdistance();
     virtual double distance(const int&is, const int& js);
-	inline double getIndel(const int& indice){
-		return this->indel*seqdur[indice];
+	inline double getIndel(const int& indice, const int& state){
+		return this->indellist[state]*seqdur[indice];
 	}
   inline double getSubCost(const int& i_state, const int& j_state, const int& i_state_indice, const int& j_state_indice){
     if (sublink==1) {

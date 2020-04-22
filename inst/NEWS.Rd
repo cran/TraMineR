@@ -1,7 +1,70 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
-\section{Changes in version 2.0-15 [2020-03-18] (Development version)}{
+\section{Changes in version 2.2-0 [2020-04-22]}{
+
+  \subsection{Changes in existing functions}{
+    \itemize{
+      \item
+      \code{seqdist()}, argument \code{indel} can now be \code{"auto"} (new default)
+      in which case a suitable indel value is generated for the provided \code{sm}.
+      \item
+      \code{seqdist()} now uses the \code{rbind} stslist method to add \code{refseq} to
+      the set of sequences when it is a state sequence object.
+      (Transparent to the user.)
+      \item
+      \code{seqdist()} now gives a zero weight to the \code{refseq} when specified
+      as a state sequence object.
+      \item
+      \code{seqdist()} \code{refseq} including \code{refseq} as a state sequence
+      object can be used with all methods (did not work with OMstran, CHI2, and EUCLID).
+      \item
+      \code{seqdist()} vector \code{indel} now supported by OMspell and OMslen (in addition to OM and OMstran).
+      \item
+      \code{seqdist()}, normalization now also possible for OMspell, OMslen, OMstran, OMloc, and TWED.
+      \item
+      \code{seqdist()} now uses \code{hcl.colors} (grDevices) instead of
+      \code{qualitative_hcl} (colorspace) to set default colors when n>13.
+      (Transparent to the user.)
+    }
+  }
+
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+      \code{rbind.stslist()} bad handling of missing states.
+      \item
+      \code{seqdist()}, argument \code{sm} did not recognize values \code{"INDELS"} and
+      \code{"INDELSLOG"}.
+      \item
+      \code{seqdist()} raised warnings when \code{method='OMslen'} because of a
+      vector of conditions in an if test.
+      \item
+      \code{seqdist()} ignored the \code{weighted} value when computing substitution
+      costs with the sm method.
+      \item
+      \code{seqdist()} for OMstran ignored the \code{weighted} value when computing
+      probability-based indels (i.e. with \code{transindel="prob"}).
+      \item
+      \code{seqdist()} TWED wrongly depended on the indel value. Now indel
+      serves only in the improbable case of empty sequences.
+      \item
+      \code{seqdist()} \code{maxlength} and \code{gmean} normalization generated negative
+      distances in some circumstances. Fixed by setting the maximum length as
+      max length x max indel.
+
+   }
+  }
+  \subsection{Misc.}{
+    \itemize{
+      \item
+      Deleted unused OMVI2distance h and cpp files.
+    }
+  }
+}
+
+
+\section{Changes in version 2.0-15 [2020-03-18]}{
 
   \subsection{New functions}{
     \itemize{
