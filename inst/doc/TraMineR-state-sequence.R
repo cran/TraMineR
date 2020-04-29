@@ -1,5 +1,4 @@
 ### R code from vignette source 'TraMineR-state-sequence.Rnw'
-### Encoding: ISO8859-1
 
 ###################################################
 ### code chunk number 1: preliminary

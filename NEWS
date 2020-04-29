@@ -1,4 +1,12 @@
 ## =========
+Version 2.2-0.1 [2020-04-29] 
+
+Misc.:
+  - seqdef(): switched back from [grDevices] hcl.colors to 
+    [colorspace] qualitative_hcl to avoid dependence 
+    on R >=3.6 necessary for hcl.colors.
+
+## =========
 Version 2.2-0 [2020-04-22] 
 
 Changes in existing functions:

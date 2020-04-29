@@ -53,7 +53,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
     \code{"gmean"}, \code{"maxdist"}, or \code{"YujianBo"}. \code{"auto"} is
     equivalent to \code{"maxlength"} when \code{method} is one of \code{"OM"},
     \code{"HAM"}, or \code{"DHD"}, to \code{"gmean"} when \code{method} is one
-    of \code{"LCS"}, \code{"LCP"}, or \code{"RLCP"}, to \code{YujianBo} when 
+    of \code{"LCS"}, \code{"LCP"}, or \code{"RLCP"}, to \code{YujianBo} when
     \code{method} is one of \code{"OMloc"}, \code{"OMslen"}, \code{"OMspell"},
     \code{"OMstran"}, \code{"TWED"}. See the Details section.
     % Others: CHI2, EUCLID, OMloc, OMslen, OMspell, OMstran, NMS, NMSMST, SVRspell, TWED.
@@ -172,7 +172,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
   \item{nu}{
     Double.
     Stiffness when \code{method = "TWED"}. It must be strictly greater than 0
-    is usually less than 1.
+    and is usually less than 1.
     See \cite{Halpin (2014), p 88}.
   }
   \item{transindel}{
@@ -310,20 +310,20 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
 
   Some distances can optionally be normalized by means of the \code{norm} argument.
   Let \eqn{d} be the distance, \eqn{m} the maximum possible of the distance
-  given the lengths \eqn{p} and \eqn{q} of the two sequences, and \eqn{k} the 
-  length of the longer sequence. Normalization \code{"maxlength"} is \eqn{d/k} 
-  (Abbott's normalization), \code{"gmean"} is \eqn{1-(m-d)/(p*q)^.5} (Elzinga's 
+  given the lengths \eqn{p} and \eqn{q} of the two sequences, and \eqn{k} the
+  length of the longer sequence. Normalization \code{"maxlength"} is \eqn{d/k}
+  (Abbott's normalization), \code{"gmean"} is \eqn{1-(m-d)/(p*q)^.5} (Elzinga's
   normalization), \code{"maxdist"} is \eqn{d/m}, and "YujianBo" is \eqn{2*d/(m+d)}.
   For more details, see  \cite{Gabadinho et al. (2009, 2011)}.
   Actually, to avoid negative outcomes, the length \eqn{p}, \eqn{q}, and \eqn{k} are
   set as (max) indel times the corresponding length. For some distances, \eqn{m} is
   only a possibly non-reachable upper bound.
-   
+
   When \code{norm="auto"}, \code{"gmean"} is applied to \code{"LCS"},
   \code{"LCP"} and \code{"RLCP"} distances, \code{"maxlength"} is applied to \code{"OM"}, \code{"HAM"}
   and \code{"DHD"}, and the normalization "YujianBo" of \cite{Yujian and Bo (2007)} that preserves the
-  triangle inequality is used in the other cases.  
-   
+  triangle inequality is used in the other cases.
+
   The square of the \code{"CHI2"} and \code{"EUCLID"}
   distances are normalized by the number of intervals and the maximal distance
   on each interval. Note that for 'CHI2' the maximal distance on each interval

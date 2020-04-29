@@ -1,6 +1,17 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.2-0.1 [2020-04-29]}{
+
+  \subsection{Misc.}{
+    \itemize{
+      \item
+      \code{seqdef()}: switched back from [grDevices] \code{hcl.colors} to [colorspace] \code{qualitative_hcl} to avoid dependence on R >=3.6 necessary for \code{hcl.colors}.
+    }
+  }
+}
+
+
 \section{Changes in version 2.2-0 [2020-04-22]}{
 
   \subsection{Changes in existing functions}{

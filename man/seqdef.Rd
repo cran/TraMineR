@@ -91,12 +91,12 @@ If not overridden by the user, plotting functions retrieve this parameter from t
 
 	\item{cpal}{an optional color palette for representing the states
 in the graphics. If \code{NULL} (default), a color palette is created
-by calling the \code{brewer.pal} function of the \code{RColorBrewer}
-package. If number of states is less or equal than 8, the
+by means of the \code{brewer.pal} function of the \code{RColorBrewer}
+package for number of states up to 12. When the number of states is less or equal than 8, the
 \code{"Accent"} palette is used. If number of states is between 8 and
-12, the \code{"Set3"} palette is used. If the number of states in the
-data is greater than 12, colors are set using \code{hcl.colors} with 
-the "Set 3" palette (See \code{\link[grDevices]{hcl.colors}}). To specify your own palette use e.g. the \code{\link{colors}}
+12, the \code{"Set3"} palette is used. When the number of states is greater than 12,
+colors are set using \code{hcl.colors} with
+the "Set 3" palette. To specify your own palette use e.g. the \code{\link{colors}}
 function, or the RColorBrewer or colorspace packages.}
 
 	\item{missing.color}{alternative color for representing missing
@@ -107,7 +107,7 @@ TraMineR's graphics. If \code{NULL} (default), the state names in the
 alphabet are used as state labels as well.}
 
 	\item{...}{options passed to the \code{\link{seqformat}} function
-for handling input data that is not in STS format or print format.}
+for handling input data that is not in STS format.}
 
 }
 
