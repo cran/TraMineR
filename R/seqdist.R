@@ -6,7 +6,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
   kweights = rep(1.0, ncol(seqdata)), tpow = 1.0, expcost = 0.5, context,
   link = "mean", h = 0.5, nu, transindel = "constant", otto,
   previous = FALSE, add.column = TRUE, breaks = NULL, step = 1, overlap = FALSE,
-  weighted = TRUE, global.pdotj=NULL, prox = NULL) {
+  weighted = TRUE, global.pdotj=NULL, prox = NULL, check.max.size=TRUE) {
 
   gc(FALSE)
   ptime.begin <- proc.time()
@@ -475,9 +475,13 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
   # Keep only distinct sequences
   dseqs.num <- unique(seqdata.num)
   # Check that dseqs.num does not exceed the max allowed
-  max.allowed.seq <- floor(sqrt(.Machine$integer.max))
-  if (nrow(dseqs.num) > max.allowed.seq){
-    msg.stop(nrow(dseqs.num), " unique sequences exceeds max allowed of ", max.allowed.seq)
+  if (check.max.size){
+    max.allowed.seq <- ifelse(refseq.type=="none",
+                          floor(sqrt(.Machine$integer.max)),
+                          .Machine$integer.max - 1)
+    if (nrow(dseqs.num) > max.allowed.seq){
+      msg.stop(nrow(dseqs.num), " unique sequences exceeds max allowed of ", max.allowed.seq)
+    }
   }
 
   #### Handle reference sequence ####

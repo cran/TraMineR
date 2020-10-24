@@ -1,6 +1,74 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.2-1 [2020-10-24] (Development version)}{
+
+  \subsection{New functions}{
+    \itemize{
+      \item
+      \code{seqivardur()} computes the variance of spell durations for each individual sequence.
+      Either the variance of the observed spells or by accounting also for the 0-time spent
+      in non-visited states. The associated print method can print
+      the mean, standard deviation, variance, and max variance.
+      %\item
+      %\code{seqidegrad()} degrading index.
+      %\item
+      %\code{seqibad()} badness index.
+    }
+  }
+
+  \subsection{Changes in existing functions}{
+    \itemize{
+      \item
+      \code{seqST()} gains an argument \code{type} to select the type of duration variance used.
+      \item
+      \code{seqindic()} the possible indicator list gains elements
+      \code{'recu'} for recurrence index,
+      \code{'nvolat'} for normative volatility,
+      %\code{'degrad'} for degrading index,
+      %\code{'bad'} for badness index,
+      %\code{'prec2'} for revised precarity index,
+      \code{'meand'} for mean spell duration,
+      \code{'dustd'} for standard deviation of the duration.
+      %, as well as the type 2 forms \code{'meand2'}, \code{'dustd2'},
+      %\code{'turb2'}, and \code{'turb2n'}.
+      The \code{indic} argument accepts now also values \code{'basic'}, \code{'diversity'},  \code{'complexity'}, and \code{'binary'} that each selects a subset of indicators.
+      \item
+      \code{seqprecstart()} the normalized \code{stprec} has now a minimum 0.
+      \item
+      \code{seqdist()} the check of allowed number of unique sequences now
+      depends on \code{refseq} and used thresholds are \code{sqrt(.Machine$integer.max)} when
+      \code{refseq==NULL}, and \code{.Machine$integer.max} otherwise.
+      In addition, a new argument permits to skip the test.
+    }
+  }
+
+  \subsection{Bug Fixes}{
+    \itemize{
+      \item
+      \code{seqdur()} returned sometimes bad values for the duration of the
+      last spell of sequences of unequal lengths when \code{with.missing=TRUE}.
+      \item
+      \code{seqdur()} unexpected outcome for sequences with missing values when \code{with.missing=FALSE}. Now correctly ignores missing values.
+      \item
+      \code{seqdplot()} and \code{plot.stslist.statd()} ignored the \code{xlab} argument.
+      \item
+      \code{seqconc()}, \code{seqdecomp()}, \code{seqformat()}, and the print method for
+      \code{stslist} objects produced in some circumstances output without the row names of the input data.
+      \item
+      \code{seqsubsn()} error for sequences with missing values when \code{with.missing=FALSE}. Now correctly ignores missing values.
+
+    }
+  }
+
+  \subsection{Misc.}{
+    \itemize{
+      \item
+      TraMineRextras added to the 'Suggests' list (to avoid NOTE on undeclared package in Rd xrefs.)
+    }
+  }
+}
+
 \section{Changes in version 2.2-0.1 [2020-04-29]}{
 
   \subsection{Misc.}{
@@ -10,6 +78,7 @@
     }
   }
 }
+
 
 
 \section{Changes in version 2.2-0 [2020-04-22]}{
@@ -1140,9 +1209,9 @@
     \item
     \code{dissrep()}, \code{seqrep()}: error when \code{nrep} cannot be reached (reported by M. Studer)
     \item
-    \code{seqefsub()}: when using \code{strsubseq} argument, \code{countMethod} of \code{seqeconstraint} was not taken into account (Reported by Reto Bürgin).
+    \code{seqefsub()}: when using \code{strsubseq} argument, \code{countMethod} of \code{seqeconstraint} was not taken into account (Reported by Reto B\"{u}rgin).
     \item
-    \code{seqeconstraint()}: added consistency checks to avoid misuses (Reported by Reto Bürgin).
+    \code{seqeconstraint()}: added consistency checks to avoid misuses (Reported by Reto B\"{u}rgin).
     \item
     \code{print.seqelist()} and \code{as.character.seqelist()}: generated \code{segfault} when converting long event sequences to character (Reported by Pierre Molinier).
     \item

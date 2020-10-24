@@ -1,9 +1,9 @@
-seqivolatility <- function(seqdata, type=1, w=.5, with.missing=FALSE){
+seqivolatility <- function(seqdata, w=.5, with.missing=FALSE, adjust=TRUE){
 
 	if (!inherits(seqdata,"stslist"))
 		stop(" [!] data is NOT a sequence object, see seqdef function to create one")
-  if (!type %in% c(1,2))
-		stop(" [!] type should be 1  or 2!")
+  if (!is.logical(adjust))
+		stop(" [!] adjust should be logical")
   if (w>1 | w<0)
 		stop(" [!] w should be in the range [0, 1]!")
 
@@ -21,10 +21,10 @@ seqivolatility <- function(seqdata, type=1, w=.5, with.missing=FALSE){
   sdist <- suppressMessages(
       seqistatd(seqdata, with.missing=with.missing))
   nvisit <- rowSums(sdist>0)
-  if (type == 1) {
+  if (adjust) {
     ret <- ifelse(nvisit - 1 <= 0, 0, (nvisit - 1)/(alph.size -1))
     ret <- w * ret + (1-w) * transp
-  } else if (type == 2) {
+  } else {
     ret <- w * nvisit/alph.size + (1-w) * transp
   }
 

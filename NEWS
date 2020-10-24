@@ -1,13 +1,58 @@
 ## =========
-Version 2.2-0.1 [2020-04-29] 
+Version 2.2-1 [2020-10-24] 
+
+New functions:
+  - seqivardur() computes the variance of spell durations
+    for each individual sequence. Either the variance of observed
+    non null spells or by accounting also for the 0-time spent
+    in non-visited states. The associated print method can print
+    the mean, standard deviation, variance, and max variance.
+
+Changes in existing functions:
+  - seqST() gains an argument 'type' to select the type of duration
+    variance used.
+  - seqindic() the possible indicator list gains elements
+    'recu' for recurrence index,
+    'nvolat' for normative volatility,
+    'meand' for mean duration,
+    'dustd' for standard deviation of the duration.
+    The 'indic' argument accepts now also
+    values 'basic', 'diversity', 'complexity', and 'binary' that each
+    selects a subset of indicators.
+  - seqprecstart() the normalized stprec has now a minimum 0.
+  - seqdist() the check of allowed number of unique sequences now
+    depends on refseq and used thresholds are
+    sqrt(.Machine$integer.max) when refseq==NULL,
+    and .Machine$integer.max otherwise. In addition, a new argument
+    permits to skip the test.
+
+Bug Fixes:
+  - seqdur() returned sometimes bad values for the duration of the
+    last spell of sequences of unequal lengths when
+    with.missing=TRUE.
+  - seqdur() unexpected outcome for sequences with missing values
+    when with.missing=FALSE. Now correctly ignores missing values.
+  - seqdplot() and plot.stslist.statd() ignored the xlab argument.
+  - seqconc(), seqdecomp(), seqformat(), and the print method for
+    stslist objects produced in some circumstances output without
+    the row names of the input data.
+  - seqsubsn() error for sequences with missing values when
+    with.missing=FALSE. Now correctly ignores missing values.
 
 Misc.:
-  - seqdef(): switched back from [grDevices] hcl.colors to 
-    [colorspace] qualitative_hcl to avoid dependence 
+  - TraMineRextras added to 'Suggests' list (to avoid NOTE on
+    undeclared package in Rd xrefs.)
+
+## =========
+Version 2.2-0.1 [2020-04-29]
+
+Misc.:
+  - seqdef(): switched back from [grDevices] hcl.colors to
+    [colorspace] qualitative_hcl to avoid dependence
     on R >=3.6 necessary for hcl.colors.
 
 ## =========
-Version 2.2-0 [2020-04-22] 
+Version 2.2-0 [2020-04-22]
 
 Changes in existing functions:
   - seqdist(), argument 'indel' can now be "auto" (new default)
@@ -42,7 +87,7 @@ Bug Fixes:
   - seqdist() TWED wrongly depended on the indel value. Now indel
     serves only in the improbable case of empty sequences.
   - seqdist() maxlength and gmean normalization generated negative
-    distances in some circumstances. Fixed by setting the 
+    distances in some circumstances. Fixed by setting the
     maximum length as max length x max indel.
 
 Misc:
@@ -763,8 +808,8 @@ Bug fixes:
         the plotting function.
   - dissrep(), seqrep(): error when 'nrep' cannot be reached (reported by M. Studer)
   - seqefsub(): when using strsubseq argument, countMethod of seqeconstraint
-        was not taken into account (Reported by Reto Bürgin).
-  - seqeconstraint(): added consistency checks to avoid misuses (Reported by Reto Bürgin).
+        was not taken into account (Reported by Reto B\"{u}rgin).
+  - seqeconstraint(): added consistency checks to avoid misuses (Reported by Reto B\"{u}rgin).
   - print.seqelist() and as.character.seqelist(): generated segfault when
         converting long event sequences to character (Reported by Pierre Molinier).
   - seqsubm(): Very small rounding errors (1e-16) were sometimes leading to non symmetric

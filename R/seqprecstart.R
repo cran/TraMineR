@@ -1,7 +1,21 @@
 seqprecstart <- function(seqdata, state.order=alphabet(seqdata, with.missing), state.equiv=NULL, stprec=NULL, with.missing=FALSE) {
   ## cost of starting state
 
-  state.order <- states.check(seqdata, state.order, state.equiv, with.missing=with.missing)
+  if (is.null(state.order) && is.null(stprec))
+    stop("state.order and stprec cannot both be null!")
+
+  if (!is.null(stprec)) { ## state.order set from stprec
+    if (!is.null(state.order)) {
+       msg.warn("state.order overridden by stprec order!")
+    }
+    ord <- order(stprec)
+    ord <- ord[(1+sum(stprec<0)):length(ord)] ## only positive values
+    state.order <- alphabet(seqdata,with.missing)[ord]
+    stprec[stprec<0] <- mean(stprec[ord])
+  }
+
+  if (!is.null(state.order))
+    state.order <- states.check(seqdata, state.order, state.equiv, with.missing=with.missing)
 
   step <- 1/(length(state.order)-1)
 
@@ -27,8 +41,8 @@ seqprecstart <- function(seqdata, state.order=alphabet(seqdata, with.missing), s
     stprec <- c(stprec, rep(mean(stprec),length(state.noncomp)))
     stprec <- stprec[ordo]
   }
-  else ## user provided stprec
-    stprec <- stprec/max(stprec)
+  else ## user provided stprec should conform order of the alphabet
+    stprec <- (stprec-min(stprec))/(max(stprec)-min(stprec))
 
   ## assign the class mean cost to all states of a same equivalent class
   if(!is.null(state.equiv)){

@@ -15,7 +15,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
   tpow = 1.0, expcost = 0.5, context, link = "mean", h = 0.5, nu,
   transindel = "constant", otto, previous = FALSE, add.column = TRUE,
   breaks = NULL, step = 1, overlap = FALSE, weighted = TRUE,
-  global.pdotj = NULL, prox = NULL)
+  global.pdotj = NULL, prox = NULL, check.max.size=TRUE)
 }
 \arguments{
   \item{seqdata}{
@@ -237,6 +237,9 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
     Default: \code{NULL}.
     The matrix of state proximities when \code{method = "NMS"} or
     \code{method = "SVRspell"}.
+  }
+  \item{check.max.size}{
+    Logical. Should \code{seqdist} stop when maximum allowed number of unique sequences is exceeded? Caution, setting \code{FALSE} may produce unexpected results or even crash R.
   }
 }
 \details{

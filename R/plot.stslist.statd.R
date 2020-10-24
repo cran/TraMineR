@@ -46,6 +46,7 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
 			## cex.names=cex.axis,
 			col=cpal,
 			ylab=ylab,
+      xlab=xlab,
 			...)
 
 		## Plotting the x axis

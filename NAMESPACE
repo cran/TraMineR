@@ -43,6 +43,7 @@ export(
   seqIplot,
   seqipos,
   seqistatd,
+  seqivardur,
   seqivolatility,
   seqlegend,
   seqlength,
@@ -138,6 +139,9 @@ S3method(print , seqprec)
 
 ## seqipos methods
 S3method(print , seqipos)
+
+## seqivardur methods
+S3method(print , seqivardur)
 
 ## diss module
 export(

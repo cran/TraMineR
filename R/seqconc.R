@@ -33,7 +33,11 @@ seqconc <- function (data, var=NULL, sep="-", vname="Sequence", void=NA) {
 		cseq <- as.matrix(cseq)
 
 		## Rows and column names for the output
-		rownames(cseq) <- paste("[",seq(1:length(cseq)),"]",sep="")
+    if (is.null(rownames(data))){
+		  rownames(cseq) <- paste("[",seq(1:length(cseq)),"]",sep="")
+    } else {
+      rownames(cseq) <- rownames(data)
+    }
 	}
 
 	colnames(cseq) <- vname

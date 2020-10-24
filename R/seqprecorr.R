@@ -1,21 +1,53 @@
+## alias for degrading index
+
+seqidegrad <- function(seqdata, tr.sum=TRUE,
+    state.order=alphabet(seqdata, with.missing), state.equiv=NULL,
+    stprec=NULL, penalized="BOTH", method = "RANK", weight.type="ADD",
+    pow=1, with.missing=FALSE, border.effect=10){
+
+  degr <- seqdegrad.private(seqdata,
+            state.order=state.order, state.equiv=state.equiv, stprec=stprec,
+            penalized=penalized, method=method, weight.type=weight.type,
+            pow=pow, tr.sum=tr.sum,
+            with.missing=with.missing, border.effect=border.effect)
+  ##degr <- (1+degr)/2
+  colnames(degr)<-"Degrad"
+  return(degr)
+}
+
+seqprecorr <- function(seqdata, state.order=alphabet(seqdata, with.missing), state.equiv = NULL,
+      penalized="BOTH", method="TRATEDSS", weight.type="ADD",
+      stprec=NULL, with.missing=FALSE, border.effect=10, tr.type) {
+
+  TraMineR.check.depr.args(alist(method = tr.type))
+
+  precorr <- seqdegrad.private(seqdata,
+              state.order=state.order, state.equiv=state.equiv, stprec=stprec,
+              penalized=penalized, method=method, weight.type=weight.type,
+              with.missing=with.missing, border.effect=border.effect)
+  return(precorr)
+}
+
+
 ## =====================================
 ## Correction term
 ## =====================================
 
-seqprecorr <- function(seqdata, state.order=alphabet(seqdata, with.missing), state.equiv = NULL,
-      penalized="BOTH", method="TRATEDSS", weight.type="ADD", stprec=NULL,
-      with.missing=FALSE, border.effect=10, tr.type) {
+seqdegrad.private <- function(seqdata, tr.sum=TRUE, state.order=alphabet(seqdata, with.missing),
+      state.equiv = NULL, stprec=NULL,
+      penalized="BOTH", method="TRATEDSS", weight.type="ADD", pow=1,
+      with.missing=FALSE, border.effect=10) {
 
-  TraMineR.check.depr.args(alist(method = tr.type))
+  spell.integr <- tr.sum
 
 	if (!inherits(seqdata,"stslist"))
-		msg.stop("seqprecorr: seqdata is NOT a sequence object, see seqdef function to create one")
+		msg.stop("seqdegrad: seqdata is NOT a sequence object, see seqdef function to create one")
 
   if(!is.null(stprec) && length(stprec) != length(alphabet(seqdata, with.missing)))
-    msg.stop("seqprecorr: length of stprec does not match the size of the alphabet!")
-  if(is.null(stprec) && method=="RANK"){
+    msg.stop("seqdegrad: length of stprec does not match the size of the alphabet!")
+  if(method %in% c("RANK","RANK+") || tr.sum){
     stprec <- suppressMessages(seqprecstart(seqdata, state.order=state.order,
-                        state.equiv=state.equiv, with.missing=with.missing))
+                        state.equiv=state.equiv, stprec=stprec, with.missing=with.missing))
   }
 
   if (is.logical(penalized)){
@@ -23,17 +55,7 @@ seqprecorr <- function(seqdata, state.order=alphabet(seqdata, with.missing), sta
   }
   if (penalized=="NO")
     return(0L)
-  else
-    seqprecorr.tr(seqdata, state.order=state.order, state.equiv = state.equiv,
-      method=method, weight.type=weight.type, penalized=penalized,
-      stprec=stprec, with.missing=with.missing, border.effect = border.effect)
 
-}
-
-
-seqprecorr.tr <- function(seqdata, state.order, state.equiv = NULL,
-      method="TRATEDSS", weight.type="ADD", penalized="BOTH", stprec=NULL, with.missing=FALSE,
-      border.effect = 10, tr.ignore) {
 
   ## weight.type == "ADD"  : additive, i.e. 1-tr
   ##             == "INV"  : inverse, i.e. 1/tr
@@ -43,6 +65,7 @@ seqprecorr.tr <- function(seqdata, state.order, state.equiv = NULL,
   ## method == "TRATEDSS" : transition prob in DSS sequences
   ## method == "TRATE"    : transition probabilities
   ## method == "RANK"    : diff of start costs
+  ## method == "SPELLINT"    : spell integration index
   ## method == "ONE"
 
   ## penalized == "NEG" (default) negative transitions are penalized
@@ -50,8 +73,6 @@ seqprecorr.tr <- function(seqdata, state.order, state.equiv = NULL,
   ##           == "BOTH"
   ##           == "NO"  return a zero correction
 
-	if (!inherits(seqdata,"stslist"))
-		msg.stop("seqdata is NOT a sequence object, see seqdef function to create one")
 
 
   method.names <- c("FREQ","TRATE","TRATEDSS","RANK","FREQ+","TRATE+","TRATEDSS+","RANK+","ONE")
@@ -154,11 +175,29 @@ seqprecorr.tr <- function(seqdata, state.order, state.equiv = NULL,
   }
 	
   ## Number of transitions
+  sl <- seqlength(seqdata, with.missing=with.missing)
   dss <- seqdss(seqdata, with.missing=with.missing)
   dssl <- seqlength(dss)
   nbseq <- nrow(dss)
+  integr <- matrix(1, nrow=nbseq, ncol=max(dssl))
+
+
+  ## Transition weights based on resulting spell integration index (Sept 2020)
+
+  if (spell.integr) {
+    Dur <- seqdur(seqdata, with.missing=with.missing)
+    make.sps <- function(dur){
+      sps <- paste0(1:length(dur),'/',dur)
+      return(sps)
+    }
+    sps <- t(apply(Dur,1,make.sps))
+    sps[is.na(Dur)] <- NA
+    seqtmp <- suppressMessages(seqdef(sps, informat='SPS', SPS.in=list(xfix='',sdsep='/')))
+    integr <- seqintegration(seqtmp, pow=pow)
+  }
 
 	##  default tr set above as 1s
+
   if (method %in% c('FREQ','TRATE','TRATEDSS')) {
 	
     ## Computing transition probabilities
@@ -245,6 +284,7 @@ seqprecorr.tr <- function(seqdata, state.order, state.equiv = NULL,
 	}
 
   diag(tr) <- 0
+  maxtr <- max(tr)
   	
 	transw <- matrix(0, nrow=nbseq, ncol=1)
 	rownames(transw) <- rownames(seqdata)
@@ -257,20 +297,25 @@ seqprecorr.tr <- function(seqdata, state.order, state.equiv = NULL,
   	for (i in 1:nbseq) {
   		if (dssl[i]>1) {
   			for (j in 2:dssl[i]) {
-  			  transw[i] <- transw[i] + tr[dss.num[i,j-1], dss.num[i,j]]
-  			  transpen[i] <- transpen[i] + tr[dss.num[i,j-1], dss.num[i,j]] * signs[dss.num[i,j-1], dss.num[i,j]]
+          ## integr[i,j] = 1 when spell.integr=FALSE, default tr = 1
+  			  transw[i] <- transw[i] + tr[dss.num[i,j-1], dss.num[i,j]] * integr[i,j]
+  			  transpen[i] <- transpen[i] + tr[dss.num[i,j-1], dss.num[i,j]] * signs[dss.num[i,j-1], dss.num[i,j]] * integr[i,j]
   			}
   		}
   	  ## else leave prop.transpen[i] <- 0
   	}
     nz <- transw > 0
-    prop.transpen[nz] <- transpen[nz]/transw[nz]
+    if (tr.sum)
+      prop.transpen[nz] <- transpen[nz]
+    else
+      prop.transpen[nz] <- transpen[nz]/transw[nz]
 
     if (use.mean.tr){
       mean.transw <- transw/dssl ## mean transition weight per sequence
       prop.transpen <- mean.transw * prop.transpen
     }
   }
+
 	
 	dimnames(signs) <- dimnames(tr)
 	colnames(prop.transpen) <- "Penalty"
@@ -278,6 +323,8 @@ seqprecorr.tr <- function(seqdata, state.order, state.equiv = NULL,
 	attr(prop.transpen,"signs") <- signs
 	attr(prop.transpen,"state.noncomp") <- state.noncomp
 	attr(prop.transpen,"state.order") <- state.order.plus
+	attr(prop.transpen,"integr") <- integr
+	##attr(prop.transpen,"norm.transpen") <- norm.transpen
 	##attr(prop.transpen,"seqdata") <- seqdata
   class(prop.transpen) <- c("seqprecorr",class(prop.transpen))
 	

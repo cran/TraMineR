@@ -77,7 +77,7 @@ code used by TraMineR for representing void elements in the
 sequences. Default is \code{"\%"}. Must be different from \code{left}, \code{gaps}, and \code{right}.}
 
 	\item{nr}{the internal code used by TraMineR for representing real
-missing elements in the sequences. Default is\code{"*"}.}
+missing elements in the sequences. Default is \code{"*"}.}
 
 	\item{cnames}{optional names for the columns composing the
 sequence data. Those names will be used by default in the graphics as

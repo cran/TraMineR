@@ -12,7 +12,11 @@ STS_to_SPS <- function(seqdata, spsformat,
 
 	out <- matrix(NA, nrow=nbseq, ncol=maxsl)
 
-	rownames(out) <- paste("[",seq(1:nbseq),"]",sep="")
+	if (is.null(rownames(seqdata))) {
+    rownames(out) <- paste("[",seq(1:nbseq),"]",sep="")
+  } else {
+    rownames(out) <- rownames(seqdata)
+  }
 	colnames(out) <- paste("[",seq(1:maxsl),"]",sep="")
 
 	## Defining the format options
@@ -52,4 +56,3 @@ STS_to_SPS <- function(seqdata, spsformat,
 
 	return(out)
 }
-

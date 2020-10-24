@@ -6,22 +6,23 @@
 \title{State precarity}
 
 \description{
-Determines the initial state precarity degree from the state ordering. (See details.)
+Determines the state undesirableness degree from the state ordering or conversely the state undesirableness values from the state ordering. (See details.)
 }
 
 \usage{
-seqprecstart(seqdata, state.order=alphabet(seqdata, with.missing), state.equiv=NULL, 
+seqprecstart(seqdata,
+    state.order=alphabet(seqdata, with.missing), state.equiv=NULL,
     stprec=NULL, with.missing=FALSE)
 }
 
 \arguments{
   \item{seqdata}{a state sequence object (class \code{stslist}) as returned by the \code{\link[TraMineR]{seqdef}} function.}
 
-  \item{state.order}{Vector of short state labels defining the order of the states. First the less precarious (most positive) state and then the other states in increasing precariousness order. States of the alphabet that are not included here define the non-comparable states.}
+  \item{state.order}{Vector of short state labels defining the order of the states. First the most desirable (most positive) state and then the other states in decreasing desirability order. States of the alphabet that are not included here define the non-comparable states.}
 
   \item{state.equiv}{List of state equivalence classes. The classes in the list are each set as the vector of the short labels of the states forming the class. }
 
-  \item{stprec}{Vector of user defined state precarity degrees ordered conformably with the alphabet of seqdata.}
+  \item{stprec}{Vector of user defined state undesirableness degrees ordered conformably with the alphabet of \code{seqdata}. Use negative values to indicate non-comparable states.}
 
   \item{with.missing}{Logical. Should the missing state be considered as an element of the alphabet?
       }
@@ -30,13 +31,15 @@ seqprecstart(seqdata, state.order=alphabet(seqdata, with.missing), state.equiv=N
 
 
 \details{
-When \code{stprec=NULL}, the initial state precarity degrees are set as equivalently spaced values between 0 and 1 assigned to the states in the specified order.
+When \code{stprec} is provided, the order is determined from the \code{stprec} values and overwrites \code{state.order}.
+
+When \code{stprec=NULL}, the initial state undesirableness degrees are set as equivalently spaced values between 0 and 1 assigned to the states in specified order by \code{state.order}.
 
 Equivalent states get the mean value of the states in the equivalence class.
 
-Incomparable states (those not on the \code{state.order} list and not member of an equivalent class having a state listed in \code{state.order}) receive the average of all state precarity degrees.
+Incomparable states (those not on the \code{state.order} list and not member of an equivalent class having a state listed in \code{state.order}) receive the average of all state undesirableness degrees.
 
-When \code{stprec} is user defined, the provided vector is normalized by its maximal value and mean value of states in a class are assigned to all class members.
+When \code{stprec} is user defined, the provided vector is normalized into a vector with minimum 0 and maximum 1 and mean value of states in a class are assigned to all class members.
 
 Only one state per class needs to be on the state order list. If more than one member is on the state order list they should be listed consecutively. Note that currently no check is performed.
 
@@ -48,7 +51,7 @@ When \code{with.missing=TRUE}, use the \code{seqdata, "nr"} argument to possibly
 
 \value{
 
-The vector of assigned precarity degrees sorted according to the original order of states in the alphabet.
+The vector of assigned undesirableness degrees sorted according to the original order of states in the alphabet.
 
 
 }

@@ -7,9 +7,11 @@ seqintegration <- function(seqdata, state=NULL, pow=1, with.missing=FALSE){
   if (with.missing) {
       alph <- c(alph, nr)
   }
+  if (length(state)>1)
+    msg.stop("When non null, 'state' must be a single state")
   if (!is.null(state)){
     if (!state %in% alph){
-        stop("[!] state ", state, " not in the alphabet!")
+        msg.stop("state ", state, " not in the alphabet!")
     }
   }
   nbstat <- ifelse(is.null(state),length(alph),1)

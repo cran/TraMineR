@@ -4,12 +4,12 @@ seqipos <- function(seqdata, dss=NULL, pos.states=NULL, neg.states=NULL, index="
     pow=1, w=.5, with.missing=FALSE){
 
 	if (!inherits(seqdata,"stslist"))
-		stop(" [!] data is NOT a sequence object, see seqdef function to create one")
+		msg.stop("data is NOT a sequence object, see seqdef function to create one")
   if (is.null(pos.states) & is.null(neg.states))
-		stop(" [!] at least one of pos.states and neg.states should be non null!")
+		msg.stop("at least one of pos.states and neg.states should be non null!")
   ind <- c("share","integration","volatility")
   if (!index %in% ind)
-		stop(" [!] index should be one of share, integration, or volatility")
+		msg.stop("index should be one of share, integration, or volatility")
   if (is.null(dss)){
     dss <- index=="share"
   }
@@ -21,11 +21,11 @@ seqipos <- function(seqdata, dss=NULL, pos.states=NULL, neg.states=NULL, index="
     alph <- c(alph,nr)
 
   if (!is.null(pos.states) & !all(pos.states %in% alph)){
-    stop(" [!] invalid values in pos.states: ",paste(pos.states[!pos.states %in% alph], collapse=",
+    msg.stop("invalid values in pos.states: ",paste(pos.states[!pos.states %in% alph], collapse=",
     "))
   }
   if (!is.null(neg.states) & !all(neg.states %in% alph)){
-    stop(" [!] invalid values in neg.states: ",paste(neg.states[!neg.states %in% alph], collapse=",
+    msg.stop("invalid values in neg.states: ",paste(neg.states[!neg.states %in% alph], collapse=",
     "))
   }
 
@@ -33,9 +33,9 @@ seqipos <- function(seqdata, dss=NULL, pos.states=NULL, neg.states=NULL, index="
   if (is.null(neg.states)) neg.states <- alph[!alph %in% pos.states]
 
   if (length(pos.states)!=length(unique(pos.states)))
-    stop(" [!] Multiple occurrences of same state in pos.states")
+    msg.stop("Multiple occurrences of same state in pos.states")
   if (length(neg.states)!=length(unique(neg.states)))
-    stop(" [!] Multiple occurrences of same state in neg.states")
+    msg.stop("Multiple occurrences of same state in neg.states")
 
   recodes <- list("p"=pos.states, "n"=neg.states)
 

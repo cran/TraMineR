@@ -3,10 +3,10 @@
 %
 \author{Gilbert Ritschard}
 %
-\title{Proportion of positive spells or states per sequence}
+\title{Indicators for binary sequences of positive and negative states.}
 %
 \description{
-  Indicators for the underlaying binary sequences of positive and negative states.
+  Indicators for the underlying binary sequences of positive and negative states.
   Possible indicators are the proportion of positive states within each sequence, i.e. of positive spells if computed on the sequences of distinct successive states (DSS), objective volatility of the binary sequences, and capacity to integrate a positive state.
 }
 \usage{
@@ -55,6 +55,12 @@
 \seealso{
 \code{\link{seqindic}}
 }
+\references{
+Brzinsky-Fay, C. (2007) Lost in Transition? Labour Market Entry Sequences of School Leavers in Europe, \emph{European Sociological Review}, 23(4). DOI: \href{https://doi.org/10.1093/esr/jcm011}{10.1093/esr/jcm011}
+
+Brzinsky-Fay, C. (2018) Unused Resources: Sequence and Trajectory Indicators. International Symposium on Sequence Analysis and Related Methods, Monte Verita, TI, Switzerland, October 10-12, 2018.
+}
+
 \examples{
 data(ex1)
 sx <- seqdef(ex1[,1:13], right="DEL")

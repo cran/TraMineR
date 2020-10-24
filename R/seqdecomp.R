@@ -5,6 +5,7 @@
 
 seqdecomp <- function(data, var=NULL, sep="-", miss="NA", vnames=NULL) {
 
+  rownames <- rownames(data)
 	## Extracting the sequences from the data set
 	seqdata <- seqxtract(data, var)
 
@@ -14,12 +15,16 @@ seqdecomp <- function(data, var=NULL, sep="-", miss="NA", vnames=NULL) {
 	## Splitting the character strings
 	tmp <- strsplit(seqdata, split=sep)
 
-	## We look for the max sequence length first
+	## We first look for the max sequence length
 	sl <- sapply(tmp,length)
 	lmax <- max(sl)
 	
 	sdecomp <- matrix(nrow=nbseq, ncol=lmax)
-	rownames(sdecomp) <- paste("[",seq(1:nbseq),"]",sep="")
+  if (is.null(rownames)){
+	  rownames(sdecomp) <- paste("[",seq(1:nbseq),"]",sep="")
+  } else {
+    rownames(sdecomp) <- rownames
+  }
 	if (is.null(vnames))
 		colnames(sdecomp) <- paste("[",seq(1:lmax),"]",sep="")
 	else
