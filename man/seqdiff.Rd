@@ -39,14 +39,16 @@ seqdiff(seqdata, group, cmprange = c(0, 1),
 }
 
 \references{
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2010)
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. M\"{u}ller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510, \doi{10.1177/0049124111415372}.
+
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. M\"{u}ller (2010)
   Discrepancy analysis of complex objects using dissimilarities.
   In F. Guillet, G. Ritschard, D. A. Zighed and H. Briand (Eds.),
   \emph{Advances in Knowledge Discovery and Management},
   Studies in Computational Intelligence, Volume 292, pp. 3-19. Berlin: Springer.
 
-  Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2009)
-  Analyse de dissimilarités par arbre d'induction. In EGC 2009,
+  Studer, M., G. Ritschard, A. Gabadinho and N. S. M\"{u}ller (2009)
+  Analyse de dissimilarit\'{e}s par arbre d'induction. In EGC 2009,
   \emph{Revue des Nouvelles Technologies de l'Information}, Vol. E-15, pp. 7-18.
 
  }
@@ -54,11 +56,11 @@ seqdiff(seqdata, group, cmprange = c(0, 1),
 \examples{
 ## Define a state sequence object
 data(mvad)
-## First 12 months of first 200 trajectories
-mvad.seq <- seqdef(mvad[1:200, 17:28])
+## First 12 months of first 100 trajectories
+mvad.seq <- seqdef(mvad[1:100, 17:28])
 
 ## Position-wise discrepancy analysis
-mvad.diff <- seqdiff(mvad.seq, group=mvad$gcse5eq[1:200])
+mvad.diff <- seqdiff(mvad.seq, group=mvad$gcse5eq[1:100])
 print(mvad.diff)
 plot(mvad.diff, stat=c("Pseudo R2", "Levene"), xtstep=6)
 plot(mvad.diff, stat="discrepancy")

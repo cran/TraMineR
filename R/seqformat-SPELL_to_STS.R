@@ -83,6 +83,14 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		##names.seqresult <- c(names.seqresult, "id")
 	}
 	else {
+    if (length(endcolumn[!is.na(endcolumn) & endcolumn > 0]) > 0){
+      maxend <- max(endcolumn[!is.na(endcolumn) & endcolumn > 0])
+      if (maxend > limit) {
+        msg.warn(paste("max of 'end' column > limit! Sequences troncated at limit=",limit))
+      }
+    } else {
+      msg.warn("No positive value in 'end' column!")
+    }
 		#names.seqresult <- c((paste("a", seq(1:limit), sep="")),"id")
 		names.seqresult <- paste0("a", seq(from = 1, to = limit))
 	}

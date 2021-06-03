@@ -29,7 +29,11 @@ the formula
  \deqn{SC(i,j) = cval - P(i|j) -P(j|i)}
 
 where \eqn{P(i|j)} is the probability of transition from state \eqn{j} to
-\eqn{i} \code{lag} positions ahead.
+\eqn{i} \code{lag} positions ahead. Default \code{cval} value is 2. When \code{time.varying=TRUE} and \code{transition="both"}, the substitution cost at position \eqn{t} is set as
+
+ \deqn{SC(i,j,t) = cval - P(i|j,t-1) -P(j|i,t-1) - P(i|j,t) - P(j|i,t)}
+
+where \eqn{P(i|j,t-1)} is the probability to transit from state \eqn{j} at \eqn{t-1} to \eqn{i} at {t}. Here, the default \code{cval} value is 4.
 
 With method \code{FUTURE}, the cost between \eqn{i} and \eqn{j} is the Chi-squared distance between the vector (\eqn{d(alphabet | i)}) of probabilities of transition from states \eqn{i} and
 \eqn{j} to all the states in the alphabet \code{lag} positions ahead:
@@ -72,7 +76,7 @@ seqsubm(...)
 
     \item{miss.cost.fixed}{Logical. Should the substitution cost for missing be set as the \code{miss.cost} value. When \code{NULL} (default) it will be set as \code{FALSE} when \code{method = "INDELS"} or \code{"INDELSLOG"}, and \code{TRUE} otherwise.}
 
-    \item{time.varying}{Logical. If \code{TRUE} return an \code{\link{array}} with a distinct matrix for each time unit. Time is the third dimension (subscript) of the returned array.}
+    \item{time.varying}{Logical. If \code{TRUE} return an \code{\link{array}} with a distinct matrix for each time unit. Time is the third dimension (subscript) of the returned array. Time varying works only with \code{method='CONSTANT'}, \code{'TRATE'}, \code{'INDELS'}, and \code{'INDELSLOG'}.}
 
     \item{weighted}{Logical. Should weights in \code{seqdata} be used when applicable?}
 
@@ -91,18 +95,18 @@ seqsubm(...)
 \value{
   For \code{seqcost}, a list of two elements, \code{indel} and \code{sm} or \code{prox}:
     \item{indel}{
-      The indel cost. Either a scalar or a vector of size \eqn{ns}.
+      The indel cost. Either a scalar or a vector of size \eqn{ns}. When \code{time.varying=TRUE}
     }
     \item{sm}{
-      The substitution-cost matrix when \code{proximities = FALSE} (default).
+      The substitution-cost matrix (or array) when \code{proximities = FALSE} (default).
     }
     \item{prox}{
       The state proximity matrix when \code{proximities = TRUE}.
     }
-    \code{sm} and \code{prox} are a matrix of size \eqn{ns * ns}, where \eqn{ns}
-    is the number of states in the alphabet of the sequence object.
+    \code{sm} and \code{prox} are, when \code{time.varying = FALSE}, a matrix of size \eqn{ns * ns}, where \eqn{ns}
+    is the number of states in the alphabet of the sequence object. When \code{time.varying = TRUE}, they are a three dimensional array of size \eqn{ns * ns * L}, where \eqn{L} is the maximum sequence length. 
 
-  For \code{seqsubm}, only one element, the matrix \code{sm}.
+  For \code{seqsubm}, only one element, the matrix (or array) \code{sm}.
 }
 
 \seealso{
@@ -116,9 +120,9 @@ Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2010). Mining Sequence
 \code{R} with the \code{TraMineR} package: A user's guide. Department of Econometrics and
 Laboratory of Demography, University of Geneva.
 
-Studer, M. & Ritschard, G. (2016), "What matters in differences between life trajectories: A comparative review of sequence dissimilarity measures", \emph{Journal of the Royal Statistical Society, Series A}. \bold{179}(2), 481-511. DOI: \href{http://dx.doi.org/10.1111/rssa.12125}{10.1111/rssa.12125}
+Studer, M. & Ritschard, G. (2016), "What matters in differences between life trajectories: A comparative review of sequence dissimilarity measures", \emph{Journal of the Royal Statistical Society, Series A}. \bold{179}(2), 481-511. \doi{10.1111/rssa.12125}
 
-Studer, M. and G. Ritschard (2014). "A Comparative Review of Sequence Dissimilarity Measures". \emph{LIVES Working Papers}, \bold{33}. NCCR LIVES, Switzerland, 2014. DOI: \href{http://dx.doi.org/10.12682/lives.2296-1658.2014.33}{10.12682/lives.2296-1658.2014.33}
+Studer, M. and G. Ritschard (2014). "A Comparative Review of Sequence Dissimilarity Measures". \emph{LIVES Working Papers}, \bold{33}. NCCR LIVES, Switzerland, 2014. \doi{10.12682/lives.2296-1658.2014.33}
 }
 
 \examples{

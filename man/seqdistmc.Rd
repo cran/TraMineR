@@ -9,13 +9,13 @@ Hamming distance (HAM), and Dynamic Hamming distance (DHD).}
 \usage{
 seqdistmc(channels, method, norm="none", indel=1, sm=NULL,
      with.missing=FALSE, full.matrix=TRUE, link="sum", cval=2,
-     miss.cost=2, cweight=NULL) }
+     miss.cost=2, cweight=NULL, what="diss") }
 
 \arguments{
  \item{channels}{A list of state sequence objects defined
     with the \code{\link{seqdef}} function, each state sequence object corresponding
-    to a "channel".} 
-    
+    to a "channel".}
+
  \item{method}{a character string indicating the metric to be used.
     One of \code{"OM"} (Optimal Matching), \code{"LCS"} (Longest Common Subsequence),
     \code{"HAM"} (Hamming distance), \code{"DHD"} (Dynamic Hamming distance).}
@@ -23,7 +23,7 @@ seqdistmc(channels, method, norm="none", indel=1, sm=NULL,
   \item{norm}{
     String.
     Default: \code{"none"}.
-    The normalization method to use. See \code{\link{seqdist}}. 
+    The normalization method to use. See \code{\link{seqdist}}.
     }
 
  \item{indel}{A vector with an insertion/deletion cost for each channel (OM method).}
@@ -46,17 +46,20 @@ seqdistmc(channels, method, norm="none", indel=1, sm=NULL,
  \item{miss.cost}{Missing values substitution cost, see \code{\link{seqsubm}}.}
 
  \item{cweight}{A vector of channel weights. Default is 1 (same weight for each channel).}
-  }
+ 
+ \item{what}{Character string. What output should be returned? One of \code{"diss", "sm", "seqmc"}.}
+}
 
-\details{The \code{seqdistmc} function returns a matrix of multichannel distances between sequences. The available metrics (see 'method' option) are optimal matching (\code{"OM"}), longest common subsequence (\code{"LCS"}), Hamming distance (\code{"HAM"}) and Dynamic Hamming Distance (\code{"DHD"}). See \code{\link{seqdist}} for more information about distances between sequences. 
+\details{The \code{seqdistmc} function builds a state sequence by combining the channels, derives the multichannel indel and substitution costs from the indel and substitution costs of each channel (following the strategy proposed by \cite{Pollock, 2007}), and computes the multichannel distances using the multichannel distances. The available metrics (see 'method' option) are optimal matching (\code{"OM"}), longest common subsequence (\code{"LCS"}), Hamming distance (\code{"HAM"}), and Dynamic Hamming Distance (\code{"DHD"}). See \code{\link{seqdist}} for more information about distances between sequences.
 
-The \code{seqdistmc} function computes a multichannel distance in two steps following the strategy proposed by \cite{Pollock (2007)}. First it builds a new sequence object derived from the combination of the sequences of each channel. Second, it derives the substitution cost matrix by summing (or averaging) the costs of substitution across channels. It then calls \code{\link{seqdist}} to compute the distance matrix.
+Normalization may be useful when dealing with sequences that are not all of the same length. For details on the applied normalization, see \code{\link{seqdist}}. }
 
-Normalization may be useful when dealing with sequences that are not all of the same length. For details on the applied normalization, see \code{\link{seqdist}}. } 
+\value{When \code{what="diss"}, a matrix of pairwise distances between multichannel sequences.\cr
+When \code{what="sm"}, the matrix of substitution costs with three attributes: \code{indel} the indel, \code{alphabet} the alphabet of the combined state sequences, and \code{cweight} the channel weight used.\cr
+When \code{seqmc}, the combined state sequence object.
+}
 
-\value{A matrix of pairwise distances between multichannel sequences is returned.}
-
-\seealso{ \code{\link{seqsubm}}, \code{\link{seqdef}}, \code{\link{seqdist}}. } 
+\seealso{ \code{\link{seqsubm}}, \code{\link{seqdef}}, \code{\link{seqdist}}. }
 
 \references{ Pollock, Gary (2007) Holistic trajectories: a study of combined employment, housing and family careers by using multiple-sequence analysis. \emph{Journal of the Royal Statistical Society: Series A} \bold{170}, Part 1, 167--183. }
 

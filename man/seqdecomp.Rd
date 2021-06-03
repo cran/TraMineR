@@ -2,7 +2,7 @@
 \alias{seqdecomp}
 \title{Convert a character string into a vector of states or events}
 \description{
-  For the moment, each character in the string will be considered to be one state or event = this function will not give accurate results if the character string representing the sequence contains events or states coded with more than one character.
+  States can be represented by any substring that does not include the \code{sep} value. An empty separator \code{sep = ""} can only be used when each state is coded with a single character. 
 }
 \usage{
  seqdecomp(data, var=NULL, sep='-', miss="NA", vnames=NULL)
@@ -18,8 +18,10 @@
  \code{\link{seqconc}}.
 }
 \examples{
-## Converts 'seq' into a vector of states of length 10
-seq <- "A-A-A-A-B-B-B-C-C-C"
-seqdecomp(seq)
+# 1 sequence of length 4
+seqdecomp("A-BB-C-DD")
+
+# 2 sequences of length 6
+seqdecomp(c("ABBCDD","BBCCAD"),sep="")
 }
 \keyword{Data handling}

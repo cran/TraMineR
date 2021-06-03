@@ -5,7 +5,7 @@
 \description{
 This function gets or sets the color palette of a sequence object, that is, the list of colors used to represent the states.
 }
-\details{In the plot functions provided for visualizing sequence objects, a different color is associated to each state of the alphabet. The color palette is defined when creating the sequence object, either automatically using the \code{brewer.pal} function of the \code{RColorBrewer} package or by specifying a user defined color vector. The \code{cpal} function can be used to get or set the color palette of a previously defined sequence object.}
+\details{In the plot functions provided for visualizing sequence objects, a different color is associated to each state of the alphabet. The color palette is defined when creating the sequence object, either automatically or by specifying a user defined color vector. The \code{cpal} function can be used to get or set the color palette of a previously defined sequence object.}
 \usage{
 cpal(seqdata)
 cpal(seqdata) <- value

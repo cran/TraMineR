@@ -125,13 +125,21 @@ seqcost <- function(seqdata, method, cval = NULL, with.missing = FALSE,
   }
   if (method == "INDELS" || method == "INDELSLOG") {
     if (time.varying) {
-      stop(" [!] time.varying substitution cost is not (yet) implemented for INDELS and INDELSLOG.")
+      #stop(" [!] time.varying substitution cost is not (yet) implemented for INDELS and INDELSLOG.")
+      indels <- seqstatd(seqdata, with.missing=with.missing)$Frequencies
+    } else {
+      ww <- attr(seqdata, "weights")
+      if (is.null(ww) || !weighted) {
+        ww <- rep(1, nrow(seqdata))
+      }
+      indels <- as.numeric(prop.table(xtabs(rep(ww, ncol(seqdata)) ~ unlist(seqdata)))[alphabet])
     }
-    ww <- attr(seqdata, "weights")
-    if (is.null(ww) || !weighted) {
-      ww <- rep(1, nrow(seqdata))
-    }
-    indels <- as.numeric(prop.table(xtabs(rep(ww, ncol(seqdata)) ~ unlist(seqdata)))[alphabet])
+
+    #ww <- attr(seqdata, "weights")
+    #if (is.null(ww) || !weighted) {
+    #  ww <- rep(1, nrow(seqdata))
+    #}
+    #indels <- as.numeric(prop.table(xtabs(rep(ww, ncol(seqdata)) ~ unlist(seqdata)))[alphabet])
     indels[is.na(indels)] <- 1
     if (method == "INDELSLOG") {
       indels <- log(2/(1 + indels))
@@ -142,12 +150,29 @@ seqcost <- function(seqdata, method, cval = NULL, with.missing = FALSE,
     ## ret <- list()
     ret$indel <- indels
     ## ret$sm <- matrix(0, nrow=length(alphabet), ncol=length(alphabet))
-    costs <- matrix(0, nrow = length(alphabet), ncol = length(alphabet))
-    for (i in seq_along(alphabet)) {
-      for (j in seq_along(alphabet)) {
-        if (i != j) {
-          ## ret$sm[i, j] <- indels[i]+indels[j]
-          costs[i, j] <- indels[i] + indels[j]
+
+    if (time.varying) {
+      time <- ncol(seqdata)
+      message(" [>] creating ", alphsize, "x", alphsize, "x", time, " time varying substitution-cost matrix using ",method)
+      costs <- array(0, dim = c(alphsize, alphsize, time))
+      for (t in 1:time) {
+        for (i in seq_along(alphabet)) {
+          for (j in seq_along(alphabet)) {
+            if (i != j) {
+              ## ret$sm[i, j] <- indels[i]+indels[j]
+              costs[i, j, t] <- indels[i, t] + indels[j, t]
+            }
+          }
+        }
+      }
+    } else {
+      costs <- matrix(0, nrow = length(alphabet), ncol = length(alphabet))
+      for (i in seq_along(alphabet)) {
+        for (j in seq_along(alphabet)) {
+          if (i != j) {
+            ## ret$sm[i, j] <- indels[i]+indels[j]
+            costs[i, j] <- indels[i] + indels[j]
+          }
         }
       }
     }

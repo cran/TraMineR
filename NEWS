@@ -1,10 +1,66 @@
 ## =========
-Version 2.2-1 [2020-10-24] 
+Version 2.2-2 [2021-06-03]
+
+New functions:
+  - seqidegrad() degradation index (replaces seqprecorr() that
+    becomes obsolete). Class seqprecorr now named seqidegrad
+    and associated print method renamed accordingly.
+  - seqibad() badness index.
+  - seqinsecurity() insecurity index.
+  - dissdomassoc() computes measures proposed in
+    Piccarreta (SMR 2017) to assess the degree of association
+    between domains.
+
+Changes in existing functions:
+  - seqdist() can now compute distances between two subsets of
+    sequences. The subsets are defined by providing a list with
+    two subsets of sequence indexes as 'refseq' argument.
+  - seqdist() dimnames of the objects returned by seqdist are
+    now all set from the rownames of the provided sequence object.
+  - seqdist() method="DHD" now supports sm="INDELS" and
+    sm="INDELSLOG".
+  - seqcost() time.varying=TRUE works with "INDELS"
+    and "INDELSLOG".
+  - seqdistmc() gains a 'what' argument to choose what
+    value will be returned: distances, costs, or combined
+    state sequences.
+  - seqintegration() renamed seqintegr()
+  - seqindic() the possible indicator list gains elements
+    'degrad' for degradation index,
+    'bad' for badness index,
+    'insec' for insecurity index,
+      and the type 2 forms
+      'meand2', 'dustd2', 'turb2', and 'turb2n'
+      taking non-visited states into account.
+    In addition, indic accepts now also value
+    'ranked' that is equivalent to c('degrad','bad','prec','insec').
+  - seqindic() value 'inpos' of indic renamed 'integr', 'volat'
+    now in the 'complexity' group.
+  - seqindic() changes in index order in the returned table.
+  - seqformat() with from='SPELL' and process=TRUE now issues
+    a warning message when the max of the 'end' column exceeds limit.
+  - seqlegend() gains an argument 'boxes' to control how colors
+    are displayed. In addition, now supports any argument of
+    function legend and, e.g. 'x' (or 'x' and 'y') can be used instead
+    of 'position'.
+  - seqstatf() gains the 'with.missing' argument.
+  - seqlogp() gains the with.missing argument. In addition,
+    the overall state distribution can now be used as starting
+    point by setting begin='global.freq'.
+
+Bug fixes:
+  - seqlogp() error for state sequences with missing values.
+
+Misc.:
+  - New imports from psych and cNORM (for dissdomassoc)
+
+## =========
+Version 2.2-1 [2020-10-24]
 
 New functions:
   - seqivardur() computes the variance of spell durations
     for each individual sequence. Either the variance of observed
-    non null spells or by accounting also for the 0-time spent
+    non null spells or by considering also the 0-time spent
     in non-visited states. The associated print method can print
     the mean, standard deviation, variance, and max variance.
 
@@ -808,8 +864,8 @@ Bug fixes:
         the plotting function.
   - dissrep(), seqrep(): error when 'nrep' cannot be reached (reported by M. Studer)
   - seqefsub(): when using strsubseq argument, countMethod of seqeconstraint
-        was not taken into account (Reported by Reto B\"{u}rgin).
-  - seqeconstraint(): added consistency checks to avoid misuses (Reported by Reto B\"{u}rgin).
+        was not taken into account (Reported by Reto Bürgin).
+  - seqeconstraint(): added consistency checks to avoid misuses (Reported by Reto Bürgin).
   - print.seqelist() and as.character.seqelist(): generated segfault when
         converting long event sequences to character (Reported by Pierre Molinier).
   - seqsubm(): Very small rounding errors (1e-16) were sometimes leading to non symmetric

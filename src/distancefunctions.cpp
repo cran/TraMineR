@@ -122,14 +122,22 @@ extern "C" {
     //int m, n;
 
     int nseq= INTEGER(seqdim)[0];
-    int rseq= INTEGER(refseqS)[0]-1;
+	int nans= nseq;
+    int rseq1= INTEGER(refseqS)[0];
+    int rseq2= INTEGER(refseqS)[1];
+	if (rseq1 < rseq2) {
+		nseq = rseq1;
+		nans = nseq * (rseq2 - rseq1);
+	} else {
+		rseq1 = rseq1 - 1;
+	}
 
     TMRLOG(5, "Choosing distance type\n");
     DistanceCalculator* ds= getDistanceCalculatorObject(Ssequences, seqdim, lenS, paramS, normS, disttypeS);
 
     // Ensure correct memory management
     SEXP workers, ans;
-    PROTECT(ans = allocVector(REALSXP, nseq));
+    PROTECT(ans = allocVector(REALSXP, nans));
 
     PROTECT(workers = allocVector(VECSXP, 1));
     SET_VECTOR_ELT(workers,0, DistanceCalculator::distanceCalculatorFactory(ds));
@@ -143,16 +151,18 @@ extern "C" {
     // double currentperc=0;
     // REprintf(" [>] Progress (#=2.5%%): ");
     double cmpres=0;
-    for (int is=0;is<nseq;is++) {
-      //toutes les distances intra-groupes=0
-      R_CheckUserInterrupt();
-      if(is==rseq){
-        cmpres=0;
-      } else {
-        cmpres = ds->distance(is,rseq);
-      }
-      distances[is]=cmpres;
-      TMRLOG(5,"cmpres = %d %d => %f \n",(1+is),(1+rseq), cmpres);
+	for (int rseq=rseq1;rseq<rseq2;rseq++){
+		for (int is=0;is<nseq;is++) {
+		  //toutes les distances intra-groupes=0
+		  R_CheckUserInterrupt();
+		  if(is==rseq){
+			cmpres=0;
+		  } else {
+			cmpres = ds->distance(is,rseq);
+		  }
+		  distances[is+(rseq-rseq1)*nseq]=cmpres;
+		  TMRLOG(5,"cmpres = %d %d => %f \n",(1+is),(1+rseq), cmpres);
+		}
     }
     UNPROTECT(2);
     return ans;

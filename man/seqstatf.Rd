@@ -6,13 +6,14 @@
 Overall frequency of each state of the alphabet in the state sequence object.
 }
 \usage{
-seqstatf(seqdata, weighted = TRUE)
+seqstatf(seqdata, weighted = TRUE, with.missing=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{seqdata}{a sequence object as defined by the \code{\link{seqdef}} function.}
   \item{weighted}{Logical. Should frequencies account for weights when present in the state sequence object
-  (see \code{\link{seqdef}}). Default is \code{TRUE}.  If no weights were assigned during the creation of the sequence object, \code{weighted=TRUE} will yield the same result as \code{weighted=FALSE} since each sequence is allowed a weight of 1.}
+  (see \code{\link{seqdef}}). Default is \code{TRUE}.}
+  \item{with.missing}{Logical. Should non void missing states be treated as regular values? Default is \code{FALSE}.}
 }
 \details{
 The \code{seqstatf} function computes the (weighted) count and frequency of each state of the alphabet in \code{seqdata}, i.e., the (weighted) sum of the occurrences of a state in \code{seqdata}.
@@ -50,5 +51,5 @@ seqstatf(ex1.seq, weighted=TRUE)
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{State sequences}
-\keyword{Global characteristics} 
+\keyword{Global characteristics}
 

@@ -23,7 +23,7 @@ citEntry(entry = "Article",
         "Analyzing and Visualizing State Sequences in R with TraMineR.",
         "Journal of Statistical Software, 40(4), 1-37.",
         "DOI http://dx.doi.org/10.18637/jss.v040.i04."),
-        header="For state sequences:\n"
+        header="For the package and state sequences:\n"
 )
 
 citEntry(entry="Article",
@@ -82,6 +82,16 @@ citEntry(entry="incollection",
   header="For representative sequences:"
 )
 citEntry(entry="article",
+  author = personList(p2),
+  title = "Measuring the nature of individual sequences",
+  journal = "Sociological Methods and Research",
+  year = "2021",
+  note = "(forthcoming)",
+
+  textVersion="Ritschard, G. (2021), Measuring the nature of individual sequences, Sociological Methods and Research. (Forthcoming)",
+  header="For longitudinal characteristics (complexity, badness, precarity, ...):"
+)
+citEntry(entry="article",
   author = personList(p1, p2, p3, p4),
   title = "Indice de complexit\u00E9 pour le tri et la comparaison de s\u00E9quences cat\u00E9gorielles",
   booktitle = "Extraction et gestion des connaissances (EGC 2010)",
@@ -91,10 +101,9 @@ citEntry(entry="article",
   pages = "61-66",
 
   textVersion="Gabadinho, A., Ritschard, G., Studer, M. & M\u00FCller, N.S. (2010), Indice de complexit\u00E9 pour le tri et la comparaison de s\u00E9quences cat\u00E9gorielles, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 61-66.",
-  header="For longitudinal characteristics and the complexity index:"
 )
 citEntry(entry="incollection",
-  author = personList(p1, p6, p7),
+  author = personList(p2, p6, p7),
   title = "An Index of Precarity for Measuring Early Employment Insecurity",
   booktitle = "Sequence Analysis and Related Approaches: Innovative Methods and Applications",
   publisher = "Springer",
@@ -107,7 +116,6 @@ citEntry(entry="incollection",
   doi = "10.1007/978-3-319-95420-2_16",
 
   textVersion="Ritschard, G., Bussi, M. & O'Reilly, J. (2018), An Index of Precarity for Measuring Early Employment Insecurity, In Ritschard, G. & Studer, M. (eds) Sequence Analysis and Related Approaches: Innovative Methods and Applications. Series: Life Course Research and Social Policies. Vol. 10, pp. 279-295. Cham: Springer. DOI http://dx.doi.org/10.1007/978-3-319-95420-2_16",
-  header="For the precarity index:"
 )
 citEntry(entry="incollection",
   author = personList(p2, p5, p3),

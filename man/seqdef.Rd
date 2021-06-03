@@ -2,6 +2,7 @@
 \alias{seqdef}
 \alias{rbind.stslist}
 \alias{summary.stslist}
+
 \title{Create a state sequence object}
 
 \description{
@@ -48,29 +49,28 @@ Other separators must be specified explicitly.}
 at age 15, you can specify 15. At this stage, used only for labelling column names.}
 
     \item{left}{the behavior for missing values appearing before the
-first (leftmost) valid state in each sequence. See \cite{Gabadinho et
-al. (2010)} for more details on the options for handling missing
-values when defining sequence objects. By default, left missing
-values are treated as 'real' missing values and converted to the
+first (leftmost) valid state in each sequence. When \code{NA} (default), 
+left missing values are treated as 'real' missing values and converted to the
 internal missing value code defined by the \code{nr} option. Other
 options are \code{"DEL"} to delete the positions containing missing values
 or a state code (belonging to the alphabet or not) to replace the
-missing values.}
+missing values. See \cite{Gabadinho et
+al. (2010)} for more details on the options for handling missing
+values when defining sequence objects.}
 
 	\item{right}{the behavior for missing values appearing after the
 last (rightmost) valid state in each sequence. Same options as for
-the \code{left} argument.}
+the \code{left} argument. Default is \code{'DEL'}.}
 
 	\item{gaps}{the behavior for missing values appearing inside the
 sequences, i.e. after the first (leftmost) valid state and before the
 last (rightmost) valid state of each sequence. Same options as for
-the \code{left} argument.}
+the \code{left} argument. Default is \code{NA}.}
 
 	\item{missing}{the code used for missing values in the input
-data. When specified, all cells containing this value will be
-replaced by \code{NA}'s, the internal R code for missing values. If
-'\code{missing}' is not specified, cells containing \code{NA}'s are
-considered as missing values.}
+data. Default is \code{NA}. When any other value, all cells containing this value are treated
+as \code{NA}s and replaced by \code{nr} or \code{void} code according to the
+\code{left}, \code{gaps}, and \code{right} options.}
 
     \item{void}{the internal
 code used by TraMineR for representing void elements in the
@@ -135,12 +135,10 @@ which may differ when you have different original codings.
  \code{\link{seqecreate}} to create an event sequence object,\cr
  \code{\link{seqformat}} for converting between various longitudinal data formats. }
 
-\value{An object of class \code{stslist}. There are \code{print},
-\code{plot}, \code{rbind}, \code{summary}, and subsetting \code{[,]} methods for such objects. State
-sequence objects are required as argument to other functions such as
-plotting functions (\code{seqdplot}, \code{seqiplot} or
-\code{seqfplot}), functions to compute distances (\code{seqdist}),
-etc...}
+\value{An object of class \code{stslist}.
+
+There are \code{print}, \code{plot}, \code{rbind}, \code{summary}, and subsetting \code{[,]} methods for such objects.
+}
 
 \references{
 Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.

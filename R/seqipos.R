@@ -7,9 +7,13 @@ seqipos <- function(seqdata, dss=NULL, pos.states=NULL, neg.states=NULL, index="
 		msg.stop("data is NOT a sequence object, see seqdef function to create one")
   if (is.null(pos.states) & is.null(neg.states))
 		msg.stop("at least one of pos.states and neg.states should be non null!")
-  ind <- c("share","integration","volatility")
+  ind <- c("share","integr","volatility")
+  if (index=="integration"){
+    msg.warn("index='integration' obsolete, use 'integr' instead")
+    index <- "integr"
+  }
   if (!index %in% ind)
-		msg.stop("index should be one of share, integration, or volatility")
+		msg.stop("index should be one of share, integr, or volatility")
   if (is.null(dss)){
     dss <- index=="share"
   }
@@ -51,9 +55,9 @@ seqipos <- function(seqdata, dss=NULL, pos.states=NULL, neg.states=NULL, index="
     nneg <- rowSums(sbinary=="n")
     ret <- npos/(nneg + npos)
   }
-  else if (index == "integration"){
+  else if (index == "integr"){
     ret <- as.vector(suppressMessages(
-      seqintegration(sbinary, state="p", pow=pow, with.missing = with.missing)))
+      seqintegr(sbinary, state="p", pow=pow, with.missing = with.missing)))
   }
   else if (index == "volatility"){
     ret <- suppressMessages(

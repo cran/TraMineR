@@ -6,7 +6,7 @@ seqibad <- function(seqdata, pow=1, with.missing=FALSE, ...){
   lalph <- length(alph)
 
   stprec <- suppressMessages(seqprecstart(seqdata, with.missing=with.missing, ...))
-  integr <- suppressMessages(seqintegration(seqdata, with.missing=with.missing, pow=pow))
+  integr <- suppressMessages(seqintegr(seqdata, with.missing=with.missing, pow=pow))
 
   bad <- stprec[1] * integr[,1]
 

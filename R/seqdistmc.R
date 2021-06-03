@@ -1,9 +1,15 @@
 ## multichannel distances
 
 seqdistmc <- function(channels, method, norm="none", indel=1, sm=NULL,
-	with.missing=FALSE, full.matrix=TRUE, link="sum", cval=2, miss.cost=2, cweight=NULL ) {
+	with.missing=FALSE, full.matrix=TRUE, link="sum", cval=2, miss.cost=2, cweight=NULL,
+  what="diss") {
 
 	## Checking arguments
+  whatlist <- c("diss","sm","seqmc")
+  if (!(what %in% whatlist)){
+    msg.stop("what should be one of ",whatlist)
+  }
+
 	nchannels <- length(channels)
 	if (nchannels < 2) {
 		stop("[!] please specify at least two channels")
@@ -64,57 +70,63 @@ seqdistmc <- function(channels, method, norm="none", indel=1, sm=NULL,
 	## seqlenth of each channels
 	maxlength_list <- numeric(length=nchannels)
 
-	## ============================================================
-	## Building and checking substitution matrix per channel
-	## ============================================================
-	for (i in 1:nchannels) {
-		## Sequence object
-		if (!inherits(channels[[i]],"stslist")) {
-			stop(" [!] channel ", i, " is not a state sequence object, use 'seqdef' function to create one", call.=FALSE)
-		}
-		alphabet_list[[i]] <- attr(channels[[i]],"alphabet")
-		## Checking missing values
-		if (with.missing) {
-			alphabet_list[[i]] <- c(alphabet_list[[i]],attr(channels[[i]],"nr"))
-			message(" [>] including missing value as an additional state" )
-		}
-		else {
-			if (any(channels[[i]]==attr(channels[[i]],"nr"))) {
-				stop(" [!] found missing values in channel ", i, ", please set 'with.missing=T' to nevertheless compute distances")
-			}
-		}
-		alphsize_list[[i]] <- length(alphabet_list[[i]])
-		## Storing number of columns
-		maxlength_list[i] <- ncol(channels[[i]])
-		indel_list[i] <- indel[i]
-		## Substitution matrix generation method is given
-		if	(is.character(sm[[i]])) {
-			message(" [>] computing substitution cost matrix for channel ", i)
-			substmat_list[[i]] <- seqsubm(channels[[i]], sm[[i]], with.missing=with.missing,
-				time.varying=timeVarying, cval=cval, miss.cost=miss.cost)
-		}
-		## Checking correct dimension cost matrix
-		else {
-			if (method=="OM") {
-				checkcost(sm[[i]], channels[[i]], with.missing = with.missing, indel = indel[i])
-			} else {
-				checkcost(sm[[i]], channels[[i]], with.missing = with.missing)
-			}
-			substmat_list[[i]] <- sm[[i]]
-		}
+  if (what != "seqmc") {
+  	## ============================================================
+  	## Building and checking substitution matrix per channel
+  	## ============================================================
+  	for (i in 1:nchannels) {
+  		## Sequence object
+  		if (!inherits(channels[[i]],"stslist")) {
+  			stop(" [!] channel ", i, " is not a state sequence object, use 'seqdef' function to create one", call.=FALSE)
+  		}
+  		alphabet_list[[i]] <- attr(channels[[i]],"alphabet")
+  		## Checking missing values
+  		if (with.missing) {
+  			alphabet_list[[i]] <- c(alphabet_list[[i]],attr(channels[[i]],"nr"))
+  			message(" [>] including missing value as an additional state" )
+  		}
+  		else {
+  			if (any(channels[[i]]==attr(channels[[i]],"nr"))) {
+  				stop(" [!] found missing values in channel ", i, ", please set 'with.missing=T' to nevertheless compute distances")
+  			}
+  		}
+  		alphsize_list[[i]] <- length(alphabet_list[[i]])
+  		## Storing number of columns
+  		maxlength_list[i] <- ncol(channels[[i]])
+  		indel_list[i] <- indel[i]
+  		## Substitution matrix generation method is given
+  		if	(is.character(sm[[i]])) {
+  			message(" [>] computing substitution cost matrix for channel ", i)
+  			substmat_list[[i]] <- seqsubm(channels[[i]], sm[[i]], with.missing=with.missing,
+  				time.varying=timeVarying, cval=cval, miss.cost=miss.cost)
+  		}
+  		## Checking correct dimension cost matrix
+  		else {
+  			if (method=="OM") {
+  				checkcost(sm[[i]], channels[[i]], with.missing = with.missing, indel = indel[i])
+  			} else {
+  				checkcost(sm[[i]], channels[[i]], with.missing = with.missing)
+  			}
+  			substmat_list[[i]] <- sm[[i]]
+  		}
 
-		## Mutliply by channel weight
-		substmat_list[[i]] <- cweight[i]* substmat_list[[i]]
-	}
+  		## Mutliply by channel weight
+  		substmat_list[[i]] <- cweight[i]* substmat_list[[i]]
+  	}
+  } else {
+      for (i in 1:nchannels) {
+  		  maxlength_list[i] <- ncol(channels[[i]])
+      }
+  }
 
 	## Checking that all channels have the same length
 	slength1 <- seqlength(channels[[1]])
 	for (i in 2:nchannels) {
 		if (sum(slength1 != seqlength(channels[[i]]))>0) {
 			if (!with.missing) {
-				stop(" [!] some channels have sequences of different length for the same individual. Please set 'with.missing=TRUE' to nevertheless compute distances")
+				stop(" [!] Some individuals have channels of different length. Set 'with.missing=TRUE'.")
 			} else {
-				warning(" [!] some channels have sequences of different length for the same individual. Shorter sequences will be filled with missing values.")
+				warning(" [!] Some individuals have channels of different length. Shorter sequences will be filled with missing values.")
 				break
 			}
 		}
@@ -155,64 +167,78 @@ seqdistmc <- function(channels, method, norm="none", indel=1, sm=NULL,
 	## Setting void states back to NA  (nr will be considered as a distinct state)
 	newseqdata[newseqdataNA] <- NA
 
-	alphabet_size <- length(unique(as.character(newseqdata))) - as.integer(sum(is.na(newseqdata))>0)
-	suppressMessages(newseqdata <- seqdef(newseqdata, cpal=rep("blue", alphabet_size)))
+  ## since v 2.2-0 automatic cpal no longer limited to 12 states, so no need of following
+	#alphabet_size <- length(unique(as.character(newseqdata))) - as.integer(sum(is.na(newseqdata))>0)
+	#suppressMessages(newseqdata <- seqdef(newseqdata, cpal=rep("blue", alphabet_size)))
+	suppressMessages(newseqdata <- seqdef(newseqdata))
 	message(" OK")
 
-	## =========================================
-	## Building the new substitution cost matrix
-	## =========================================
-	message(" [>] computing combined substitution and indel costs...", appendLF=FALSE)
-	## Build subsitution matrix and new alphabet
-	alphabet <- attr(newseqdata,"alphabet")
-	alphabet_size <- length(alphabet)
-	## Recomputing the subsitution matrix
-	if (!timeVarying) {
-		newsm <- matrix(0, nrow=alphabet_size, ncol=alphabet_size)
-		for (i in 1:(alphabet_size-1)) {
-			statelisti <- strsplit(alphabet[i], sep)[[1]]
-			for (j in (i+1):alphabet_size) {
-				cost <- 0
-				statelistj <- strsplit(alphabet[j], sep)[[1]]
-				for (chan in 1:nchannels) {
-					ipos <- match(statelisti[chan], alphabet_list[[chan]])
-					jpos <- match(statelistj[chan], alphabet_list[[chan]])
-					cost <- cost + substmat_list[[chan]][ipos, jpos]
-				}
-				newsm[i, j] <- cost
-				newsm[j, i] <- cost
-			}
-		}
-	} else {
-		## Recomputing time varying substitution
-		newsm <- array(0, dim=c(alphabet_size, alphabet_size, maxlength))
-		for (t in 1:maxlength) {
-			for (i in 1:(alphabet_size-1)) {
-				statelisti <- strsplit(alphabet[i], sep)[[1]]
-				for (j in (i+1):alphabet_size) {
-					cost <- 0
-					statelistj <- strsplit(alphabet[j], sep)[[1]]
-					for (chan in 1:nchannels) {
-						ipos <- match(statelisti[chan], alphabet_list[[chan]])
-						jpos <- match(statelistj[chan], alphabet_list[[chan]])
-						cost <- cost + substmat_list[[chan]][ipos, jpos, t]
-					}
-					newsm[i, j, t] <- cost
-					newsm[j, i, t] <- cost
-				}
-			}
-		}
-	}
-	message(" OK")
-	## Indel as sum
-	newindel <- sum(indel_list*cweight)
-	## If we want the mean of cost..
-	if (link=="mean") {
-		newindel <- newindel / sum(cweight)
-		newsm <- newsm / sum(cweight)
-	}
-	message(" [>] computing distances ...")
-	## Calling seqdist
-	return(seqdist(newseqdata, method=method, norm=norm, indel=newindel,
-		sm=newsm, with.missing=FALSE, full.matrix=full.matrix))
+  if (what == "seqmc") {
+    return(newseqdata)
+  } else {
+  	## =========================================
+  	## Building the new substitution cost matrix
+  	## =========================================
+  	message(" [>] computing combined substitution and indel costs...", appendLF=FALSE)
+  	## Build subsitution matrix and new alphabet
+  	alphabet <- attr(newseqdata,"alphabet")
+  	alphabet_size <- length(alphabet)
+  	## Recomputing the subsitution matrix
+  	if (!timeVarying) {
+  		newsm <- matrix(0, nrow=alphabet_size, ncol=alphabet_size)
+  		for (i in 1:(alphabet_size-1)) {
+  			statelisti <- strsplit(alphabet[i], sep)[[1]]
+  			for (j in (i+1):alphabet_size) {
+  				cost <- 0
+  				statelistj <- strsplit(alphabet[j], sep)[[1]]
+  				for (chan in 1:nchannels) {
+  					ipos <- match(statelisti[chan], alphabet_list[[chan]])
+  					jpos <- match(statelistj[chan], alphabet_list[[chan]])
+  					cost <- cost + substmat_list[[chan]][ipos, jpos]
+  				}
+  				newsm[i, j] <- cost
+  				newsm[j, i] <- cost
+  			}
+  		}
+  	} else {
+  		## Recomputing time varying substitution
+  		newsm <- array(0, dim=c(alphabet_size, alphabet_size, maxlength))
+  		for (t in 1:maxlength) {
+  			for (i in 1:(alphabet_size-1)) {
+  				statelisti <- strsplit(alphabet[i], sep)[[1]]
+  				for (j in (i+1):alphabet_size) {
+  					cost <- 0
+  					statelistj <- strsplit(alphabet[j], sep)[[1]]
+  					for (chan in 1:nchannels) {
+  						ipos <- match(statelisti[chan], alphabet_list[[chan]])
+  						jpos <- match(statelistj[chan], alphabet_list[[chan]])
+  						cost <- cost + substmat_list[[chan]][ipos, jpos, t]
+  					}
+  					newsm[i, j, t] <- cost
+  					newsm[j, i, t] <- cost
+  				}
+  			}
+  		}
+  	}
+  	message(" OK")
+  	## Indel as sum
+  	newindel <- sum(indel_list*cweight)
+  	## If we want the mean of cost..
+  	if (link=="mean") {
+  		newindel <- newindel / sum(cweight)
+  		newsm <- newsm / sum(cweight)
+  	}
+    if (what == "sm") {
+      attr(newsm,"indel") <- newindel
+      attr(newsm,"alphabet") <- alphabet
+      attr(newsm,"cweight") <- cweight
+      return(newsm)
+    }
+  }
+  if (what == "diss") {
+	   message(" [>] computing distances ...")
+	   ## Calling seqdist
+	   return(seqdist(newseqdata, method=method, norm=norm, indel=newindel,
+		        sm=newsm, with.missing=FALSE, full.matrix=full.matrix))
+  }
 }

@@ -1,13 +1,18 @@
-seqlogp <- function(seqdata, prob="trate", time.varying=TRUE, begin="freq", weighted=TRUE) {
+seqlogp <- function(seqdata, prob="trate", time.varying=TRUE, begin="freq", weighted=TRUE, with.missing=FALSE) {
 	## Liste des taux de transitions par age
-	sl <- seqlength(seqdata)
+
+  if (!isTRUE(with.missing) && any(seqdata==attr(seqdata,"nr"))) {
+    stop("Non-void missing values in seqdata, with.missing should be TRUE!")
+  }
+
+	sl <- seqlength(seqdata, with.missing=with.missing)
 	maxage <- max(sl)
 	nbtrans <- maxage -1
 	agedtr <- vector(mode="list", length=maxage)
 	
 	## On ajoute 1 pour que les codes correspondent aux index R (commence à 1)
-	seqdatanum <- seqasnum(seqdata)+1
-	nbstates <- max(seqdatanum)
+	seqdatanum <- seqasnum(seqdata, with.missing=with.missing)+1
+	nbstates <- max(seqdatanum, na.rm=TRUE)
 	## User defined begin frequencies
 	if(is.numeric(begin)){
 		if (length(begin)!=nbstates) {
@@ -18,10 +23,14 @@ seqlogp <- function(seqdata, prob="trate", time.varying=TRUE, begin="freq", weig
 	}
 	##Compute from data
 	else if (is.character(begin) && begin=="freq") {
-		message(" [>] Using data defined frequencies as starting point")
-		firstfreq <- seqstatd(seqdata, weighted=weighted)$Frequencies[, 1]
+		message(" [>] Using frequencies at first position as starting point")
+		firstfreq <- seqstatd(seqdata[,1:2], weighted=weighted, with.missing=with.missing)$Frequencies[, 1]
 	}
-	else {
+	else if (is.character(begin) && begin=="global.freq") {
+		message(" [>] Using overall state frequencies as starting point")
+		firstfreq <- seqstatf(seqdata, weighted=weighted, with.missing=with.missing)$Percent/100
+  }
+  else {
 		stop("Unknow method to compute starting frequencies")
 	}
 	
@@ -30,37 +39,37 @@ seqlogp <- function(seqdata, prob="trate", time.varying=TRUE, begin="freq", weig
 		if (prob=="trate") {
 			if (time.varying) {
 				message(" [>] Using time varying transition rates as probability model")
-				agedtr <- seqtrate(seqdata, time.varying=TRUE, weighted=weighted)
+				agedtr <- suppressMessages(seqtrate(seqdata, time.varying=TRUE, weighted=weighted, with.missing=with.missing))
 			}
 			else {
 				message(" [>] Using global transition rates as probability model")
 				agedtr <- array(0, dim=c(nbstates, nbstates, nbtrans))
-				tr <- seqtrate(seqdata, weighted=weighted)
+				tr <- suppressMessages(seqtrate(seqdata, weighted=weighted, with.missing=with.missing))
 				for (i in 1:nbtrans) {
 					agedtr[,,i] <- tr
 				}
 			}
 		}
 		else if (prob=="freq") {
-			## On crée quand même une matrice de transition (qui ne dépend pas de l'état précédant)
-			## On peut ainsi utiliser le même algorithme
+			## building a transition matrix that does not depend on previous state
+			## so that same algorithm can be used
 			message(" [>] Using time varying frequencies as probability model")
 			agedtr <- array(0, dim=c(nbstates, nbstates, nbtrans))
 			if (time.varying) {
-				freqs <- seqstatd(seqdata, weighted=weighted)$Frequencies
+				freqs <- seqstatd(seqdata, weighted=weighted, with.missing=with.missing)$Frequencies
 				for (i in 1:nbtrans) {
 					for (j in 1:length(freqs[, i+1])) {
 							agedtr[, j,i] <- freqs[j, i+1]
-					}
+          }
 				}
 			}
 			else {
 				message(" [>] Using global frequencies as probability model")
-				freqs <- seqstatf(seqdata, weighted=weighted)$Percent/100
+				freqs <- seqstatf(seqdata, weighted=weighted, with.missing=with.missing)$Percent/100
 				for (i in 1:nbtrans) {
 					for (j in 1:length(freqs)) {
-						agedtr[, j,i] <- freqs[j]
-					}
+   					agedtr[, j,i] <- freqs[j]
+	  			}
 				}
 			}
 		}
@@ -104,11 +113,11 @@ seqlogp <- function(seqdata, prob="trate", time.varying=TRUE, begin="freq", weig
 	logp[] <- 0
 	for (i in 1:nrow(seqdatanum)) {
 		p <- firstfreq[seqdatanum[i, 1]]
-		logp[[i]] <- -log(p)
+    if (!is.na(p) & p > 0) 	logp[[i]] <- -log(p)
 		if (sl[i]>1) {
 			for (j in 2:sl[i]) {
 				p <- agedtr[seqdatanum[i, j-1], seqdatanum[i, j], j-1]
-				logp[[i]] <- logp[[i]] -log(p)
+				if (!is.na(p) & p > 0) logp[[i]] <- logp[[i]] -log(p)
 			}
 		}
 	}

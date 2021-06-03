@@ -17,24 +17,24 @@ seqivardur(seqdata, type=1, with.missing=FALSE)
 \arguments{
   \item{seqdata}{a state sequence object (\code{stslist}) as returned by \code{\link[TraMineR]{seqdef}}.}
 
-  \item{type}{either 1 or 2. The default \code{type=1} ignores non visited states. Type 2 accounts for the 0-time spent in non-visited states (see Details).}
+  \item{type}{either 1 or 2. The default \code{type=1} ignores non visited states. Type 2 takes into account the 0-time spent in non-visited states (see Details).}
 
 	\item{with.missing}{logical: should non-void missing values be treated as a regular state? If \code{FALSE} (default) missing values are ignored.}
 
   \item{x}{an outcome of \code{seqivardur}.}
 
   \item{stat}{string or vector of strings. Duration statistic to be printed. Either \code{'mean'} (mean duration), \code{'std'} (standard deviation), \code{'var'} (variance), \code{'vmax'} (maximum variance for number of spells), or \code{'all'}. Default is \code{'var'}.}
-      
+
   \item{...}{further arguments such as \code{digits} passed to the next \code{\link{print}} method.}
 }
 \details{
   The returned variance is a population variance, i.e. the sum of squares divided by the number of terms.
 
-  When \code{type=1}, this is the variance of the observed spells in the sequence. When \code{type=2}, in addition to the observed spells one spell of length 0 is considered for each non-visited state. The mean duration is computed conformably.
+  When \code{type=1}, this is the variance of the observed spells in the sequence. When \code{type=2}, in addition to the observed spells one spell of length 0 is considered for each non-visited state. The mean duration is computed the same way.
 }
 
 \value{
-  A numeric vector with the spell duration variance of each sequence.
+  A numeric vector with the variance of spell duration of each sequence.
 
   The returned object has two attributes:
    \item{vmax}{the maximum value that the variance of each sequence could reach given its number of spells.}
@@ -45,7 +45,7 @@ seqivardur(seqdata, type=1, with.missing=FALSE)
 \code{\link{seqdur}}, \code{\link{seqindic}}
 }
 \references{
-Ritschard, Gilbert (2020) Measuring the nature of state sequences, University of Geneva, preprint.
+Ritschard, Gilbert (2021) Measuring the nature of state sequences, \emph{Sociological Methods and Research}, forthcoming.
 }
 
 

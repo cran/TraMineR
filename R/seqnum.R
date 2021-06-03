@@ -7,7 +7,7 @@ seqnum <- function(seqdata, with.missing=FALSE) {
 		stop("data is not a sequence object, see seqdef function to create one")
 
 	alphabet.orig <- attr(seqdata,"alphabet")
-	levels.orig <- levels(seqdata[[1]])  
+  levels.orig <- levels(seqdata[[1]])
 
 	nbstat <- length(alphabet.orig)
 
@@ -15,7 +15,7 @@ seqnum <- function(seqdata, with.missing=FALSE) {
 	levels.new <- alphabet.new
 
 	if (with.missing) {
-		## Changing missing and void codes into numerical values
+		## Changing missing code into numerical value
 		nr.new <- which(levels.orig==attr(seqdata,"nr"))-1
 		levels.new <- c(levels.new, nr.new)
 		attr(seqdata,"nr") <- nr.new
@@ -28,9 +28,11 @@ seqnum <- function(seqdata, with.missing=FALSE) {
 	if (length(alphabet.new)!=nbstat)
 		stop("lengths of old and new alphabet are different")
 
-	for (i in 1:seqdim(seqdata)[2])
-		#seqdata[,i] <- factor(seqdata[,i], levels=levels.orig, labels=levels.new)
-		seqdata[[i]]  <- factor(seqdata[[i]], levels=levels.orig, labels=levels.new)
+	#for (i in 1:seqdim(seqdata)[2])
+	#	#seqdata[,i] <- factor(seqdata[,i], levels=levels.orig, labels=levels.new)
+	#	seqdata[[i]]  <- factor(seqdata[[i]], levels=levels.orig, labels=levels.new)
+
+  seqdata[] <- lapply(seqdata, factor, levels=levels.orig, labels=levels.new)
 
 	attr(seqdata,"alphabet") <- alphabet.new
 

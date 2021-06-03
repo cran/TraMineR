@@ -2,6 +2,8 @@
 ## Returns a matrix with integer coding of the sequences
 
 ## ToDo: Check if different from seqnum
+## seqnum returns an stslist object with a numeric alphabet
+## seqasnum returns a numeric matrix
 
 seqasnum <- function(seqdata, with.missing=FALSE) {
 

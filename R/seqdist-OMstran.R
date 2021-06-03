@@ -62,7 +62,8 @@ OMstran <- function(seqdata, indel, sm, full.matrix, transindel, otto, previous,
   newalph <- newalph[!is.na(newalph)] ## deleting NAs
 	alphabet_size <- length(newalph)
 	suppressMessages(newseqdata <- seqdef(newseqdata, cpal=rep("blue", alphabet_size),
-                                      left='DEL', gaps='DEL', right='DEL') )
+                                      left='DEL', gaps='DEL', right='DEL',
+                                      id = rownames(seqdata)) )
 	transweight <- 1 - otto
 	if(previous){
 		transweight <- transweight/2

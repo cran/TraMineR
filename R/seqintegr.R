@@ -1,4 +1,8 @@
-seqintegration <- function(seqdata, state=NULL, pow=1, with.missing=FALSE){
+seqintegration <- function(...){
+  msg.stop("Seqintegration is obsolete, use seqintegr instead!")
+}
+
+seqintegr <- function(seqdata, state=NULL, pow=1, with.missing=FALSE){
 	if (!inherits(seqdata, "stslist")) {
         stop("[!] seqdata is not a sequence object, see seqdef function to create one")
   }

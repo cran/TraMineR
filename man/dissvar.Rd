@@ -27,7 +27,7 @@ In the Euclidean case, the sum of squares can be expressed as:
 \value{The discrepancy.}
 
 \references{
-    Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510.
+    Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2011). Discrepancy analysis of state sequences, \emph{Sociological Methods and Research}, Vol. 40(3), 471-510, \doi{10.1177/0049124111415372}.
 
   Studer, M., G. Ritschard, A. Gabadinho and N. S. Müller (2010)
   Discrepancy analysis of complex objects using dissimilarities.

@@ -16,9 +16,9 @@
 
   \item{adjust}{Logical. Should the indicator be adjusted such that it can reach its bounds 0 and 1. Deafult is \code{TRUE} (see Details).}
 
-  \item{w}{real in the range [0, 1]. Weight given to the proportion of states visited (see Details).}
+  \item{w}{Real in the range [0, 1]. Default is 0.5. Weight given to the proportion of states visited (see Details).}
 
-	\item{with.missing}{logical: should non-void missing values be treated as a regular state? If \code{FALSE} (default) missing values are ignored.}
+	\item{with.missing}{Logical: should non-void missing values be treated as a regular state? If \code{FALSE} (default) missing values are ignored.}
 }
 \details{
   The (objective) volatility is the weighted average between the proportion \eqn{pvisited} of states visited and the frequency \eqn{ftrans} of transitions (state changes). Formally,
@@ -30,7 +30,7 @@
   The frequency of transition is \eqn{ftrans = \frac{transn}{max.transn}} where
   \eqn{transn} is the number of transitions (state changes) within the sequence, and \eqn{max.transn} the maximum possible transitions in the sequence.
 
-  For the normative volatility computed for a set of positive states, see \code{\link{seqipos}}.
+  For the normative volatility, see \code{\link{seqipos}}. For alternative measures of sequence complexity see \code{\link{seqST}},  \code{\link{seqici}}, \code{\link{seqindic}}.
 }
 
 \value{
@@ -38,10 +38,13 @@
 }
 
 \seealso{
-\code{\link{seqintegration}}, \code{\link{seqipos}}, \code{\link{seqindic}}
+\code{\link{seqintegr}}, \code{\link{seqipos}}, \code{\link{seqindic}}
 }
 \references{
 Brzinsky-Fay, C. Unused Resources: Sequence and Trajectory Indicators. International Symposium on Sequence Analysis and Related Methods, Monte Verita, TI, Switzerland, Oct 10-11, 2018
+
+Ritschard, Gilbert (2021) Measuring the nature of state sequences, \emph{Sociological Methods and Research}, forthcoming.
+
 }
 
 

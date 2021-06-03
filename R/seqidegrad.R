@@ -1,51 +1,69 @@
-## alias for degrading index
+## degradation index
+##  seqidegrad superseeds previous seqprecorr function
 
-seqidegrad <- function(seqdata, tr.sum=TRUE,
+seqidegrad <- function(seqdata,
     state.order=alphabet(seqdata, with.missing), state.equiv=NULL,
-    stprec=NULL, penalized="BOTH", method = "RANK", weight.type="ADD",
-    pow=1, with.missing=FALSE, border.effect=10){
+    stprec=NULL, with.missing=FALSE,
+    penalized="BOTH", method = "RANK", weight.type="ADD",
+    pow=1, border.effect=10){
 
-  degr <- seqdegrad.private(seqdata,
+  if (is.logical(pow)) {
+    spell.integr <- pow
+    pow <- as.numeric(pow)
+  } else {
+    spell.integr <- TRUE
+  }
+  degr <- seqidegrad.private(seqdata,
             state.order=state.order, state.equiv=state.equiv, stprec=stprec,
             penalized=penalized, method=method, weight.type=weight.type,
-            pow=pow, tr.sum=tr.sum,
+            pow=pow, spell.integr=spell.integr,
             with.missing=with.missing, border.effect=border.effect)
   ##degr <- (1+degr)/2
   colnames(degr)<-"Degrad"
   return(degr)
 }
 
-seqprecorr <- function(seqdata, state.order=alphabet(seqdata, with.missing), state.equiv = NULL,
-      penalized="BOTH", method="TRATEDSS", weight.type="ADD",
-      stprec=NULL, with.missing=FALSE, border.effect=10, tr.type) {
+## for backward compatibility
+seqprecorr <- function(...){
+  msg.stop("seqprecorr is obsolete, use seqidegrad with spell.integr=FALSE and method='TRATEDSS' instead")
+  #olist <- list(...)
+  #if (!"method" %in% names(olist)) olist[["method"]] <- 'TRATEDSS'
+  #if (!"spell.integr" %in% names(olist)) olist[["spell.integr"]] <- FALSE
 
-  TraMineR.check.depr.args(alist(method = tr.type))
-
-  precorr <- seqdegrad.private(seqdata,
-              state.order=state.order, state.equiv=state.equiv, stprec=stprec,
-              penalized=penalized, method=method, weight.type=weight.type,
-              with.missing=with.missing, border.effect=border.effect)
-  return(precorr)
+  #do.call(seqidegrad, olist)
 }
+
+### seqprecorr <- function(seqdata, state.order=alphabet(seqdata, with.missing), state.equiv = NULL,
+###       penalized="BOTH", method="TRATEDSS", weight.type="ADD",
+###       stprec=NULL, with.missing=FALSE, border.effect=10, tr.type) {
+###
+###   TraMineR.check.depr.args(alist(method = tr.type))
+###
+###   precorr <- seqidegrad.private(seqdata,
+###               state.order=state.order, state.equiv=state.equiv, stprec=stprec,
+###               penalized=penalized, method=method, weight.type=weight.type,
+###               with.missing=with.missing, border.effect=border.effect)
+###   return(precorr)
+### }
 
 
 ## =====================================
 ## Correction term
 ## =====================================
 
-seqdegrad.private <- function(seqdata, tr.sum=TRUE, state.order=alphabet(seqdata, with.missing),
+seqidegrad.private <- function(seqdata, spell.integr=TRUE, state.order=alphabet(seqdata, with.missing),
       state.equiv = NULL, stprec=NULL,
       penalized="BOTH", method="TRATEDSS", weight.type="ADD", pow=1,
       with.missing=FALSE, border.effect=10) {
 
-  spell.integr <- tr.sum
-
 	if (!inherits(seqdata,"stslist"))
-		msg.stop("seqdegrad: seqdata is NOT a sequence object, see seqdef function to create one")
+		msg.stop("seqidegrad: seqdata is NOT a sequence object, see seqdef function to create one")
 
-  if(!is.null(stprec) && length(stprec) != length(alphabet(seqdata, with.missing)))
-    msg.stop("seqdegrad: length of stprec does not match the size of the alphabet!")
-  if(method %in% c("RANK","RANK+") || tr.sum){
+  if(!is.null(stprec)) {
+    if(length(stprec) != length(alphabet(seqdata, with.missing)))
+      msg.stop("seqidegrad: length of stprec does not match the size of the alphabet!")
+  }
+  if(method %in% c("RANK","RANK+") || spell.integr){
     stprec <- suppressMessages(seqprecstart(seqdata, state.order=state.order,
                         state.equiv=state.equiv, stprec=stprec, with.missing=with.missing))
   }
@@ -193,7 +211,7 @@ seqdegrad.private <- function(seqdata, tr.sum=TRUE, state.order=alphabet(seqdata
     sps <- t(apply(Dur,1,make.sps))
     sps[is.na(Dur)] <- NA
     seqtmp <- suppressMessages(seqdef(sps, informat='SPS', SPS.in=list(xfix='',sdsep='/')))
-    integr <- seqintegration(seqtmp, pow=pow)
+    integr <- seqintegr(seqtmp, pow=pow)
   }
 
 	##  default tr set above as 1s
@@ -305,7 +323,7 @@ seqdegrad.private <- function(seqdata, tr.sum=TRUE, state.order=alphabet(seqdata
   	  ## else leave prop.transpen[i] <- 0
   	}
     nz <- transw > 0
-    if (tr.sum)
+    if (spell.integr)
       prop.transpen[nz] <- transpen[nz]
     else
       prop.transpen[nz] <- transpen[nz]/transw[nz]
@@ -323,15 +341,15 @@ seqdegrad.private <- function(seqdata, tr.sum=TRUE, state.order=alphabet(seqdata
 	attr(prop.transpen,"signs") <- signs
 	attr(prop.transpen,"state.noncomp") <- state.noncomp
 	attr(prop.transpen,"state.order") <- state.order.plus
-	attr(prop.transpen,"integr") <- integr
+	##attr(prop.transpen,"integr") <- integr
 	##attr(prop.transpen,"norm.transpen") <- norm.transpen
 	##attr(prop.transpen,"seqdata") <- seqdata
-  class(prop.transpen) <- c("seqprecorr",class(prop.transpen))
+  class(prop.transpen) <- c("seqidegrad",class(prop.transpen))
 	
 	return(prop.transpen)
 }
 
-print.seqprecorr <- function(x, ...){
+print.seqidegrad <- function(x, ...){
   names <- dimnames(x)
   attributes(x) <- NULL
   x <- as.matrix(x)

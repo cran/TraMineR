@@ -59,8 +59,9 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE,
         global.pdotj <- seqmeant(seqdata, weighted=weighted, with.missing=with.missing, prop=TRUE)
       }
     } else {
-      if (!is.numeric(global.pdotj) || sum(global.pdotj) != 1 || any(global.pdotj<0))
-        msg.stop("When a vector, global.pdotj should be proportions summing up to 1")
+      if (!is.numeric(global.pdotj) || any(global.pdotj<0) || sum(global.pdotj) == 0)
+        msg.stop("When a vector, global.pdotj should be non negative with at least one strictly positive element.")
+      global.pdotj <- global.pdotj/sum(global.pdotj)
       if (length(global.pdotj) != nalph)
         msg.stop("When a vector, global.pdotj should conform the size of the alphabet including the missing state when applicable")
     }
@@ -133,31 +134,51 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE,
 	##  pdotj <- pdotj[cond]
 	##}
   pdotj <- pdotj[cond]
-  chdist <- function(i, j){
-		return(sqrt(sum((allmat[i, ]-allmat[j, ])^2/pdotj)))
-	}
 	n <- nrow(seqdata)
-	if(notC){ ##Unused
-		dd <- numeric(n*(n-1)/2)
-		for(i in 1:(n-1)){
-			for(j in (i+1):n){
-				dd[n*(i-1) - i*(i-1)/2 + j-i] <- chdist(i, j)
-			}
-		}
-	}else{
+
+
+  ## dealing with refseq as a list (conformity alread checked in seqdist)
+  sets <- FALSE
+  if (inherits(refseq, "list")) {
+      allmat.r <- rbind(allmat[refseq[[1]],],allmat[refseq[[2]],])
+      n1 <- length(refseq[[1]])
+      n2 <- length(refseq[[2]])
+      refseq.id <- c(n1, n1 + n2)
+      allmat <- allmat[c(refseq[[1]],refseq[[2]]),]
+      sets <- TRUE
+  } else if (!is.null(refseq)) {
+    refseq.id <- c(refseq,refseq)
+    sets <- FALSE
+  }
+
+  ##chdist <- function(i, j){
+	##	return(sqrt(sum((allmat[i, ]-allmat[j, ])^2/pdotj)))
+	##}
+	##if(notC){ ##Unused
+	##	dd <- numeric(n*(n-1)/2)
+	##	for(i in 1:(n-1)){
+	##		for(j in (i+1):n){
+	##			dd[n*(i-1) - i*(i-1)/2 + j-i] <- chdist(i, j)
+	##		}
+	##	}
+	##}else{
     if (is.null(refseq)) {
   		## SEXP tmrChisq(SEXP ChiTableS, SEXP tdimS, SEXP margeS)
   		dd <- .Call(C_tmrChisq, as.double(allmat), as.integer(dim(allmat)), as.double(pdotj))
     }
     else{
-  		dd <- .Call(C_tmrChisqRef, as.double(allmat), as.integer(dim(allmat)), as.double(pdotj), as.integer(refseq))
+  		dd <- .Call(C_tmrChisqRef, as.double(allmat), as.integer(dim(allmat)), as.double(pdotj), as.integer(refseq.id))
     }
-	}
+	##}
   if (norm) dd <- dd/sqrt(length(breaks))
-  if (is.null(refseq)){
+  if (sets) {
+    dd <- matrix(dd, nrow=n1, ncol=n2, byrow=FALSE, dimnames=list(rownames(seqdata)[refseq[[1]]],rownames(seqdata)[refseq[[2]]]))
+  } else if (is.null(refseq)) { ## pairwise distances
     attributes(dd) <- list(Size = n, Labels = rownames(seqdata), Diag = FALSE,
           Upper = FALSE, method = "Chi square sequence", call = match.call(),
           class = "dist")
+  } else { ## vector of dist to refseq
+    names(dd) <- rownames(seqdata)
   }
 	return(dd)
 }
