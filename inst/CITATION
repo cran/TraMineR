@@ -22,7 +22,7 @@ citEntry(entry = "Article",
   paste("Gabadinho, A., Ritschard, G., M\u00FCller, N. S., & Studer, M. (2011).",
         "Analyzing and Visualizing State Sequences in R with TraMineR.",
         "Journal of Statistical Software, 40(4), 1-37.",
-        "DOI http://dx.doi.org/10.18637/jss.v040.i04."),
+        "DOI https://doi.org/10.18637/jss.v040.i04."),
         header="For the package and state sequences:\n"
 )
 
@@ -36,7 +36,7 @@ citEntry(entry="Article",
     pages        = "481--511",
     doi = "10.1111/rssa.12125",
 
-    textVersion="Studer, M. & Ritschard, G. (2016). What matters in differences between life trajectories: A comparative review of sequence dissimilarity measures, Journal of the Royal Statistical Society, Series A, 179(2), 481-511. DOI http://dx.doi.org/10.1111/rssa.12125",
+    textVersion="Studer, M. & Ritschard, G. (2016). What matters in differences between life trajectories: A comparative review of sequence dissimilarity measures, Journal of the Royal Statistical Society, Series A, 179(2), 481-511. DOI https://doi.org/10.1111/rssa.12125",
     header="For dissimilarity measures:\n"
 )
 
@@ -50,7 +50,7 @@ citEntry(entry="Article",
     pages   = "471--510",
     doi = "10.1177/0049124111415372",
 
-    textVersion="Studer, M., Ritschard, G., Gabadinho, A. & M\u00FCller, N.S. (2011), Discrepancy analysis of state sequences, Sociological Methods and Research, 40(3), 471-510. DOI http://dx.doi.org/10.1177/0049124111415372",
+    textVersion="Studer, M., Ritschard, G., Gabadinho, A. & M\u00FCller, N.S. (2011), Discrepancy analysis of state sequences, Sociological Methods and Research, 40(3), 471-510. DOI https://doi.org/10.1177/0049124111415372",
     header="For discrepancy analysis:\n"
 )
 
@@ -86,9 +86,10 @@ citEntry(entry="article",
   title = "Measuring the nature of individual sequences",
   journal = "Sociological Methods and Research",
   year = "2021",
-  note = "(forthcoming)",
+  doi = "10.1177/00491241211036156",
+  note = "(first published online)",
 
-  textVersion="Ritschard, G. (2021), Measuring the nature of individual sequences, Sociological Methods and Research. (Forthcoming)",
+  textVersion="Ritschard, G. (2021), Measuring the nature of individual sequences, Sociological Methods and Research. (first published online), DOI https://doi.org/10.1177/00491241211036156",
   header="For longitudinal characteristics (complexity, badness, precarity, ...):"
 )
 citEntry(entry="article",
@@ -115,7 +116,7 @@ citEntry(entry="incollection",
   pages = "279-295",
   doi = "10.1007/978-3-319-95420-2_16",
 
-  textVersion="Ritschard, G., Bussi, M. & O'Reilly, J. (2018), An Index of Precarity for Measuring Early Employment Insecurity, In Ritschard, G. & Studer, M. (eds) Sequence Analysis and Related Approaches: Innovative Methods and Applications. Series: Life Course Research and Social Policies. Vol. 10, pp. 279-295. Cham: Springer. DOI http://dx.doi.org/10.1007/978-3-319-95420-2_16",
+  textVersion="Ritschard, G., Bussi, M. & O'Reilly, J. (2018), An Index of Precarity for Measuring Early Employment Insecurity, In Ritschard, G. & Studer, M. (eds) Sequence Analysis and Related Approaches: Innovative Methods and Applications. Series: Life Course Research and Social Policies. Vol. 10, pp. 279-295. Cham: Springer. DOI https://doi.org/10.1007/978-3-319-95420-2_16",
 )
 citEntry(entry="incollection",
   author = personList(p2, p5, p3),
@@ -139,7 +140,7 @@ citEntry(entry="article",
   number = "2",
   doi = "10.1080/00031305.2014.887591",
 
-  textVersion="B\u00FCrgin, R. & Ritschard, G. (2014), A decorated parallel coordinate plot for categorical longitudinal data, The American Statistician 68(2), 98-103.  DOI http://dx.doi.org/10.1080/00031305.2014.887591",
+  textVersion="B\u00FCrgin, R. & Ritschard, G. (2014), A decorated parallel coordinate plot for categorical longitudinal data, The American Statistician 68(2), 98-103.  DOI https://doi.org/10.1080/00031305.2014.887591",
 )
 
 

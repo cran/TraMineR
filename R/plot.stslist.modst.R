@@ -4,7 +4,7 @@
 
 plot.stslist.modst <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
   xaxis = TRUE, xtlab = NULL, xtstep = NULL, tick.last = NULL,
-  cex.axis = 1, cex.plot, ...) {
+  info = TRUE, cex.axis = 1, cex.plot, ...) {
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
@@ -68,8 +68,7 @@ plot.stslist.modst <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
 		axes=FALSE,
 		...)
 
-	text(seql/2, 1.1, txt,
-		cex=cex.axis)
+	if(info) text(seql/2, 1.1, txt, cex=cex.axis)
 
 	## Plotting the x axis
 	if (xaxis) {

@@ -60,7 +60,7 @@ Brzinsky-Fay, C. (2007) Lost in Transition? Labour Market Entry Sequences of Sch
 
 Brzinsky-Fay, C. (2018) Unused Resources: Sequence and Trajectory Indicators. International Symposium on Sequence Analysis and Related Methods, Monte Verita, TI, Switzerland, October 10-12, 2018.
 
-Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, forthcoming.
+Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, \doi{10.1177/00491241211036156}.
 }
 
 \examples{

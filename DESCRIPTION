@@ -1,6 +1,6 @@
 Package: TraMineR
-Version: 2.2-2
-Date: 2021-06-03
+Version: 2.2-3
+Date: 2022-01-19
 Title: Trajectory Miner: a Toolbox for Exploring and Rendering
         Sequences
 Authors@R: c(
@@ -16,8 +16,8 @@ Authors@R: c(
     email = "gilbert.ritschard@unige.ch",
     comment = c(ORCID = "0000-0001-7776-0903")))
 Depends: R (>= 3.0.0)
-Imports: utils, RColorBrewer, boot, graphics, grDevices, stats, Hmisc,
-        cluster, colorspace, psych, cNORM
+Imports: utils, graphics, grDevices, stats, cluster, colorspace,
+        RColorBrewer, weights, cNORM, boot
 Suggests: xtable, TraMineRextras
 SystemRequirements: C++11
 Description: Toolbox for the manipulation, description and rendering of sequences, and more generally the mining of sequence data in the field of social sciences. Although the toolbox is primarily intended for analyzing state or event sequences that describe life courses such as family formation histories or professional careers, its features also apply to many other kinds of categorical sequence data. It accepts many different sequence representations as input and provides tools for converting sequences from one format to another. It offers several functions for describing and rendering sequences, for computing distances between sequences with different metrics (among which optimal matching), original dissimilarity-based analysis tools, and simple functions for extracting the most frequent subsequences and identifying the most discriminating ones among them. A user's guide can be found on the TraMineR web page.
@@ -26,7 +26,7 @@ URL: http://traminer.unige.ch
 Encoding: UTF-8
 Maintainer: Gilbert Ritschard <gilbert.ritschard@unige.ch>
 NeedsCompilation: yes
-Packaged: 2021-06-03 13:10:06 UTC; adm
+Packaged: 2022-01-19 16:09:42 UTC; grits
 Author: Alexis Gabadinho [aut, cph],
   Matthias Studer [aut, cph] (<https://orcid.org/0000-0002-6269-1412>),
   Nicolas Müller [aut],
@@ -35,4 +35,4 @@ Author: Alexis Gabadinho [aut, cph],
   Gilbert Ritschard [aut, cre, cph]
     (<https://orcid.org/0000-0001-7776-0903>)
 Repository: CRAN
-Date/Publication: 2021-06-03 16:10:02 UTC
+Date/Publication: 2022-01-19 16:52:42 UTC

@@ -8,8 +8,8 @@ Plot the result of \code{\link{seqecmpgroup}}
 \method{plot}{subseqelistchisq}(x, ylim = "uniform", rows = NA, cols = NA,
   resid.levels = c(0.05,0.01),
   cpal = brewer.pal(1 + 2 * length(resid.levels), "RdBu"), vlegend = NULL,
-  cex.legend = 1, ptype = "freq", legend.title = NULL, residlevels, legendcol,
-  legend.cex, ...)
+  cex.legend = 1, ptype = "freq", legend.title = NULL, 
+  with.legend = TRUE, residlevels, legendcol, legend.cex, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -23,6 +23,7 @@ Plot the result of \code{\link{seqecmpgroup}}
   \item{cex.legend}{Scale parameters for text legend.}
   \item{ptype}{If set to \code{"resid"}, Pearson residuals are plotted instead of frequencies}
   \item{legend.title}{Legend title.}
+  \item{with.legend}{Logical. Should legend be displayed?}
   \item{residlevels}{Deprecated. Use \code{resid.levels} instead.}
   \item{legendcol}{Deprecated. Use \code{vlegend} instead.}
   \item{legend.cex}{Deprecated. Use \code{cex.legend} instead.}

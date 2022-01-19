@@ -1,6 +1,76 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.2-3 [2022-01-19] (Development version)}{
+
+  \subsection{New functions}{
+    \itemize{
+      \item
+      \code{summary.ddomassoc()} summary method that organizes outcome of \code{dissdomassoc} in table form.
+    }
+  }
+
+  \subsection{Changes in existing functions}{
+    \itemize{
+      \item
+      \code{dissdomassoc()} now returns also p-values of computed correlations.
+      \item
+      \code{plot.subseqelistchisq()} (plot of outcome of \code{seqecmpgroup}) gains attribute \code{with.legend}.
+      \item
+      \code{plot.stslist.modst()} new attribute \code{info} to control whether frequency of sequence of modal state should be displayed.
+      \item
+      \code{plot.ststlist.meant()} now uses an internal function
+      to draw error bars to avoid issues with dependence on Hmisc.
+      \item
+      \code{plot.ststlist.meant()} new arguments \code{bar.labels},
+      \code{cex.barlab}, and \code{offset.barlab} to display and control bar labels.
+      \item
+      \code{seqmtplot()} (\code{seqplot(..,type="mt", ..)}) adapted for
+       handling bar labels with groups. See details in \code{seqplot} help page.
+      \item
+      \code{seqformat()} with \code{from="SPELL"}, provides info about number of sequences truncated, empty sequences because of spell occurring before birth year, and empty because of missing start time. A new attribute \code{issues} contains
+      the indexes of sequences with issues.
+      \item
+      \code{seqdef()} now prints, when applicable, the number of empty sequences and lists the first 9 empty sequences only.
+      \item
+      \code{seqdistmc()} gains an argument \code{ch.sep} to control the separator symbol for building state names of the expanded alphabet.
+      \item
+      \code{seqdistmc()} rows and columns of the returned distance matrix and the mc sequences are now labelled with rownames of the
+      first channel. Rows and columns of the returned mc substitution cost matrix are labelled with the expanded alphabet.
+      \item
+      \code{seqdistmc()} columns of the returned expanded sequence object now labelled with column names of longest domain.
+      \item
+      \code{seqdistmc()} \code{indel} can now be \code{"auto"} (new default) to automatically set indel values. In addition, state dependent indels are now supported.
+      \item
+      \code{seqdistmc()} \code{with.missing} can now be a vector to provide different values for each channel.
+      \item
+      \code{seqdistmc()} now also supports \code{"INDELS"} and \code{"INDELSLOG"} values for the \code{sm} argument.
+      \item
+      \code{seqcost()} removed "\code{->}" at end of row/column labels of matrix \code{sm}.
+    }
+  }
+
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+      \code{seqdiff()} negative values in \code{cmprange} caused an error.
+      \item
+      \code{seqdiff()} changed deprecated \code{norm=TRUE} into \code{norm='auto'} in default \code{seqdist.args} value.
+      \item
+      \code{seqecreate()} \code{NA}s introduced by coercion with character \code{id}.
+
+    }
+  }
+
+  \subsection{Misc.}{
+    \itemize{
+      \item
+      Dependence on boot and RColorBrewer replaced by importFrom of functions \code{boot} and \code{brewer.pal}.
+    }
+  }
+}
+
+
 \section{Changes in version 2.2-2 [2021-06-03]}{
 
   \subsection{New functions}{
@@ -184,7 +254,7 @@
       \item
       \code{seqdist()}, normalization now also possible for OMspell, OMslen, OMstran, OMloc, and TWED.
       \item
-      \code{seqdist()} now uses \code{hcl.colors} (grDevices) instead of
+      \code{seqdef()} now uses \code{hcl.colors} (grDevices) instead of
       \code{qualitative_hcl} (colorspace) to set default colors when n>13.
       (Transparent to the user.)
     }

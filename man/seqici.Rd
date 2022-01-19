@@ -61,9 +61,9 @@ Gabadinho, A., Ritschard, G., Studer, M. and Müller,
 N.S. (2010). "Indice de complexité pour le tri et la comparaison de
 séquences catégorielles", In \emph{Extraction et gestion des
 connaissances (EGC 2010), Revue des nouvelles technologies de
-l'information RNTI}. Vol. E-19, pp. 61-66. 
+l'information RNTI}. Vol. E-19, pp. 61-66.
 
-Ritschard, Gilbert (2021) Measuring the nature of state sequences, \emph{Sociological Methods and Research}, forthcoming.
+Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, \doi{10.1177/00491241211036156}.
 }
 \examples{
 ## Creating a sequence object from the mvad data set

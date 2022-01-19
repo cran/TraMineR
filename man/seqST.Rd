@@ -62,7 +62,7 @@ The normalized value is obtained by subtracting 1 to the index and then dividing
   De-standardization of Family-Life Trajectories of Young Adults: A Cross-National Comparison Using Sequence Analysis.
   \emph{European Journal of Population}, 23, 225-250.
 
-Ritschard, Gilbert (2021) Measuring the nature of state sequences, \emph{Sociological Methods and Research}, forthcoming.
+Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, \doi{10.1177/00491241211036156}.
 }
 \examples{
   ## Loading the 'actcal' example data set
@@ -79,7 +79,7 @@ Ritschard, Gilbert (2021) Measuring the nature of state sequences, \emph{Sociolo
 
   ## Normalized turbulence
   turb.norm <- seqST(actcal.seq, norm=TRUE)
-  
+
   ## Normalized turbulence taking non-visited states into account.
   turb2.norm <- seqST(actcal.seq, norm=TRUE, type=2)
 

@@ -1,4 +1,65 @@
 ## =========
+Version 2.2-3 [2022-01-19] (Development version)
+
+New functions:
+  - summary.ddomassoc() summary method that organizes
+    outcome of dissdomassoc in table form.
+
+Changes in existing functions:
+  - dissdomassoc() now returns also p-values of the
+    computed correlations.
+  - plot.subseqelistchisq() (plot of outcome of seqecmpgroup)
+    gains attribute 'with.legend'.
+  - plot.stslist.modst() new attribute 'info' to control
+    whether frequency of sequence of modal state should
+    be displayed.
+  - plot.ststlist.meant() now uses an internal function
+    to draw error bars to avoid issues with dependence
+    on Hmisc.
+  - plot.ststlist.meant() new arguments 'bar.labels',
+    'cex.barlab', and 'offset.barlab' to display and
+    control bar labels.
+  - seqmtplot() (seqplot(..,type="mt",..)) adapted for
+    handling bar labels with groups. See details in
+    seqplot help page.
+  - seqformat() with from="SPELL", provides info about
+    number of sequences truncated, empty sequences because
+    of spell occurring before birth year, and empty because
+    of missing start time. A new attribute 'issues' contains
+    the indexes of sequences with issues.
+  - seqdef() now prints, when applicable, the number of
+    empty sequences and lists the first 9 empty sequences only.
+  - seqdistmc() gains an argument 'ch.sep' to control
+    the separator symbol for building state names of
+    of the expanded alphabet.
+  - seqdistmc() rows and columns of the returned distance matrix
+    and the mc sequences are now labelled with rownames of the
+    first channel. Rows and columns of the mc substitution
+    cost matrix are labelled with the expanded alphabet.
+  - seqdistmc() columns of the returned expanded sequence object
+    now labelled with column names of longest domain.
+  - seqdistmc() indel argument can now be "auto" (new default)
+    to automatically set indel values. In addition, state
+    dependent indels are now supported.
+  - seqdistmc()} \code{with.missing} can now be a vector
+    to provide different values for each channel.
+  - seqdistmc() now also supports "INDELS" and "INDELSLOG"
+    values for the sm argument.
+  - seqcost() removed "->" at end of row/column labels
+    of matrix sm.
+
+Bug fixes:
+  - seqdiff() negative values in cmprange caused an error.
+  - seqdiff() changed deprecated norm=TRUE into
+    norm='auto' in default seqdist.args value.
+  - seqecreate() NAs introduced by coercion with character id.
+
+Misc.
+  - Dependence on boot and RColorBrewer replaced by importFrom
+    of functions boot and brewer.pal.
+
+
+## =========
 Version 2.2-2 [2021-06-03]
 
 New functions:
@@ -126,7 +187,7 @@ Changes in existing functions:
     and OMstran (previously only by OM).
   - seqdist(), normalization now also possible for OMspell, OMslen,
     OMstran, OMloc, and TWED.
-  - seqdist() now uses hcl.colors (grDevices) instead of
+  - seqdef() now uses hcl.colors (grDevices) instead of
     qualitative_hcl (colorspace) to set default colors when n>13.
     (Transparent to the user.)
 

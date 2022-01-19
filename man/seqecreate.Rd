@@ -20,13 +20,13 @@ seqecreate(data = NULL, id = NULL,timestamp = NULL, event = NULL,
 }
 \arguments{
   \item{data}{A state sequence object (see \code{\link{seqdef}}) or a data frame }
-  \item{id}{The sequence 'id' (integer) column when data are provided in TSE format (ignored if \code{data} argument is provided).}
-  \item{timestamp}{The event 'timestamp' (double) column when data are provided in TSE format, i.e., the time at which events occur (ignored if \code{data} argument is provided).}
-  \item{event}{The 'event' column when data are provided in TSE format, i.e., the events occurring at the specified time stamps  (ignored if \code{data} argument is provided).}
-  \item{end.event}{If specified this event indicates the end of observation time (total length of event sequences) when it is not followed by any other valid event. The event is ignored when occurring in between two valid events.}
+  \item{id}{Integer. The sequence 'id' column when data are provided in TSE format (ignored if \code{data} argument is provided).}
+  \item{timestamp}{Double. The event 'timestamp' column when data are provided in TSE format, i.e., the time at which events occur (ignored if \code{data} argument is provided).}
+  \item{event}{Character or factor. The 'event' column when data are provided in TSE format, i.e., the events occurring at the specified time stamps  (ignored if \code{data} argument is provided).}
+  \item{end.event}{Character. If specified this event indicates the end of observation time (total length of event sequences) when it is not followed by any other valid event. The event is ignored when occurring in between two valid events.}
   \item{tevent}{Either a transition matrix or a method to generate events from state sequences (see \code{\link{seqetm}}). Used only when \code{data} is a state sequence object.}
-  \item{use.labels}{If \code{TRUE}, transitions names are built from long state labels rather than from the short state names of the alphabet.}
-  \item{weighted}{If \code{TRUE} and \code{data} is a state sequence object, use the weights specified in \code{data} (see \code{\link{seqdef}})}
+  \item{use.labels}{Logical. If \code{TRUE}, transitions names are built from long state labels rather than from the short state names of the alphabet.}
+  \item{weighted}{Logical. If \code{TRUE} and \code{data} is a state sequence object, use the weights specified in \code{data} (see \code{\link{seqdef}})}
   \item{endEvent}{Deprecated. Use \code{end.event} instead.}
 }
 \seealso{

@@ -8,7 +8,7 @@ Plot method for output produced by the seqmodst function, i.e objects of class s
 \usage{
 \method{plot}{stslist.modst}(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
   xaxis = TRUE, xtlab = NULL, xtstep = NULL, tick.last = NULL,
-  cex.axis = 1, cex.plot, ...)
+  info = TRUE, cex.axis = 1, cex.plot, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -26,9 +26,12 @@ Plot method for output produced by the seqmodst function, i.e objects of class s
 
   \item{tick.last}{Logical. Should a tick mark be enforced at the last position on the x-axis? If unspecified, the \code{tick.last} attribute of the \code{x} object is used.}
 
+  \item{info}{Logical: should info about frequency of occurrence of the sequence of modal states be displayed?}
+
   \item{cex.axis}{Axis annotation magnification. See \code{\link{par}}.}
 
   \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
+  
 
   \item{\dots}{further graphical parameters. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}. }
 }

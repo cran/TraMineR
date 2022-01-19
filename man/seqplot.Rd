@@ -103,7 +103,7 @@ The \emph{transversal entropy plot} (\code{type="Ht"}) displays the evolution ov
 
 The \emph{modal state sequence plot} (\code{type="ms"}) displays the sequence of the modal states with each mode proportional to its frequency at the given position. The \code{\link{seqmodst}} function is called which returns the sequence and the result is plotted by calling the \code{\link{plot.stslist.modst}} plot method.
 
-The \emph{mean time plot} (\code{type="mt"}) displays the mean time spent in each state of the alphabet as computed by the \code{\link{seqmeant}} function. The \code{\link{plot.stslist.meant}} plot method is used to plot the resulting statistics. Set \code{serr=TRUE} to display error bars on the mean time plot.
+The \emph{mean time plot} (\code{type="mt"}) displays the mean time spent in each state of the alphabet as computed by the \code{\link{seqmeant}} function. The \code{\link{plot.stslist.meant}} plot method is used to plot the resulting statistics. Set \code{serr=TRUE} to display error bars on the mean time plot. Bar labels can be specified by passing the \code{bar.labels} among the \code{...} arguments. In that case, \code{bar.labels} must be either a matrix with group specific labels in columns or a single vector to display the same labels for all groups.
 
 The \emph{representative sequence plot} (\code{type="r"}) displays a reduced, non redundant set of representative sequences extracted from the provided state sequence object and sorted according to a representativeness criterion. The \code{\link{seqrep}} function is called to extract the representative set which is then plotted by calling the \code{\link{plot.stslist.rep}} method. A distance matrix is required that is passed with the \code{diss} argument or by calling the \code{seqdist} function if \code{diss=NULL}. The \code{criterion} argument sets the representativeness criterion used to sort the sequences.  Refer to the \code{\link{seqrep}} and \code{\link{plot.stslist.rep}} manual pages for a complete list of optional arguments.  See \cite{Gabadinho and Ritschard (2013)} for more details on the extraction of representative sets. Also look at the examples below.
 
@@ -229,17 +229,23 @@ seqplot(actcal.seq, type="d", group=actcal$sex)
 seqplot(biofam.seq, type="Ht", group=biofam$sex)
 
 ## ===============
-## Meant time plot
+## Mean time plot
 ## ===============
 
 ## actcal data set, grouped by sex
 seqplot(actcal.seq, type="mt", group=actcal$sex)
 
-## biofam data set, grouped by sex
-seqmtplot(biofam.seq, group=biofam$sex)
+## displaying mean times as bar labels
+group <- factor(actcal$sex)
+blab <- NULL
+for (i in 1:length(levels(group))){
+  blab <- cbind(blab,seqmeant(actcal.seq[group==levels(group)[i],]))
+}
+seqmtplot(actcal.seq, group=group,
+          bar.labels = round(blab,digits=2), cex.barlab=1.2)
 
 }
 
-\author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
+\author{Alexis Gabadinho and Gilbert Ritschard}
 
 \keyword{Plot}

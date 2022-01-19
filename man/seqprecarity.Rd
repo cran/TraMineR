@@ -7,10 +7,11 @@
 \alias{seqinsecurity}
 %%\alias{seqprecarity.old}
 \alias{seqprecorr}
+\alias{print.seqidegrad}
 \alias{print.seqprec}
-\alias{print.seqprecorr}
+%\alias{print.seqprecorr}
 
-\title{Degradation, Precarity and Insecurity indexes}
+\title{Degradation, Precarity, and Insecurity indexes}
 
 \description{
 The degradation index returned by \code{seqidegrad} is a normalized transformation of the difference between the proportion of downward and upward state changes (transitions).
@@ -79,7 +80,7 @@ seqprecorr(...)
 
 
 \details{
-The \code{seqidegrad} function returns for each sequence \eqn{x} the difference \eqn{q(x)} between the proportions of downward and upward transitions (state changes). 
+The \code{seqidegrad} function returns for each sequence \eqn{x} the difference \eqn{q(x)} between the proportions of downward and upward transitions (state changes).
 
 The argument \code{penalized} allows to chose between three strategies for computing \eqn{q(x)}: only penalizing negative weights (in which case \eqn{q(x)} is the proportion of negative transitions), only rewarding (with negative penalties) positive transitions, and applying both positive and negative penalties. The transitions can be weighted and the type of transition weights used is selected with the \code{method} argument. For weights based on transition probabilities, the way how theses probabilites are transformed into weights is controlled with \code{weight.type}. To avoid a border effect, when any computed transition probability \eqn{p} is close from 1 (\eqn{p > 1 - .1/d}), all \eqn{p}'s are adjusted as \eqn{p - p/d}, where \eqn{d} is the \code{border.effect} parameter. With \code{method="RANK"}, the weights are set as the differences between the to and from state undesirableness.
 When \code{pow} is not \code{FALSE}, the weight of each transition is multiplied by the potential to integrate the next spell using the provided \code{pow} value.
@@ -96,7 +97,7 @@ The insecurity index applies an additive correction of the complexity:
 
   \deqn{insec(x) = \pi(x_1) integr(x,sp1) + r(x) + c(x)}{insec(x) = pi(x_1) integr(x,sp1) + r(x) + c(x)}
 
-where \eqn{integr(x,sp1)} is the potential to integrate the first spell (proportion of sequence length covered by first spell when \code{spow=0}). 
+where \eqn{integr(x,sp1)} is the potential to integrate the first spell (proportion of sequence length covered by first spell when \code{spow=0}).
 
 When \code{correction = NULL} (default), \eqn{r(x)} is set as the degradation index \eqn{q(x)} provided by \code{seqidegrad}. The degradation is computed with \code{pow=FALSE} for the precarity and using the provided \code{pow} value for the insecurity.
 
@@ -131,11 +132,11 @@ and as additional attributes: \code{tr} the used transition weights; \code{signs
 }
 
 \references{
-Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, forthcoming.
+Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, \doi{10.1177/00491241211036156}.
 
 Ritschard, G., Bussi, M., and O'Reilly, J. (2018), "An index of precarity for
 measuring early employment insecurity", in G. Ritschard, and M. Studer, \emph{Sequence Analysis and Related Approaches: Innovative Methods and Applications}, Series Life Course Research and Social
-Policies, Vol. 10, pp 279-295. Cham: Springer.
+Policies, Vol. 10, pp 279-295. Cham: Springer, \doi{10.1007/978-3-319-95420-2_16}.
 
 Gabadinho, A., Ritschard, G., Studer, M. and Müller, N.S. (2010), "Indice de complexité pour le tri et la comparaison de séquences catégorielles", In Extraction et gestion des connaissances (EGC 2010), \emph{Revue des nouvelles technologies de l'information RNTI}. Vol. E-19, pp. 61-66.
 

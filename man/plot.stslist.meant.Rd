@@ -7,7 +7,8 @@ This is the plot method for objects of class \emph{stslist.meant} produced by th
 }
 \usage{
 \method{plot}{stslist.meant}(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
-  xaxis = TRUE, cex.axis = 1, ylim = NULL, cex.plot, ...)
+  xaxis = TRUE, cex.axis = 1, ylim = NULL, bar.labels = NULL,
+  cex.barlab = cex.axis, offset.barlab = .1, cex.plot, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,6 +20,9 @@ This is the plot method for objects of class \emph{stslist.meant} produced by th
 
   \item{cex.axis}{Axis annotation magnification. See \code{\link{par}}.}
   \item{ylim}{an optional vector setting the limits for the y axis. If \code{NULL} (default), limits are set to (0, max. sequence length).}
+  \item{bar.labels}{Vector of bar labels of length equal to size of alphabet.}
+  \item{cex.barlab}{Real. Bar labels magnification. Defaults to \code{cex.axis}} 
+  \item{offset.barlab}{Real. Vertical offset of bar labels as a proportion of \code{max(ylim)}.  Default is 0.1.}
   \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
   \item{\dots}{further graphical parameters. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}.}
 }

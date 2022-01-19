@@ -18,7 +18,7 @@ seqindic(seqdata, indic=c("visited","trans","entr","cplx","turb2n"), with.missin
   \item{indic}{vector of character strings. List of selected indicators among \code{"lgth"} (sequence length), \code{"nonm"} (number of non-missing elements), \code{"dlgth"} (number of spells), \code{"visited"} (number of visited states), \code{"visitp"} (proportion of states visites), \code{"trans"} (number of state changes), \code{"transp"} (number of state changes as a proportion of maximum possible transitions), \code{"meand"} (mean spell duration),  \code{"dustd"} (duration standard deviation),
       \code{"meand2"} (mean spell duration taking non-visited states into account), \code{"dustd2"} (duration standard deviation taking non-visited states into account),
       \code{"entr"} (longitudinal normalized entropy), \code{"nsubs"} (number of subsequences of the DSS sequence), \code{"volat"} (objective volatility), \code{"cplx"} (complexity index),
-      \code{"turb"} (turbulence), \code{"turbn"} (normalized turbulence), 
+      \code{"turb"} (turbulence), \code{"turbn"} (normalized turbulence),
       \code{"turb2"} (turbulence taking non-visited states into account), \code{"turb2n"} (normalized turbulence taking non-visited states into account),
       \code{"ppos"} (proportion of positive states), \code{"nvolat"} (normative volatility), \code{"vpos"} objective volatility of positive-negative state sequences, \code{"integr"} (integrative potential),  \code{"degrad"} (degradation), \code{"bad"} (badness), \code{"prec"} (precarity index),  \code{"insec"} (insecurity). Can also be \code{"all"}, \code{"basic"}, \code{"diversity"}, \code{"complexity"},  \code{"binary"} or \code{"ranked"} that each selects a subset of the indicators. Setting \code{indic="all"} selects all indicators but \code{"ppos"}, \code{"vpos"}, \code{"nvolat"}, \code{"integr"}, \code{"degrad"}, code{"bad"}, \code{"prec"}, and \code{"insec"} that require an additional argument list.}
 
@@ -59,17 +59,17 @@ seqindic(seqdata, indic=c("visited","trans","entr","cplx","turb2n"), with.missin
   \cr \code{Nsubs}: Number of subsequences of the DSS sequence
   \cr \code{Volat}: Objective volatility
   \cr \code{Cplx}: Complexity
-  \cr \code{Turb}: Turbulence   
+  \cr \code{Turb}: Turbulence
   \cr \code{Turbn}: Normalized turbulence
-  \cr \code{Turb2}: Turbulence taking non visited states into account    
+  \cr \code{Turb2}: Turbulence taking non visited states into account
   \cr \code{Turbn2}: Normalized turbulence taking non visited states into account
   \cr \code{Ppos}: Proportion of positive states
   \cr \code{Nvolat}: Normative volatility (proportion of positive spells)
   \cr \code{Vpos}: Objective volatility of positive-negative state sequences
-  \cr \code{Integr}: Integrative capacity (potential)   
+  \cr \code{Integr}: Integrative capacity (potential)
   \cr \code{Degrad}: Degradation
-  \cr \code{Bad}: Badness    
-  \cr \code{Prec}: Precarity   
+  \cr \code{Bad}: Badness
+  \cr \code{Prec}: Precarity
   \cr \code{Insec}: Insecurity
 }
 \seealso{
@@ -78,7 +78,7 @@ seqindic(seqdata, indic=c("visited","trans","entr","cplx","turb2n"), with.missin
 
 
 \references{
-Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, forthcoming.
+Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, \doi{10.1177/00491241211036156}.
 }
 
 

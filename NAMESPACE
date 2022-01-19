@@ -1,13 +1,14 @@
-import(boot, RColorBrewer)
-importFrom("graphics", "abline", "arrows", "axis", "barplot", "box", "hist", "layout", "legend", "lines", "mtext", "par", "plot", "plot.new", "points", "polygon", "rect", "segments", "text", "title")
+## import(boot, RColorBrewer)
+importFrom("graphics", "abline", "arrows", "axis", "barplot", "box", "hist", "layout", "legend", "lines", "mtext", "par", "plot", "plot.new", "points", "polygon", "rect", "segments", "strwidth", "text", "title")
 importFrom("grDevices", "col2rgb", "colorRamp", "dev.off", "rgb")
 importFrom("stats", "as.dist", "chisq.test", "cor", "complete.cases", "density", "dnorm", "dunif", "formula", "median", "model.frame", "model.matrix", "na.omit", "na.pass", "pnorm", "qnorm", "quantile", "reshape", "runif", "terms", "var", "weighted.mean", "xtabs")
 importFrom("utils", "combn", "download.file", "read.table", packageDescription, packageVersion)
-importFrom("Hmisc", "errbar")
 importFrom("cluster", "daisy")
 importFrom("colorspace", "qualitative_hcl")
-importFrom("psych", "cor.wt")
+importFrom("weights", "wtd.cor")
 importFrom("cNORM", "weighted.rank")
+importFrom("RColorBrewer", "brewer.pal")
+importFrom("boot", "boot")
 
 export(
   alphabet,
@@ -176,6 +177,8 @@ S3method(print,seqdiff)
 S3method(plot,seqdiff)
 S3method(print,diss.rep)
 S3method(summary,diss.rep)
+S3method(summary,ddomassoc)
+
 
 ## Event subsequence module
 S3method(plot,subseqelistchisq)

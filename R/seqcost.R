@@ -270,7 +270,8 @@ seqcost <- function(seqdata, method, cval = NULL, with.missing = FALSE,
   }
 
   ## Setting rows and columns labels
-  rclab <- paste(alphabet, "->", sep = "")
+  #rclab <- paste(alphabet, "->", sep = "")
+  rclab <- alphabet
   if (time.varying) {
     dimnames(costs) <- list(rclab, rclab, colnames(seqdata))
   } else {

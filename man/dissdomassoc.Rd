@@ -1,5 +1,6 @@
 \name{dissdomassoc}
 \alias{dissdomassoc}
+\alias{summary.ddomassoc}
 \title{Domain association measures}
 
 \description{
@@ -29,9 +30,10 @@ These are for each pair of domains the correlation (Pearson or Spearman) between
 When a \code{jointdiss} distance matrix or object is provided, correlations of each individual with this joint domain are also computed. The R2 of the joint domain takes account of all domains. However, R2's for the domains remain unchanged, i.e. they ignore the joint domain. Likewise, \code{jointdiss} does not affect the Cronbach alpha.
 
 Spearman correlations are based on rank values of the distances. The computation of weighted ranks for weighted data is done with the \code{\link[cNORM]{weighted.rank}} function of the \code{cNORM} package and may take a while for large number of sequences (\code{> 500},  i.e. 124750 distances per domain). Therefore, weighted ranks are only used when explicitly requested by setting \code{w.rank = TRUE}. When \code{w.rank = FALSE} (default), Spearman is computed as the weighted Pearson correlation between non-weighted ranks.
+
 }
 
-\value{A list with the requested association measures.
+\value{An object of class \code{ddomassoc}, which is a list with the requested association measures. The \code{summary} method organizes the correlations and their p-values in table form.
 }
 \references{
     Piccarreta (2017). Joint Sequence Analysis: Association and Clustering. \emph{Sociological Methods and Research}, 46(2), 252–287. \doi{10.1177/0049124115591013}.
@@ -65,14 +67,14 @@ names(dbiofam) <- c("child","marr","left")
 ## Association between domains and R2 by domain
 rass <- dissdomassoc(dbiofam, weights=weights)
 
-## Joint distance matrix based on substitution costs
-## derived from indels based on log of state frequencies
+## Joint distance matrix based on domain INDELSLOG costs.
 mcdist <- seqdistmc(channels=list(child.seq, marr.seq, left.seq),
                     method="OM", sm =list("INDELSLOG", "INDELSLOG", "INDELSLOG"))
 
 rassj <- dissdomassoc(dbiofam, jointdiss=mcdist, what=c("all"), weights=weights)
 rassj[["Pearson.Rsquare"]]
 rass[["Pearson.Rsquare"]]
+summary(rassj)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 \author{Gilbert Ritschard}

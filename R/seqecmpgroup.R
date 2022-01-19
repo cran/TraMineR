@@ -105,7 +105,7 @@ seqecmpgroup <- function(subseq, group, method="chisq", pvalue.limit=NULL, weigh
 plot.subseqelistchisq <- function(x, ylim = "uniform", rows = NA, cols = NA,
   resid.levels = c(0.05,0.01), cpal = brewer.pal(1 + 2 * length(resid.levels), "RdBu"),
   vlegend = NULL, cex.legend = 1, ptype = "freq", legend.title = NULL,
-  residlevels, legendcol, legend.cex, ...) {
+  with.legend=TRUE, residlevels, legendcol, legend.cex, ...) {
 
   TraMineR.check.depr.args(alist(resid.levels = residlevels, vlegend = legendcol, cex.legend = legend.cex))
 
@@ -122,7 +122,7 @@ plot.subseqelistchisq <- function(x, ylim = "uniform", rows = NA, cols = NA,
 
 	#print(cpal)
 	residbreaks <- c(-Inf, -sort(resid.levels), sort(resid.levels), Inf)
-	lout <- TraMineR.setlayout(nplot, rows, cols, TRUE, "all")
+	lout <- TraMineR.setlayout(nplot, rows, cols, with.legend=with.legend, "all")
 	## Save all current settings
 	savepar <- par(no.readonly = TRUE)
 	on.exit(par(savepar))
@@ -140,26 +140,28 @@ plot.subseqelistchisq <- function(x, ylim = "uniform", rows = NA, cols = NA,
 		ccol <- as.character(cut(x$data[ , 4+nplot+i], breaks=residbreaks, labels=cpal))
 		plot.subseqelist(x, freq=x$data[,baseIndex+i], col=ccol, main=x$labels[i], ylim=ylim, ...)
 	}
-	par(mar = c(1, 1, 0.7, 1) + 0.1, xpd=FALSE)
-    if (is.null(legend.title)){
-       legend.title <- "Color by sign and significance of Pearson's residual"
-       }
-	#on.exit(par(savepar))
-	plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
-	title(main=legend.title, cex=cex.legend)
-	legncol <- length(c(paste("-", rev(resid.levels)), "neutral", resid.levels))
-	if(is.null(vlegend) && lout$legpos=="center"){
-		legncol <- 1
-	}
-	else if(!is.null(vlegend) && vlegend){
-		legncol <- 1
-	}
-	legend(lout$legpos,
-			# inset=c(0,leg.inset),
-			legend=c(paste("Negative", rev(pvalue.levels)), "neutral", paste("Positive", pvalue.levels)),
-			fill=cpal,
-			ncol=legncol,
-			cex=cex.legend,
-			bty="o"
-		)
+    if (with.legend) {
+	    par(mar = c(1, 1, 0.7, 1) + 0.1, xpd=FALSE)
+        if (is.null(legend.title)){
+           legend.title <- "Color by sign and significance of Pearson's residual"
+           }
+    	#on.exit(par(savepar))
+    	plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
+    	title(main=legend.title, cex=cex.legend)
+    	legncol <- length(c(paste("-", rev(resid.levels)), "neutral", resid.levels))
+    	if(is.null(vlegend) && lout$legpos=="center"){
+    		legncol <- 1
+    	}
+    	else if(!is.null(vlegend) && vlegend){
+    		legncol <- 1
+    	}
+    	legend(lout$legpos,
+    			# inset=c(0,leg.inset),
+    			legend=c(paste("Negative", rev(pvalue.levels)), "neutral", paste("Positive", pvalue.levels)),
+    			fill=cpal,
+    			ncol=legncol,
+    			cex=cex.legend,
+    			bty="o"
+    		)
+    }
 }

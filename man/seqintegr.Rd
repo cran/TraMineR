@@ -46,7 +46,7 @@ Brzinsky-Fay, C. (2018) Unused Resources: Sequence and Trajectory Indicators. In
 
 Manzoni, A and I. Mooi-Reci (2018) Measuring Sequence Quality, in Ritschard and Studer (eds), \emph{Sequence Analysis and Related Approaches. Innovative Methods and Applications}, Springer, 2018, pp 261-278.
 
-Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, forthcoming.
+Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, \doi{10.1177/00491241211036156}.
 }
 
 \seealso{

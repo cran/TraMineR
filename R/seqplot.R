@@ -24,6 +24,7 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
       msg.warn("'tlim' deprecated, use 'idxs' instead!")
       oolist <- oolist[names(oolist) != "tlim"]
     }
+    barlab <- if ("bar.labels" %in% names(oolist)) { as.matrix(oolist[["bar.labels"]]) } else { NULL }
 
     diss <- NULL
   	if ("diss" %in% names(oolist)) {
@@ -87,6 +88,11 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
 
           nplot <- length(levels(group))
           gindex <- vector("list",nplot)
+
+          if (type=="mt" & !is.null(barlab)){
+            if (!(ncol(barlab) %in% c(1,nplot)) )
+            stop(call.=FALSE, "When a matrix, bar.labels should have one column per group")
+          }
 
           for (s in 1:nplot)
             gindex[[s]] <- which(group==levels(group)[s])
@@ -185,8 +191,16 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
 			}
 		}
 		## Mean times
-		else if (type=="mt") {f <- seqmeant}
-		## Mean times
+		else if (type=="mt") {
+      f <- seqmeant
+      if (!is.null(barlab)) {
+        if (ncol(barlab)==1)
+          olist[["bar.labels"]] <- as.vector(barlab)
+        else
+          olist[["bar.labels"]] <- as.vector(barlab[,np])
+      }
+    }
+		## Modal states
 		else if (type=="ms") {
 			f <- seqmodst
 		}

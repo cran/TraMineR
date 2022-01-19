@@ -95,16 +95,21 @@ dissdomassoc <- function(domdiss, jointdiss = NULL, what = c("pearson","R2"),
   }
 
   res <- list()
-  if ("pearson" %in% what){ ## cor.wt from the psych package
+
+  if ("pearson" %in% what){ ## wtd.cor from weights package
     ##correlation <- cor(dissmatw, method='pearson')
-    correlation <- cor.wt(dissmat, w=ww)$r
+    wcorr <- wtd.cor(dissmat, weight=ww)
+    correlation <- wcorr[["correlation"]]
     res[["Pearson"]] <- correlation
+    res[["p.pearson"]] <- wcorr[["p.value"]]
     if ("R2" %in% what) res[["Pearson.Rsquare"]] <- rsquare.corr(correlation, jointdiss, ndom, ndomv)
   }
   if ("spearman" %in% what){
     ##correlation <- cor(dissmat.spearw)
-    correlation <- cor.wt(dissmat.spear, w=ww)$r
+    wcorr <- wtd.cor(dissmat.spear, weight=ww)
+    correlation <- wcorr[["correlation"]]
     res[["Spearman"]] <- correlation
+    res[["p.spearman"]] <- wcorr[["p.value"]]
     if ("R2" %in% what) res[["Spearman.Rsquare"]] <- rsquare.corr(correlation, jointdiss, ndom, ndomv)
   }
   #if ("kendall" %in% what){  ## kendall takes too much time
@@ -140,8 +145,51 @@ dissdomassoc <- function(domdiss, jointdiss = NULL, what = c("pearson","R2"),
     else
       message("Two or less domains, no subset possible for Cronbach alpha")
   }
+  res[["dnames"]] <- dnames
+
+  class(res) <- c(class(res), "ddomassoc")
 
   return(res)
+}
+
+
+summary.ddomassoc <- function(object, ...){
+  dnames <- object[["dnames"]]
+  ndom <- length(dnames)
+  cnam <- NULL
+  rnam <- NULL
+  is.pearson <- !is.null(object[["Pearson"]])
+  if (is.pearson) cnam <- c(cnam, "Pearson","p.Pearson")
+  is.spearman <- !is.null(object[["Spearman"]])
+  if (is.spearman) cnam <- c(cnam, "Spearman","p.Spearman")
+  ncol <- length(cnam)
+  tab <- matrix(NA,nrow=ndom*(ndom-1)/2, ncol=ncol)
+  colnames(tab) <- cnam
+
+  tabnames <- NULL
+  k <- 0 ## res row counter
+  dn.split <- strsplit(dnames," x ")
+  for (d1 in 1:(ndom-1)) {
+    for (d2 in (d1+1):ndom ) {
+       ## cat("\n d1 = ",d1, " d2 = ", d2)
+      if (!any(dn.split[[d1]] %in% dn.split[[d2]])) {
+        k <- k+1
+        if(is.pearson) {
+          tab[k,"Pearson"]    <- object[["Pearson"]][dnames[d1],dnames[d2]]
+          tab[k,"p.Pearson"] <- object[["p.pearson"]][dnames[d1],dnames[d2]]
+        }
+        if(is.spearman) {
+          tab[k,"Spearman"] <- object[["Spearman"]][dnames[d1],dnames[d2]]
+          tab[k,"p.Spearman"] <- object[["p.spearman"]][dnames[d1],dnames[d2]]
+        }
+        tabname <- paste(dnames[d1],dnames[d2],sep="_vs_")
+        tabnames <- c(tabnames,tabname)
+      }
+    }
+  }
+  tab <- tab[1:k,]
+  rownames(tab) <- tabnames
+  return(tab)
 }
 
 

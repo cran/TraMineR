@@ -37,8 +37,14 @@ seqprep <- function(seqdata, left=NA, right="DEL", gaps=NA,
     }
 	}
 
-	if (length(allmiss)>0) {
-		message(" [!!] Empty sequence(s) with index: ", paste(allmiss, collapse=","),"\n      may produce inconsistent results.")
+  nempty <- length(allmiss)
+	if (nempty>0) {
+    dots <- ""
+    if (nempty > 10){
+      allmiss <- allmiss[1:10]
+      dots <- ", ..."
+    }
+		message(" [!!] ",nempty," empty sequence(s) with index: ", paste(allmiss, collapse=","),dots,"\n      may produce inconsistent results.")
 	}
 
 	## Setting a new code for missing statuses

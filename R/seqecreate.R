@@ -81,6 +81,7 @@ seqecreate.internal <- function(data, id, timestamp, event, end.event, tevent,
 	if(any(grepl("\\(|\\)|,", dictionnary))){
 		warning(" [!] some of your events contain '(', ')' or ',' characters. The search of specific subsequences may not work properly.")
 	}
+  if (is.character(id)) id <- factor(id)
 	id <- as.integer(id)
 	timestamp <- as.double(timestamp)
 	event <- as.integer(event)

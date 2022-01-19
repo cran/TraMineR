@@ -2,7 +2,7 @@
 ## Locate the difference in sequence between groups
 ###########################
 seqdiff <- function(seqdata, group, cmprange = c(0, 1),
-  seqdist.args = list(method = "LCS", norm = TRUE), with.missing = FALSE,
+  seqdist.args = list(method = "LCS", norm = "auto"), with.missing = FALSE,
   weighted = TRUE, squared = FALSE, seqdist_arg) {
 
   TraMineR.check.depr.args(alist(seqdist.args = seqdist_arg))
@@ -37,6 +37,7 @@ seqdiff <- function(seqdata, group, cmprange = c(0, 1),
 		weights <- NULL
 	}
 
+  offtot <- min(totrange)-1
 	for (i in totrange) {
 		gc()
 		srange=c((i+cmprange[1]):(i+cmprange[2]))
@@ -60,8 +61,8 @@ seqdiff <- function(seqdata, group, cmprange = c(0, 1),
 		## Computing distance on range
 		sdist <- suppressMessages(do.call(seqdist, args=seqdist.args))
 		tmp <- dissassoc(sdist, cmpbase[seqok], R=0, weights=weights[seqok], weight.permutation="diss", squared=squared)
-		ret$stat[i,rownames(tmp$stat)] <- tmp$stat[,1]
-		ret$discrepancy[i,rownames(tmp$groups)] <- tmp$groups$discrepancy
+		ret$stat[i-offtot,rownames(tmp$stat)] <- tmp$stat[,1]
+		ret$discrepancy[i-offtot,rownames(tmp$groups)] <- tmp$groups$discrepancy
 	}
 	attr(ret, "xtstep") <- attr(seqdata, "xtstep")
 	attr(ret, "tick.last") <- attr(seqdata, "tick.last")
@@ -111,7 +112,8 @@ plot.seqdiff <- function(x, stat = "Pseudo R2", type = "l", ylab = stat,
     		if (is.null(ylim)) {
     			ylim=c(min(toplot), max(toplot))
     		}
-    		plot(1:nrow(x$discrepancy), x$discrepancy[, ncol(x$discrepancy)], type=type, ylab=ylab, xlab=xlab, xaxt="n", col=cpal[nbstates], ylim=ylim, ...)
+    		plot(1:nrow(x$discrepancy), x$discrepancy[, ncol(x$discrepancy)], type=type,
+            ylab=ylab, xlab=xlab, xaxt="n", col=cpal[nbstates], ylim=ylim, ...)
 
     		for (i in 1:(ncol(x$discrepancy)-1)) {
     			lines(toplot[, i], type=type, col=cpal[i], ...)

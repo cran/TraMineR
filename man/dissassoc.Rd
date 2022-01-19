@@ -25,15 +25,16 @@ dissassoc(diss, group, weights=NULL, R=1000,
   \item{squared}{Logical. If \code{TRUE} the dissimilarities \code{diss} are squared.}
 }
 
-\details{ The \code{dissassoc} function assesses the association
+\details{The \code{dissassoc} function assesses the association
 between objects characterized by their dissimilarity matrix and a
 discrete covariate. It provides a generalization of the ANOVA
-principle to any kind of distance metric. The function returns a
-pseudo R-square that can be interpreted as a usual R-square. The
+principle to any kind of distance metric. The function returns a pseudo F statistic, 
+a pseudo Brown-Forsythe Fbf statistic, and
+a pseudo R-square that can be interpreted as a usual R-square. The
 statistical significance of the association is computed by means of
 permutation tests. The function performs also a test of discrepancy
 homogeneity (equality of within variances) using a generalization of
-the Levene statistic and Bartlett's statistics. \cr There are
+the Levene statistic and the Bartlett statistic. \cr There are
 \code{print} and \code{hist} methods (the latter producing an
 histogram of the permuted values used for testing the significance).
 
@@ -44,7 +45,7 @@ If a numeric \code{group} variable is provided, it will be treated as categorica
 following components:
   \item{groups}{A data frame with the number of cases and the discrepancy of each group}
   \item{anova.table}{The pseudo ANOVA table}
-  \item{stat}{The value of the statistics and their p-values}
+  \item{stat}{The value of the statistics (Pseudo F, Pseudo Fbf, Pseudo R2, Bartlett, and Levene) and their p-values}
   \item{perms}{The permutation object, containing the values computed for each permutation}
 }
 \references{

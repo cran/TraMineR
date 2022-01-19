@@ -28,7 +28,7 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		stop(" [!] Found one or more spell with starting time < 1", call.=FALSE)
 	}
 	if (any(endcolumn-begincolumn<0, na.rm=TRUE)) {
-		stop(" [!] Found one or more spell with ending time < starting time", call.=FALSE)
+		stop(" [!] Found one or more spell with ending time < starting time\n",which(endcolumn-begincolumn<0), call.=FALSE)
 	}
 
   ## print("Testing whether process==FALSE and pdata=='auto'")
@@ -85,9 +85,16 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	else {
     if (length(endcolumn[!is.na(endcolumn) & endcolumn > 0]) > 0){
       maxend <- max(endcolumn[!is.na(endcolumn) & endcolumn > 0])
-      if (maxend > limit) {
-        msg.warn(paste("max of 'end' column > limit! Sequences troncated at limit=",limit))
-      }
+      ## Check of sequence length <= limit is done later during the transformation
+###       if (frmoption == "year2age"){
+###         #minbeg <- min(begincolumn, na.rm=TRUE)
+###         #mlimit <- maxend - minbeg
+###         #if (mlimit > limit)
+###         #  msg.warn(paste("Some sequence lengths could be larger than 'limit' and will be truncated at",limit))
+###       }
+###       else if (maxend > limit) {
+###         msg.warn(paste("max of 'end' column > limit! Sequences truncated at limit=",limit))
+###       }
     } else {
       msg.warn("No positive value in 'end' column!")
     }
@@ -137,6 +144,16 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 	#print(birthyrid1)
 	#print(length(birthyrid1))
 	#print(nbseq)
+  #maxlength.warn <- TRUE
+  nemptseq <- 0
+  iemptseq <- NULL
+  nstartbefore <- 0
+  istartbefore <- NULL
+  nendbefore <- 0
+  iendbefore <- NULL
+  ntrunc <- 0
+  itrunc <- NULL
+  ii <- 0
 	for (i in 1:nbseq) {
 		spell <- seqdata[seqdata[,id]==lid[i],]
 		# number of spells for individual i
@@ -150,13 +167,31 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		if (frmoption=="year2age") {
 			if (length(birthyrid1)==1 && all(pdata=="auto")) {
 				birthy <- spell[1,begin]
-				age1 <- 0
+				if (!is.na(birthy)) age1 <- 0 else age1 <- NA ## gr Aug 21 fixed for NA birthy
 			}
 			else if (all(lid %in% birthyrid1)) {
 				birthy <- birthyr1[birthyrid1==lid[i]]
 				#print(paste("spell 1 = ", spell[1,begin]))
 				#print(paste("birthyr = ", birthy))
 				age1 <- spell[1,begin] - birthy
+				if (!is.na(age1) & age1 < 0) { ## first spell starts before birthyr
+          nstartbefore <- nstartbefore + 1
+          istartbefore <- c(istartbefore, i)
+          if (spell[1,end] >= birthy) {
+            #if (nstartbefore < 10)
+            #  msg.warn("First spell of sequence",i, "starts before birth year! Start set as birth year")
+            spell[1,begin] <- birthy
+            age1 <- 0
+          }
+          #else if (nstartbefore < 10)
+          #  msg.warn("First spell of sequence",i, "occurs before birth year! Start set as NA")
+          #if (nstartbefore == 10)
+          #  msg.warn("...")
+          else {
+            nendbefore <- nendbefore + 1
+            iendbefore <- c(iendbefore, i)
+          }
+        }
 			}
 			else {
 				stop(" [>] pdata must either contain a birth year per individual or be set as \"auto\"")
@@ -171,7 +206,12 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 			age1 <- spell[1,begin]
 		}
 		if (is.na(age1)) {
-			message(" [!] start time is missing for case ", i,", skipping sequence creation")
+      nemptseq <- nemptseq + 1
+      iemptseq <- c(iemptseq, i)
+      #if (nemptseq < 11) {
+			#   msg.warn("start time is missing for case ", i,", empty sequence created")
+      #} else if (nemptseq == 11)
+			#   msg.warn("...")
 			age1 <- -1
 		}
 
@@ -216,7 +256,7 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 						sstop <- spell[j,end] - birthy + 1
 					}
 					if(is.na(sstart) | is.na(sstop)) {
-						message(" [>] warning, skipping episode ",j, " for case ", i, " due to missing start/end time")
+						msg.warn("skipping episode ",j, " for case ", i, " due to missing start/end time")
 					}
 					else {
 					#######################
@@ -258,7 +298,7 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 							# if dur == 0, it means the individual stays in the state only one year
 							# if (dur == 0 && (sstop < limit) ) {
 							#	seqresult[i,sstart] <- state
-                            #                            }
+              # }
 
 									if(sstop <= limit) {
 									# if the sequence begins at age 0, we delete the first state
@@ -267,16 +307,38 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 									#	dur <- dur -1
 									#	}
 										seqresult[i,sstart:sstop] <- rep(state, dur)
-
 									}
-
-					   		 }
+                  else {
+                    if (i != ii) {
+                      ntrunc <- ntrunc + 1
+                      itrunc <- c(itrunc, i)
+                      ii <- i
+                    }
+                    #if (maxlength.warn){
+                    #  msg.warn("Some sequences exceed limit length and are truncated")
+                    #  msg.warn("Sequence",i,"truncated at limit",limit)
+                    #  maxlength.warn <- FALSE
+                    #}
+                    if (sstart <= limit) {
+                      tdur <- limit - sstart + 1
+                      seqresult[i,sstart:limit] <- rep(state, tdur)
+                    }
+                  }
+					   	}
 						}
 					}
 				}
 			 }
 		}
 	}
+  if (nstartbefore > 0)
+    msg.warn(nstartbefore,"cases with a spell starting before birth year. Indexes in attribute 'issues'")
+  if (nendbefore > 0)
+    msg.warn(nendbefore,"empty sequences because of spell occurring before birth year. Indexes in attribute 'issues'")
+  if (nemptseq > 0)
+    msg.warn(nemptseq,"empty sequences because of missing start time. Indexes in attribute 'issues'")
+  if (ntrunc > 0)
+    msg.warn(ntrunc,"sequences truncated at limit",limit,". Indexes in attribute 'issues'")
   seqresult <- as.data.frame(seqresult)
   if(is.factor(status.orig)) {
     for (k in 1:(limit)) {
@@ -289,6 +351,8 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		}
   }
   names(seqresult) <- names.seqresult
+  attr(seqresult,"issues") <- list(truncated = itrunc, empty.seq = iemptseq, start.before.birth = istartbefore,
+            spell.before.birth = iendbefore)
 
 	## setting id as rowname
 	row.names(seqresult) <- lid

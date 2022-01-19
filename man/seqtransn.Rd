@@ -15,12 +15,11 @@ seqtransn(seqdata, with.missing=FALSE, norm=FALSE, pweight=FALSE)
 
 	\item{norm}{logical. If set as \code{TRUE}, the number of transitions is
 divided by its theoretical maximum, the length of the sequence minus
-1. When the length of the sequence is 1, the normalized value is set as 0 (non-normalized value).}
+1. When the length of the sequence is 1, the normalized value is set as 0.}
 
-	\item{pweight}{logical. EXPERIMENTAL! If set as \code{TRUE}, when counting transitions
-	each transition does not account for 1 but for its probability (transition rate) as observed in the data.}
-
- }
+	\item{pweight}{logical. EXPERIMENTAL! If set as \code{TRUE}, the count of transition weights  
+each transition by its probability of transition in the data.}
+}
 
 \details{A transition in a sequence is a state change between
 time/position \eqn{t} and \eqn{t+1}. For example, the sequence

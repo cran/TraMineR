@@ -275,6 +275,8 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
 }
 \value{
   A data frame for \code{SRS}, \code{TSE}, and \code{SPELL}, a matrix otherwise.
+  
+  When \code{from="SPELL"}, outcome has an attribute \code{issues} with indexes of sequences with issues (truncated sequences, missing start time, spells before birth year, ...)
 }
 \references{
   Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining
