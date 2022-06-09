@@ -9,8 +9,8 @@
   Table of per sequence values of selected indicators.
 }
 \usage{
-seqindic(seqdata, indic=c("visited","trans","entr","cplx","turb2n"), with.missing=FALSE,
-    ipos.args=list(), prec.args=list(), w=.5)
+seqindic(seqdata, indic=c("visited","trans","entr","cplx","turb2n"), 
+    with.missing=FALSE, ipos.args=list(), prec.args=list(), w=.5)
 }
 \arguments{
   \item{seqdata}{a state sequence object (class \code{stslist}) as returned by \code{\link[TraMineR]{seqdef}}.}

@@ -4,12 +4,12 @@
 
 plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
   yaxis = TRUE, xaxis = TRUE, xtlab = NULL, xtstep = NULL, tick.last = NULL,
-    cex.axis = 1, space = 0, xlab = NULL, cex.plot, ...) {
+    cex.axis = 1, space = 0, xlab = NULL, lwd=3.5, col="blue", ylim=NULL, cex.plot, ...) {
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
-  if (!(type %in% c("d", "Ht"))){
-    msg.stop("type can only be 'd' or 'Ht'")
+  if (!(type %in% c("d", "Ht", "dH"))){
+    msg.stop("type can only be 'd', 'Ht', or 'dH'")
   }
 
 	n <- attr(x,"nbseq")
@@ -30,15 +30,42 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
 
 	seql <- length(xtlab)
 
+    ## for x axis
+	x.lab.pos <- NULL
+	tpos <- seq(1,seql, xtstep)
+    if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
+
+	for (p in tpos) {
+		x.lab.pos <- c(x.lab.pos, (p-1)+((p-1)*space)+(0.5+space))
+	}
+
+    ## y label
+    if(is.null(ylab)){
+        if (type=="d")
+			ylab <- paste("Rel. Freq. (",wlab,"n=",round(n,2),")",sep="")
+        else
+            ylab <- paste("Entropy (",wlab,"n=",round(n,2),")",sep="")
+    }
+
+    ## y limit for entropy
+    y <- x$Entropy
+    if (is.null(ylim)) {
+        if (isTRUE(attr(x,"norm")))
+            ylim <- c(0.025,1)
+        else
+            ylim <- c(0.025*1.1*max(y),1.1*max(y))
+    }
+
+
 	## State distribution plot
-	if (type=="d") {
+	if (type %in% c("d","dH")) {
 		if (is.null(cpal))
 			cpal <- attr(x,"cpal")
 
-		if (is.null(ylab))
-			ylab <- paste("Freq. (",wlab,"n=",round(n,2),")",sep="")
+		#if (is.null(ylab))
+		#	ylab <- paste("Freq. (",wlab,"n=",round(n,2),")",sep="")
 
-		barplot(x$Frequencies,
+		bp <- barplot(x$Frequencies,
 			space=space,
 			axes=FALSE,
 			axisnames=FALSE,
@@ -46,42 +73,59 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
 			## cex.names=cex.axis,
 			col=cpal,
 			ylab=ylab,
-      xlab=xlab,
+            xlab=xlab,
 			...)
 
 		## Plotting the x axis
-		x.lab.pos <- NULL
-		tpos <- seq(1,seql, xtstep)
-    if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
-
-		for (p in tpos) {
-			x.lab.pos <- c(x.lab.pos, (p-1)+((p-1)*space)+(0.5+space))
-		}
+ ##		x.lab.pos <- NULL
+ ##		tpos <- seq(1,seql, xtstep)
+ ##        if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
+ ##
+ ##		for (p in tpos) {
+ ##			x.lab.pos <- c(x.lab.pos, (p-1)+((p-1)*space)+(0.5+space))
+ ##		}
 
 		if (xaxis) {
 			axis(1, at=x.lab.pos, labels=xtlab[tpos], pos=-0.02, cex.axis=cex.axis)
 		}
+
+        if (type == "dH") {
+            #if (is.null(ylab.r))
+            #    ylab.r <- "Entropy index"
+            par(new=TRUE)
+            c1 <- 1 - (1-.5*space)/length(y)
+            c2 <- .5
+            bp <- as.vector(bp)[1:length(y)]
+            #plot(x=as.vector(bp)[1:length(y)], y=y, type="n", axes=FALSE,
+            plot(x=x.lab.pos, y=y, type="n", axes=FALSE,
+                    ylim=ylim, xlab=NA, ylab=NA)
+            #lines(x=c1*bp + c2, y=y, col=col, lwd=lwd)
+            lines(x=c1*x.lab.pos + c2, y=y, col=col, lwd=lwd)
+            #axis(4,at=seq(0,max(c(1,max(y))),.2))
+            #mtext(ylab.r, line=3, side=4, cex = par("cex"))
+
+        }
 	}
 	## Entropy index plot
 	else if (type=="Ht") {
-		if (is.null(ylab))
-			ylab <- paste("Entropy index (",wlab,"n=",round(n,2),")",sep="")
+        #if (is.null(ylab.r))
+        #    ylab.r <- paste("Entropy index (",wlab,"n=",round(n,2),")",sep="")
 
-		plot(x$Entropy,
-			col="blue",
+		plot(y,
+			col=col,
 			## frame.plot=TRUE,
 			type="l",
-			lwd=3.5,
+			lwd=lwd,
 			lty="solid",
 			axes=FALSE,
-			ylim=0:1,
+			ylim=ylim,
 			ylab=ylab,
 			xlab=xlab,
 			...)
 
 		## Plotting the x axis
 		if (xaxis) {
-			tpos <- seq(1,seql, xtstep)
+			#tpos <- seq(1,seql, xtstep)
 			axis(1, at=tpos, labels=xtlab[tpos], pos=-0.02, cex.axis=cex.axis)
 		}
 	}
@@ -91,5 +135,6 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
 		axis(2, cex.axis=cex.axis)
 
   if (type == 'Ht') return(invisible(x$Entropy))
-  else return(invisible(x$Frequencies))
+  else if (type == 'd') return(invisible(x$Frequencies))
+  else return(invisible(x))
 }

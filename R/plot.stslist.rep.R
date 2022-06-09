@@ -4,12 +4,29 @@
 
 plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
   dmax = NULL, stats = TRUE, ylab = NULL, xaxis = TRUE, xtlab = NULL,
-  xtstep = NULL, tick.last = NULL, cex.with.axis = 1, cex.plot, ...) {
+  xtstep = NULL, tick.last = NULL, seq.alt = NULL, info = TRUE,
+  cex.with.axis = 1, cex.plot, ...) {
 
   TraMineR.check.depr.args(alist(cex.with.axis = cex.plot))
 
 	## Extracting attributes
 	n <- attr(x,"nbseq")
+    nn <- length(attr(x,"Scores"))
+
+    if (!is.null(seq.alt)) {
+        if (!is.stslist(seq.alt)) msg.stop("seq.alt should be a state sequence stslist object!")
+        if (nrow(seq.alt) != nn) msg.stop("seq.alt should have",nn,"number of sequences")
+        attr(seq.alt,"weighted")
+        rep.idx <- attr(x,"Index")
+        x.alt <- seq.alt[rep.idx,]
+        attr(x.alt,"nbseq") <- n
+        attr(x.alt,"weighted") <- attr(x,"weighted")
+        attr(x.alt,"dmax") <- attr(x,"dmax")
+        attr(x.alt,"criterion") <- attr(x,"criterion")
+        attr(x.alt,"Statistics") <- attr(x,"Statistics")
+        #stats <- FALSE
+        x <- x.alt
+    }
 
 	if (is.null(xtlab)) {xtlab <- colnames(x)}
 
@@ -86,9 +103,12 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 		ylab <- paste(nbrep, " representative(s) (", wlab, "n=", round(n,2),")",sep="")
 	}
 
-	barplot(seqbar,col=cpal, width=barw,
+	if (ylab=="") xmin <- 0
+    else xmin <- -2
+
+    barplot(seqbar,col=cpal, width=barw,
 		ylab=ylab,
-		xlim=c(-2,seql),
+		xlim=c(xmin,seql),
 		ylim=c(0,ymax),
 		horiz=TRUE,
 		axes=FALSE,
@@ -98,7 +118,7 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 	## Time axis for the sequence
 	if (xaxis) {
 		tpos <- seq(1,seql, xtstep)
-    if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
+        if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
 
 		axis(1, at=tpos-0.5, labels=xtlab[tpos],
 			pos=-0.04,
@@ -116,11 +136,13 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 	##	cex.axis=cex.with.axis)
 
 	## Frequency of the representative sequence
+    if (info) {
 	nbprox <- sum(Statistics$nb[1:nbrep])
 	ctfreq <- round((nbprox/n)*100,1)
 	text(seql/2, 1.3,
 		paste("Criterion=",ctname,", coverage=", ctfreq ,"%", sep=""),
 		cex=cex.with.axis)
+    }
 
 	## ==========
 	## Statistics

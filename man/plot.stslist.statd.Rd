@@ -9,7 +9,7 @@ This is the plot method for output produced by the \code{\link{seqstatd}} functi
 \usage{
 \method{plot}{stslist.statd}(x, type = "d", cpal = NULL, ylab = NULL,
   yaxis = TRUE, xaxis = TRUE, xtlab = NULL, xtstep = NULL, tick.last = NULL,
-  cex.axis = 1, space = 0, xlab = NULL, cex.plot, ...)
+  cex.axis = 1, space = 0, xlab = NULL, lwd=3.5, col="blue", ylim=NULL, cex.plot, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -31,17 +31,29 @@ This is the plot method for output produced by the \code{\link{seqstatd}} functi
 
   \item{xlab}{Optional title for the x axis. See \code{\link{title}}.}
 
+  \item{lwd}{Width of entropy line. Default is 3.5. Ignored when \code{type="d"}.}
+
+  \item{col}{Color of entropy line. Default is \code{"blue"}. Ignored when \code{type="d"}.}
+
+  \item{ylim}{Real vector of length two. Limits of y axis for entropy line. Default is \code{NULL}. Ignored when \code{type="d"}.}
+
   \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
 
   \item{\dots}{further graphical parameters such as \code{border=NA} to remove the borders of the bars. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}.}
 }
-\details{This is the plot method for the output produced by the \code{\link{seqstatd}} function, i.e. for objects of class \emph{stslist.statd}. If \code{type="d"} it produces a state distribution plot presenting the sequence of the transversal state frequencies at each successive (time) position, as computed by the \code{\link{seqstatd}} function. With \code{type="Ht"}, the series of entropies of the transversal state distributions is plotted.
+\details{This is the plot method for output produced by the \code{\link{seqstatd}} function, i.e. for objects of class \emph{stslist.statd}. If \code{type="d"} it produces a state distribution plot presenting the sequence of the transversal state frequencies at each successive (time) position, as computed by the \code{\link{seqstatd}} function. With \code{type="Ht"}, the series of entropies of the transversal state distributions is plotted.
+With \code{type="dH"} the entropy line is overlayed on the state distribution plot.
 
-This method is called by the generic \code{\link{seqplot}} function (if \code{type="d"} or \code{type="Ht"}) that produces more sophisticated plots, allowing grouping and automatic display of the state color legend. The \code{seqdplot} and \code{seqHtplot} functions are shortcuts for calling \code{seqplot} with \code{type="d"} or \code{type="Ht"} respectively.
+When \code{ylim=NULL}, \code{ylim} is set as \code{c(0,1)} when entropy is normalized and otherwise as \code{c(0,1.1*max(entropy))}.
+
+This plot method is called by the generic \code{\link{seqplot}} function (if \code{type="d"}, \code{type="Ht"}, or \code{"dH"}) that produces more sophisticated plots, allowing grouping and automatic display of the state color legend. The \code{seqdplot}, \code{seqHtplot}, and \code{seqdHplot} functions are aliases for calling \code{seqplot} with \code{type="d"}, \code{type="Ht"}, and \code{dH} respectively.
 }
 
-\value{The plotted values, i.e. for \code{type="d"} the cross-sectional distributions, and for \code{type="Ht"} the cross-sectional entropies.
+\value{The plotted values, i.e. for \code{type="d"} the cross-sectional distributions, for \code{type="Ht"} the cross-sectional entropies, and for \code{type="dH"} the \code{x} \code{stslist.statd} object.
 }
+
+\author{Alexis Gabadinho and Gilbert Ritschard}
+
 
 \examples{
 ## Defining a sequence object with the data in columns 10 to 25
@@ -59,6 +71,9 @@ plot(biofam.statd)
 
 ## Entropy index plot
 plot(biofam.statd, type="Ht")
+
+## State distribution and entropy line
+plot(biofam.statd, type="dH")
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

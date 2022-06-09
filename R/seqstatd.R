@@ -60,6 +60,7 @@ seqstatd <- function(seqdata, weighted=TRUE, with.missing=FALSE, norm=TRUE) {
 	attr(res,"xtstep") <- attr(seqdata,"xtstep")
 	attr(res,"tick.last") <- attr(seqdata,"tick.last")
 	attr(res,"weighted") <- weighted
+    attr(res,"norm") <- norm
 
 	return(res)
 }

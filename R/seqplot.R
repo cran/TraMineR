@@ -156,7 +156,7 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
 		subdata <- seqdata[gindex[[np]],]
 
 		## State distribution plot or Entropy index
-		if (type=="d" || type=="Ht") {
+		if (type=="d" || type=="Ht" || type=="dH") {
 			f <- seqstatd
 			plist <- c(list(type=type), plist)
 

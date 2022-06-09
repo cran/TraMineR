@@ -9,13 +9,16 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
 
   TraMineR.check.depr.args(alist(compress = compressed, missing = nr))
 
+  ## tibble converted to data frame
+  if (inherits(data, "tbl_df")) data <- as.data.frame(data)
+  if (inherits(pdata, "tbl_df")) pdata <- as.data.frame(pdata)
   is.stslist <- if (inherits(data, "stslist")) TRUE else FALSE
 
   #### Check arguments with deprecated values ####
 
-  if (is.a.string(data) & !is.matrix(data)) {
+  if (is.strings(data) & !is.matrix(data)) {
     data <- as.matrix(data)
-    msg.warn("'data' as a string is deprecated, use as.matrix() to convert it")
+    #msg.warn("'data' as a string is deprecated, use as.matrix() to convert it")
   }
 
   #### Check for arguments that need to be defined ####

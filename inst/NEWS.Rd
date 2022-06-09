@@ -1,7 +1,52 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
-\section{Changes in version 2.2-3 [2022-01-19] (Development version)}{
+\section{Changes in version 2.2-4 [2022-06-08] }{
+
+  \subsection{New functions}{
+    \itemize{
+      \item
+      \code{seqdHplot()} alias for \code{seqplot(...,type="dH",...)}.
+      \item
+      \code{seqlength.align()} sets lengths of sequences of multiple domains as the shortest length among the domains.
+      \item
+      \code{seqmaintokens()} returns indexes of more frequent tokens.
+    }
+  }
+  \subsection{Changes in existing functions}{
+    \itemize{
+      \item
+      \code{plot.stslist.statd()} new type \code{"dH"} that overlays entropy line on the chronogram. In addition, new arguments \code{col}, \code{lwd}, and \code{ylim} allow controlling aspect of entropy line.
+      \item
+      \code{seqplot()} new type \code{"dH"}.
+      \item
+      \code{seqformat()}, \code{seqdef()}, \code{seqdecomp()}, \code{seqconc()}, \code{seqstatl()} now support tibble input data.
+      \item
+      \code{seqformat()} accepts a tibble as \code{pdata} table.
+      \item
+      \code{seqformat()} accepts a character string vector as input data.
+      \item
+      \code{seqdistmc()}: option \code{what="sm"} becomes \code{what="cost"}.
+      Deprecated \code{"sm"} value maintained for backward compatibility.
+      \item
+      \code{plot.stslist.rep()} gains two arguments \code{seq.alt} to specify
+      the domain in which representatives are displayed and \code{info} to control
+      whether coverage info should be displayed.
+    }
+  }
+  \subsection{Misc.}{
+    \itemize{
+      \item
+      Suppressed dependence on cNORM because of license
+      incompatibility. (\code{dissdomassoc} uses now a proper
+      internal function in place of \code{cNORM:::weighted.rank}).
+    }
+  }
+
+}
+
+
+\section{Changes in version 2.2-3 [2022-01-19] }{
 
   \subsection{New functions}{
     \itemize{

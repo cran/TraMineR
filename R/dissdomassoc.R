@@ -70,9 +70,9 @@ dissdomassoc <- function(domdiss, jointdiss = NULL, what = c("pearson","R2"),
     rankmat <- apply(dissmat,2,rank)
     if (weighted & w.rank) {
       cat("\nPlease wait, computing weighted ranks may take a while ...")
-      #dissmat.spear <- apply(dissmat,2,w.rank,w=ww)
+      dissmat.spear <- apply(dissmat,2,w.rank,w=ww)
       ## above proper solution is much slower than weighted.rank from cNORM
-      dissmat.spear <- apply(dissmat,2,weighted.rank,weights=ww)
+      #dissmat.spear <- apply(dissmat,2,weighted.rank,weights=ww)
       ## weighted.rank returns NA for min and max ranks
       ## we replace these NAs with the non-weighted ranks
       dissmat.spear[is.na(dissmat.spear)] <- rankmat[is.na(dissmat.spear)]
@@ -182,7 +182,7 @@ summary.ddomassoc <- function(object, ...){
           tab[k,"Spearman"] <- object[["Spearman"]][dnames[d1],dnames[d2]]
           tab[k,"p.Spearman"] <- object[["p.spearman"]][dnames[d1],dnames[d2]]
         }
-        tabname <- paste(dnames[d1],dnames[d2],sep="_vs_")
+        tabname <- paste(dnames[d1],dnames[d2],sep="_with_")
         tabnames <- c(tabnames,tabname)
       }
     }
@@ -195,22 +195,22 @@ summary.ddomassoc <- function(object, ...){
 
 ##################
 
-### w.rank <- function(x, w) {
-###   ox <- order(x)
-###   ## original order
-###   oox <- rank(x,ties.method='first')
-###   ooxt <- rank(x) ## with ties
-###   ## sorted weights
-###   sw <- w[ox]
-###   ## cumsum normalized to range from 1 to length(x)
-###   csw <- cumsum(sw)
-###   rcsw <- (length(w)-1)*(csw-1)/(csw[length(csw)]-1) + 1
+w.rank <- function(x, w) {
+  ox <- order(x)
+  ## original order
+  oox <- rank(x,ties.method='first')
+  ooxt <- rank(x) ## with ties
+  ## sorted weights
+  sw <- w[ox]
+  ## cumsum normalized to range from 1 to length(x)
+  csw <- cumsum(sw)
+  rcsw <- (length(w)-1)*(csw-1)/(csw[length(csw)]-1) + 1
 ###
-###   ## replace weighted rank of ties by mean weighted rank of the ties
-###   for (i in unique(ooxt)){
-###     rcsw[oox[ooxt==i]]<-mean(rcsw[oox[ooxt==i]])
-###   }
+  ## replace weighted rank of ties by mean weighted rank of the ties
+  for (i in unique(ooxt)){
+    rcsw[oox[ooxt==i]]<-mean(rcsw[oox[ooxt==i]])
+  }
 ###
-###   ## setting original order
-###   return(rcsw[oox])
-### }
+  ## setting original order
+  return(rcsw[oox])
+}

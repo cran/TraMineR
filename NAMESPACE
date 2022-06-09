@@ -6,7 +6,6 @@ importFrom("utils", "combn", "download.file", "read.table", packageDescription, 
 importFrom("cluster", "daisy")
 importFrom("colorspace", "qualitative_hcl")
 importFrom("weights", "wtd.cor")
-importFrom("cNORM", "weighted.rank")
 importFrom("RColorBrewer", "brewer.pal")
 importFrom("boot", "boot")
 
@@ -29,6 +28,7 @@ export(
   seqdist,
   seqdistmc,
   seqdplot,
+  seqdHplot,
   seqdss,
   seqdur,
   seqfcheck,
@@ -54,9 +54,11 @@ export(
   seqivolatility,
   seqlegend,
   seqlength,
+  seqlength.align,
   seqLLCP,
   seqLLCS,
   seqlogp,
+  seqmaintokens,
   seqmeant,
   seqmodst,
   seqmpos,

@@ -50,7 +50,9 @@ sequence.
  }
 
 \seealso{
- \code{\link{seqindic}}, \code{\link{seqient}}, \code{\link{seqipos}}. For alternative measures of sequence complexity see \code{\link{seqST}},  \code{\link{seqivolatility}}.
+ \code{\link{seqindic}}, \code{\link{seqient}}, \code{\link{seqipos}}. 
+ 
+ For alternative measures of sequence complexity see \code{\link{seqST}},  \code{\link{seqivolatility}}.
 }
 
 \references{

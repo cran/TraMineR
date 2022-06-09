@@ -26,10 +26,8 @@ scores used for sorting the objects in the candidate list. The length
 of the vector must be equal to the number of rows/columns in the
 distance matrix, i.e the number of objects.}
 
-  \item{decreasing}{if a score vector is provided, indicates whether
-the objects in the candidate list must be sorted in ascending or
-decreasing order of this score. The first object in the candidate
-list is supposed to be the most representative.}
+  \item{decreasing}{logical. If a score vector is provided, should
+the objects in the candidate list be sorted in ascending order of the score. If \code{FALSE}, sort is in descending order. The first object in the candidate list is supposed to be the most representative.}
 
   \item{coverage}{controls the size of the representative set by setting
 the desired coverage level, i.e the proportion of objects having a
@@ -46,9 +44,9 @@ distance  \code{dmax}. Defaults to 0.1 (10\%). Object \eqn{y} is
 redundant to object \eqn{x} when it is in the neighborhood of \eqn{x}, i.e., within a distance
 \code{pradius*dmax} from \eqn{x}.}
 
-  \item{dmax}{maximum theoretical distance. Used to derive the neighborhood radius as \code{pradius*dmax}. If \code{NULL}, the value of \code{dmax} is derived from the dissimilarity matrix.}
+  \item{dmax}{maximum theoretical distance. The \code{dmax} value is used to derive the neighborhood radius as \code{pradius*dmax}. If \code{NULL}, the value of \code{dmax} is derived from the dissimilarity matrix.}
 
-    \item{weights}{vector of weights of length equal to the number of rows of the dissimilarity matrix. If \code{NULL}, equal weights are assigned.}
+  \item{weights}{vector of weights of length equal to the number of rows of the dissimilarity matrix. If \code{NULL}, equal weights are assigned.}
   \item{trep}{Deprecated. Use \code{coverage} instead.}
   \item{tsim}{Deprecated. Use \code{pradius} instead.}
  }
@@ -77,7 +75,7 @@ smallest the sum, the most representative the sequence.
 Use \code{criterion="dist"} and \code{nrep=1} to get the medoid and \code{criterion="density"} and \code{nrep=1} to get the densest object pattern.
 
 
-For more details, see \cite{Gabadinho et al., 2011}.
+For more details, see \cite{Gabadinho and Ritschard, 2013}.
 }
 
 \value{An object of class \code{diss.rep}. This is a vector containing

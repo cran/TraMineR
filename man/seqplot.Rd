@@ -1,6 +1,7 @@
 \name{seqplot}
 \alias{seqplot}
 \alias{seqdplot}
+\alias{seqdHplot}
 \alias{seqfplot}
 \alias{seqiplot}
 \alias{seqIplot}
@@ -21,6 +22,7 @@ seqplot(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
   legend.prop = NA, rows = NA, cols = NA, title, cex.plot, withlegend, ...)
 
 seqdplot(seqdata, group = NULL, main = NULL, ...)
+seqdHplot(seqdata, group = NULL, main = NULL, ...)
 seqfplot(seqdata, group = NULL, main = NULL, ...)
 seqiplot(seqdata, group = NULL, main = NULL, ...)
 seqIplot(seqdata, group = NULL, main = NULL, ...)
@@ -35,7 +37,8 @@ seqrplot(seqdata, group = NULL, main = NULL, ...)
     \item{group}{Grouping variable of length equal to the number of sequences. When not \code{NULL}, a distinct plot is generated for each level of \code{group}.}
 
     \item{type}{the type of the plot. Available types are \code{"d"}
-    for state distribution plots (chronograms), \code{"f"} for sequence frequency
+    for state distribution plots (chronograms), \code{"dH"} for chronograms
+    with overlayed entropy line, \code{"f"} for sequence frequency
     plots, \code{"Ht"} for transversal entropy plots, \code{"i"} for
     selected sequence index plots, \code{"I"} for whole set index
     plots, \code{"ms"} for plotting the sequence of modal states,
@@ -83,10 +86,10 @@ seqrplot(seqdata, group = NULL, main = NULL, ...)
 \details{
 \code{seqplot} is the generic function for high level plots of state sequence objects with group splits and automatic display of the color legend. Many different types of plots can be produced by means of the \code{type} argument. Except for sequence index plots, \code{seqplot} first calls the specific function producing the required statistics and then the plot method for objects produced by this function (see below). For sequence index plots, the state sequence object itself is plotted by calling the \code{\link{plot.stslist}} method. When splitting by groups and/or displaying the color legend, the \code{\link[graphics]{layout}} function is used for arranging the plots.
 
-The \code{seqdplot}, \code{seqfplot}, \code{seqiplot}, \code{seqIplot},
+The \code{seqdplot}, \code{seqdHplot}, \code{seqfplot}, \code{seqiplot}, \code{seqIplot},
 \code{seqHtplot}, \code{seqmsplot}, \code{seqmtplot}, \code{seqpcplot}
 and \code{seqrplot} functions are aliases for calling \code{seqplot}
-with \code{type} argument set respectively to \code{"d"}, \code{"f"},
+with \code{type} argument set respectively to \code{"d"}, \code{"dH"}, \code{"f"},
 \code{"i"}, \code{"I"}, \code{"Ht"}, \code{"ms"}, \code{"mt"},
 \code{"pc"} or \code{"r"}.
 
@@ -97,9 +100,9 @@ The \code{idxs} optional argument may be specified for selecting the sequences t
 
 In \emph{sequence index plots} (\code{type="i"} or \code{type="I"}), the requested individual sequences are rendered with horizontal stacked bars depicting the states over successive positions (time). Optional arguments are \code{idxs} for specifying the indexes of the sequences to be plotted (when \code{type="i"} defaults to the first ten sequences, i.e \code{idxs=1:10}). For plotting nicely a (big) whole set one can use \code{type="I"} which is the same as using \code{idxs=0} together with the additional graphical parameters \code{border=NA} and \code{space=0} to suppress bar borders and space between bars. The \code{sortv} argument can be used to pass a vector of numerical values for sorting the sequences or to specify a sorting method. See \code{\link{plot.stslist}} for a complete list of optional arguments and their description.
 
-The interest of sequence index plots has, for instance, been stressed by \cite{Scherer (2001)} and \cite{Brzinsky-Fay et al. (2006)}. Notice that index plots for thousands of sequences result in very heavy PDF or POSTSCRIPT graphic files. Dramatic file size reduction may be achieved by saving the figures in bitmap format with using for instance the \code{\link[grDevices]{png}} graphic device instead of \code{\link[grDevices]{postscript}} or \code{\link[grDevices]{pdf}}.
+The interest of sequence index plots has, for instance, been stressed by \cite{Scherer (2001)} and \cite{Brzinsky-Fay et al. (2006)}. Notice that index plots for thousands of sequences result in very heavy PDF or POSTSCRIPT graphic files. Dramatic file size reduction may be achieved by saving the figures in bitmap format by using for instance the \code{\link[grDevices]{png}} graphic device instead of \code{\link[grDevices]{postscript}} or \code{\link[grDevices]{pdf}}.
 
-The \emph{transversal entropy plot} (\code{type="Ht"}) displays the evolution over positions of the cross-sectional entropies (\cite{Billari, 2001}). Cross-sectional entropies are computed by calling \code{\link{seqstatd}} function and then plotted by calling the \code{\link{plot.stslist.statd}} plot method.
+The \emph{transversal entropy plot} (\code{type="Ht"}) displays the evolution over positions of the cross-sectional entropies (\cite{Billari, 2001}). Cross-sectional entropies are computed by calling \code{\link{seqstatd}} function and then plotted with the \code{\link{plot.stslist.statd}} plot method. With \code{type="dH"}, the entropy line is overlayed on the state distribution plot.
 
 The \emph{modal state sequence plot} (\code{type="ms"}) displays the sequence of the modal states with each mode proportional to its frequency at the given position. The \code{\link{seqmodst}} function is called which returns the sequence and the result is plotted by calling the \code{\link{plot.stslist.modst}} plot method.
 
@@ -222,6 +225,9 @@ seqplot(biofam.seq, type="d", group=actcal$sex)
 
 ## actcal grouped by sex
 seqplot(actcal.seq, type="d", group=actcal$sex)
+
+## with overlayed entropy line
+seqplot(actcal.seq, type="dH", group=actcal$sex)
 
 ## ===================
 ## Cross-sectional entropy plot

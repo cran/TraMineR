@@ -46,7 +46,7 @@ distance \code{dmax}. Defaults to 0.1 (10\%). Sequence \eqn{y} is
 redundant to sequence \eqn{x} when it is in the neighborhood of \eqn{x}, i.e., within a distance
 \code{pradius*dmax} from \eqn{x}.}
 
-  \item{dmax}{maximum theoretical distance. Used to derive the neighborhood radius as \code{pradius*dmax}. If \code{NULL}, the value of \code{dmax} is derived from the dissimilarity matrix.}
+  \item{dmax}{maximum theoretical distance. The \code{dmax} value is used to derive the neighborhood radius as \code{pradius*dmax}. If \code{NULL}, the value of \code{dmax} is derived from the dissimilarity matrix.}
 
   \item{diss}{matrix of pairwise dissimilarities between sequences in \code{seqdata}. If \code{NULL}, the
       matrix is computed by calling the \code{\link{seqdist}} function. In that case, optional arguments to be passed to

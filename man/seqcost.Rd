@@ -86,7 +86,7 @@ seqsubm(...)
     (default is \code{lag=1}).}
 
     \item{state.features}{Data frame with features values for each state.}
-    \item{feature.weights}{Vector of feature weights with length equal to the number of columns of \code{state.features}.}
+    \item{feature.weights}{Vector of feature weights with a weight per column of \code{state.features}.}
     \item{feature.type}{List of feature types. See \code{\link[cluster]{daisy}} for details.}
     \item{proximities}{Logical: should state proximities be returned instead of substitution costs?}
     \item{...}{Arguments passed to \code{seqcost}}

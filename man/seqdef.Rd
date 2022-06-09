@@ -18,7 +18,7 @@ seqdef(data, var=NULL, informat="STS", stsep=NULL,
 }
 
 \arguments{
-  \item{data}{a data frame or matrix containing sequence data.}
+  \item{data}{a data frame, matrix, or character string vector containing sequence data (tibble will be converted with \code{as.data.frame}).}
 
   \item{var}{the list of columns containing the sequences. Default is
 \code{NULL}, i.e. all the columns. The function detects automatically
@@ -49,7 +49,7 @@ Other separators must be specified explicitly.}
 at age 15, you can specify 15. At this stage, used only for labelling column names.}
 
     \item{left}{the behavior for missing values appearing before the
-first (leftmost) valid state in each sequence. When \code{NA} (default), 
+first (leftmost) valid state in each sequence. When \code{NA} (default),
 left missing values are treated as 'real' missing values and converted to the
 internal missing value code defined by the \code{nr} option. Other
 options are \code{"DEL"} to delete the positions containing missing values

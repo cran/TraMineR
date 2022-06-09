@@ -16,12 +16,12 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
 }
 \arguments{
   \item{data}{
-    Data Frame, Matrix, or State Sequence Object.
-    The data to use.
+    Data frame, matrix, \code{stslist} state sequence object, or character string vector.
+    The data to use. (Tibble will be converted with \code{as.data.frame}).
 
     A data frame or a matrix with sequence data in one or more columns when
     \code{from = "STS"} or \code{from = "SPS"}. If sequence data are in a single
-    column, they are assumed to be in the compressed form (see \code{stsep}).
+    column or in a string vector, they are assumed to be in the compressed form (see \code{stsep}).
 
     A data frame with sequence data in one or more columns when \code{from = "SPELL"}.
     If sequence data has not four columns ordered as individual ID, spell
@@ -167,8 +167,8 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   \item{pdata}{
     % from SPELL
     % to SPELL
-    \code{NULL}, \code{"auto"}, or Data Frame.
-    Default: \code{NULL}.
+    \code{NULL}, \code{"auto"}, or data frame.
+    Default: \code{NULL}. (tibble will be converted with \code{as.data.frame}).
 
     If \code{NULL}, the start and end times of each spell are supposed to be, if
     \code{process = TRUE}, ages, if \code{process = FALSE}, years when
@@ -275,7 +275,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
 }
 \value{
   A data frame for \code{SRS}, \code{TSE}, and \code{SPELL}, a matrix otherwise.
-  
+
   When \code{from="SPELL"}, outcome has an attribute \code{issues} with indexes of sequences with issues (truncated sequences, missing start time, spells before birth year, ...)
 }
 \references{

@@ -1,5 +1,36 @@
 ## =========
-Version 2.2-3 [2022-01-19] (Development version)
+Version 2.2-4 [2022-06-08]
+
+New functions:
+  - seqdHplot() alias for seqplot(...,type="dH",...).
+  - seqlength.align() sets lengths of sequences of multiple
+    domains as the shortest length among the domains.
+  - seqmaintokens() returns indexes of more frequent tokens.
+
+Changes in existing function:
+  - plot.stslist.statd() new type "dH" that overlays entropy 
+    line on the chronogram. In addition, new arguments col, 
+    lwd, and ylim allow controlling aspect of entropy line.
+  - seqplot() new type "dH".
+  - seqformat(), seqdef(), seqdecomp(), seqconc(), seqstatl() 
+    now support tibble input data.
+  - seqformat() accepts a tibble as pdata table.
+  - seqformat() accepts a character string vector as input data.
+  - seqdistmc(): option what="sm" becomes what="cost".
+    Deprecated "sm" value maintained for backward
+    compatibility.
+  - plot.stslist.rep() gains two arguments seq.alt to specify
+    the domain in which representatives are displayed
+    and info to control whether coverage info should
+    be displayed.
+
+Misc.:
+  - Suppressed dependence on cNORM because of license 
+    incompatibility. (dissdomassoc uses now a proper 
+    internal function in place of cNORM:::weighted.rank).
+
+## =========
+Version 2.2-3 [2022-01-19]
 
 New functions:
   - summary.ddomassoc() summary method that organizes

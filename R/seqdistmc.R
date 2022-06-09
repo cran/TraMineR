@@ -5,15 +5,19 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
   what="diss", ch.sep = "@@@@TraMineRSep@@@@") {
 
 	## Checking arguments
-  whatlist <- c("diss","sm","seqmc")
+  if (what=="sm") {
+    what <- "cost"
+    msg.warn("what='sm' deprecated! Use what='cost' instead.")
+  }
+  whatlist <- c("diss","cost","seqmc")
   if (!(what %in% whatlist)){
     msg.stop("what should be one of ",paste0("'",whatlist,"'", collapse=","))
   }
 
   if (what=="diss" & is.null(method))
     msg.stop("method cannot be NULL when what = 'diss'")
-  if (what=="sm" & is.null(sm))
-    msg.stop("sm cannot be NULL when what = 'sm'")
+  if (what=="cost" & is.null(sm))
+    msg.stop("sm cannot be NULL when what = 'cost'")
   ## if time varying sm are provided, all sm must be 3-dimensional
   if (any(length(dim(sm[[1]]))==3) && !all(length(dim(sm[[1]]))==3))
     msg.stop("One sm is 3-dimensional and some are not!")
@@ -45,7 +49,7 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
 		stop(" [!] sequence objects have different numbers of rows")
 	}
 	numseq <- numseq[1]
-	message(" [>] ", nchannels, " channels with ", numseq, " sequences")
+	msg.warn(nchannels, " channels with ", numseq, " sequences")
 	## Actually LCP and RLCP are not included
 
   if (what=="diss") {
@@ -173,7 +177,7 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
   if (what == "seqmc") {
     return(newseqdata)
   }
-  else { ## what == "diss" or "sm"
+  else { ## what == "diss" or "cost"
   ######################
   #if (what != "seqmc") {
   	## ============================================================
@@ -323,7 +327,7 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
   		newindel <- newindel / sum(cweight)
   		newsm <- newsm / sum(cweight)
   	}
-    if (what == "sm") {
+    if (what == "cost") {
       attr(newsm,"indel") <- newindel
       attr(newsm,"alphabet") <- alphabet
       attr(newsm,"cweight") <- cweight

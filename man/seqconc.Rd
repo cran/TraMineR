@@ -8,7 +8,7 @@ Concatenate vectors of states or events into a character string. In the string, 
 seqconc(data, var=NULL, sep="-", vname="Sequence", void=NA)
 }
 \arguments{
-  \item{data}{A dataframe or matrix containing sequence data.}
+  \item{data}{A data frame or matrix containing sequence data (tibble will be converted with \code{as.data.frame}).}
 
   \item{var}{List of the columns containing the sequences. Default is \code{NULL} in which case all  columns are retained. Whether the sequences are in the compressed (character strings) or extended format is automatically detected by counting the number of columns.}
 
