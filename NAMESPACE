@@ -1,13 +1,15 @@
 ## import(boot, RColorBrewer)
-importFrom("graphics", "abline", "arrows", "axis", "barplot", "box", "hist", "layout", "legend", "lines", "mtext", "par", "plot", "plot.new", "points", "polygon", "rect", "segments", "strwidth", "text", "title")
+importFrom("graphics", "abline", "arrows", "axis", "barplot", "box", "bxp", "hist", "layout", "legend", "lines", "mtext", "par", "plot", "plot.new", "points", "polygon", "rect", "segments", "strwidth", "text", "title")
 importFrom("grDevices", "col2rgb", "colorRamp", "dev.off", "rgb")
-importFrom("stats", "as.dist", "chisq.test", "cor", "complete.cases", "density", "dnorm", "dunif", "formula", "median", "model.frame", "model.matrix", "na.omit", "na.pass", "pnorm", "qnorm", "quantile", "reshape", "runif", "terms", "var", "weighted.mean", "xtabs")
-importFrom("utils", "combn", "download.file", "read.table", packageDescription, packageVersion)
+importFrom("stats", "as.dist", "chisq.test", "coef", "cor", "complete.cases", "density", "dnorm", "dunif", "fitted", "formula", "lm", "median", "model.frame", "model.matrix", "na.omit", "na.pass", "pchisq", "pnorm", "qnorm", "quantile", "reshape", "runif", "terms", "var", "weighted.mean", "xtabs",
+ "cmdscale", "cutree", "fivenum", "hclust", "pf")
+importFrom("utils", "combn", "download.file", "read.table", packageDescription)
 importFrom("cluster", "daisy")
 importFrom("colorspace", "qualitative_hcl")
-importFrom("weights", "wtd.cor")
+##importFrom("weights", "wtd.cor")
 importFrom("RColorBrewer", "brewer.pal")
 importFrom("boot", "boot")
+importFrom("vegan","wcmdscale")
 
 export(
   alphabet,
@@ -26,7 +28,7 @@ export(
   seqdiff,
   seqdim,
   seqdist,
-  seqdistmc,
+  seqdistmc, ##obsolete
   seqdplot,
   seqdHplot,
   seqdss,
@@ -36,6 +38,7 @@ export(
   seqformat,
   seqfplot,
   seqfpos,
+  seqfposend,
   seqgen,
   seqHtplot,
   seqibad,
@@ -59,6 +62,7 @@ export(
   seqLLCS,
   seqlogp,
   seqmaintokens,
+  seqMD,
   seqmeant,
   seqmodst,
   seqmpos,
@@ -68,12 +72,15 @@ export(
   seqpcfilter,
   seqpcplot,
   seqplot,
+  #seqplotMD,
   seqpm,
     seqprecarity,
     seqprecorr,
     seqprecstart,
   seqrecode,
   seqrep,
+  seqrf,
+  seqrfplot,
   seqrplot,
   seqsep,
   seqstatd,
@@ -88,7 +95,6 @@ export(
   stlab,
   "stlab<-",
   TraMineR.check.depr.args,
-  TraMineR.checkupdates,
   TraMineRInternalLayout,
   TraMineRInternalLegend,
   TraMineRInternalNodeInit,
@@ -112,6 +118,11 @@ S3method(print, seqalign)
 ## seqpcplot methods
 S3method(plot, seqpcplot)
 S3method(summary , seqpcplot)
+
+## seqrf methods
+S3method(plot, seqrf)
+S3method(print, seqrf)
+S3method(summary, seqrf)
 
 ## stslist.stad methods
 S3method(plot, stslist.statd)
@@ -158,6 +169,7 @@ export(
     disscenter,
     dissdomassoc,
     dissrep,
+    dissrf,
     dissmfacw,
     disstreedisplay,
     disstree2dot,
@@ -178,8 +190,11 @@ S3method(print,seqtree)
 S3method(print,seqdiff)
 S3method(plot,seqdiff)
 S3method(print,diss.rep)
+S3method(print,dissrf)
+S3method(summary,dissrf)
 S3method(summary,diss.rep)
 S3method(summary,ddomassoc)
+
 
 
 ## Event subsequence module

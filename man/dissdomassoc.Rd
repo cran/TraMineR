@@ -31,9 +31,11 @@ When a \code{jointdiss} distance matrix or object is provided, correlations of e
 
 Spearman correlations are based on rank values of the distances. The computation of weighted ranks may take a while for large number of sequences (\code{> 500},  i.e. 124750 distances per domain). Therefore, weighted ranks are only used when explicitly requested by setting \code{w.rank = TRUE}. When \code{w.rank = FALSE} (default), Spearman is computed as the weighted Pearson correlation between non-weighted ranks.
 
+When \code{"pearson"} and/or \code{"spearman"} correlations are requested, p-values (probability to get a stronger correlation under the zero correlation assumption) are automatically computed.
+
 }
 
-\value{An object of class \code{ddomassoc}, which is a list with the requested association measures. The \code{summary} method organizes the correlations and their p-values in table form.
+\value{An object of class \code{ddomassoc}, which is a list of tables of the requested association measures and tables of p-values of the Pearson and Spearman correlations when applicable. The \code{summary} method organizes the correlations and their p-values in table form.
 }
 \references{
     Piccarreta (2017). Joint Sequence Analysis: Association and Clustering. \emph{Sociological Methods and Research}, 46(2), 252–287. \doi{10.1177/0049124115591013}.

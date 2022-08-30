@@ -38,20 +38,21 @@ plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
 
 	## Sorting
 	if (!is.null(sortv)) {
-		if (length(sortv)==1 && sortv %in% c("from.start", "from.end")) {
+        if (length(sortv)==1 && sortv %in% c("from.start", "from.end")) {
         		end <- if (sortv=="from.end") { max(seqlength(x)) } else { 1 }
         		beg <- if (sortv=="from.end") { 1 } else { max(seqlength(x)) }
 
-			sortv <- do.call(order, as.data.frame(x)[,end:beg])
-			x <- x[sortv,]
-		} else if (length(sortv)!=n) {
-			stop(call.=FALSE, "sortv must contain one value for each row in the sequence object")
-		} else {
-			if (is.factor(sortv)) { sortv <- as.integer(sortv) }
-			x <- x[order(sortv),]
-		}
+        	sortv <- do.call(order, unname(as.data.frame(x))[,end:beg])
+        	x <- x[sortv,]
+        } else if (length(sortv)!=n) {
+            stop(call.=FALSE, "sortv must contain one value for each row in the sequence object ",
+                "or be either 'from.start' or 'from.end'")
+        } else {
+        	if (is.factor(sortv)) { sortv <- as.integer(sortv) }
+        	x <- x[order(sortv),]
+        }
 
-		sortlab <- paste(", sorted")
+        sortlab <- paste(", sorted")
 
 	} else { sortlab <- NULL }
 
@@ -140,8 +141,13 @@ plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
 
 		if (is.null(ytlab)) {ytlab <- idxs}
 		else if (length(ytlab)==1) {
-            if(ytlab=="id") {ytlab <- rownames(x)[idxs]}
+            if(ytlab=="id")
+                {ytlab <- rownames(x)[idxs]}
+            else if (length(idxs)>1)
+                stop(paste("Bad ytlab value",ytlab))
         }
+        else if (length(ytlab)!=length(idxs))
+                stop("Length of ytlab does not much number of sequences!")
 
 		axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=ylas, tick=FALSE, cex.axis=cex.axis)
 	}

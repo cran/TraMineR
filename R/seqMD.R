@@ -1,21 +1,33 @@
-## multichannel distances
+## multidomain sequences:
+## - MD sequences of combined states and expanded alphabet,
+## - additive trick costs (CAT),
+## - OM distances based on CAT costs
 
-seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
+## alias for backward compatibility
+seqdistmc <- function(channels, what="diss", ch.sep="@@@@TraMineRSep@@@@", ...){
+    seqMD(channels = channels, what=what, ch.sep=ch.sep, ...)
+}
+
+seqMD <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
 	with.missing=FALSE, full.matrix=TRUE, link="sum", cval=2, miss.cost=2, cweight=NULL,
-  what="diss", ch.sep = "@@@@TraMineRSep@@@@") {
+  what="MDseq", ch.sep = "+") {
 
 	## Checking arguments
   if (what=="sm") {
     what <- "cost"
     msg.warn("what='sm' deprecated! Use what='cost' instead.")
   }
-  whatlist <- c("diss","cost","seqmc")
+  if (what=="seqmc") {
+    what <- "MDseq"
+    msg.warn("what='seqmc' deprecated! Use what='MDseq' instead.")
+  }
+  whatlist <- c("MDseq","cost","diss")
   if (!(what %in% whatlist)){
     msg.stop("what should be one of ",paste0("'",whatlist,"'", collapse=","))
   }
 
-  if (what=="diss" & is.null(method))
-    msg.stop("method cannot be NULL when what = 'diss'")
+  if (what=="diss" && (is.null(method) || is.na(method)))
+    msg.stop("a valid method must be provided when what = 'diss'")
   if (what=="cost" & is.null(sm))
     msg.stop("sm cannot be NULL when what = 'cost'")
   ## if time varying sm are provided, all sm must be 3-dimensional
@@ -26,11 +38,11 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
   if(length(indel) > 1 & any(indel=="auto"))
     stop(" [!] 'auto' not allowed in vector or list indel")
   if(is.list(indel) & length(indel)==1)
-    stop(" [!] When a list, indel must be of length equal to number of channels")
+    stop(" [!] When a list, indel must be of length equal to number of domains")
 
 	nchannels <- length(channels)
 	if (nchannels < 2) {
-		stop("[!] please specify at least two channels")
+		stop("[!] please specify at least two domains")
 	}
 	if (is.null(cweight)) {
 		cweight <- rep(1, nchannels)
@@ -40,16 +52,16 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
       stop(" [!] ch.sep symbol (",ch.sep,") occurs in alphabet of at least one channel")
   }
   if (is.list(indel) & length(indel) != nchannels)
-		stop("[!] when a list, indel must be of length equal to number of channels")
+		stop("[!] when a list, indel must be of length equal to number of domains")
   if (length(with.missing) > 1 & length(with.missing) != nchannels )
-		stop("[!] when a vector, with.missing must be of length equal to number of channels")
+		stop("[!] when a vector, with.missing must be of length equal to number of domains")
 
 	numseq <- sapply(channels,nrow)
 	if(any(numseq!=numseq[1])) {
 		stop(" [!] sequence objects have different numbers of rows")
 	}
 	numseq <- numseq[1]
-	msg.warn(nchannels, " channels with ", numseq, " sequences")
+	msg.warn(nchannels, " domains with ", numseq, " sequences")
 	## Actually LCP and RLCP are not included
 
   if (what=="diss") {
@@ -87,11 +99,11 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
       with.missing <- rep(with.missing, nchannels)
   }
 	## Checking correct numbers of info per channel
-  if (what != "seqmc") {
+  if (what != "MDseq") {
 	if ((length(indel)!= nchannels) ||
 		(length(sm)!= nchannels) ||
 		(length(cweight)!= nchannels)) {
-		  stop(" [!] you should supply one weight, one substitution matrix and one indel per channel")
+		  stop(" [!] you must supply one weight, one substitution matrix, and one indel per domain")
     }
 	}
 	## indels
@@ -124,7 +136,7 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
 			#if (with.missing) {
 			#	stop(" [!] Some individuals have channels of different length. Set 'with.missing=TRUE' for all channels.")
 			#} else {
-				warning(" [!] Some individuals have channels of different length. Shorter sequences will be filled with missing values and corresponding channel with.missing set as TRUE")
+				msg.warn("Some individuals have channels of different length. Shorter sequences will be filled with missing values and corresponding channel with.missing set as TRUE")
 				break
 			#}
 		}
@@ -132,13 +144,13 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
 	## ================================
 	## Building the new sequence object
 	## ================================
-	message(" [>] building combined sequences...", appendLF=F)
+	message(" [>] building MD sequences of combined states...", appendLF=F)
 	## Complex separator to ensure (hahem) unicity
 	##sep <- "@@@@TraMineRSep@@@@"  ## now argument ch.sep
   sep <- ch.sep
 	maxlength=max(maxlength_list)
 	newseqdata <- matrix("", nrow=numseq, ncol=maxlength)
-  rownames(newseqdata) <- rownames(channels[[1]])
+    rownames(newseqdata) <- rownames(channels[[1]])
 	newseqdataNA <- matrix(TRUE, nrow=numseq, ncol=maxlength)
 	for (i in 1:nchannels) {
 		seqchan <- channels[[i]]
@@ -168,18 +180,17 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
 	## Setting void states back to NA  (nr will be considered as a distinct state)
   newseqdata[newseqdataNA] <- NA
 
-  ## since v 2.2-0 automatic cpal no longer limited to 12 states, so no need of following
+  ## since v 2.2-0 automatic cpal no longer limited to 12 states, so no need of the following
 	#alphabet_size <- length(unique(as.character(newseqdata))) - as.integer(sum(is.na(newseqdata))>0)
 	#suppressMessages(newseqdata <- seqdef(newseqdata, cpal=rep("blue", alphabet_size)))
   suppressMessages(newseqdata <- seqdef(newseqdata, cnames=md.cnames))
   message(" OK")
 
-  if (what == "seqmc") {
+  if (what == "MDseq") {
     return(newseqdata)
   }
   else { ## what == "diss" or "cost"
   ######################
-  #if (what != "seqmc") {
   	## ============================================================
   	## Building and checking substitution matrix per channel
   	## ============================================================
@@ -215,35 +226,31 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
 
   		## Substitution matrix generation method is given
   		if	(is.character(sm[[i]])) {
-  			message(" [>] computing substitution cost matrix for channel ", i)
-  			costs <- seqcost(channels[[i]], sm[[i]], with.missing=with.missing[i],
-  				time.varying=timeVarying, cval=cval, miss.cost=miss.cost)
-        substmat_list[[i]] <- costs$sm
-        if (any(indel=="auto")) {
-          if (is.list(indel_list)){
-            if (length(costs$indel)==1) costs$indel <- rep(costs$indel,alphsize_list[[i]])
-            indel_list[[i]] <- costs$indel
-          }
-          else
-            indel_list[i] <- costs$indel
-        }
+  			message(" [>] computing substitution cost matrix for domain ", i)
+  			costs <- suppressMessages(seqcost(channels[[i]], sm[[i]], with.missing=with.missing[i],
+  				time.varying=timeVarying, cval=cval, miss.cost=miss.cost))
+            substmat_list[[i]] <- costs$sm
+            if (any(indel=="auto")) {
+              if (is.list(indel_list)){
+                if (length(costs$indel)==1) costs$indel <- rep(costs$indel,alphsize_list[[i]])
+                indel_list[[i]] <- costs$indel
+              }
+              else
+                indel_list[i] <- costs$indel
+            }
   		}
   		## Checking correct dimension cost matrix
   		else { ## provided sm
         #message(" [>]   channel ",i)
 
-  			#if (what=='diss' & method=="OM") {
-        if (any(indel[i] == "auto") & !is.list(indel_list))
-          indel_list[i] <- max(sm[[i]])/2
-        else
-          indel_list[i] <- indel[i]
-          ##cat("\n indel_list[i] ",indel_list[i], "\n")
-          ##print(sm[[i]])
-  			checkcost(sm[[i]], channels[[i]], with.missing = with.missing[i], indel = indel_list[[i]])
-        #else {
-  			#	checkcost(sm[[i]], channels[[i]], with.missing = with.missing[i])
-  			#}
-  			substmat_list[[i]] <- sm[[i]]
+            if (any(indel[i] == "auto") & !is.list(indel_list))
+              indel_list[i] <- max(sm[[i]])/2
+            else
+              indel_list[i] <- indel[i]
+              ##cat("\n indel_list[i] ",indel_list[i], "\n")
+              ##print(sm[[i]])
+      		checkcost(sm[[i]], channels[[i]], with.missing = with.missing[i], indel = indel_list[[i]])
+   			substmat_list[[i]] <- sm[[i]]
   		}
 
   		## Mutliply by channel weight
@@ -254,14 +261,14 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
 
 
   	## =========================================
-  	## Building the new substitution cost matrix
+  	## Building the new CAT substitution cost matrix
   	## =========================================
-  	message(" [>] computing combined substitution and indel costs...", appendLF=FALSE)
+  	message(" [>] computing MD substitution and indel costs with additive trick...", appendLF=FALSE)
   	## Build subsitution matrix and new alphabet
   	alphabet <- attr(newseqdata,"alphabet")
   	alphabet_size <- length(alphabet)
     newindel <- NULL
-  	## Recomputing the subsitution matrix
+  	## Recomputing the substitution matrix
   	if (!timeVarying) {
   		newsm <- matrix(0, nrow=alphabet_size, ncol=alphabet_size)
       if (is.list(indel)){
@@ -269,21 +276,21 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
         statelisti <- strsplit(alphabet[alphabet_size], sep, fixed=TRUE)[[1]]
         ##cat("\n last state statelisti ",statelisti, "\n")
         for (chan in 1:nchannels){
-					 ipos <- match(statelisti[chan], alphabet_list[[chan]])
-           newindel[alphabet_size] <- newindel[alphabet_size] + indel[[chan]][ipos]*cweight[chan]
+		  ipos <- match(statelisti[chan], alphabet_list[[chan]])
+          newindel[alphabet_size] <- newindel[alphabet_size] + indel[[chan]][ipos]*cweight[chan]
            ##cat("ipos ",ipos,"\n indel chan ",chan,": ",indel[[chan]],"\n newindel = ",newindel,"\n" )
         }
       }
   		for (i in 1:(alphabet_size-1)) {
   			statelisti <- strsplit(alphabet[i], sep, fixed=TRUE)[[1]]
         ##cat("state ",i," statelisti ",statelisti, "\n")
-        if (is.list(indel)){
-          for (chan in 1:nchannels){
+            if (is.list(indel)){
+                for (chan in 1:nchannels){
   					 ipos <- match(statelisti[chan], alphabet_list[[chan]])
-             newindel[i] <- newindel[i] + indel[[chan]][ipos]*cweight[chan]
+                newindel[i] <- newindel[i] + indel[[chan]][ipos]*cweight[chan]
            ##cat("ipos ",ipos,"\n indel chan ",chan,": ",indel[[chan]],"\n newindel = ",newindel,"\n" )
-          }
-        }
+                }
+            }
   			for (j in (i+1):alphabet_size) {
   				cost <- 0
   				statelistj <- strsplit(alphabet[j], sep, fixed=TRUE)[[1]]
@@ -335,7 +342,7 @@ seqdistmc <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
     }
   }
   if (what == "diss") {
-	   message(" [>] computing distances ...")
+	   message(" [>] computing distances using additive trick ...")
       ##cat(" newindel = ",newindel,"\n")
 	   ## Calling seqdist
 	   return(seqdist(newseqdata, method=method, norm=norm, indel=newindel,

@@ -1,18 +1,53 @@
 ## =========
+Version 2.2-5 [2022-08-30]
+
+New functions:
+  - dissrf() medoids of relative frequency (RF) groups
+  - seqrf() medoid sequences of RF groups
+  - plot.seqrf() plot method for medoid sequences of RF groups
+  - seqrfplot() alias for seqplot(...,type="rf",...)
+  - print and summary methods for dissrf and seqrf objects
+  - seqfposend() position of end of first spell in given state
+
+Changes in existing functions
+  - seqplot() new value \code{"rf"} (RF plots) for argument type.
+  - seqtab(): result gains an attribute idxf with indexes
+    of first found most frequent sequences.
+  - seqdistmc() renamed seqMD to better reflect that the
+    function can return various outcomes related to multidomain
+    (MD) sequences, not just distances based on the MCSA trick.
+    Old name maintained as an alias for backward compatibility.
+  - plot.stslist() now raises an explicit error for bad
+    ytlab value.
+
+Bug fixes:
+  - plot.stslist() possible conflict between x names and 
+    arguments of order.
+  - plot.stslist.rep() position of y-axis when !is.na(ylab)
+
+Misc.
+  - Proper wtd.cor, wtd.mean, wtd.var, wtd.fivenum,
+    and wtd.boxplot internal functions
+    to avoid issues with dependence on packages weights,
+    Hmisc, and ENmisc.
+    (Code in TraMineR-weights.R and TraMineR-wtd-stats.R.)
+  - Function TraMineR.checkupdates has been removed.
+
+## =========
 Version 2.2-4 [2022-06-08]
 
 New functions:
-  - seqdHplot() alias for seqplot(...,type="dH",...).
+  - seqdHplot() alias for seqplot(...,type="dH",...)
   - seqlength.align() sets lengths of sequences of multiple
     domains as the shortest length among the domains.
   - seqmaintokens() returns indexes of more frequent tokens.
 
 Changes in existing function:
-  - plot.stslist.statd() new type "dH" that overlays entropy 
-    line on the chronogram. In addition, new arguments col, 
+  - plot.stslist.statd() new type "dH" that overlays entropy
+    line on the chronogram. In addition, new arguments col,
     lwd, and ylim allow controlling aspect of entropy line.
   - seqplot() new type "dH".
-  - seqformat(), seqdef(), seqdecomp(), seqconc(), seqstatl() 
+  - seqformat(), seqdef(), seqdecomp(), seqconc(), seqstatl()
     now support tibble input data.
   - seqformat() accepts a tibble as pdata table.
   - seqformat() accepts a character string vector as input data.
@@ -25,9 +60,10 @@ Changes in existing function:
     be displayed.
 
 Misc.:
-  - Suppressed dependence on cNORM because of license 
-    incompatibility. (dissdomassoc uses now a proper 
+  - Suppressed dependence on cNORM because of license
+    incompatibility. (dissdomassoc uses now a proper
     internal function in place of cNORM:::weighted.rank).
+
 
 ## =========
 Version 2.2-3 [2022-01-19]

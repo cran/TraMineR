@@ -1,12 +1,68 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.2-5 [2022-08-30] }{
+
+    \subsection{New functions}{
+        \itemize{
+            %\item
+            %\code{seqplot.md()} plot of multidomain sequences.
+            \item
+            \code{dissrf()} medoids of relative frequency (RF) groups
+            \item
+            \code{seqrf()} medoid sequences of RF groups
+            \item
+            \code{plot.seqrf()} plot method for medoid sequences of RF groups
+            \item
+            \code{seqrfplot()} alias for \code{seqplot(...,type="rf",...)}
+            \item
+            print and summary methods for \code{dissrf} and \code{seqrf} objects
+            \item
+            \code{seqfposend()} position of end of spell in given state
+        }
+
+    }
+
+    \subsection{Changes in existing functions}{
+        \itemize{
+            \item
+            \code{seqplot()} new value \code{"rf"} (RF plots) for argument type.
+            \item
+            \code{seqtab()} result gains an attribute \code{idxf} with indexes of first found frequent sequences.
+            \item
+            \code{seqdistmc()} renamed \code{seqMD} to better reflect that the function can return various outcomes related to multidomain (MD) sequences, not just distances based on the MCSA trick. Old name maintained as an alias for backward compatibility.
+            \item
+            \code{plot.stslist()} now raises an explicit error for bad \code{ytlab} value.
+        }
+    }
+
+    \subsection{Bug fixes}{
+        \itemize{
+          \item
+          \code{plot.stslist()} possible conflict between \code{x} names and arguments of \code{order}.
+          \item
+          \code{plot.stslist.rep()} bad position of y-axis when \code{!is.na(ylab)}
+        }
+    }
+
+    \subsection{Misc.}{
+        \itemize{
+            \item
+            Proper \code{wtd.cor}, \code{wtd.mean}, \code{wtd.var}, \code{wtd.fivenum}, and
+            \code{wtd.boxplot}  internal functions to avoid
+            issues with dependence on packages weights, Hmisc, and ENmisc. (Code in TraMineR-weights.R and TraMineR-wtd-stats.R.)
+            \item
+            Function \code{TraMineR.checkupdates} has been removed.
+        }
+    }
+}
+
 \section{Changes in version 2.2-4 [2022-06-08] }{
 
   \subsection{New functions}{
     \itemize{
       \item
-      \code{seqdHplot()} alias for \code{seqplot(...,type="dH",...)}.
+      \code{seqdHplot()} alias for \code{seqplot(...,type="dH",...)}
       \item
       \code{seqlength.align()} sets lengths of sequences of multiple domains as the shortest length among the domains.
       \item
@@ -42,7 +98,6 @@
       internal function in place of \code{cNORM:::weighted.rank}).
     }
   }
-
 }
 
 

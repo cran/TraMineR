@@ -37,6 +37,8 @@ extern SEXP tmrWeightedInterInertia(SEXP, SEXP, SEXP, SEXP);
 extern SEXP tmrfindsubsequences(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP tmrmatrixsubseqinseq(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP tmrseqetotse(SEXP);
+extern SEXP wcorr(SEXP, SEXP, SEXP);
+
 
 static const R_CMethodDef CEntries[] = {
   {"cLCP", (DL_FUNC) &cLCP, 4},
@@ -74,6 +76,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"tmrfindsubsequences",          (DL_FUNC) &tmrfindsubsequences,          10},
   {"tmrmatrixsubseqinseq",         (DL_FUNC) &tmrmatrixsubseqinseq,          8},
   {"tmrseqetotse",                 (DL_FUNC) &tmrseqetotse,                  1},
+  {"wcorr", 					   (DL_FUNC) &wcorr, 						 4},
   {NULL, NULL, 0}
 };
 

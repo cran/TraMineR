@@ -103,7 +103,7 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 		ylab <- paste(nbrep, " representative(s) (", wlab, "n=", round(n,2),")",sep="")
 	}
 
-	if (ylab=="") xmin <- 0
+	if (is.na(ylab) || ylab=="") xmin <- 0
     else xmin <- -2
 
     barplot(seqbar,col=cpal, width=barw,
@@ -199,6 +199,7 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 			cex.axis=cex.with.axis)
 
 		axis(2, at=c(dist.rep.pos,dist.center.pos),
+            pos = 0,
 			labels=c("B","A"),
 			las=2,
 			cex.axis=cex.with.axis)

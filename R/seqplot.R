@@ -33,7 +33,21 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
   	else if ("dist.matrix" %in% names(oolist)) {
       diss <- oolist[["dist.matrix"]]
       oolist[["diss"]] <- diss
-    } # FIXME dist.matrix is deprecated
+    } #  dist.matrix is deprecated
+
+    ## Stuff for rf plot
+    use.rf.layout <- FALSE
+    if ("which.plot" %in% names(oolist)){
+        #msg.warn("which.plot ignored, because not allowed as seqplot argument!")
+        #if (length(oolist) > 0) oolist <- oolist[[names(oolist) != "which.plot"]]
+        #else oolist <-  list()
+        if (oolist[["which.plot"]] == "both"){
+            if (!is.null(group))
+                msg.stop('which.plot="both" applies only when group=NULL')
+            use.layout <- use.rf.layout <- TRUE
+        }
+    }
+
 
 
   if (type == "pc") { # modification of Reto Bürgin 16.08.2012
@@ -126,9 +140,16 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
 		## Saving graphical parameters
 		savepar <- par(no.readonly = TRUE)
 
-		lout <- TraMineR.setlayout(nplot, rows, cols, with.legend, axes, legend.prop)
-	  	layout(lout$laymat, heights=lout$heights, widths=lout$widths)
 
+        if (use.rf.layout) {
+		  lout <- TraMineR.setlayout(2, 1, 2, with.legend, axes, legend.prop)
+          lout$widths[1] <- 1.3*lout$widths[1]
+	  	  layout(lout$laymat, heights=lout$heights, widths=lout$widths)
+        }
+        else {
+		  lout <- TraMineR.setlayout(nplot, rows, cols, with.legend, axes, legend.prop)
+	  	  layout(lout$laymat, heights=lout$heights, widths=lout$widths)
+        }
 		## Should axis be plotted or not ?
 		xaxis <- 1:nplot==lout$axisp
 
@@ -190,16 +211,37 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
 				if (!"border" %in% names(olist)) {olist <- c(olist, list(border=NA))}
 			}
 		}
+		## Sequence relative frequency plot
+		else if (type=="rf") {
+			f <- seqrf
+			with.missing <- TRUE
+
+			## Selecting sub sample for sort variable
+			## according to 'group'
+			if ("sortv" %in% names(olist)) {
+				if (!length(sortv)==1) {
+					olist[["sortv"]] <- sortv[gindex[[np]]]
+				}
+			}
+
+			if (!"space" %in% names(olist)) {olist <- c(olist, list(space=0))}
+			if (!"border" %in% names(olist)) {olist <- c(olist, list(border=NA))}
+			## Selecting distances according to group
+			olist[["diss"]] <- diss[gindex[[np]],gindex[[np]]]
+            plist[["skipar"]] <- TRUE
+
+            if (use.rf.layout) olist[["which.plot"]] <- "medoids"
+		}
 		## Mean times
 		else if (type=="mt") {
-      f <- seqmeant
-      if (!is.null(barlab)) {
-        if (ncol(barlab)==1)
-          olist[["bar.labels"]] <- as.vector(barlab)
-        else
-          olist[["bar.labels"]] <- as.vector(barlab[,np])
-      }
-    }
+          f <- seqmeant
+          if (!is.null(barlab)) {
+            if (ncol(barlab)==1)
+              olist[["bar.labels"]] <- as.vector(barlab)
+            else
+              olist[["bar.labels"]] <- as.vector(barlab[,np])
+          }
+        }
 		## Modal states
 		else if (type=="ms") {
 			f <- seqmodst
@@ -258,11 +300,18 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
 		olist <- olist[!match.args]
     ## suppress non plot arguments if necessary
     olist <- olist[!names(olist) %in% c("with.missing")]
-    if (!(type %in% c("i","I"))) olist <- olist[!(names(olist) %in% c("sortv","weighted"))]
+    if (!(type %in% c("i","I","rf"))) olist <- olist[!(names(olist) %in% c("sortv","weighted"))]
     if (type != "r") olist <- olist[!(names(olist) %in% c("dmax","stats"))]
 
 		plist <- c(list(x=res), plist, olist)
 		do.call(plot, args=plist)
+
+        if (use.rf.layout){
+            plist[["which.plot"]] <- "diss.to.med"
+            plist[["ylab"]] <- NA
+            plist[["yaxis"]] <- FALSE
+            do.call(plot, args=plist)
+        }
 	}
 
 	## Plotting the legend

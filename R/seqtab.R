@@ -52,7 +52,8 @@ seqtab <- function(seqdata, idxs = 1:10, weighted = TRUE, format = "SPS", tlim) 
 	}
 
 	##if (nbuseq >1){
-        res <- seqdata[match(names(Freq), seqlist)[idxs],]
+        idxf <- match(names(Freq), seqlist)[idxs]
+        res <- seqdata[idxf,]
     ##}
     ##else {
     ##    res <- names(Freq)
@@ -71,6 +72,7 @@ seqtab <- function(seqdata, idxs = 1:10, weighted = TRUE, format = "SPS", tlim) 
 	attr(res,"nbseq") <- sum(weights)
 	attr(res,"weighted") <- weighted
 	attr(res,"idxs") <- idxs
+	attr(res,"idxf") <- idxf
 	attr(res,"format") <- format
 
 	return(res)
