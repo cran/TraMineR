@@ -69,8 +69,8 @@ names(dbiofam) <- c("child","marr","left")
 ## Association between domains and R2 by domain
 rass <- dissdomassoc(dbiofam, weights=weights)
 
-## Joint distance matrix based on domain INDELSLOG costs.
-mcdist <- seqdistmc(channels=list(child.seq, marr.seq, left.seq),
+## Joint distances using additive trick with domain INDELSLOG costs.
+mcdist <- seqMD(channels=list(child.seq, marr.seq, left.seq), what="diss",
                     method="OM", sm =list("INDELSLOG", "INDELSLOG", "INDELSLOG"))
 
 rassj <- dissdomassoc(dbiofam, jointdiss=mcdist, what=c("all"), weights=weights)

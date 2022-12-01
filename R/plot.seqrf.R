@@ -24,6 +24,11 @@ plot.seqrf <- function(x, space=0, border=NA, which.plot="medoids", ylab=NA,
         if(dotargs[["yaxis"]]) yaxt <- "s"
     yaxis <- yaxt == "s"
 
+  sep.ylab <- (isFALSE(dotargs[["yaxis"]]) && (is.null(ylab) || !is.na(ylab)))
+  cex.lab <- par("cex.lab")
+  if ("cex.lab" %in% names(list(...))) cex.lab <- list(...)[["cex.lab"]]
+
+
     if(!skipar & which.plot=="both"){
   	  ##opar <- par(mfrow=c(1,2), oma=c(3,(!is.na(ylab)*5),(!is.null(main))*3,0), mar=c(1, 1, 2, 0))
   	  if (info %in% c("all","stat"))
@@ -56,8 +61,16 @@ plot.seqrf <- function(x, space=0, border=NA, which.plot="medoids", ylab=NA,
       else
         par(mar=c(xaxis * 2.5, 2 + yaxis , (info %in% c("all","subtitle")) * 2, .5))
      }
+
+   if (sep.ylab) {
+        sylab <- ylab
+        ylab <- NA
+   }
+
   if (which.plot %in% c("medoids","both")){
      plot(x[["seqtoplot"]], idxs = 0, space=space, border=border, ylab=ylab, main=titmed, ...)
+     if (sep.ylab)
+        title(ylab=sylab, line=1, cex.lab=cex.lab)
   }
 
   #if (!is.null(main) & which.plot == "diss.to.med")
@@ -74,7 +87,10 @@ plot.seqrf <- function(x, space=0, border=NA, which.plot="medoids", ylab=NA,
      }
      wtd.boxplot.tmr(x[["rf"]][["dist.list"]], x[["rf"]][["weights.list"]], horizontal=TRUE, width=heights,
         main=titbxp, pars=pars, yaxt=yaxt, xaxt=xaxt, frame.plot=frame.plot,
-        ylim=range(unlist(x[["rf"]][["dist.list"]])), at=at, ylab=ylab)
+        ylim=range(unlist(x[["rf"]][["dist.list"]])), at=at, ylab=ylab, cex.lab=cex.lab)
+
+     if (which.plot=="diss.to.med" & sep.ylab)
+        title(ylab=sylab, line=1, cex.lab=cex.lab)
   }
 
   if (which.plot=="both") {

@@ -103,17 +103,31 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 		ylab <- paste(nbrep, " representative(s) (", wlab, "n=", round(n,2),")",sep="")
 	}
 
-	if (is.na(ylab) || ylab=="") xmin <- 0
-    else xmin <- -2
+    sline = -1
+	if (is.na(ylab) || ylab=="") {
+        if(isFALSE(stats)){
+            xmin <- 0
+        } else {
+            xmin <- -1.5
+        }
+    }
+    else  xmin <- -2
 
     barplot(seqbar,col=cpal, width=barw,
-		ylab=ylab,
+		ylab=NA,
 		xlim=c(xmin,seql),
 		ylim=c(0,ymax),
 		horiz=TRUE,
 		axes=FALSE,
 		axisnames=FALSE,
 		...)
+
+    if (!is.na(ylab)){
+        cex.lab <- par("cex.lab")
+        if ("cex.lab" %in% names(olist))
+            cex.lab <- olist[["cex.lab"]]
+        title(ylab=ylab, line=0+stats, cex.lab=cex.lab)
+    }
 
 	## Time axis for the sequence
 	if (xaxis) {
@@ -137,11 +151,11 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 
 	## Frequency of the representative sequence
     if (info) {
-	nbprox <- sum(Statistics$nb[1:nbrep])
-	ctfreq <- round((nbprox/n)*100,1)
-	text(seql/2, 1.3,
-		paste("Criterion=",ctname,", coverage=", ctfreq ,"%", sep=""),
-		cex=cex.with.axis)
+    	nbprox <- sum(Statistics$nb[1:nbrep])
+    	ctfreq <- round((nbprox/n)*100,1)
+	    text(seql/2, 1.3,
+		  paste("Criterion=",ctname,", coverage=", ctfreq ,"%", sep=""),
+		  cex=cex.with.axis)
     }
 
 	## ==========

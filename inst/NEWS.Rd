@@ -1,12 +1,50 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.2-6 [2022-11-29] }{
+
+    \subsection{Changes in existing functions}{
+        \itemize{
+            \item
+            \code{seqplot()} and all the \code{seqxxplot()} family functions: default value for the \code{main} argument is now \code{"auto"} and \code{NULL} removes all titles as it should.
+            \item
+            \code{seqplot()} and all the \code{seqxxplot()} family functions: argument \code{axes} is deprecated and replaced by \code{xaxis}. Argument \code{yaxis} can now also be one of \code{"all"} or \code{"left"}.
+            \item
+            \code{plot()} methods for objects returned by \code{seqdef}, \code{seqstatd}, \code{seqtab}, \code{seqmodst}, \code{seqmeant}, and \code{seqrf} now display the \code{ylab} closer from the y-axis when \code{yaxis=FALSE}.
+            \item
+            \code{plot()} method for object returned by \code{seqrep} now displays the \code{ylab} closer from the y-axis when \code{stats=FALSE}.
+
+        }
+    }
+    \subsection{Bug fixes}{
+        \itemize{
+            \item
+            \code{summary.dissrf()}: five number statistics ignored weights (reported by Marcel Raab)
+            \item
+            \code{seqstatl()}: non-integer state value were not recognized.
+            \item
+            \code{plot()} methods for objects returned by \code{seqdef}, \code{seqstatd}, \code{seqtab}, \code{seqmodst}, \code{seqmeant}, \code{seqrf}, and \code{seqrep} ignored the \code{cex.lab} argument. 
+            \item
+            issues with prototypes in init.c
+            \item
+            removed unused code with deprecated \code{sprintf} in eventdictionary.cpp
+        }
+    }
+
+    \subsection{Misc.}{
+        \itemize{
+            \item
+            Replaced \code{seqdistmc} with \code{seqMD} in examples of \code{dissdomassoc}.
+        }
+    }
+}
+
 \section{Changes in version 2.2-5 [2022-08-30] }{
 
     \subsection{New functions}{
         \itemize{
             %\item
-            %\code{seqplot.md()} plot of multidomain sequences.
+            %\code{seqplotMD()} plot of multidomain sequences.
             \item
             \code{dissrf()} medoids of relative frequency (RF) groups
             \item

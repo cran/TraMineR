@@ -9,6 +9,10 @@ plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
 
   TraMineR.check.depr.args(alist(idxs = tlim, cex.axis = cex.plot))
 
+  sep.ylab <- (isFALSE(yaxis) && (is.null(ylab) || !is.na(ylab)))
+  cex.lab <- par("cex.lab")
+  if ("cex.lab" %in% names(list(...))) cex.lab <- list(...)[["cex.lab"]]
+
 	n <- nrow(x)
 	seql <- ncol(x)
 	statl <- alphabet(x)
@@ -94,6 +98,11 @@ plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
 			sortlab, sep="")
 	}
 
+    if (sep.ylab) {
+        sylab <- ylab
+        ylab <- NA
+    }
+
 	## The PLot
 	barplot(seqbar,col=cpal, width=weights,
 		ylab=ylab,
@@ -151,5 +160,8 @@ plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
 
 		axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=ylas, tick=FALSE, cex.axis=cex.axis)
 	}
+
+    if (sep.ylab)
+        title(ylab=sylab, line=1, cex.lab=cex.lab)
 
 }

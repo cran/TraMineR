@@ -12,7 +12,7 @@
 #ifdef __cplusplus
 	#include <cstdio>
 	#include <cstdarg>
-	using std::sprintf;
+	//using std::sprintf;
 #endif	//#ifdef __cplusplus
 
 #include <R.h>

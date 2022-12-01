@@ -2,13 +2,15 @@
 ## Generic function for plotting state sequence objects
 ## ====================================================
 
-seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
-  missing.color = NULL, ylab = NULL, yaxis = TRUE, axes = "all", xtlab = NULL,
-  cex.axis = 1, with.legend = "auto", ltext = NULL, cex.legend = 1,
+seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
+  cpal = NULL, missing.color = NULL,
+  ylab = NULL, yaxis = "all",
+  xaxis = "all", xtlab = NULL, cex.axis = 1,
+  with.legend = "auto", ltext = NULL, cex.legend = 1,
   use.layout = (!is.null(group) | with.legend != FALSE), legend.prop = NA,
-  rows = NA, cols = NA, title, cex.plot, withlegend, ...) {
+  rows = NA, cols = NA, title, cex.plot, withlegend, axes, ...) {
 
-  TraMineR.check.depr.args(alist(main = title, cex.axis = cex.plot, with.legend = withlegend))
+  TraMineR.check.depr.args(alist(main = title, cex.axis = cex.plot, with.legend = withlegend, xaxis=axes))
 
 	if (!inherits(seqdata,"stslist"))
 		stop(call.=FALSE, "seqplot: data is not a state sequence object, use seqdef function to create one")
@@ -48,7 +50,20 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
         }
     }
 
-
+    if (is.logical(xaxis)){
+        xaxis <- ifelse (xaxis, "all", FALSE)
+    } else {
+        if (!xaxis %in% c("all","bottom"))
+            msg.stop('If not logical, xaxis should be one of "all" or "bottom"')
+    }
+    axes <- xaxis
+    if (is.logical(yaxis)){
+        yaxis <- ifelse(yaxis, "all", FALSE)
+    } else {
+        if (!yaxis %in% c("all","left"))
+            msg.stop('If not logical, yaxis should be one of "all" or "left"')
+    }
+    yaxes <- yaxis
 
   if (type == "pc") { # modification of Reto Bürgin 16.08.2012
     oolist <- append(oolist, list(group = group, rows = rows, cols = cols))
@@ -112,14 +127,24 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
             gindex[[s]] <- which(group==levels(group)[s])
 
           ## Title of each plot
-          if (!is.null(main))
-            main <- paste(main,"-",levels(group))
-          else
-            main <- levels(group)
+          #if (!is.null(main))
+          #  main <- paste(main,"-",levels(group))
+          #else
+          #  main <- levels(group)
+
+
+          if (!is.null(main)) {
+              if (main[1] == "auto")
+                main <- levels(group) ## will be NULL if group is NULL
+              else if (length(main)==1)
+                main <- paste(main,"-",levels(group))
+          }
+
 	} else { # single group
           nplot <- 1
           gindex <- vector("list",1)
           gindex[[1]] <- 1:nrow(seqdata)
+          if (!is.null(main) && main[1] == "auto" && type!="pc") main <- NULL
 	}
 
 	## ===================
@@ -127,14 +152,16 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
 	## ===================
 	if (type=="Ht" | type =="pc") { with.legend=FALSE }
 
-	## IF xaxis argument is provided
+    ## Issue below fixed by using xaxis instead of axes ## gr 22.11.23
+    ## IF xaxis argument is provided
 	## it interferes with axes argument
-	if ("xaxis" %in% names(oolist)) {
-		tmpxaxis <- oolist[["xaxis"]]
-		if (tmpxaxis==TRUE) {axes="all"}
-		else if (tmpxaxis==FALSE) {axes=FALSE}
-		oolist <- oolist[!names(oolist) %in% "xaxis"]
-	}
+## 	if ("xaxis" %in% names(oolist)) {
+## 		tmpxaxis <- oolist[["xaxis"]]
+## 		if (tmpxaxis==TRUE) {axes="all"}
+## 		else if (tmpxaxis==FALSE) {axes=FALSE}
+## 		oolist <- oolist[!names(oolist) %in% "xaxis"]
+## 	}
+
 
 	if (use.layout | !is.null(group) ) {
 		## Saving graphical parameters
@@ -151,13 +178,28 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
 	  	  layout(lout$laymat, heights=lout$heights, widths=lout$widths)
         }
 		## Should axis be plotted or not ?
-		xaxis <- 1:nplot==lout$axisp
+		#xaxis <- 1:nplot==lout$axisp
+
+        xaxis <- rep(FALSE,nplot)
+        xaxis[lout$axisp] <- TRUE
+
+        yaxis <- rep(FALSE,nplot)
+        if (!isFALSE(yaxes)){
+            if (yaxes == "left"){
+                yaxis[lout$laymat[,1]] <- TRUE
+            }
+            else if (yaxes == "all") {
+                yaxis <- rep(TRUE,nplot)
+            }
+        }
 
 		legpos <- lout$legpos
 	}
 	else {
-		if (axes!=FALSE) {xaxis <- TRUE}
-		else {xaxis <- FALSE}
+		if (isFALSE(axes)) {xaxis <- FALSE}
+		else {xaxis <- TRUE}
+        if (isFALSE(yaxes)) {yaxis <- FALSE}
+        else yaxis <- TRUE
 		legpos <- NULL
 	}
 
@@ -169,7 +211,7 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
 		olist <- oolist
 
 		plist <- list(main=main[np], cpal=cpal, missing.color=missing.color,
-			ylab=ylab, yaxis=yaxis, xaxis=xaxis[np],
+			ylab=ylab, yaxis=yaxis[np], xaxis=xaxis[np],
 			xtlab=xtlab, cex.axis=cex.axis)
 
 		## Selecting sub sample for x
@@ -265,7 +307,7 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = NULL, cpal = NULL,
     }
     else if (type == "pc") { # modification of Reto Bürgin 16.08.2012
 
-                        plist[["main"]] <- main
+                        plist[["main"]] <- list(main)
                         olist <- c(olist, plist)
                         olist[["plot"]] <- FALSE
                         f <- seqpcplot

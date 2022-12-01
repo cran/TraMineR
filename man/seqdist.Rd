@@ -392,12 +392,12 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
   See also all references in \cite{Studer and Ritschard (2014, 2016)}
 }
 \author{
-  Matthias Studer, Pierre-Alexandre Fonta, Alexis Gabadinho, Nicolas S. Müller,
-  Gilbert Ritschard.
+  Matthias Studer, Gilbert Ritschard, Pierre-Alexandre Fonta, Alexis Gabadinho, Nicolas S. Müller.
+  .
 }
 \seealso{
-  \code{\link{seqcost}}, \code{\link{seqsubm}}, \code{\link{seqdef}}, and for
-  multichannel distances \code{\link{seqdistmc}}.
+  \code{\link{seqcost}}, \code{\link{seqsubm}}, \code{\link{seqdef}}, and \code{\link{seqMD}} for
+  multidomain (multichannel) distances using the cost additive trick.
 }
 \examples{
 ## =========================

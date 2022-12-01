@@ -1,7 +1,7 @@
 seqpcplot <- function(seqdata, group = NULL, weights = NULL, cex = 1, lwd = 1/4,
   cpal = NULL, grid.scale = 1/5, ltype = "unique", embedding = "most-frequent",
   lorder = NULL , lcourse = "upwards", filter = NULL, hide.col = "grey80",
-  alphabet = NULL, missing = "auto", order.align = "first", main = NULL,
+  alphabet = NULL, missing = "auto", order.align = "first", main = "auto",
   xlab = NULL, ylab = NULL, xaxis = TRUE, yaxis = TRUE, axes = "all",
   xtlab = NULL, cex.lab = 1, rows = NA, cols = NA, plot = TRUE, seed = NULL,
   weighted = TRUE, with.missing = TRUE,
@@ -41,7 +41,7 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
                               filter = NULL, alpha = 1,
                               ltype = "unique", embedding = "most-frequent",
                               sf.cex = 1, sf.cex.leaves = 1,
-                              main = NULL, xlab = NULL, ylab = NULL,
+                              main = "auto", xlab = NULL, ylab = NULL,
                               xlim, ylim,
                               alphabet = NULL, alphabet.optim = FALSE,
                               missing = c("auto", "show", "hide"),
@@ -695,13 +695,15 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
     }
 
     ## title(s)
-    if (is.null(main)) {
-      if (ngroup > 1) {
-        main <- paste(grouplev, ", n = ", round(wid.group.unscaled, 1), sep = "")
-      } else main <- paste("n = ", round(wid.group.unscaled, 1), sep = "")
-    } else {
-      if ((ngroup > 1) & (length(main) < ngroup)) {
-        main <- rep(main, length.out = ngroup)
+    if (!is.null(main)) {
+      if (main[1]=="auto") {
+          if (ngroup > 1)
+            main <- paste(grouplev, ", n = ", round(wid.group.unscaled, 1), sep = "")
+          else
+            main <- paste("n = ", round(wid.group.unscaled, 1), sep = "")
+      } else  {
+        if ((ngroup > 1) & (length(main) < ngroup))
+            main <- rep(main, length.out = ngroup)
       }
     }
 

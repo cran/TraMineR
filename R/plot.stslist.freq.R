@@ -8,6 +8,13 @@ plot.stslist.freq <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
+  sep.ylab <- (isFALSE(yaxis) && (is.null(ylab) || !is.na(ylab)))
+  cex.lab <- par("cex.lab")
+  if ("cex.lab" %in% names(list(...))) cex.lab <- list(...)[["cex.lab"]]
+
+  if (!is.logical(yaxis) && !yaxis %in% c("cum","pct"))
+    msg.stop("Bad yaxis value!")
+
 	n <- attr(x,"nbseq")
 	weighted <- attr(x, "weighted")
 	if (weighted) {wlab <- "weighted "}
@@ -40,10 +47,10 @@ plot.stslist.freq <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE
 	}
 
 	if (is.null(ylab)) {
-		if (yaxis==TRUE || yaxis=="cum")
-			ylab <- paste("Cum. % freq. (",wlab,"n=",round(n,2),")",sep="")
-		else if (yaxis=="pct")
+		if (yaxis=="pct")
 			ylab <- paste("% freq. (",wlab,"n=",n,")",sep="")
+        else
+			ylab <- paste("Cum. % freq. (",wlab,"n=",round(n,2),")",sep="")
 	}
 
 	## Storing the optional parameters in a list
@@ -58,6 +65,11 @@ plot.stslist.freq <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE
 
 	if (pbarw==TRUE) barw=table$Percent
 	else barw=1
+
+    if (sep.ylab) {
+        sylab <- ylab
+        ylab <- NA
+    }
 
 	## The plot
 	barplot(seqbar,col=cpal, width=barw,
@@ -115,4 +127,8 @@ plot.stslist.freq <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE
 			## mgp=c(1.5,1,0),
 			las=1,
 			cex.axis=cex.axis)
+
+    if (sep.ylab)
+        title(ylab=sylab, line=1, cex.lab=cex.lab)
+
 }

@@ -8,6 +8,10 @@ plot.stslist.modst <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
+  sep.ylab <- (isFALSE(yaxis) && (is.null(ylab) || !is.na(ylab)))
+  cex.lab <- par("cex.lab")
+  if ("cex.lab" %in% names(list(...))) cex.lab <- list(...)[["cex.lab"]]
+
 	seql <- ncol(x)
 	statl <- attr(x,"alphabet")
 	n <- attr(x, "nbseq")
@@ -56,6 +60,12 @@ plot.stslist.modst <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
 	ctfreq <- round((nbrep/n)*100,1)
 	txt <- paste("Modal state sequence (",nbrep," occurrences, freq=", ctfreq ,"%)", sep="")
 
+    if (sep.ylab) {
+        sylab <- ylab
+        ylab <- NA
+    }
+
+
 	barplot(prof.freq,
 		space=0,
 		## mgp=c(2.5,0.6,0),
@@ -83,5 +93,8 @@ plot.stslist.modst <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
 	if (yaxis)
 		axis(2, at=seq(0,1.0,0.25), labels=c("0","0.25",".5","0.75","1"),
 			las=2, cex.axis=cex.axis)
+    if (sep.ylab)
+        title(ylab=sylab, line=1, cex.lab=cex.lab)
+
 
 }

@@ -15,7 +15,7 @@ EventDictionary():numseq(0) {}
     EventDictionary(SEXP flist);
     virtual ~EventDictionary();
     bool codeExists(const int &code) const;
-    int sprint(char * buffer, const char* start, const int&code)const;
+    //int sprint(char * buffer, const char* start, const int&code)const;
     void addSequence() {
         this->numseq++;
     }

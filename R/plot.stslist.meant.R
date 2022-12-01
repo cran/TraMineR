@@ -4,6 +4,10 @@ plot.stslist.meant <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
+  sep.ylab <- (isFALSE(yaxis) && (is.null(ylab) || !is.na(ylab)))
+  cex.lab <- par("cex.lab")
+  if ("cex.lab" %in% names(list(...))) cex.lab <- list(...)[["cex.lab"]]
+
   n <- attr(x,"nbseq")
   seql <- length(attr(x,"xtlab"))
   errbar <- attr(x, "se")
@@ -20,6 +24,11 @@ plot.stslist.meant <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
 
   if (is.null(cpal))
     cpal <- attr(x,"cpal")
+
+  if (sep.ylab) {
+      sylab <- ylab
+      ylab <- NA
+  }
 
   mt <- as.vector(x[,"Mean"])
   mp <- barplot(mt,
@@ -56,5 +65,7 @@ plot.stslist.meant <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
     text(mp, mt + offset.barlab*ylim[2], format(bar.labels), xpd = TRUE, cex = cex.barlab)
 
   }
+    if (sep.ylab)
+        title(ylab=sylab, line=1, cex.lab=cex.lab)
 
 }

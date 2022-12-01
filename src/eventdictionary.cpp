@@ -14,13 +14,13 @@ EventDictionary::~EventDictionary() {
 bool EventDictionary::codeExists(const int &code) const {
     return this->find(code)==this->end();
 }
-int EventDictionary::sprint(char * buffer, const char* start, const int&code) const {
+/*int EventDictionary::sprint(char * buffer, const char* start, const int&code) const {
     const_iterator it=this->find(code);
 	if (it!=this->end()) {
 		return sprintf(buffer,"%s%s",start,it->second.c_str());
 	}
 	return sprintf(buffer,"%s%i",start,code);
-}
+}*/
 
 SEXP EventDictionary::getDictionary()const{
 	SEXP ret;

@@ -23,10 +23,11 @@ seqstatl <- function(data, var=NULL, format='STS') {
 	## IF states are numeric values, sort them as integer
 	## (if sorted as characters, 10 will be after 1,
 	## not after 9)
-	statnum <- suppressWarnings(as.integer(statl))
+	#statnum <- suppressWarnings(as.integer(statl))
+	## using as.numeric to avoid issue with non-integer state value
+    statnum <- suppressWarnings(as.numeric(statl))
 
 	if (all(is.na(statnum)==FALSE)) statl <- sort(statnum)
 
 	return(statl)
 	}
-

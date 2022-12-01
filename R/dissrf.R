@@ -297,12 +297,16 @@ summary.dissrf <- function(object, dist.idx=1:10, ...){
   medoids <- object[["medoids"]]
   dlist <- object[["dist.list"]]
   dweights <- object[["weights.list"]]
-##  g <- length(dlist)
-##  dist.stat <- matrix(rep(NA,5*g), nrow=5)
-##  for (i in 1:g){
-##    dist.stat[,1] <- wtd.fivenum.tmr(dlist[[i]],dweights[[i]])
-##  }
-  dist.stat  <- sapply(dlist, fivenum)
+  g <- length(dlist)
+  if (inherits(object,"dissrfprop")){
+    dist.stat <- matrix(rep(NA,5*g), nrow=5)
+    for (i in 1:g){
+      dist.stat[,i] <- wtd.fivenum.tmr(dlist[[i]],dweights[[i]])
+    }
+  }
+  else {
+    dist.stat  <- sapply(dlist, fivenum)
+  }
   k <- length(dlist)
   dmean <- stdev <- vector("double",length=k)
 

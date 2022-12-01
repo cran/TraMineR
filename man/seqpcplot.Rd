@@ -1,4 +1,4 @@
-%% -*- RD:ANSI -*-
+%% -*- TeX -*-
 \name{seqpcplot}
 \alias{seqpcplot}
 \alias{seqpcfilter}
@@ -20,7 +20,7 @@ seqpcplot(seqdata, group = NULL, weights = NULL, cex = 1, lwd = 1/4,
   cpal = NULL, grid.scale = 1/5, ltype = "unique",
   embedding = "most-frequent", lorder = NULL , lcourse = "upwards",
   filter = NULL, hide.col = "grey80", alphabet = NULL,
-  missing = "auto", order.align = "first", main = NULL, xlab = NULL,
+  missing = "auto", order.align = "first", main = "auto", xlab = NULL,
   ylab = NULL, xaxis = TRUE, yaxis = TRUE, axes = "all", xtlab = NULL,
   cex.lab = 1, rows = NA, cols = NA, plot = TRUE, seed = NULL,
   weighted = TRUE, with.missing = TRUE,
@@ -88,9 +88,11 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 
   \item{order.align}{Aligning method. For aligning on order positions use either \code{"first"} (default) or
   \code{"last"}. Option \code{"first"} numbers the positions from the beginning
-  while \code{"last"} numbers them from the end. With \code{order.align = "time"}, the elements in the sequences are aligned on their rounded timestamps.}
+  while \code{"last"} numbers them from the end. With \code{order.align = "time"}, the elements in the
+  sequences are aligned on their rounded timestamps.}
 
-  \item{main}{title for the graphic.}
+  \item{main}{title for the graphic. Default \code{"auto"} prints default titles. Set as \code{NULL} to
+  suppress the title.}
   \item{xlab}{label for the x axis}
   \item{ylab}{label for the y axis}
   \item{xaxis}{logical: Should x-axis be plotted?}
@@ -107,13 +109,15 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 
   \item{rows,cols}{integers. Number of rows and columns of the plot panel.}
 
-  \item{plot}{logical. Should the plot be displayed? Set as \code{FALSE} to retrieve the \code{seqpcplot} object without plotting it.}
+  \item{plot}{logical. Should the plot be displayed? Set as \code{FALSE} to retrieve the \code{seqpcplot}
+  object without plotting it.}
 
   \item{seed}{integer. Start seed value.}
 
   \item{weighted}{logical. Should weights be accounted for? Default is \code{TRUE}.}
 
-  \item{with.missing}{logical. Should we care about possible missings? Default is \code{TRUE}. See also the \code{missing} argument.}
+  \item{with.missing}{logical. Should we care about possible missings? Default is \code{TRUE}. See also the
+  \code{missing} argument.}
 
   \item{method}{character string. Defines the filtering
      function. Available are \code{"minfreq"}, \code{"cumfreq"} and
@@ -156,14 +160,14 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
   Type \code{"function"}: colors the patterns depending on the values
   returned by a [0,1] valued function of the frequency x of the
   pattern. Three native functions can be used: \code{"minfreq"},
-  \code{"cumfreq"} and \code{"linear"}. Use 
-  \code{filter = list(type = "function", value = "minfreq", level = 0.05)} 
+  \code{"cumfreq"} and \code{"linear"}. Use
+  \code{filter = list(type = "function", value = "minfreq", level = 0.05)}
   to color patterns with a
   support of at least 5\% (within group). Use
-  \cr\code{filter = list(type = "function", value = "cumfreq", level = 0.5)} 
+  \cr\code{filter = list(type = "function", value = "cumfreq", level = 0.5)}
   to highlight the 50\% most
-  frequent patterns (within group). Or, use 
-  \code{filter = list(type="function", value="linear")} 
+  frequent patterns (within group). Or, use
+  \code{filter = list(type="function", value="linear")}
   to use a linear gradient for the
   color intensity (the most frequent trajectory gets
   100\% intensity). Other user-specified functions can be provided by
@@ -174,7 +178,7 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 
   The function \code{seqpcfilter} is a convenience function for type
   \code{"function"}. The three examples above can be imitated by
-  \code{seqpcfilter("minfreq", 0.05)}, 
+  \code{seqpcfilter("minfreq", 0.05)},
   \code{seqpcfilter("cumfreq", 0.5)} and \code{seqpcfilter("linear")}.
 
   If a numeric scalar is assigned to \code{filter}, the \code{"minfreq"}
@@ -192,7 +196,8 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 \seealso{ \code{\link{seqplot}}, \code{\link{seqdef}}, \code{\link{seqecreate}}}
 
 \references{
-  Bürgin, R. and G. Ritschard (2014), A decorated parallel coordinate plot for categorical longitudinal data, \emph{The American Statistician} 68(2), 98-103.
+  Bürgin, R. and G. Ritschard (2014), A decorated parallel coordinate plot for categorical longitudinal
+  data, \emph{The American Statistician} 68(2), 98-103.
 }
 
 \examples{

@@ -12,6 +12,10 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
     msg.stop("type can only be 'd', 'Ht', or 'dH'")
   }
 
+  sep.ylab <- (isFALSE(yaxis) && (is.null(ylab) || !is.na(ylab)))
+  cex.lab <- par("cex.lab")
+  if ("cex.lab" %in% names(list(...))) cex.lab <- list(...)[["cex.lab"]]
+
 	n <- attr(x,"nbseq")
 	weighted <- attr(x, "weighted")
 	if (weighted) {wlab <- "weighted "}
@@ -45,6 +49,11 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
 			ylab <- paste("Rel. Freq. (",wlab,"n=",round(n,2),")",sep="")
         else
             ylab <- paste("Entropy (",wlab,"n=",round(n,2),")",sep="")
+    }
+
+    if (sep.ylab) {
+        sylab <- ylab
+        ylab <- NA
     }
 
     ## y limit for entropy
@@ -131,6 +140,8 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
 	}
 
 	##
+    if (sep.ylab)
+        title(ylab=sylab, line=1, cex.lab=cex.lab)
 	if (is.null(yaxis) || yaxis)
 		axis(2, cex.axis=cex.axis)
 
