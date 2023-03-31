@@ -1,5 +1,5 @@
 ## creating rf sequence object
-seqrf <- function(seqdata, diss, k=NULL, sortv=NULL, weights=NULL,
+seqrf <- function(seqdata, diss, k=NULL, sortv="mds", weights=NULL,
                   weighted=TRUE,
                   grp.meth = "prop", squared = FALSE, pow = NULL){
 
@@ -7,14 +7,18 @@ seqrf <- function(seqdata, diss, k=NULL, sortv=NULL, weights=NULL,
   if (!weighted) weights <- NULL
   ## computing sortv
   if (!is.null(sortv)) {
-    if (length(sortv)==1 && sortv %in% c("from.start", "from.end")) {
-      end <- if (sortv=="from.end") { max(seqlength(seqdata)) } else { 1 }
-      beg <- if (sortv=="from.end") { 1 } else { max(seqlength(seqdata)) }
+    if (length(sortv)==1){
+        if (sortv %in% c("from.start", "from.end")) {
+          end <- if (sortv=="from.end") { max(seqlength(seqdata)) } else { 1 }
+          beg <- if (sortv=="from.end") { 1 } else { max(seqlength(seqdata)) }
 
-      sortv <- do.call(order, as.data.frame(seqdata)[,end:beg])
+          sortv <- do.call(order, as.data.frame(seqdata)[,end:beg])
+          sortv <- order(sortv)
+        } else if (sortv != "mds") {
+            stop(call.=FALSE, "If of length one, sortv must be one of 'mds', 'from.start', and 'from.end'")
+        }
     } else if (length(sortv)!=nrow(seqdata)) {
-      stop(call.=FALSE, "sortv must contain one value for each row in the sequence object ",
-           "or be either 'from.start' or 'from.end'")
+      stop(call.=FALSE, "sortv must contain one value for each row in the sequence object ")
     } else {
       if (is.factor(sortv)) { sortv <- as.integer(sortv) }
     }

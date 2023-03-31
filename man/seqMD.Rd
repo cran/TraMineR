@@ -2,13 +2,25 @@
 \alias{seqMD}
 \alias{seqdistmc}
 \title{Multidomain sequences}
-\description{Build multidomain (MD) sequences of combined individual domain states (expanded alphabet), derive multidomain CAT indel and substitution costs from domain costs by means of an additive trick, and compute OM pairwise distances using CAT costs.
+\description{Build multidomain (MD) sequences of combined individual domain states (expanded alphabet), derive multidomain indel and substitution costs from domain costs by means of an additive trick (CAT), and compute OM pairwise distances using CAT costs.
 }
 
 \usage{
-seqMD(channels, method=NULL, norm="none", indel="auto", sm=NULL,
-     with.missing=FALSE, full.matrix=TRUE, link="sum", cval=2,
-     miss.cost=2, cweight=NULL, what="MDseq", ch.sep="+")
+seqMD(channels,
+  method=NULL,
+  norm="none",
+  indel="auto",
+  sm=NULL,
+  with.missing=NULL,
+  full.matrix=TRUE,
+  link="sum",
+  cval=2,
+  miss.cost=2,
+  cweight=NULL,
+  what="MDseq",
+  ch.sep="+",
+  fill.with.miss=TRUE
+  )
 
 seqdistmc(channels, what="diss", ch.sep="@@@@TraMineRSep@@@@", ...)
 
@@ -16,18 +28,18 @@ seqdistmc(channels, what="diss", ch.sep="@@@@TraMineRSep@@@@", ...)
 
 
 \arguments{
- \item{channels}{A list of domain state sequence objects defined
+ \item{channels}{A list of domain state sequence \code{stslist} objects defined
     with the \code{\link{seqdef}} function, each state sequence object corresponding
     to a domain.}
 
- \item{method}{a character string indicating a dissimilarity measure between sequences.
-    One of \code{"OM"} (Optimal Matching), \code{"LCS"} (Longest Common Subsequence),
-    \code{"HAM"} (Hamming distance), \code{"DHD"} (Dynamic Hamming distance).}
+ \item{method}{String. Default: \code{NULL}. Dissimilarity measure between sequences.
+    When \code{what="diss"}, must be one of \code{"OM"} (Optimal Matching),
+    \code{"HAM"} (Hamming distance), or \code{"DHD"} (Dynamic Hamming distance). Otherwise, ignored. Can also be \code{"LCS"} (Longest common subsequence), but see details. }
 
-  \item{norm}{
+ \item{norm}{
     String.
     Default: \code{"none"}.
-    The normalization method to use. See \code{\link{seqdist}}.
+    The normalization method to use. See \code{\link{seqdist}}. Ignored if \code{what} is not \code{"diss"}.
     }
 
  \item{indel}{Double, vector of doubles, or list with an insertion/deletion cost or a vector of state dependent indel costs for each domain. Can also be \code{"auto"} (default), in which case the indel cost of each domain is automatically set in accordance with the \code{sm} value of the domain. See \code{indel} argument of \code{\link{seqdist}}.
@@ -38,8 +50,7 @@ seqdistmc(channels, what="diss", ch.sep="@@@@TraMineRSep@@@@", ...)
    (see \code{\link{seqcost}}). Ignored when \code{method="LCS"}.
    }
 
- \item{with.missing}{Logical or vector of logical. Must be \code{TRUE} for channels with non deleted
-   gaps (missing values). See details.
+ \item{with.missing}{Logical, vector of logical, or \code{NULL} (default). See \code{\link{seqdist}} and \code{\link{seqcost}}.
    }
 
  \item{full.matrix}{Logical. If \code{TRUE} (default), the full distance matrix between MD sequences is returned.
@@ -56,26 +67,34 @@ seqdistmc(channels, what="diss", ch.sep="@@@@TraMineRSep@@@@", ...)
 
  \item{cweight}{A vector of domain weights. Default is 1 (same weight for each domain).}
 
- \item{what}{Character string. What output should be returned? One of \code{"MDseq", "cost", "diss"}. The deprecated value \code{what="sm"} is treated as \code{what="cost"}.}
+ \item{what}{Character string. What output should be returned? One of \code{"MDseq", "cost", "diss"}. The deprecated value \code{what="sm"} is treated as \code{what="cost"}. \code{MDseq} returns the multidomain sequences expressed in terms of the expanded alphabet, \code{"cost"} the CAT costs, and "diss" the CAT-based multidomain distances.}
 
  \item{ch.sep}{Character string. Separator used for building state names of the expanded alphabet.}
+ 
+ \item{fill.with.miss}{Logical. Should shorter domain sequences be filled with missings to match sequence lengths across domains? Applies only to domains that already have missings.}
 
  \item{...}{arguments passed to \code{seqMD}}
 }
 
-\details{The \code{seqMD} function builds MD sequences by combining the domain states. When \code{what="cost"}, it derives multidomain indel and substitution costs from the indel and substitution costs of each domain by means of the additive trick (AT) proposed by \cite{Pollock, 2007}). When \code{what="cost"}, it computes multidomain distances using the AT-multidomain costs. The available metrics (see \code{method} argument) are optimal matching (\code{"OM"}), longest common subsequence (\code{"LCS"}), Hamming distance (\code{"HAM"}), and Dynamic Hamming Distance (\code{"DHD"}). The selected metric is used to compute pairwise domain dissimilarities. It is also used to compute MD distances except when \code{"LCS"}, in which case MD distances are obtained with OM.   For other edit distances, extract the combined state sequence object (by setting \code{what="MDseq"}) and the AT-multidomain substitution and indel costs (by setting \code{what="cost"}). Then use these outcomes as input in a call to \code{seqdist}.  See \code{\link{seqdist}} for more information about available distance measures.
+\details{The \code{seqMD} function builds MD sequences by combining the domain states. When \code{what="cost"}, it derives multidomain indel and substitution costs from the indel and substitution costs of each domain by means of the cost additive trick (CAT) (\cite{Ritschard et al., 2023}, \cite{Pollock, 2007}). When \code{what="diss"}, it computes multidomain distances using the CAT multidomain costs. The available metrics (see \code{method} argument) are optimal matching (\code{"OM"}), Hamming distance (\code{"HAM"}), and Dynamic Hamming Distance (\code{"DHD"}). If \code{method="LCS"}, distances are obtained with OM using CAT costs derived from domain indel and sm costs of respectively 1 and 2 (i.e. inputted \code{indel} and \code{sm} are ignored).  For other edit distances, extract the combined state sequence object (by setting \code{what="MDseq"}) and the CAT-multidomain substitution and indel costs (by setting \code{what="cost"}). Then use these outcomes as input in a call to \code{seqdist}.  See \code{\link{seqdist}} for more information about available distance measures.
 
-Normalization may be useful when dealing with sequences that are not all of the same length. For details on the applied normalization, see \code{\link{seqdist}}. }
+Normalization may be useful when dealing with sequences that are not all of the same length. For details on the applied normalization, see \code{\link{seqdist}}. 
+
+Sequences lengths are supposed to match across domains. If \code{fill.with.miss} is \code{TRUE} and the i-th sequence is shorter in one domain than the longest i-th sequence, it will, when constructing the i-th MD sequence, be filled with missing values to adapt its length to that of the longest sequence. However, this applies only for domain that already have missings, i.e., domains with a corresponding \code{with.missing} value set as \code{TRUE}. }
 
 \value{
 When \code{what="MDseq"}, the MD sequences of combined states as a \code{stslist} sequence object.\cr
-When \code{what="cost"}, the matrix of AT-substitution costs with three attributes: \code{indel} the AT-indel cost(s), \code{alphabet} the alphabet of the combined state sequences, and \code{cweight} the channel weights used.\cr
+When \code{what="cost"}, the matrix of CAT-substitution costs with three attributes: \code{indel} the CAT-indel cost(s), \code{alphabet} the alphabet of the combined state sequences, and \code{cweight} the channel weights used.\cr
 When \code{what="diss"}, a matrix of pairwise distances between MD sequences.
 }
 
 \seealso{ \code{\link{seqcost}}, \code{\link{seqdef}}, \code{\link{seqdist}}. }
 
-\references{ Pollock, Gary (2007) Holistic trajectories: a study of combined employment, housing and family careers by using multiple-sequence analysis. \emph{Journal of the Royal Statistical Society: Series A} \bold{170}, Part 1, 167--183. }
+\references{
+ Ritschard, G., T.F. Liao, and E. Struffolino (2023). Strategies for multidomain sequence analysis in social research. \emph{Sociological Methodology}. DOI: 10.1177/00811750231163833.
+
+ Pollock, G. (2007) Holistic trajectories: a study of combined employment, housing and family careers by using multiple-sequence analysis. \emph{Journal of the Royal Statistical Society: Series A} \bold{170}, Part 1, 167--183.
+}
 
 \examples{
 data(biofam)
@@ -93,7 +112,7 @@ marr.seq <- seqdef(married)
 child.seq <- seqdef(children)
 channels <- list(LeftHome=left.seq, Marr=marr.seq, Child=child.seq)
 
-## AT-multidomain distances based on channel specific cost methods
+## CAT multidomain distances based on channel specific cost methods
 MDdist <- seqMD(channels, method="OM",
     sm =list("INDELSLOG", "INDELSLOG", "TRATE"), what="diss")
 
@@ -107,14 +126,14 @@ smatrix[[3]] <- seqsubm(child.seq, method="CONSTANT")
 MDseq <- seqMD(channels)
 alphabet(MDseq)
 
-## Retrieving the AT-multidomain substitution costs
-## Using a weight of 2 for domain "child"
-MDcost <- seqMD(channels,
+## Retrieving the CAT multidomain substitution costs
+## Using double weight for domain "child"
+CATcost <- seqMD(channels,
     sm=smatrix, cweight=c(1,1,2), what="cost")
 
 ## OMspell distances between MD sequences
 MDdist2 <- seqdist(MDseq, method="OMspell",
-    sm = MDcost, indel=attr(MDcost,"indel"))
+    sm = CATcost, indel=attr(CATcost,"indel"))
 
 }
 

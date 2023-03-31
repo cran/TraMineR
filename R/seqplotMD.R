@@ -35,78 +35,77 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
   else if (!is.list(ltext.dom) || length(ltext.dom) != ndom)
     msg.stop("ltext.dom should be a list with a color palette for each domain")
 
-    if (is.logical(xaxis)){
-        xaxis <- ifelse (xaxis, "all", FALSE)
-    } else {
-        if (!xaxis %in% c("all","bottom"))
-            msg.stop('If not logical, xaxis should be one of "all" or "bottom"')
-    }
-    axes <- xaxis
-    if (is.logical(yaxis)){
-        yaxis <- ifelse(yaxis, "all", FALSE)
-    } else {
-        if (!yaxis %in% c("all","left"))
-            msg.stop('If not logical, yaxis should be one of "all" or "left"')
-    }
-    yaxes <- yaxis
-    if (is.logical(stats)){
-        stats <- ifelse (stats, "all", FALSE)
-    } else {
-        if (!stats %in% c("all","first"))
-            msg.stop('If not logical, stats should be one of "all" or "first"')
-    }
-    which.stats <- stats
+  if (is.logical(xaxis)){
+      xaxis <- ifelse (xaxis, "all", FALSE)
+  } else {
+      if (!xaxis %in% c("all","bottom"))
+          msg.stop('If not logical, xaxis should be one of "all" or "bottom"')
+  }
+  axes <- xaxis
+  if (is.logical(yaxis)){
+      yaxis <- ifelse(yaxis, "all", FALSE)
+  } else {
+      if (!yaxis %in% c("all","left"))
+          msg.stop('If not logical, yaxis should be one of "all" or "left"')
+  }
+  yaxes <- yaxis
+  if (is.logical(stats)){
+      stats <- ifelse (stats, "all", FALSE)
+  } else {
+      if (!stats %in% c("all","first"))
+          msg.stop('If not logical, stats should be one of "all" or "first"')
+  }
+  which.stats <- stats
+
+  if (!is.logical(dom.byrow))
+      msg.stop("dom.byrow must be logical!")
 
 
-    if (!is.logical(dom.byrow))
-        msg.stop("dom.byrow must be logical!")
+  ## Storing original optional arguments list
+  oolist <- list(...)
+
+  sortv <- if ("sortv" %in% names(oolist))  oolist[["sortv"]] else NULL
+  if (type=="rf" && !"sortv" %in% names(oolist)) sortv <- "mds" ## default for rf plot 
+  leg.ncol <- if ("ncol" %in% names(oolist)) { oolist[["ncol"]] } else { NULL }
+  oolist <- oolist[names(oolist) != "ncol"]
+
+  #if ("tlim" %in% names(oolist)) {
+  #  oolist[["idxs"]] <- oolist[["tlim"]]
+  #  msg.warn("'tlim' deprecated, use 'idxs' instead!")
+  #  oolist <- oolist[names(oolist) != "tlim"]
+  #}
+  ##MD We need bar.labels by domain x group, i.e. a list of bar.labels matrices
+  if ("bar.labels" %in% names(oolist)) {
+   if (!is.list(oolist[["bar.labels"]]) || length(oolist[["bar.labels"]]) != ndom)
+      msg.stop("bar.labels must be a list with bar labels for each domain")
+   barlab <- list()
+   for (i in 1:ndom) {
+      barlab[[i]] <- as.matrix(oolist[["bar.labels"]][[i]])
+   }
+  } else { barlab <- NULL }
 
 
-	## Storing original optional arguments list
-	oolist <- list(...)
-
-  	sortv <- if ("sortv" %in% names(oolist))  oolist[["sortv"]] else NULL
-  	leg.ncol <- if ("ncol" %in% names(oolist)) { oolist[["ncol"]] } else { NULL }
-    oolist <- oolist[names(oolist) != "ncol"]
-
-    #if ("tlim" %in% names(oolist)) {
-    #  oolist[["idxs"]] <- oolist[["tlim"]]
-    #  msg.warn("'tlim' deprecated, use 'idxs' instead!")
-    #  oolist <- oolist[names(oolist) != "tlim"]
-    #}
-    ##MD We need bar.labels by domain x group, i.e. a list of bar.labels matrices
-    if ("bar.labels" %in% names(oolist)) {
-     if (!is.list(oolist[["bar.labels"]]) || length(oolist[["bar.labels"]]) != ndom)
-        msg.stop("bar.labels must be a list with bar labels for each domain")
-     barlab <- list()
-     for (i in 1:ndom) {
-        barlab[[i]] <- as.matrix(oolist[["bar.labels"]][[i]])
-     }
-    } else { barlab <- NULL }
-
-
-    diss <- NULL
-  	if ("diss" %in% names(oolist)) { ## should be a MD dist matrix
-      diss <- oolist[["diss"]]
-    }
-  	else if ("dist.matrix" %in% names(oolist)) {
-      diss <- oolist[["dist.matrix"]]
-      oolist[["diss"]] <- diss
+  diss <- NULL
+    if ("diss" %in% names(oolist)) { ## should be a MD dist matrix
+        diss <- oolist[["diss"]]
+    } else if ("dist.matrix" %in% names(oolist)) {
+        diss <- oolist[["dist.matrix"]]
+        oolist[["diss"]] <- diss
     } #  dist.matrix is deprecated
 
-    ## Stuff for rf plot
-    use.rf.layout <- FALSE
-    if ("which.plot" %in% names(oolist)){
-        #msg.warn("which.plot ignored, because not allowed as seqplot argument!")
-        #if (length(oolist) > 0) oolist <- oolist[[names(oolist) != "which.plot"]]
-        #else oolist <-  list()
-        ##MD which.plot="both" not applicable for MD sequences
-        if (oolist[["which.plot"]] == "both"){
-            #if (!is.null(group))
-                msg.stop('which.plot="both" not applicable for MD plots')
-            #use.rf.layout <- TRUE
-        }
-    }
+  ## Stuff for rf plot
+  use.rf.layout <- FALSE
+  if ("which.plot" %in% names(oolist)){
+      #msg.warn("which.plot ignored, because not allowed as seqplot argument!")
+      #if (length(oolist) > 0) oolist <- oolist[[names(oolist) != "which.plot"]]
+      #else oolist <-  list()
+      ##MD which.plot="both" not applicable for MD sequences
+      if (oolist[["which.plot"]] == "both"){
+          #if (!is.null(group))
+              msg.stop('which.plot="both" not applicable for MD plots')
+          #use.rf.layout <- TRUE
+      }
+  }
 
   ##MD pc plot may need a special handling for MD data!!
   ## for now, we disable the "pc" type
@@ -160,6 +159,11 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
           for (s in 1:nplot)
             gindex[[s]] <- which(group==levels(group)[s])
 
+          if (length(ylab) <= 1) ## length(NULL) is 0
+            ylab <- rep(ylab, nplot)
+          else if (length(ylab) != nplot)
+            msg.stop("if a vector, ylab must have one value per group level!")
+
 
 	} else { # single group
           nplot <- 1
@@ -203,7 +207,7 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
     }
     else MDseq <- NA
 
-    ## if sortv is a string, we compute sortv on one domain or the MD sequences
+    ## if sortv is a string (except "mds"), we compute sortv on one domain or the MD sequences
 	if (!is.null(sortv)) {
         if (length(sortv)==1 && sortv %in% c("from.start", "from.end")) {
 
@@ -229,7 +233,7 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
                 }
             }
             else
-                msg.stop("unvalid dom.crit value", dom.crit)
+                msg.stop("invalid dom.crit value", dom.crit)
 
             end <- if (sortv=="from.end") { mxl } else { 1 }
     		beg <- if (sortv=="from.end") { 1 } else { mxl }
@@ -238,11 +242,49 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
         	sortv <- order(do.call(order, MDext[,end:beg]))
         	#x <- x[sortv,]
         } else if (length(sortv)!=ncase) {
-            msg.stop("sortv must either contain one value for each sequence ",
+            if (type != "rf"){
+              msg.stop("sortv must either contain one value for each sequence ",
                 "or be one of 'from.start' and 'from.end'")
+            } else if (length(sortv) == 1 && sortv != "mds") {
+              msg.stop("sortv must either contain one value for each sequence ",
+                "or be one of 'mds', 'from.start', and 'from.end'")
+            }
         } else {
         	if (is.factor(sortv)) { sortv <- as.integer(sortv) }
         	#x <- x[order(sortv),]
+        }
+
+        if (length(sortv)==1 && sortv == "mds") {
+          if (type=="rf"){
+            if (is.null(diss))
+                msg.stop("'diss' required for rf plots")
+        	with.missing <- TRUE
+
+##         	if ("sortv" %in% names(oolist))
+##                 sortv <- oolist[["sortv"]]
+##             else
+##                 sortv <- "mds"
+##            if (length(sortv)==1 && sortv=="mds"){
+                weighted <- TRUE
+                if ("weighted" %in% names(oolist)) weighted <- oolist[["weighted"]]
+                if (weighted) {
+                   if ("weights" %in% names(oolist))
+                     weights <- oolist[["weights"]]
+                   else
+                     weights <- attr(channels[[1]],"weights")
+                   if (is.null(weights)) {
+                     weighted <- FALSE
+                   }
+                }
+
+                mdspow <- 1
+                if ("squared" %in% names(oolist)) mdspow <- 2^oolist[["squared"]]
+                if (weighted)
+                    sortv <- wcmdscale(diss^mdspow, k = 1, w=weights)
+                else
+                    sortv <- cmdscale(diss^mdspow, k = 1)
+            #}
+          }
         }
     }
 
@@ -331,7 +373,7 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
         if (dom.byrow){
             #maind <- if (np==1) main[d] else NA
             #ylabd <- if (np==1) ylab else NA
-            ylabd <- ylab
+            ylabd <- ylab[np]
             if (axes=="bottom")
                 axesd <- if (d==ndom) TRUE else FALSE
             else if (axes=="all")
@@ -349,7 +391,7 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
         }
         else {
             #maind <- if (d==1) main[np] else NA
-            ylabd <- if (d==1) ylab else NA
+            ylabd <- if (d==1) ylab[np] else NA
             if (axes=="bottom")
                 axesd <- if (np==nplot) TRUE else FALSE
             else if (axes=="all")
@@ -470,7 +512,7 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
             if (which.stats == "all")
                 stats <- TRUE
             else
-                stats <- (which.stats == "first" & np == 1)
+                stats <- (which.stats == "first" & d == 1)
             plist[["stats"]] <- stats
 			## Removing unused arguments
 			plist <- plist[!names(plist) %in% "yaxis"]
@@ -552,9 +594,6 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
         else
             cpal <- cpal.dom[[d]]
 
-		density <- if ("density" %in% names(oolist)) { oolist[["density"]] } else { NULL }
-		angle <- if ("angle" %in% names(oolist)) { oolist[["angle"]] } else { NULL }
-
 		## Adding an entry for missing in the legend
 		if (with.missing & any(seqdata==nr)) {
 			cpal <- c(cpal,missing.color)
@@ -563,7 +602,13 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
 		## nbstat <- nbstat+1
 		}
 
-		TraMineR.legend(legpos, ltext, cpal, cex=cex.legend, density=density, angle=angle, leg.ncol=leg.ncol)
+        legargs <- names(formals(legend))
+        largs <- oolist[names(oolist) %in% legargs]
+        largs <- largs[!names(largs) %in% c("cex")]
+        largs <- c(list(legpos, ltext, cpal, cex=cex.legend, leg.ncol=leg.ncol),largs)
+
+		#TraMineR.legend(legpos, ltext, cpal, cex=cex.legend, density=density, angle=angle, leg.ncol=leg.ncol)
+		do.call(TraMineR.legend, largs)
 	}
 
   }

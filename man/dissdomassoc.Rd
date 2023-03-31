@@ -42,6 +42,9 @@ When \code{"pearson"} and/or \code{"spearman"} correlations are requested, p-val
 }
 %\note{ ~~further notes~~ }
 
+\seealso{
+\code{\link{seqdomassoc}}
+}
 
 \examples{
 data(biofam)

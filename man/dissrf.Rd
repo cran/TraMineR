@@ -16,7 +16,7 @@ Relative Frequency (RF) groups are equally sized groups obtained by partitioning
 \usage{
 dissrf(diss,
        k=NULL,
-       sortv=NULL,
+       sortv="mds",
        weights=NULL,
        grp.meth = "prop",
        squared = FALSE,
@@ -25,7 +25,7 @@ dissrf(diss,
 seqrf(seqdata,
        diss,
        k=NULL,
-       sortv=NULL,
+       sortv="mds",
        weights=NULL,
        weighted=TRUE,
        grp.meth = "prop",
@@ -42,13 +42,13 @@ seqrf(seqdata,
   \item{diss}{Matrix or distance object. Pairwise dissimilarities between analyzed cases.}
   \item{seqdata}{State sequence \code{stslist} object as produced by \code{\link{seqdef}}.}
   \item{k}{Integer: Number of groupings (RF groups). When \code{NULL}, \code{k} is set as the minimum between 100 and the sum of weights over 10.}
-  \item{sortv}{Real vector (of length \code{nrow(diss)}), character string (\code{seqrf} only), or \code{NULL}. Sorting variable used to compute the frequency groups.  If \code{NULL}, the first MDS factor of \code{diss} (\code{diss^2} when \code{squared=TRUE}) is used. Ties are randomly ordered. If a string, one of \code{"from.start"} and \code{"from.end"}, which apply to \code{seqrf} only.}
-  \item{weights}{Vector  (of length \code{nrow(diss)}) of non-negative weights. If \code{NULL} (default), equal weights are used.}
+  \item{sortv}{Real vector (of length \code{nrow(diss)}), character string, or \code{NULL}. Sorting variable used to compute the frequency groups.  If \code{NULL}, the original data order is used. If \code{"mds"} (default), the first MDS factor of \code{diss} (\code{diss^2} when \code{squared=TRUE}) is used. Ties are randomly ordered. For \code{seqrf} only, can also be one of \code{"from.start"} and \code{"from.end"}.}
+  \item{weights}{Vector  (of length \code{nrow(diss)}) of non-negative weights. If \code{NULL} (default), equal weights except when \code{weighted} is set as \code{TRUE} in \code{seqrf}.}
   \item{weighted}{Logical. Should weights be used when there are weights in \code{seqdata}? (default is \code{TRUE})}
   \item{grp.meth}{Character string. One of \code{"prop"}, \code{"first"}, and \code{"random"}. Grouping method. See details.}
   \item{squared}{Logical. Should medoids (and computation of \code{sortv} when applicable) be based on squared dissimilarities? (default is \code{FALSE})}
   \item{pow}{Double. Dissimilarity power exponent (typically 1 or 2) for computation of pseudo R2 and F. When \code{NULL}, \code{pow} is set as 1 when \code{squared = FALSE}, and as 2 otherwise.}
-  \item{...}{additional arguments passed to \code{\link{plot.stslist}}}
+  \item{...}{further arguments passed to or from other methods such as \code{\link{print.stslist}}}
   \item{object}{Object of class \code{dissrf} or \code{seqrf}}
   \item{format}{String. One of \code{"SPS"} (default) or \code{"STS"}. Display format of the medoid sequences.}
   \item{dist.idx}{Indexes of RF groups for which summary statistics of distances to the medoids are displayed. Default is \code{1:10}. Set as 0 to plot statistics for all RF groups.}

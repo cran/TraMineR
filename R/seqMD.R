@@ -9,8 +9,8 @@ seqdistmc <- function(channels, what="diss", ch.sep="@@@@TraMineRSep@@@@", ...){
 }
 
 seqMD <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
-	with.missing=FALSE, full.matrix=TRUE, link="sum", cval=2, miss.cost=2, cweight=NULL,
-  what="MDseq", ch.sep = "+") {
+	with.missing=NULL, full.matrix=TRUE, link="sum", cval=2, miss.cost=2, cweight=NULL,
+  what="MDseq", ch.sep = "+", fill.with.miss = TRUE) {
 
 	## Checking arguments
   if (what=="sm") {
@@ -47,10 +47,21 @@ seqMD <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
 	if (is.null(cweight)) {
 		cweight <- rep(1, nchannels)
 	}
+
+    has.miss <- rep(FALSE,nchannels)
+  if (length(with.missing)==1) {
+      with.missing <- rep(with.missing, nchannels)
+  }
   for (i in 1:nchannels){
     if (length(grep(ch.sep, alphabet(channels[[i]], with.missing=TRUE), fixed=TRUE))>0)
       stop(" [!] ch.sep symbol (",ch.sep,") occurs in alphabet of at least one channel")
+    has.miss[i] <- any(channels[[i]]==attr(channels[[i]],"nr"))
+    if (!is.null(with.missing) && has.miss[i] != with.missing[i]) {
+      msg.warn(paste(" Bad with.missing value for domain",i,". I set it as",has.miss[i]))
+      ##with.missing[i]=has.miss[i]
+    }
   }
+  if (is.null(with.missing)) with.missing <- has.miss
   if (is.list(indel) & length(indel) != nchannels)
 		stop("[!] when a list, indel must be of length equal to number of domains")
   if (length(with.missing) > 1 & length(with.missing) != nchannels )
@@ -95,9 +106,6 @@ seqMD <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
   if (length(indel)==1) {
    	indel <- rep(indel, nchannels)
   }
-  if (length(with.missing)==1) {
-      with.missing <- rep(with.missing, nchannels)
-  }
 	## Checking correct numbers of info per channel
   if (what != "MDseq") {
 	if ((length(indel)!= nchannels) ||
@@ -136,7 +144,7 @@ seqMD <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
 			#if (with.missing) {
 			#	stop(" [!] Some individuals have channels of different length. Set 'with.missing=TRUE' for all channels.")
 			#} else {
-				msg.warn("Some individuals have channels of different length. Shorter sequences will be filled with missing values and corresponding channel with.missing set as TRUE")
+				msg.warn("Cases with sequences of different length across domains!")
 				break
 			#}
 		}
@@ -163,12 +171,14 @@ seqMD <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
 			}
 			else {
 				newCol <- as.character(seqchan[,j])
-			}
-			## If all channels are equal to void, then we accept as void
-			newseqdataNA[,j] <- newseqdataNA[,j] & newCol == void
-			## Setting void as nr
-      if (any(newCol==void)) with.missing[i] <- TRUE
-			newCol[newCol == void] <- nr
+			    #}
+    			## If fill.with.miss==TRUES, set void as nr
+                if (fill.with.miss==TRUE & has.miss[i] & any(newCol==void)) {
+        		     newCol[newCol == void] <- nr
+                }
+			    ## If void in all channels, then combined state will be void
+    			newseqdataNA[,j] <- newseqdataNA[,j] & newCol == void
+            }
 			if (i > 1) {
 				newseqdata[,j] <- paste(newseqdata[,j], newCol, sep = sep)
 			}
@@ -216,8 +226,8 @@ seqMD <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
         if (length(indel[[i]])==1)
           indel[[i]] <- rep(indel[[i]],alphsize_list[[i]])
         if (length(indel[[i]]) != alphsize_list[[i]]){
-          cat("i = ",i,", indel length = ", length(indel[[i]]), ", alphabet size = ", alphsize_list[[i]], "\n alphabet = ", alphabet_list[[i]],"\n" )
-  				stop(" [!] indel length does not much size of alphabet for at least one channel")
+          cat("domain = ",i,", indel length = ", length(indel[[i]]), ", alphabet size = ", alphsize_list[[i]], "\n alphabet = ", alphabet_list[[i]],"\n" )
+  				stop(" [!] indel length does not match size of alphabet for at least one channel")
         }
       }
       else if (!any(indel=="auto") & !is.list(indel_list)) {
@@ -227,7 +237,7 @@ seqMD <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
   		## Substitution matrix generation method is given
   		if	(is.character(sm[[i]])) {
   			message(" [>] computing substitution cost matrix for domain ", i)
-  			costs <- suppressMessages(seqcost(channels[[i]], sm[[i]], with.missing=with.missing[i],
+  			costs <- suppressMessages(seqcost(channels[[i]], sm[[i]], with.missing=has.miss[i],
   				time.varying=timeVarying, cval=cval, miss.cost=miss.cost))
             substmat_list[[i]] <- costs$sm
             if (any(indel=="auto")) {
@@ -239,7 +249,6 @@ seqMD <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
                 indel_list[i] <- costs$indel
             }
   		}
-  		## Checking correct dimension cost matrix
   		else { ## provided sm
         #message(" [>]   channel ",i)
 
@@ -247,11 +256,12 @@ seqMD <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
               indel_list[i] <- max(sm[[i]])/2
             else
               indel_list[i] <- indel[i]
-              ##cat("\n indel_list[i] ",indel_list[i], "\n")
-              ##print(sm[[i]])
-      		checkcost(sm[[i]], channels[[i]], with.missing = with.missing[i], indel = indel_list[[i]])
+              #cat("\n indel_list[i] ",indel_list[[i]], "\n with.missing = ",with.missing,"\n")
+              #print(sm[[i]])
    			substmat_list[[i]] <- sm[[i]]
-  		}
+        }
+  		## Checking correct dimension of indel and cost matrix
+   		checkcost(substmat_list[[i]], channels[[i]], with.missing = has.miss[i], indel = indel_list[[i]])
 
   		## Mutliply by channel weight
   		substmat_list[[i]] <- cweight[i]* substmat_list[[i]]
@@ -342,7 +352,9 @@ seqMD <- function(channels, method=NULL, norm="none", indel="auto", sm=NULL,
     }
   }
   if (what == "diss") {
-	   message(" [>] computing distances using additive trick ...")
+       if (any(is.na(newsm)) || any(is.na(newindel)))
+            msg.stop("NA indel and/or substitution CAT costs, cannot compute MD distances!")
+	   message(" [>] computing MD distances using additive trick ...")
       ##cat(" newindel = ",newindel,"\n")
 	   ## Calling seqdist
 	   return(seqdist(newseqdata, method=method, norm=norm, indel=newindel,

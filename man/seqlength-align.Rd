@@ -1,11 +1,11 @@
 \name{seqlength.align}
 \alias{seqlength.align}
-\title{Align sequence length among domains}
+\title{Align sequence length across domains}
 \description{
-  Sets lengths of sequences of multiple domains as the shortest lengths among domains.
+  Sets lengths of sequences of multiple domains as the shortest lengths across domains.
 }
 \details{
-Sequences in the sequence objects are assumed to be ordered conformably. The length of the \eqn{i}-th sequence in each domain is set as the length of the shortest \eqn{i}-th sequence among the domains. The reduction of length is done by filling end positions with voids.
+Sequences in the sequence objects are assumed to be ordered conformably. The length of the \eqn{i}-th sequence in each domain is set as the length of the shortest \eqn{i}-th sequence of the domains. The reduction of length is done by filling end positions with voids.
 }
 \usage{
  seqlength.align(seq.list)

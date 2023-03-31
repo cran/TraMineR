@@ -9,6 +9,10 @@
 \usage{
 dissmfacw(formula, data, R = 1000, gower = FALSE, squared = FALSE,
     weights = NULL)
+    
+gower_matrix(diss, squared=TRUE, weights=NULL)
+
+\method{print}{dissmultifactor}(x, pvalue.confint=0.95, digits = NULL, ...)
 }
 
 \arguments{
@@ -18,9 +22,14 @@ dissmfacw(formula, data, R = 1000, gower = FALSE, squared = FALSE,
   \item{gower}{Logical: Is the dissimilarity matrix already a Gower matrix?}
   \item{squared}{Logical: Should we square the provided dissimilarities?}
   \item{weights}{Optional numerical vector of case weights.}
+  \item{diss}{Dissimilarity matrix}
+  \item{x}{a \code{dissmultifactor} object as returned by \code{dissmfacw}}
+  \item{pvalue.confint}{Real in range [0,1]. Confidence probability. }
+  \item{digits}{Integer or \code{NULL}. Number of digits.}
+  \item{...}{Other generic print arguments.}
 }
 \details{
-  This method is, in some way, a generalization of \code{\link{dissassoc}} to account for several explanatory variables.
+  Function \code{dissmfacw} is, in some way, a generalization of \code{\link{dissassoc}} to account for several explanatory variables.
   The function computes the part of discrepancy explained by the list of covariates specified in the \code{formula}.
   It provides for each covariate the Type-II effect, i.e. the effect measured when removing the covariate from the full model with all variables included.
 
@@ -30,6 +39,8 @@ dissmfacw(formula, data, R = 1000, gower = FALSE, squared = FALSE,
   Moreover, the latter performs also tests for homogeneity in within-group discrepancies (equality of variances) with a generalization of Levene's and Bartlett's statistics.
 
   Part of the function is based on the Multivariate Matrix Regression with qr decomposition algorithm written in SciPy-Python by Ondrej Libiger and Matt Zapala (See \cite{Zapala and Schork}, 2006, for a full reference.)  The algorithm has been adapted for Type-II effects and extended to account for case weights.
+  
+  Function \code{gower_matrix} transforms the provided dissimilarity matrix into a Gower matrix.
 }
 
 \value{

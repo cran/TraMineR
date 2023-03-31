@@ -7,10 +7,12 @@ p4 <- person("Nicolas S.", "M\u00FCller", email = "nsmuller@gmail.com")
 p5 <- person("Reto", "B\u00FCrgin", email = "rbuergin@gmx.ch")
 p6 <- person("Marherita", "Bussi")
 p7 <- person("Jacqueline", "O'Reilly")
+p8 <- person("Tim F.", "Liao")
+p9 <- person("Emanuela", "Struffolino")
 
-citEntry(entry = "Article",
+bibentry(bibtype = "Article",
   title        = "Analyzing and Visualizing State Sequences in {R} with {TraMineR}",
-  author       = personList(p1, p2, p4, p3),
+  author       = c(p1, p2, p4, p3),
   journal      = "Journal of Statistical Software",
   year         = "2011",
   volume       = "40",
@@ -26,8 +28,8 @@ citEntry(entry = "Article",
         header="For the package and state sequences:\n"
 )
 
-citEntry(entry="Article",
-    author = personList(p3, p2),
+bibentry(bibtype="Article",
+    author = c(p3, p2),
     title = "What matters in differences between life trajectories: a comparative review of sequence dissimilarity measures",
     journal = "Journal of the Royal Statistical Society, Series A",
     year    = "2016",
@@ -40,8 +42,20 @@ citEntry(entry="Article",
     header="For dissimilarity measures:\n"
 )
 
-citEntry(entry="Article",
-    author = personList(p3, p2, p1, p4),
+bibentry(bibtype="Article",
+    author = c(p2, p8, p9),
+    title = "Strategies for multidomain sequence analysis in social research",
+    journal = "Sociological Methodology",
+    year    = "2023",
+    note    = "In press. DOI: 10.1177/00811750231163833",
+
+    textVersion="Ritschard, G., Liao, T.F. & Struffolino, E.  (2023). Strategies for multidomain sequence analysis in social research, Sociological Methodology, In press. DOI: 10.1177/00811750231163833",
+    header="For multidomain/multichannel sequence analysis:\n"
+)
+
+
+bibentry(bibtype="Article",
+    author = c(p3, p2, p1, p4),
     title = "Discrepancy analysis of state sequences",
     journal = "Sociological Methods and Research",
     year    = "2011",
@@ -54,8 +68,8 @@ citEntry(entry="Article",
     header="For discrepancy analysis:\n"
 )
 
-citEntry(entry="incollection",
-    author = personList(p3, p2, p1, p4),
+bibentry(bibtype="incollection",
+    author = c(p3, p2, p1, p4),
     title = "Discrepancy analysis of complex objects using dissimilarities",
     booktitle = "Advances in Knowledge Discovery and Management",
     publisher = "Springer",
@@ -65,12 +79,13 @@ citEntry(entry="incollection",
     volume = "292",
     address = "Berlin",
     pages = "3-19",
+    doi = "10.1007/978-3-642-00580-0_1",
 
-    textVersion="Studer, M., Ritschard, G., Gabadinho, A. & M\u00FCller, N.S. (2010), Discrepancy analysis of complex objects using dissimilarities, In Guillet, F., Ritschard, G., Zighed, D.A. & Briand, H. (eds) Advances in Knowledge Discovery and Management. Series: Studies in Computational Intelligence. Volume 292, pp. 3-19. Berlin: Springer.",
+    textVersion="Studer, M., Ritschard, G., Gabadinho, A. & M\u00FCller, N.S. (2010), Discrepancy analysis of complex objects using dissimilarities, In Guillet, F., Ritschard, G., Zighed, D.A. & Briand, H. (eds) Advances in Knowledge Discovery and Management. Series: Studies in Computational Intelligence. Volume 292, pp. 3-19. Berlin: Springer. DOI https://doi.org/10.1007/978-3-642-00580-0_1",
 )
 
-citEntry(entry="incollection",
-  author = personList(p1, p2),
+bibentry(bibtype="incollection",
+  author = c(p1, p2),
   title = "Searching for typical life trajectories applied to child birth histories",
   booktitle = "Gendered life courses",
   publisher = "Vienna: LIT",
@@ -81,8 +96,8 @@ citEntry(entry="incollection",
   textVersion="Gabadinho, A. & Ritschard, G. (2013), Searching for typical life trajectories applied to child birth histories, In R. L\u00E9vy & E. Widmer (eds.), Gendered life courses.  pp. 287-312. Vienna: LIT",
   header="For representative sequences:"
 )
-citEntry(entry="article",
-  author = personList(p2),
+bibentry(bibtype="article",
+  author = c(p2),
   title = "Measuring the nature of individual sequences",
   journal = "Sociological Methods and Research",
   year = "2021",
@@ -92,8 +107,8 @@ citEntry(entry="article",
   textVersion="Ritschard, G. (2021), Measuring the nature of individual sequences, Sociological Methods and Research. (first published online), DOI https://doi.org/10.1177/00491241211036156",
   header="For longitudinal characteristics (complexity, badness, precarity, ...):"
 )
-citEntry(entry="article",
-  author = personList(p1, p2, p3, p4),
+bibentry(bibtype="article",
+  author = c(p1, p2, p3, p4),
   title = "Indice de complexit\u00E9 pour le tri et la comparaison de s\u00E9quences cat\u00E9gorielles",
   booktitle = "Extraction et gestion des connaissances (EGC 2010)",
   journal = "Revue des nouvelles technologies de l'information (RNTI)",
@@ -103,8 +118,8 @@ citEntry(entry="article",
 
   textVersion="Gabadinho, A., Ritschard, G., Studer, M. & M\u00FCller, N.S. (2010), Indice de complexit\u00E9 pour le tri et la comparaison de s\u00E9quences cat\u00E9gorielles, In Extraction et gestion des connaissances (EGC 2010), Revue des nouvelles technologies de l'information RNTI. Vol. E-19, pp. 61-66.",
 )
-citEntry(entry="incollection",
-  author = personList(p2, p6, p7),
+bibentry(bibtype="incollection",
+  author = c(p2, p6, p7),
   title = "An Index of Precarity for Measuring Early Employment Insecurity",
   booktitle = "Sequence Analysis and Related Approaches: Innovative Methods and Applications",
   publisher = "Springer",
@@ -118,8 +133,8 @@ citEntry(entry="incollection",
 
   textVersion="Ritschard, G., Bussi, M. & O'Reilly, J. (2018), An Index of Precarity for Measuring Early Employment Insecurity, In Ritschard, G. & Studer, M. (eds) Sequence Analysis and Related Approaches: Innovative Methods and Applications. Series: Life Course Research and Social Policies. Vol. 10, pp. 279-295. Cham: Springer. DOI https://doi.org/10.1007/978-3-319-95420-2_16",
 )
-citEntry(entry="incollection",
-  author = personList(p2, p5, p3),
+bibentry(bibtype="incollection",
+  author = c(p2, p5, p3),
   title = "Exploratory Mining of Life Event Histories",
   booktitle = "Contemporary Issues in Exploratory Data Mining in the Behavioral Sciences",
   publisher = "New York: Routledge",
@@ -130,8 +145,8 @@ citEntry(entry="incollection",
   textVersion="Ritschard, G., B\u00FCrgin, R. & Studer, M. (2013), Exploratory Mining of Life Event Histories, In J.J. McArdle & G. Ritschard (eds.), Contemporary Issues in Exploratory Data Mining in the Behavioral Sciences.  pp. 221-253. New York: Routledge",
   header="For event sequences:"
 )
-citEntry(entry="article",
-  author = personList(p5, p2),
+bibentry(bibtype="article",
+  author = c(p5, p2),
   title = "A decorated parallel coordinate plot for categorical longitudinal data",
   journal = "The American Statistician",
   year = "2014",

@@ -1,9 +1,9 @@
 ## import(boot, RColorBrewer)
 importFrom("graphics", "abline", "arrows", "axis", "barplot", "box", "bxp", "hist", "layout", "legend", "lines", "mtext", "par", "plot", "plot.new", "points", "polygon", "rect", "segments", "strwidth", "text", "title")
 importFrom("grDevices", "col2rgb", "colorRamp", "dev.off", "rgb")
-importFrom("stats", "as.dist", "chisq.test", "coef", "cor", "complete.cases", "density", "dnorm", "dunif", "fitted", "formula", "lm", "median", "model.frame", "model.matrix", "na.omit", "na.pass", "pchisq", "pnorm", "qnorm", "quantile", "reshape", "runif", "terms", "var", "weighted.mean", "xtabs",
+importFrom("stats", "as.dist", "chisq.test", "coef", "cor", "complete.cases", "density", "dnorm", "dunif", "fitted", "formula", "lm", "loglin", "median", "model.frame", "model.matrix", "na.omit", "na.pass", "pchisq", "pnorm", "qnorm", "quantile", "reshape", "runif", "terms", "var", "weighted.mean", "xtabs",
  "cmdscale", "cutree", "fivenum", "hclust", "pf")
-importFrom("utils", "combn", "download.file", "read.table", packageDescription)
+importFrom("utils", "combn", "download.file", "read.table", "read.csv", "packageDescription")
 importFrom("cluster", "daisy")
 importFrom("colorspace", "qualitative_hcl")
 ##importFrom("weights", "wtd.cor")
@@ -29,6 +29,7 @@ export(
   seqdim,
   seqdist,
   seqdistmc, ##obsolete
+  seqdomassoc,
   seqdplot,
   seqdHplot,
   seqdss,
@@ -72,7 +73,7 @@ export(
   seqpcfilter,
   seqpcplot,
   seqplot,
-  #seqplotMD,
+  seqplotMD,
   seqpm,
     seqprecarity,
     seqprecorr,
@@ -162,6 +163,9 @@ S3method(print , seqipos)
 
 ## seqivardur methods
 S3method(print , seqivardur)
+
+## sdomassoc methods
+S3method(print , sdomassoc)
 
 ## diss module
 export(

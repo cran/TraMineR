@@ -1,6 +1,6 @@
 ## seqrf  computes values for relative frequency plot
 
-dissrf <- function(diss, k=NULL, sortv=NULL, weights=NULL,
+dissrf <- function(diss, k=NULL, sortv="mds", weights=NULL,
 						#ylab=NA, yaxis=FALSE, main=NULL, which.plot="both",
                         grp.meth = "prop", squared = FALSE, pow = NULL){
 	
@@ -11,7 +11,7 @@ dissrf <- function(diss, k=NULL, sortv=NULL, weights=NULL,
            )
 }
 
-dissrf_internal <- function(diss, k=NULL, sortv=NULL, weights=NULL,
+dissrf_internal <- function(diss, k=NULL, sortv="mds", weights=NULL,
                             use.hclust=FALSE, hclust_method="ward.D", #use.quantile=FALSE,
                             #ylab=NA, yaxis=FALSE, main=NULL, which.plot="both",
                             grp.meth = "prop", squared = FALSE, pow = NULL){
@@ -24,8 +24,12 @@ dissrf_internal <- function(diss, k=NULL, sortv=NULL, weights=NULL,
   }
   mdspow <- 2^squared
 
-  if (!is.null(sortv) & length(sortv) != nrow(diss))
-    stop(" length of sortv not equal to nrow(diss)!")
+  if (!is.null(sortv)) {
+    if (length(sortv)==1 && sortv != "mds")
+        stop(call.=FALSE, ' Only length one value allowed in dissrf is "mds"')
+    else if (length(sortv) != nrow(diss) & length(sortv) != 1)
+        stop(" length of sortv not equal to nrow(diss)")
+  }
 
   ## normalizing weights
   if (is.null(weights)){
@@ -55,7 +59,10 @@ dissrf_internal <- function(diss, k=NULL, sortv=NULL, weights=NULL,
   #index of the k-medoid for each sequence
   kmedoid.index <- rep(0, ncase)
   #calculate qij - distance to frequency group specific medoid within frequency group
-  if(is.null(sortv) && !use.hclust){
+
+  if(is.null(sortv))
+    sortv <- 1:nrow(diss)
+  if(length(sortv)==1 && sortv=="mds" && !use.hclust){
     if (weighted)
         sortv <- wcmdscale(diss^mdspow, k = 1, w=weights)
     else

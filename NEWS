@@ -1,17 +1,62 @@
 ## =========
+Version 2.2-7 [2023-03-31]
+
+New functions:
+  - seqplotMD(): plot of multidomain/multichannel sequences
+    by domain and group.
+  - seqdomassoc(): pairwise state association between domains.
+
+Changes in existing functions:
+  - dissrf() and seqrf(): sortv="mds" is now the default and
+    sortv=NULL selects the original seqdata order.
+  - seqrfplot() (seqplot(..., type="rf", ...)) with option
+    sortv="mds" (new default in seqrf) the MDS sorting is
+    done on the whole seqdata instead of independently for
+    each group.
+  - seqMD(): with.missing can now be NULL (new default),
+    in which case the with.missing value of each domain is
+    set as TRUE when the domain has missings and as FALSE
+    otherwise.
+  - seqMD(): new logical argument 'fill.with.miss', which
+    offers the option to fill the shorter sequences
+    with missings in case of non-matching lengths
+    across domains.
+  - seqplot() and all the seqxxplot family: ylab can
+    be a vector of labels by group level.
+  - seqplot() and all the seqxxplot family support
+    arguments of legend among the ... list.
+  - "[.stslist" raises a warning when row subsetting
+    condition has \code{NA}s.
+
+Bug fixes:
+  - seqrf(): options sortv="from.start" and sortv="from.end"
+    did not work as expected.
+  - seqMD(): error when sequences had different lengths.
+  - foreign c function wcorr called with character string
+    naming while package calls R_forceSymbols.
+    (Fix asked for by K. Hornik).
+
+Misc.:
+  - Statement "SystemRequirements: C++11" dropped from
+    DESCRIPTION as requested by CRAN check.
+  - Using new CITATION commands.
+
+
+
+## =========
 Version 2.2-6 [2022-11-29]
 
 Changes in existing functions
   - seqplot() and all the seqxxplot family functions: default
     value for the main argument is now "auto" and NULL behaves
     as expected, i.e., removes all titles.
-  - seqplot()} and all the \code{seqxxplot family functions: 
-    argument 'axes' is deprecated and replaced by 'xaxis'. 
+  - seqplot()} and all the \code{seqxxplot family functions:
+    argument 'axes' is deprecated and replaced by 'xaxis'.
     Argument 'yaxis' can now also be one of "all" or "left".
-  - plot() methods for objects returned by seqdef, seqstatd, 
+  - plot() methods for objects returned by seqdef, seqstatd,
     seqtab, seqmodst, seqmeant, and seqrf now display the ylab
     closer from the y-axis when yaxis=FALSE.
-  - plot() method for object returned by seqrep now displays 
+  - plot() method for object returned by seqrep now displays
     the ylab closer from the y-axis when stats=FALSE.
 
 Bug fixes:
@@ -22,7 +67,8 @@ Bug fixes:
     seqtab, seqmodst, seqmeant, seqrf, and seqrep ignored
     the cex.lab argument.
   - issues with prototypes in init.c
-  - removed unused code with deprecated \code{sprintf} in eventdictionary.cpp
+  - removed unused code with deprecated \code{sprintf}
+    in eventdictionary.cpp
 
 Misc.:
   - replaced seqdistmc with seqMD in examples of dissdomassoc.
@@ -64,7 +110,7 @@ Misc.
   - Function TraMineR.checkupdates has been removed.
 
 ## =========
-Version 2.3-4 [2022-06-08]
+Version 2.2-4 [2022-06-08]
 
 New functions:
   - seqdHplot() alias for seqplot(...,type="dH",...)

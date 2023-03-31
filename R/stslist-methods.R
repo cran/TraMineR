@@ -39,20 +39,26 @@ print.stslist <- function(x,format='STS', extended=FALSE, ...) {
     j <- j[! j %in% k]
   }
 
-	if (!missing(j) && length(j)>1) {
-		## Storing the attributes
-		x.attributes <- attributes(x)
+    if (!missing(i) && is.logical(i) && any(is.na(i))) {
+        #i <- which(i)
+        #msg.warn("which applied to subsetting condition because it has NAs")
+        warning("NAs in row subsetting condition: use which(condition) to treat them as FALSE!")
+    }
 
-		## Applying method
-	  x <- NextMethod("[")
+    if (!missing(j) && length(j)>1) {
+    	## Storing the attributes
+    	x.attributes <- attributes(x)
 
-		## Adapting column names
-		x.attributes$names <- x.attributes$names[j]
+    	## Applying method
+        x <- NextMethod("[")
 
-		## Redefining attributes
-		attributes(x) <- x.attributes
+    	## Adapting column names
+    	x.attributes$names <- x.attributes$names[j]
 
-    attr(x,"start") <- x.attributes$start-1+j[1]
+    	## Redefining attributes
+    	attributes(x) <- x.attributes
+
+        attr(x,"start") <- x.attributes$start-1+j[1]
 
 		if (!missing(i)) {
 			attr(x,"row.names") <- attr(x,"row.names")[i]

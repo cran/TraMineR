@@ -16,11 +16,26 @@
 High level plot functions to render state sequence objects. Can produce many different types of plots and can render sequences by group.
 }
 \usage{
-seqplot(seqdata, group = NULL, type = "i", main = "auto", cpal = NULL,
-  missing.color = NULL, ylab = NULL, yaxis = "all", xaxis = "all",
-  xtlab = NULL, cex.axis = 1, with.legend = "auto", ltext = NULL,
-  cex.legend = 1, use.layout = (!is.null(group) | with.legend != FALSE),
-  legend.prop = NA, rows = NA, cols = NA, title, cex.plot, withlegend, axes, ...)
+seqplot(seqdata,
+  group = NULL,
+  type = "i",
+  main = "auto",
+  cpal = NULL,
+  missing.color = NULL,
+  ylab = NULL,
+  yaxis = "all",
+  xaxis = "all",
+  xtlab = NULL,
+  cex.axis = 1,
+  with.legend = "auto",
+  ltext = NULL,
+  cex.legend = 1,
+  use.layout = (!is.null(group) | with.legend != FALSE),
+  legend.prop = NA,
+  rows = NA,
+  cols = NA,
+  title, cex.plot, withlegend, axes,
+  ...)
 
 seqdplot(seqdata, group = NULL, main = "auto", ...)
 seqdHplot(seqdata, group = NULL, main = "auto", ...)
@@ -39,28 +54,28 @@ seqrfplot(seqdata, group = NULL, main = "auto", ...)
     \item{group}{Grouping variable of length equal to the number of sequences. When not \code{NULL}, a distinct plot is generated for each level of \code{group}.}
 
     \item{type}{the type of the plot. Available types are \code{"d"}
-    for state distribution plots (chronograms), \code{"dH"} for chronograms
-    with overlayed entropy line, \code{"f"} for sequence frequency
-    plots, \code{"Ht"} for transversal entropy plots, \code{"i"} for
-    selected sequence index plots, \code{"I"} for whole set index
-    plots, \code{"ms"} for plotting the sequence of modal states,
-    \code{"mt"} for mean times plots, \code{"pc"} for parallel
-    coordinate plots, \code{"r"} for representative sequence plots, and
-    \code{"rf"} for relative frequency plots.}
+        for state distribution plots (chronograms), \code{"dH"} for chronograms
+        with overlayed entropy line, \code{"f"} for sequence frequency
+        plots, \code{"Ht"} for transversal entropy plots, \code{"i"} for
+        selected sequence index plots, \code{"I"} for whole set index
+        plots, \code{"ms"} for plotting the sequence of modal states,
+        \code{"mt"} for mean times plots, \code{"pc"} for parallel
+        coordinate plots, \code{"r"} for representative sequence plots, and
+        \code{"rf"} for relative frequency plots.}
 
-    \item{main}{Character string. Title for the graphic. Default \code{"auto"} prints group levels as default title when group is not {NULL} and no title otherwise. Set as \code{NULL} to suppress titles. }
+    \item{main}{Character string. Title of the graphic. Default \code{"auto"} prints group levels as default title when group is not {NULL} and no title otherwise. Set as \code{NULL} to suppress titles. }
 
-    \item{cpal}{Color palette used for the states. By default, the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}). If user specified, a vector of colors of length and order corresponding to \code{alphabet(seqdata)}.}
+    \item{cpal}{Color palette of the states. By default, the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}). If user specified, a vector of colors of length and order corresponding to \code{alphabet(seqdata)}.}
 
     \item{missing.color}{Color for representing missing values inside the sequences. By default, this color is taken from the \code{missing.color} attribute of \code{seqdata}.}
 
-    \item{ylab}{Character string. an optional label for the y-axis. If set to \code{NA}, no label is drawn.}
+    \item{ylab}{Character string or vector of strings. Optional label of the y-axis. If a vector, y-axis label of each group level. If set as \code{NA}, no label is drawn.}
 
-    \item{yaxis}{Logical or one of \code{"all"} or \code{"left"}. If set as \code{TRUE} or \code{"all"} (default value), sequence indexes are displayed for \code{"i"} and \code{"I"}, mean time values for \code{"mt"}, percentages for \code{"d"} and \code{"f"}, and state/event labels for \code{"pc"}. Ignored for \code{"r"}. If \code{"left"} and \code{group} is used, the y-axis is only displayed on plots of the left panel. If \code{FALSE} no y-axis is drawn.}
+    \item{yaxis}{Logical or one of \code{"all"} or \code{"left"}. If set as \code{TRUE} or \code{"all"} (default value), sequence index numbers are displayed for \code{"i"} and \code{"I"}, mean time values for \code{"mt"}, percentages for \code{"d"} and \code{"f"}, and state/event labels for \code{"pc"}. Ignored for \code{"r"}. If \code{"left"} and \code{group} is used, the y-axis is displayed on plots of the left panel only. If \code{FALSE} no y-axis is drawn.}
 
-    \item{xaxis}{Logical or one of \code{"all"} or \code{"bottom"}. If set as \code{TRUE} or \code{"all"} (default value) x-axes are drawn for each plot in the graphic. If set as \code{"bottom"} and \code{group} is used, axes are drawn only under the plots of the bottom panel. If \code{FALSE}, no x-axis is drawn.}
+    \item{xaxis}{Logical or one of \code{"all"} or \code{"bottom"}. If set as \code{TRUE} or \code{"all"} (default value) x-axes are drawn for each plot in the graphic. If set as \code{"bottom"} and \code{group} is used, axes are drawn under the plots of the bottom panel only. If \code{FALSE}, no x-axis is drawn.}
 
-    \item{xtlab}{Vector of length equal to the number of columns of \code{seqdata}. Optional labels for the x-axis tick labels. If unspecified, the column names of the \code{seqdata} sequence object are used (see \code{\link{seqdef}}).}
+    \item{xtlab}{Vector of length equal to the number of columns of \code{seqdata}. Optional x-axis tick labels. If unspecified, column names of the \code{seqdata} sequence object are used (see \code{\link{seqdef}}).}
 
     \item{cex.axis}{Real value.
       Axis annotation magnification. When \code{type = "r"} and for \code{seqrplot()},
@@ -84,7 +99,7 @@ seqrfplot(seqdata, group = NULL, main = "auto", ...)
   \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
   \item{withlegend}{Deprecated. Use \code{with.legend} instead.}
   \item{axes}{Deprecated. Use \code{xaxis} instead.}
-  \item{\dots}{arguments to be passed to the function called to produce the appropriate statistics and the associated plot method (see details), or other graphical parameters. For example the \code{weighted} argument can be passed to control whether (un)weighted statistics are produced or \code{with.missing} argument to take missing values into account when computing transversal or longitudinal state distributions.}
+  \item{\dots}{arguments to be passed to the function called to produce the appropriate statistics and the associated plot method (see details), or other graphical parameters. For example, the \code{weighted} argument can be passed to control whether (un)weighted statistics are produced, and \code{with.missing=TRUE} to take missing values into account when computing cross-sectional or longitudinal state distributions. Can also include arguments of \code{\link[graphics]{legend}} such as \code{bty="n"} to suppress the box surrounding the legend.}
 }
 
 \details{
@@ -114,7 +129,7 @@ The \emph{mean time plot} (\code{type="mt"}) displays the mean time spent in eac
 
 The \emph{representative sequence plot} (\code{type="r"}) displays a reduced, non redundant set of representative sequences extracted from the provided state sequence object and sorted according to a representativeness criterion. The \code{\link{seqrep}} function is called to extract the representative set which is then plotted by calling the \code{\link{plot.stslist.rep}} method. A distance matrix is required that is passed with the \code{diss} argument or by calling the \code{seqdist} function if \code{diss=NULL}. The \code{criterion} argument sets the representativeness criterion used to sort the sequences.  Refer to the \code{\link{seqrep}} and \code{\link{plot.stslist.rep}} manual pages for a complete list of optional arguments.  See \cite{Gabadinho and Ritschard (2013)} for more details on the extraction of representative sets. Also look at the examples below.
 
-\emph{Relative frequency plot} (\code{type="rf"}) displays the medoids of equal sized groups \cite{Fasang and Liao (2014)}. The partition into equal sized groups and the identification of the medoids is done by calling \code{\link{seqrf}} and plots are generated by \code{\link{plot.seqrf}}. See these functions for possible options. Option \code{which.plot = "both"} applies only when \code{group = NULL}. Whatever the value of \code{info}, \code{seqplot} does not display the statistics on the plot.
+\emph{Relative frequency plot} (\code{type="rf"}) displays the medoids of equal sized groups \cite{Fasang and Liao (2014)}. The partition into equal sized groups and the identification of the medoids is done by calling \code{\link{seqrf}} and plots are generated by \code{\link{plot.seqrf}}. See these functions for possible options. Option \code{which.plot = "both"} applies only when \code{group = NULL}. Whatever the value of \code{info}, \code{seqplot} does not display the statistics on the plot. When \code{sortv="mds"} is set, the first MDS factor of the whole \code{diss} matrix is computed and used for sorting each group. Set \code{sortv=NULL} to use the original data order.
 
 For \emph{decorated parallel coordinate plots} (\code{type="pc"}) see the specific manual page of \code{\link{seqpcplot}}.
 }

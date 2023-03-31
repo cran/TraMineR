@@ -1,6 +1,59 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.2-7 [2023-03-31] }{
+
+    \subsection{New functions}{
+        \itemize{
+            \item
+            \code{seqplotMD()} plot of multidomain/multichannel sequences by domain and group.
+            \item
+            \code{seqdomassoc()} pairwise state association between domains.
+        }
+    }
+
+    \subsection{Changes in exiting functions}{
+        \itemize{
+            \item
+            \code{dissrf()} and \code{seqrf()} \code{sortv="mds"} is now the default and \code{sortv=NULL} selects the original seqdata order.
+            \item
+            \code{seqrfplot()} (\code{seqplot(..., type="rf", ...)}) with option \code{sortv="mds"} (new default in \code{seqrf}) the MDS sorting is done on the whole seqdata instead of independently for each group.
+            \item
+            \code{seqMD()}: \code{with.missing} can now be \code{NULL} (new default), in which case the with.missing value of each domain is set as \code{TRUE} when the domain has missings and as \code{FALSE} otherwise.
+            \item
+            \code{seqMD()}: new logical argument \code{fill.with.miss}, which offers the option to fill the shorter sequences with missings in case of non-matching lengths across domains.
+            \item
+            \code{seqplot()} and all the \code{seqxxplot()} family functions: \code{ylab} can be a vector of labels by group level.
+            \item
+            \code{seqplot()} and all the \code{seqxxplot()} family functions support arguments of \code{legend} among the \code{...} list.
+            \item
+            \code{"[.stslist"} raises a warning when row subsetting condition has \code{NA}s.
+        }
+    }
+
+    \subsection{Bug fixes}{
+        \itemize{
+            \item
+            \code{seqrf()}: options \code{sortv="from.start"} and \code{sortv="from.end"} did not work as expected.
+            \item
+            \code{seqMD()}: error when sequences had different lengths.
+            \item
+            foreign c function \code{wcorr} called with character string naming while package calls       \code{R_forceSymbols}. (Fix asked for by K. Hornik).
+        }
+    }
+
+    \subsection{Misc.}{
+        \itemize{
+            \item
+            Statement "SystemRequirements: C++11" dropped from DESCRIPTION as requested by CRAN check
+            \item
+            Using new CITATION commands.
+        }
+    }
+
+}
+
+
 \section{Changes in version 2.2-6 [2022-11-29] }{
 
     \subsection{Changes in existing functions}{
@@ -23,8 +76,7 @@
             \item
             \code{seqstatl()}: non-integer state value were not recognized.
             \item
-            \code{plot()} methods for objects returned by \code{seqdef}, \code{seqstatd}, \code{seqtab}, \code{seqmodst}, \code{seqmeant}, \code{seqrf}, and \code{seqrep} ignored the \code{cex.lab} argument. 
-            \item
+            \code{plot()} methods for objects returned by \code{seqdef}, \code{seqstatd}, \code{seqtab}, \code{seqmodst}, \code{seqmeant}, \code{seqrf}, and \code{seqrep} ignored the \code{cex.lab} argument. \item
             issues with prototypes in init.c
             \item
             removed unused code with deprecated \code{sprintf} in eventdictionary.cpp

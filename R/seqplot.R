@@ -102,7 +102,36 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
 		}
   }
 
+  if (type=="rf"){
+    if (is.null(diss))
+        msg.stop("'diss' required for rf plots")
+	with.missing <- TRUE
 
+	if ("sortv" %in% names(oolist))
+        sortv <- oolist[["sortv"]]
+    else
+        sortv <- "mds"
+    if (length(sortv)==1 && sortv=="mds"){
+        weighted <- TRUE
+        if ("weighted" %in% names(oolist)) weighted <- oolist[["weighted"]]
+        if (weighted) {
+           if ("weights" %in% names(oolist))
+             weights <- oolist[["weights"]]
+           else
+             weights <- attr(seqdata,"weights")
+           if (is.null(weights)) {
+             weighted <- FALSE
+           }
+        }
+
+        mdspow <- 1
+        if ("squared" %in% names(oolist)) mdspow <- 2^oolist[["squared"]]
+        if (weighted)
+            sortv <- wcmdscale(diss^mdspow, k = 1, w=weights)
+        else
+            sortv <- cmdscale(diss^mdspow, k = 1)
+    }
+  }
 
 	## ==============================
 	## Preparing if group is not null
@@ -117,6 +146,11 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
 
           nplot <- length(levels(group))
           gindex <- vector("list",nplot)
+
+          if (length(ylab) <= 1) ## length(NULL) is 0
+            ylab <- rep(ylab, nplot)
+          else if (length(ylab) != nplot)
+            msg.stop("If a vector, ylab must have one value per group level!")
 
           if (type=="mt" & !is.null(barlab)){
             if (!(ncol(barlab) %in% c(1,nplot)) )
@@ -211,13 +245,15 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
 		olist <- oolist
 
 		plist <- list(main=main[np], cpal=cpal, missing.color=missing.color,
-			ylab=ylab, yaxis=yaxis[np], xaxis=xaxis[np],
+			ylab=ylab[np], yaxis=yaxis[np], xaxis=xaxis[np],
 			xtlab=xtlab, cex.axis=cex.axis)
 
 		## Selecting sub sample for x
 		## according to 'group'
 		subdata <- seqdata[gindex[[np]],]
-
+        if ("weights" %in% names(olist) & !is.null(weights)){
+            olist[["weights"]] <- weights[np]
+        }
 		## State distribution plot or Entropy index
 		if (type=="d" || type=="Ht" || type=="dH") {
 			f <- seqstatd
@@ -256,14 +292,10 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
 		## Sequence relative frequency plot
 		else if (type=="rf") {
 			f <- seqrf
-			with.missing <- TRUE
-
 			## Selecting sub sample for sort variable
 			## according to 'group'
-			if ("sortv" %in% names(olist)) {
-				if (!length(sortv)==1) {
-					olist[["sortv"]] <- sortv[gindex[[np]]]
-				}
+			if (!is.null(sortv) & !length(sortv)==1) {
+				olist[["sortv"]] <- sortv[gindex[[np]]]
 			}
 
 			if (!"space" %in% names(olist)) {olist <- c(olist, list(space=0))}
@@ -367,8 +399,9 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
 
 		if (is.null(cpal)) cpal <- attr(seqdata,"cpal")
 
-		density <- if ("density" %in% names(oolist)) { oolist[["density"]] } else { NULL }
-		angle <- if ("angle" %in% names(oolist)) { oolist[["angle"]] } else { NULL }
+		## no longer needed, we pass oolist to legend
+        ##density <- if ("density" %in% names(oolist)) { oolist[["density"]] } else { NULL }
+		##angle <- if ("angle" %in% names(oolist)) { oolist[["angle"]] } else { NULL }
 
 		## Adding an entry for missing in the legend
 		if (with.missing & any(seqdata==nr)) {
@@ -378,7 +411,13 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
 		## nbstat <- nbstat+1
 		}
 
-		TraMineR.legend(legpos, ltext, cpal, cex=cex.legend, density=density, angle=angle, leg.ncol=leg.ncol)
+        legargs <- names(formals(legend))
+        largs <- oolist[names(oolist) %in% legargs]
+        largs <- largs[!names(largs) %in% c("cex")]
+        largs <- c(list(legpos, ltext, cpal, cex=cex.legend, leg.ncol=leg.ncol),largs)
+
+		#TraMineR.legend(legpos, ltext, cpal, cex=cex.legend, density=density, angle=angle, leg.ncol=leg.ncol)
+		do.call(TraMineR.legend, largs)
 	}
 
 	## Restoring graphical parameters

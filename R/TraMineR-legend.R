@@ -32,13 +32,22 @@ TraMineR.legend <- function(pos, text, colors, cex=1, leg.ncol = NULL, ... ) {
 	plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
 		## legend(position, fill = cpal, legend = ltext, cex = fontsize)
 
-	legend(pos,
-		## inset=c(0,leg.inset),
-		legend=text,
-		fill=colors,
-		ncol=leg.ncol,
-		bty="o",
-		cex=cex,
-		...)
+    oolist <- list(...)
+    oolist <- oolist[!names(oolist) %in% c("x","y","legend","ncol","fill","border", "lty", "lwd")]
+
+    legargs <- list(x=pos, legend=text, fill=colors, ncol=leg.ncol, cex=cex, border="black")
+    legargs <- c(legargs,oolist)
+
+    do.call(legend, legargs)
+
+
+## 	legend(pos,
+## 		## inset=c(0,leg.inset),
+## 		legend=text,
+## 		fill=colors,
+## 		ncol=leg.ncol,
+## 		##bty="o",
+## 		cex=cex,
+## 		...)
 
 }

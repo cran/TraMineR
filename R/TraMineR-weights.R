@@ -76,7 +76,8 @@ onecor.wtd <- function(x, y, weight=NULL){
     weight <- weight[use]
     #r1 <- lm(stdz(y, weight=weight)~stdz(x, weight=weight), weight=weight)
     #corcoef <- coef(summary(r1))[2,]
-    corcoef <- coef(summary(lm(stdz(y, weight=weight)~stdz(x, weight=weight), weights=weight)))[2,]
+    ## gr added suppressWarnings 23.3.23
+    corcoef <- coef(suppressWarnings(summary(lm(stdz(y, weight=weight)~stdz(x, weight=weight), weights=weight))))[2,]
   }
   else
     corcoef <- rep(NA, 4)
@@ -97,7 +98,7 @@ wtd.cors <- function(x, y=NULL, weight=NULL){
   x <- q[!is.na(weight),]
   y <- r[!is.na(weight),]
   weight <- weight[!is.na(weight)]
-  out <- .Call("wcorr", as.matrix(x), as.matrix(y), as.double(weight), NAOK=TRUE, PACKAGE="TraMineR")
+  out <- .Call(C_wcorr, as.matrix(x), as.matrix(y), as.double(weight), NAOK=TRUE, PACKAGE="TraMineR")
   ## C code for this package was contributed by Marcus Schwemmle
   if(!is.null(colnames(x)))
      rownames(out) <- colnames(x)

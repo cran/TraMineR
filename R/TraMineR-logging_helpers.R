@@ -73,7 +73,7 @@ msg.stop.in <- function(arg, values) {
 
 # unknown
 msg.stop.na <- function(arg) {
-  msg.stop(aprint(arg), "has an unknown value")
+  msg.stop(aprint(arg), "invalid type or unknown value")
 }
 
 # internal error
