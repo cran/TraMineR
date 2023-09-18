@@ -70,7 +70,7 @@ seqdistmc(channels, what="diss", ch.sep="@@@@TraMineRSep@@@@", ...)
  \item{what}{Character string. What output should be returned? One of \code{"MDseq", "cost", "diss"}. The deprecated value \code{what="sm"} is treated as \code{what="cost"}. \code{MDseq} returns the multidomain sequences expressed in terms of the expanded alphabet, \code{"cost"} the CAT costs, and "diss" the CAT-based multidomain distances.}
 
  \item{ch.sep}{Character string. Separator used for building state names of the expanded alphabet.}
- 
+
  \item{fill.with.miss}{Logical. Should shorter domain sequences be filled with missings to match sequence lengths across domains? Applies only to domains that already have missings.}
 
  \item{...}{arguments passed to \code{seqMD}}
@@ -78,7 +78,7 @@ seqdistmc(channels, what="diss", ch.sep="@@@@TraMineRSep@@@@", ...)
 
 \details{The \code{seqMD} function builds MD sequences by combining the domain states. When \code{what="cost"}, it derives multidomain indel and substitution costs from the indel and substitution costs of each domain by means of the cost additive trick (CAT) (\cite{Ritschard et al., 2023}, \cite{Pollock, 2007}). When \code{what="diss"}, it computes multidomain distances using the CAT multidomain costs. The available metrics (see \code{method} argument) are optimal matching (\code{"OM"}), Hamming distance (\code{"HAM"}), and Dynamic Hamming Distance (\code{"DHD"}). If \code{method="LCS"}, distances are obtained with OM using CAT costs derived from domain indel and sm costs of respectively 1 and 2 (i.e. inputted \code{indel} and \code{sm} are ignored).  For other edit distances, extract the combined state sequence object (by setting \code{what="MDseq"}) and the CAT-multidomain substitution and indel costs (by setting \code{what="cost"}). Then use these outcomes as input in a call to \code{seqdist}.  See \code{\link{seqdist}} for more information about available distance measures.
 
-Normalization may be useful when dealing with sequences that are not all of the same length. For details on the applied normalization, see \code{\link{seqdist}}. 
+Normalization may be useful when dealing with sequences that are not all of the same length. For details on the applied normalization, see \code{\link{seqdist}}.
 
 Sequences lengths are supposed to match across domains. If \code{fill.with.miss} is \code{TRUE} and the i-th sequence is shorter in one domain than the longest i-th sequence, it will, when constructing the i-th MD sequence, be filled with missing values to adapt its length to that of the longest sequence. However, this applies only for domain that already have missings, i.e., domains with a corresponding \code{with.missing} value set as \code{TRUE}. }
 
@@ -91,7 +91,9 @@ When \code{what="diss"}, a matrix of pairwise distances between MD sequences.
 \seealso{ \code{\link{seqcost}}, \code{\link{seqdef}}, \code{\link{seqdist}}. }
 
 \references{
- Ritschard, G., T.F. Liao, and E. Struffolino (2023). Strategies for multidomain sequence analysis in social research. \emph{Sociological Methodology}. DOI: 10.1177/00811750231163833.
+Ritschard, G., T.F. Liao, and E. Struffolino (2023). Strategies for
+multidomain sequence analysis in social research.
+\emph{Sociological Methodology}, 53(2), 288-322. \doi{10.1177/00811750231163833}.
 
  Pollock, G. (2007) Holistic trajectories: a study of combined employment, housing and family careers by using multiple-sequence analysis. \emph{Journal of the Royal Statistical Society: Series A} \bold{170}, Part 1, 167--183.
 }

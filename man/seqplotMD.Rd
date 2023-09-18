@@ -53,7 +53,7 @@ seqplotMD(channels,
 
     \item{ylab}{Character string or vector of strings. Optional label of the y-axis. If a vector, y-axis label of each group level. If set as \code{NA}, no label is drawn.}
 
-    \item{yaxis}{Logical or one of \code{"all"} or \code{"left"}. If set as \code{TRUE} or \code{"all"} (default value), sequence indexes are displayed for \code{"i"} and \code{"I"}, mean time values for \code{"mt"}, percentages for \code{"d"} and \code{"f"}, and state/event labels for \code{"pc"}.  If \code{"left"} and \code{group} is used, the y-axis is displayed on plots of the left panel only. If \code{FALSE} no y-axis is drawn. Ignored when \code{type="r"}.
+    \item{yaxis}{Logical or one of \code{"all"} or \code{"left"}. If set as \code{TRUE} or \code{"all"} (default value), sequence indexes are displayed for \code{"i"} and \code{"I"}, mean time values for \code{"mt"}, percentages for \code{"d"} and \code{"f"}, and state/event labels for \code{"pc"}.  If \code{"left"} and \code{group} is used, the y-axis is displayed on plots of the left panel only. If \code{FALSE} no y-axis is drawn. Ignored when \code{type="r"}. For \code{type="f"}, can also be one of \code{"pct"} and \code{"left.pct"}
         }
 
     \item{xaxis}{Logical or one of \code{"all"} or \code{"bottom"}. If set as \code{TRUE} or \code{"all"} (default value) x-axes are drawn for each plot in the graphic. If set as \code{"bottom"} is used, axes are drawn under the plots of the bottom panel only. If \code{FALSE}, no x-axis is drawn.}
@@ -115,7 +115,9 @@ No special handling other than the domain-group titles and the organization of t
 
 
 \references{
-Ritschard, G., T.F. Liao, and E. Struffolino (2023). Strategies for multidomain sequence analysis in social research. \emph{Sociological Methodology}. DOI: 10.1177/00811750231163833.
+Ritschard, G., T.F. Liao, and E. Struffolino (2023). Strategies for
+multidomain sequence analysis in social research.
+\emph{Sociological Methodology}, 53(2), 288-322. \doi{10.1177/00811750231163833}.
 }
 
 \examples{

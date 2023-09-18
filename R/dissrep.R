@@ -135,6 +135,7 @@ dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE
 
 	## Keeping distance to the nearest representative sequence only
 	dc.tot <- disscenter(diss, weights=weights)
+
 	if (nbkeep>1) {
 		tied <- 0
 		minidx <- apply(dist.repseq,1, which.min)
@@ -170,7 +171,16 @@ dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE
 		nb <- sum((dist.repseq < pradius)*weights, na.rm=TRUE)
 		DC <- sum(dc.tot*weights)
 		V <- DC/sum(weights)
+        minidx <- rep(1,nrow(dist.repseq))
 	}
+
+
+    ## List of ids of representatives in original data
+    dist.to.rep <- apply(dist.repseq,1, min, na.rm=TRUE)
+    idx.rep <- list()
+    for  (i in 1:nbkeep){
+        idx.rep[[i]] <- which(minidx==i & dist.to.rep==0)
+    }
 
 	quality <- (sum(dc.tot*weights)-sum(dist.repseq*weights, na.rm=TRUE))/sum(dc.tot*weights)
 
@@ -190,6 +200,9 @@ dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE
 	colnames(stats) <- c("na", "na(%)", "nb", "nb(%)", "SD", "MD", "DC", "V", "Q")
 	rownames(stats) <- c(paste("r",1:nbkeep,sep=""), "Total")
 
+    ## list of cases represented by each representatives
+    #lidx <- apply(dist.repseq,2,function(x) {which(!is.na(x))})
+
 	## ============
 	## Final object
 	## ============
@@ -201,6 +214,8 @@ dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE
 	attr(res, "dmax") <- dmax
 	attr(res, "Scores") <- score
 	attr(res, "Distances") <- dist.repseq
+    attr(res, "Rep.group") <- minidx
+    attr(res, "idx.rep") <- idx.rep
 	attr(res, "Statistics") <- stats
 	attr(res, "Quality") <- quality
 

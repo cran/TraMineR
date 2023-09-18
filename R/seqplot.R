@@ -57,8 +57,24 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
             msg.stop('If not logical, xaxis should be one of "all" or "bottom"')
     }
     axes <- xaxis
+    fyaxis <- "cum"
     if (is.logical(yaxis)){
         yaxis <- ifelse(yaxis, "all", FALSE)
+    } else if (type == "f"){
+        if (!yaxis %in% c("all","left","left.pct","pct","cum","left.cum"))
+            msg.stop('If not logical, yaxis should be one of "all","left","pct","cum","left.pct","left.cum"')
+        if (yaxis == "cum") {
+            yaxis <- "all"
+        } else if (yaxis == "left.cum") {
+            yaxis <- "left"
+        } else if (yaxis == "pct") {
+            yaxis <- "all"
+            fyaxis <- "pct"
+        } else if (yaxis == "left.pct") {
+            yaxis <- "left"
+            fyaxis <- "pct"
+        }
+
     } else {
         if (!yaxis %in% c("all","left"))
             msg.stop('If not logical, yaxis should be one of "all" or "left"')
@@ -217,15 +233,23 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
         xaxis <- rep(FALSE,nplot)
         xaxis[lout$axisp] <- TRUE
 
-        yaxis <- rep(FALSE,nplot)
+        yaxis <- as.list(rep(FALSE,nplot))
         if (!isFALSE(yaxes)){
             if (yaxes == "left"){
-                yaxis[lout$laymat[,1]] <- TRUE
+                #print(lout$laymat[,1])
+                if (type == "f")
+                    yaxis[lout$laymat[,1]] <- fyaxis
+                else
+                    yaxis[lout$laymat[,1]] <- TRUE
             }
             else if (yaxes == "all") {
-                yaxis <- rep(TRUE,nplot)
+                if (type == "f")
+                    yaxis <- as.list(rep(fyaxis,nplot))
+                else
+                    yaxis <- as.list(rep(TRUE,nplot))
             }
         }
+        #print(yaxis)
 
 		legpos <- lout$legpos
 	}
@@ -245,7 +269,7 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
 		olist <- oolist
 
 		plist <- list(main=main[np], cpal=cpal, missing.color=missing.color,
-			ylab=ylab[np], yaxis=yaxis[np], xaxis=xaxis[np],
+			ylab=ylab[np], yaxis=yaxis[[np]], xaxis=xaxis[np],
 			xtlab=xtlab, cex.axis=cex.axis)
 
 		## Selecting sub sample for x

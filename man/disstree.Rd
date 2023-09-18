@@ -74,11 +74,17 @@ algorithm. \emph{Journal of the Royal Statistical Society A} \bold{170}(4), 1061
    \cr
    \code{\link{disstreedisplay}} is a more general interface to generate such representation for other type of objects.
    \cr
+   \code{\link{disstreeleaf}} to get leaf membership of each case.
+   \cr
+   \code{\link{disstree.get.rules}} to get the list of classification rules as R commands.
+   \cr
+   \code{\link{disstree.assign}} for the index of the rules applying to provided profiles.
+   \cr
    \code{\link{dissvar}} to compute discrepancy using dissimilarities and for a basic introduction to discrepancy analysis.
    \cr
    \code{\link{dissassoc}} to test association between objects represented by their dissimilarities and a covariate.
    \cr
-	 \code{\link{dissmfacw}} to perform multi-factor analysis of variance from pairwise dissimilarities.
+    \code{\link{dissmfacw}} to perform multi-factor analysis of variance from pairwise dissimilarities.
 \cr
 \code{\link{disscenter}} to compute the distance of each object to its group center from pairwise dissimilarities.
 
@@ -91,36 +97,51 @@ mvad.seq <- seqdef(mvad[, 17:86])
 
 ## Computing dissimilarities (any dissimilarity measure can be used)
 mvad.ham <- seqdist(mvad.seq, method="HAM")
-## Grow the tree using using a low R value for illustration.
+## Grow the tree using a low R value for illustration.
 ## For R=10, pval cannot be lower than 0.1
 dt <- disstree(mvad.ham~ male + Grammar + funemp + gcse5eq + fmpr + livboth,
-    data=mvad, R = 10, pval = 0.1)
+               data=mvad, R = 10, pval = 0.1)
 print(dt)
 
 
 ## Will only work if GraphViz is properly installed
-## See seqtree for simpler way to plot a sequence tree.
+## See seqtree for a simpler way to plot a sequence tree.
 \dontrun{
 disstreedisplay(dt, image.fun = seqdplot, image.data = mvad.seq,
-  ## Additional parameters passed to seqdplot
-  with.legend = FALSE, axes = FALSE, ylab = "")
+                ## Additional parameters passed to seqdplot
+                with.legend = FALSE, xaxis = FALSE, ylab = "", border=NA)
 }
+
 ## Second method, using a specific function
 myplotfunction <- function(individuals, seqs, ...) {
-	par(font.sub=2, mar=c(3,0,6,0), mgp=c(0,0,0))
-	## using mds to order sequence in seqiplot
-	mds <- cmdscale(seqdist(seqs[individuals,], method="HAM"),k=1)
-	seqiplot(seqs[individuals,], sortv=mds,...)
-	}
+  par(font.sub=2, mar=c(3,0,6,0), mgp=c(0,0,0))
+  ## using mds to order sequence in seqIplot
+  mds <- suppressMessages(cmdscale(seqdist(seqs[individuals,], method="HAM"),k=1))
+  seqIplot(seqs[individuals,], sortv=mds,...)
+}
 
-## If image.data is not set, index of individuals are sent to image.fun
+## If image.data is not set, indexes of individuals are sent to image.fun
 \dontrun{
 disstreedisplay(dt, image.fun = myplotfunction, cex.main = 3,
-  ## additional parameters passed to myplotfunction
-  seqs = mvad.seq,
-  ## additional parameters passed to seqiplot (through myplotfunction)
-  with.legend = FALSE, axes = FALSE, idxs = 0, space = 0, ylab = "", border = NA)
+                ## additional parameters passed to myplotfunction
+                seqs = mvad.seq,
+                ## additional parameters passed to seqIplot (through myplotfunction)
+                with.legend = FALSE, xaxis = FALSE, ylab = "")
 }
+
+## Retrieving terminal node membership
+term.leaf <- disstreeleaf(dt)
+table(term.leaf)
+
+## Retrieving classification rules
+rules <- disstree.get.rules(dt)
+
+## Index of rule (terminal leaf) that applies to a specified profile
+## covariates are: male, Grammar, funemp, gcse5eq, fmpr, livboth
+
+profile <- data.frame(male="no", Grammar="yes", funemp="no", gcse5eq="yes", fmpr="no", livboth="no")
+rules[disstree.assign(rules, profile=profile)]
+
 }
 \author{Matthias Studer (with Gilbert Ritschard for the help page)}
 % Add one or more standard keywords, see file 'KEYWORDS' in the

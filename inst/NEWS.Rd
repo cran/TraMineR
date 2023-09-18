@@ -1,6 +1,46 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.2-8 [2023-09-18] }{
+
+    \subsection{New functions}{
+        \itemize{
+            \item
+            \code{disstree.get.rules()} character string vector of the classification rules of a \code{disstree} as R commands.
+            \item
+            \code{disstree.assign()} determines the index of the rules that apply to the provided profiles.
+        }
+    }
+
+    \subsection{Changes in exiting functions}{
+        \itemize{
+            \item
+            \code{seqST()} When number \code{phi} of subsequences is \code{NaN}, it is set as \code{.Machine$double.xmax} to compute turbulence and a warning is raised.
+            \item
+            \code{seqplot()} and \code{seqplotMD()}: when \code{type="f"}, the \code{yaxis} argument can now also be \code{"pct"} or \code{"left.pct"}.
+            \item
+            \code{seqrep()} and \code{dissrep()}: returned object gains attributes \code{Rep.group} with the representative to which each object is assigned, and \code{idx.rep} a list with indexes of all occurrences of each representative.
+            \item
+            \code{seqtreedisplay()} and \code{seqtree2dot()}: argument \code{axes} is deprecated and replaced by \code{xaxis} to be conformable with \code{seqplot}.
+            \item
+            \code{disstreedisplay()} and \code{seqtreedisplay()} now raise an error when the file \code{filename} of the image cannot be created.
+            \item
+            \code{disstreeleaf()} gains an argument \code{collapse} to control separator within classes of categories.
+        }
+    }
+
+    \subsection{Bug fixes}{
+         \itemize{
+            \item
+            \code{seqfplot()} and \code{seqplot(type="f")}: option \code{yaxis="pct"} did no longer work after update to v 2.2-7.
+            \item
+            \code{disstreedisplay()} and \code{seqtreedisplay()} did not find the GraphViz path.
+            \item
+            \code{disstreedisplay()} and \code{seqtreedisplay()} uselessly printed \code{TRUE} when filename was not \code{NULL}.
+         }
+    }
+}
+
 \section{Changes in version 2.2-7 [2023-03-31] }{
 
     \subsection{New functions}{

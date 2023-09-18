@@ -1,4 +1,41 @@
 ## =========
+Version 2.2-8 [2023-09-18]
+
+New functions:
+
+  - disstree.get.rules() character string vector of
+    the classification rules of a disstree as R commands.
+  - disstree.assign() determines the index of the rules
+    that apply to the provided profiles.
+
+Changes in existing functions:
+  - seqST() When number phi of subsequences is NaN, it is
+    set as .Machine$double.xmax to compute turbulence and
+    a warning is raised.
+  - seqplot() and seqplotMD(): when type="f",
+    the yaxis argument can now also be "pct" or "left.pct".
+  - seqrep() and dissrep(): returned object gains attributes
+    Rep.group with the representative to which each object
+    is assigned, and idx.rep a list with indexes of all 
+    occurrences of each representative.
+  - seqtreedisplay() and seqtree2dot(): argument 'axes'
+    is deprecated and replaced by 'xaxis' to be
+    conformable with seqplot.
+  - disstreedisplay() and seqtreedisplay() now raise an error
+    when the file filename of the image cannot be created.
+  - disstreeleaf() gains an argument 'collapse' to control
+    separator within classes of categories.
+
+Bug fixes:
+  - seqfplot() and seqplot(type="f"): option yaxis="pct"
+    did no longer work after update to v 2.2-7.
+  - disstreedisplay() and seqtreedisplay() did sometimes
+    not find the GraphViz path.
+  - disstreedisplay() and seqtreedisplay() uselessly printed
+    TRUE when filename was not NULL.
+
+
+## =========
 Version 2.2-7 [2023-03-31]
 
 New functions:

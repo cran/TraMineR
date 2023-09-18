@@ -92,7 +92,9 @@ disstreedisplay <- function(tree, filename = NULL, image.data = NULL,
 							cex.quality=cex.quality, legend.text=legend.text, show.tree=show.tree, show.depth=show.depth, ...)
 	setwd(actualdir)
 	if(!is.null(filename)){
-		file.copy(file.path(tmpdir, paste(tmpdisstree, image.format, sep=".")), filename, overwrite=TRUE)
+		success <- file.copy(file.path(tmpdir, paste(tmpdisstree, image.format, sep=".")), filename, overwrite=TRUE)
+		if ( !success )
+			stop("Cannot copy tmpdisstree.",image.format," as ",filename,"!")
 	}
 
 }
@@ -138,9 +140,14 @@ disstreedisplayInternal <- function(tree, filename, tmpdisstree, image.data, ima
 					}
 					dd <- dd[cond]
 					versions <- sub("Graphviz[[:space:]]?", "", dd)
-					ii <- which.max(as.numeric(versions))
-					message(" [>] GraphViz version ", versions[ii], " found.")
-					dd <- dd[ii]
+					if (versions != ""){
+						ii <- which.max(as.numeric(versions))
+						message(" [>] GraphViz version ", versions[ii], " found.")
+						dd <- dd[ii]
+					}
+					else {
+						message(" [>] GraphViz path found.")
+					}
 					return(paste(envDir, dd, sep="\\"))
 				}
 				return(NULL)
@@ -153,6 +160,7 @@ disstreedisplayInternal <- function(tree, filename, tmpdisstree, image.data, ima
 
 		}
 	}
+	#gvpath <- paste("\"", gvpath, "Graphviz\\bin\\dot.exe\" ", sep="")
 	gvpath <- paste("\"", gvpath, "\\bin\\dot.exe\" ", sep="")
 	if (.Platform$OS.type!="windows") {
 		gvpath <- "dot "
@@ -191,16 +199,17 @@ disstreedisplayInternal <- function(tree, filename, tmpdisstree, image.data, ima
 
 seqtreedisplay <- function(tree, filename = NULL, seqdata = tree$info$object,
   only.leaf = FALSE, sortv = NULL, diss = NULL, cex.main = 3, with.legend = "auto",
-  cex.legend = cex.main, axes = FALSE, image.format = "png", with.quality = TRUE,
+  #cex.legend = cex.main, axes = FALSE, image.format = "png", with.quality = TRUE,
+  cex.legend = cex.main, xaxis = FALSE, image.format = "png", with.quality = TRUE,
   cex.quality = cex.main, legend.text = NULL, show.tree = TRUE, show.depth = FALSE,
   imgLeafOnly, dist.matrix, title.cex, withlegend, legend.fontsize, imageformat,
-  withquality, quality.fontsize, legendtext, showtree, showdepth, ...) {
+  withquality, quality.fontsize, legendtext, showtree, showdepth, axes, ...) {
 
   TraMineR.check.depr.args(alist(only.leaf = imgLeafOnly, diss = dist.matrix,
     cex.main = title.cex, with.legend = withlegend, cex.legend = legend.fontsize,
     image.format = imageformat, with.quality = withquality,
     cex.quality = quality.fontsize, legend.text = legendtext, show.tree = showtree,
-    show.depth = showdepth))
+    show.depth = showdepth, xaxis=axes))
 
 	actualdir <- getwd()
 	tmpdir <- tempdir()
@@ -215,10 +224,12 @@ seqtreedisplay <- function(tree, filename = NULL, seqdata = tree$info$object,
 	disstreedisplayInternal(tree=tree, filename=filename, tmpdisstree=tmpdisstree, image.data=NULL, image.fun=DTNseqplot,
 							only.leaf=only.leaf, cex.main=cex.main, image.format=image.format, with.quality=with.quality,
 							cex.quality=cex.quality, legend.text=legend.text, show.tree=show.tree, show.depth=show.depth, image.legend=image.legend,
-							seqdata=seqdata, sortv=sortv, diss=diss, axes=axes, with.legend=FALSE, ...)
+							seqdata=seqdata, sortv=sortv, diss=diss, xaxis=xaxis, with.legend=FALSE, ...)
 	setwd(actualdir)
 	if(!is.null(filename)){
-		file.copy(file.path(tmpdir, paste(tmpdisstree, image.format, sep=".")), filename, overwrite=TRUE)
+		success <- file.copy(file.path(tmpdir, paste(tmpdisstree, image.format, sep=".")), filename, overwrite=TRUE)
+		if ( !success )
+			stop("Cannot copy tmpdisstree.",image.format," as ",filename,"!")
 	}
 	return(invisible())
 }
@@ -228,18 +239,22 @@ seqtreedisplay <- function(tree, filename = NULL, seqdata = tree$info$object,
 ###########################
 seqtree2dot <- function(tree, filename, seqdata = tree$info$object,
   only.leaf = FALSE, sortv = NULL, diss = NULL, cex.main = 3, with.legend = "auto",
-  cex.legend = cex.main, with.quality = FALSE, cex.quality = cex.main, axes = FALSE,
-  imgLeafOnly, dist.matrix, title.cex, withlegend, withquality,  ...) {
+  #cex.legend = cex.main, with.quality = FALSE, cex.quality = cex.main, axes = FALSE,
+  cex.legend = cex.main, with.quality = FALSE, cex.quality = cex.main, xaxis = FALSE,
+  #imgLeafOnly, dist.matrix, title.cex, withlegend, withquality, ...) {
+  imgLeafOnly, dist.matrix, title.cex, withlegend, withquality, axes, ...) {
 
   TraMineR.check.depr.args(alist(only.leaf = imgLeafOnly, diss = dist.matrix,
-    cex.main = title.cex, with.legend = withlegend, with.quality = withquality))
+    cex.main = title.cex, with.legend = withlegend, with.quality = withquality
+	, xaxis=axes))
 
 	image.legend <- DTNseqlegend(filename=filename, seqdata=seqdata, cex.legend=cex.legend, with.legend=with.legend, ...)
 	if(!is.null(diss)){
 		diss <- as.matrix(diss)
 	}
 	disstree2dotp(tree, filename, image.data=NULL, only.leaf=only.leaf, seqdata=seqdata, cex.main=cex.main,
-			sortv=sortv,diss=diss, image.fun=DTNseqplot, with.legend=FALSE, axes=axes,
+			#sortv=sortv,diss=diss, image.fun=DTNseqplot, with.legend=FALSE, axes=axes,
+			sortv=sortv,diss=diss, image.fun=DTNseqplot, with.legend=FALSE, xaxis=xaxis,
 			image.legend=image.legend, with.quality=with.quality, cex.quality=cex.quality, ...)
 }
 

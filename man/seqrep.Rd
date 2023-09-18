@@ -66,7 +66,7 @@ redundant to sequence \eqn{x} when it is in the neighborhood of \eqn{x}, i.e., w
 \details{
  The representative set is obtained by an heuristic. Representatives are selected by successively extracting from  the sequences sorted by their representativeness score those which are not redundant with already retained representatives. The selection stops when either the desired coverage or the wanted number of representatives is reached. Sequences are sorted either by the values provided as \code{score} argument or by specifying one of the following as \code{criterion} argument: \code{"freq"} (\emph{sequence frequency}), \code{"density"}
 (\emph{neighborhood density}), \code{"mscore"} (\emph{mean state frequency}), \code{"dist"}
-(\emph{centrality}) and \code{"dist"} (\emph{sequence likelihood}).
+(\emph{centrality}), and \code{"prob"} (\emph{sequence likelihood}).
 
 With the \emph{sequence frequency} criterion, the more frequent a
 sequence the more representative it is supposed to be. Therefore, sequences are sorted in decreasing frequency order.
@@ -93,7 +93,7 @@ in the set are identical, i.e. when there is a single sequence pattern. The most
 the highest score.
 
 The \emph{centrality} criterion is the sum of distances to all other sequences. The
-smallest the sum, the most representative the sequence.
+smallest the sum, the most representative is the sequence.
 
 The \emph{sequence likelihood} \eqn{P(s)} is defined as the product of the probability with which each of its observed
 successive state is supposed to occur at its position.
@@ -116,7 +116,7 @@ The likelihood \eqn{P(s)} being generally very small, we use
 \eqn{P(s)} equal to 1, which leads to sort the sequences in
 ascending order of their score.
 
-Use \code{criterion="dist"} and \code{nrep=1} to get the medoid and \code{criterion="density"} and \code{nrep=1} to get the densest sequence pattern.
+Use \code{criterion="dist"} (centrality) and \code{nrep=1} to get the medoid, and \code{criterion="density"} and \code{nrep=1} to get the densest sequence pattern.
 
 For more details, see \cite{Gabadinho & Ritschard, 2013}.
 }
@@ -126,6 +126,8 @@ state sequence object (containing a list of state sequences) with the
 following additional attributes:
   \item{Scores}{a vector with the representative score of each sequence in the original set given the chosen criterion.}
   \item{Distances}{a matrix with the distance of each sequence to its nearest representative.}
+  \item{Rep.group}{vector with, for each sequence, the representative that represents it.}
+  \item{idx.rep}{list with indexes of occurrences of each representative in original data.}
   \item{Statistics}{a data frame with quality measures for each representative sequence: number \eqn{na} of sequences
       attributed to the representative, number \eqn{nb} of sequences in the representative's neighborhood, mean distance \eqn{MD} to the
       representative and a few other indexes.}
@@ -150,7 +152,7 @@ argument, or the \code{\link{seqrplot}} alias. }
 data(biofam)
 biofam.lab <- c("Parent", "Left", "Married", "Left+Marr",
 "Child", "Left+Child", "Left+Marr+Child", "Divorced")
-biofam.seq <- seqdef(biofam, 10:25, labels=biofam.lab)
+biofam.seq <- seqdef(biofam[,10:25], labels=biofam.lab)
 
 ## Computing the distance matrix
 costs <- seqsubm(biofam.seq, method="TRATE")
@@ -161,9 +163,17 @@ biofam.rep <- seqrep(biofam.seq, diss=biofam.om, criterion="density")
 biofam.rep
 summary(biofam.rep)
 plot(biofam.rep)
+
+## plot by groups represented by the representatives
+seqdplot(biofam.seq, group=attr(biofam.rep,"Rep.group"), border=NA)
+
+## indexes of sequences represented by 1st representative
+r1.grp <- which(attr(biofam.rep,"Rep.group")==1)
+## indexes of occurrences of the first representative sequence
+attr(biofam.rep,"idx.rep")[[1]]
 }
 
-\author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
+\author{Alexis Gabadinho and Gilbert Ritschard}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{Dissimilarity-based analysis}

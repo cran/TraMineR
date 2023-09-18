@@ -179,6 +179,8 @@ export(
     disstree2dot,
     disstree2dotp,
     disstreeleaf,
+    disstree.get.rules,
+    disstree.assign,
     disstree,
     dissvar,
     gower_matrix,

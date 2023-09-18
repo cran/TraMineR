@@ -96,7 +96,7 @@ seqdomassoc(list(child.seq,marr.seq,left.seq), diss.dom=dbiofam,
 \references{
 Ritschard, G., T.F. Liao, and E. Struffolino (2023). Strategies for
 multidomain sequence analysis in social research.
-\emph{Sociological Methodology}, in press.
+\emph{Sociological Methodology}, 53(2), 288-322. \doi{10.1177/00811750231163833}.
 }
 \seealso{
 \code{\link{dissdomassoc}}

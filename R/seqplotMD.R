@@ -44,9 +44,16 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
   axes <- xaxis
   if (is.logical(yaxis)){
       yaxis <- ifelse(yaxis, "all", FALSE)
+  } else if (type=="f") {
+      if (!yaxis %in% c("all","left","left.pct","pct","cum","left.cum"))
+          msg.stop('If not logical, yaxis should be one of "all","left","pct","cum","left.pct","left.cum"')
+      else if (yaxis=="cum")
+        yaxis <- "all"
+      else if (yaxis=="left.cum")
+        yaxis <- "left"
   } else {
       if (!yaxis %in% c("all","left"))
-          msg.stop('If not logical, yaxis should be one of "all" or "left"')
+          msg.stop('If not logical, yaxis should be one of "all" and "left"')
   }
   yaxes <- yaxis
   if (is.logical(stats)){
@@ -65,7 +72,7 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
   oolist <- list(...)
 
   sortv <- if ("sortv" %in% names(oolist))  oolist[["sortv"]] else NULL
-  if (type=="rf" && !"sortv" %in% names(oolist)) sortv <- "mds" ## default for rf plot 
+  if (type=="rf" && !"sortv" %in% names(oolist)) sortv <- "mds" ## default for rf plot
   leg.ncol <- if ("ncol" %in% names(oolist)) { oolist[["ncol"]] } else { NULL }
   oolist <- oolist[names(oolist) != "ncol"]
 
@@ -385,6 +392,10 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
                 yaxesd <- if (np==1) TRUE else FALSE
             else if (yaxes=="all")
                 yaxesd <- TRUE
+            else if (yaxes=="pct")
+                yaxesd <- "pct"
+            else if (yaxes=="left.pct")
+                yaxesd <- if (np==1) "pct" else FALSE
             else
                 yaxesd <- FALSE
 
@@ -396,6 +407,7 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
                 axesd <- if (np==nplot) TRUE else FALSE
             else if (axes=="all")
                 axesd <- TRUE
+
             else
                 axesd <- FALSE
 
@@ -403,6 +415,10 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
                 yaxesd <- if (d==1) TRUE else FALSE
             else if (yaxes=="all")
                 yaxesd <- TRUE
+            else if (yaxes=="pct")
+                yaxesd <- "pct"
+            else if (yaxes=="left.pct")
+                yaxesd <- if (d==1) "pct" else FALSE
             else
                 yaxesd <- FALSE
 

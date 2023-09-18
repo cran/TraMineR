@@ -17,9 +17,9 @@ This is the plot method for output produced by the \code{\link{seqstatd}} functi
   \item{type}{if \code{"d"} (default), a state distribution plot is produced. If \code{"Ht"} an entropy index plot is produced.}
   \item{cpal}{alternative color palette to be used for the states. If user specified, a vector of colors with number of elements equal to the number of states in the alphabet. By default, the 'cpal' attribute of the \code{x} object is used.}
   \item{ylab}{an optional label for the y axis. If set to NA, no label is drawn.}
-  \item{yaxis}{if \code{TRUE} or \code{"cum"}, the y axis is plotted with a label showing the cumulated percentage frequency of the displayed sequences. If \code{"pct"}, the percentage value for each sequence is displayed.}
+  \item{yaxis}{Logical. Should the y axis be displayed? Default is \code{TRUE}.}
 
-  \item{xaxis}{if \code{TRUE} (default) the x-axis is plotted.}
+  \item{xaxis}{Logical. Should the x-axis be displayed? Default is \code{TRUE}.}
 
   \item{xtlab}{optional labels for the ticks of the x-axis. If unspecified, the \code{names} attribute of the input \code{x} object is used.}
   \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with xtstep=3 a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}

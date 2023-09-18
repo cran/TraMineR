@@ -9,12 +9,12 @@ Generate a graphical representation of a regression tree of state sequence data.
 \usage{
 seqtreedisplay(tree, filename = NULL, seqdata = tree$info$object,
   only.leaf = FALSE, sortv = NULL, diss = NULL, cex.main = 3,
-  with.legend = "auto", cex.legend = cex.main, axes = FALSE,
+  with.legend = "auto", cex.legend = cex.main, xaxis = FALSE,
   image.format = "png", with.quality = TRUE, cex.quality = cex.main,
   legend.text = NULL, show.tree = TRUE, show.depth = FALSE,
   imgLeafOnly, dist.matrix, title.cex, withlegend, legend.fontsize,
   imageformat, withquality, quality.fontsize, legendtext, showtree,
-  showdepth, ...)
+  showdepth, axes, ...)
 
 disstreedisplay(tree, filename = NULL, image.data= NULL, image.fun = plot,
   only.leaf = FALSE, cex.main = 3, image.format = "png",
@@ -37,7 +37,7 @@ disstreedisplay(tree, filename = NULL, image.data= NULL, image.fun = plot,
     Legend magnification. See \code{\link{par}}. If not specified, use the
     value of \code{cex.main}.
   }
-  \item{axes}{Argument passed to \code{\link{seqplot}}}
+  \item{xaxis}{Logical. Should the x-axis be displayed on the plots? (argument passed to \code{\link{seqplot}})}
   \item{image.format}{Image format of the output file (\code{filename})}
   \item{with.quality}{If \code{TRUE}, a node displaying fitting measures of the tree is added to the plot.}
   \item{cex.quality}{
@@ -62,13 +62,14 @@ disstreedisplay(tree, filename = NULL, image.data= NULL, image.fun = plot,
   \item{showdepth}{Deprecated. Use \code{show.depth} instead.}
   \item{imagedata}{Deprecated. Use \code{image.data} instead.}
   \item{imagefunc}{Deprecated. Use \code{image.fun} instead.}
+  \item{axes}{Deprecated. Use \code{xaxis} instead.}
   \item{\dots}{additional arguments passed to seqplot}
 }
 \details{
 This function generates a tree image. For each node, it invokes \code{\link{seqplot}} for the selected lines of \code{seqdata} as argument.
 You should at least specify the \code{type} of the plot to use (\code{type="d"} for instance, see \code{\link{seqplot}} for more details).
 
-The plot is actually not generated as an R plot, but with GraphViz (www.graphviz.org). Hence, \code{seqtreedisplay} only works when GraphViz is correctly installed.
+The plot is actually not generated as an R plot, but with GraphViz (www.graphviz.org). Hence, \code{seqtreedisplay} only works when GraphViz is correctly installed. If the path to GraphViz is not found, pass the path as a \code{gvpath} argument among the \dots list.
 
 Conversion to image formats other than "jpeg" or "png" is done using ImageMagick (www.imagemagick.org). To use this feature,  ImageMagick (www.imagemagick.org) should hence also be installed.
 }

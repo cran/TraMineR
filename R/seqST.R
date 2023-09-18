@@ -47,6 +47,10 @@ seqST <- function(seqdata, norm=FALSE, silent=TRUE, with.missing=FALSE, type=1) 
 
 	if (!silent) message(" [>] computing turbulence type ",type," for ",nrow(seqdata)," sequence(s) ...")
 	phi <- suppressMessages(seqsubsn(spells, DSS=FALSE, with.missing=with.missing))
+    if (any(is.nan(phi))) {
+        turb.phi[is.nan(phi)] <- .Machine$double.xmax
+        warning("Some phi set as .Machine$double.xmax because exceeding this max allowed value.")
+    }
   #s2.tx <- apply(dur, 1, realvar)
   s2.tx <- seqivardur(seqdata, type=type, with.missing=with.missing)
   s2.tx.max <- attr(s2.tx,'vmax')
@@ -67,9 +71,17 @@ seqST <- function(seqdata, norm=FALSE, silent=TRUE, with.missing=FALSE, type=1) 
         nrep <- ceiling(maxlength/length(alph))
 
         turb.seq <- suppressWarnings(suppressMessages(seqdef(t(rep(alph,nrep)[1:maxlength]), alphabet=alph)))
-        turb.spells <- seqdss(turb.seq)
+        #turb.spells <- seqdss(turb.seq) ##useless if length(alph)>1
+        turb.spells <- turb.seq
         #turb.dur <- seqdur(turb.seq)
-        turb.phi <- suppressMessages(seqsubsn(turb.spells, DSS=FALSE, with.missing=FALSE))
+        if (length(alph)>1)
+            turb.phi <- suppressMessages(seqsubsn(turb.spells, DSS=FALSE, with.missing=FALSE))
+        else
+            turb.phi <- 2
+        if (is.nan(turb.phi)) {
+            turb.phi <- .Machine$double.xmax
+            warning("phi set as .Machine$double.xmax, because it exceeds that value when computing max turbulence")
+        }
         #turb.s2 <- apply(turb.dur, 1, realvar)
         turb.s2 <- seqivardur(turb.seq, type=type, with.missing=FALSE)
         turb.s2.max <- attr(turb.s2,'vmax')

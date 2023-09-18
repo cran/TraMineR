@@ -27,9 +27,9 @@ disstree2dotp(tree, filename, image.data = NULL, only.leaf = FALSE,
 seqtree2dot(tree, filename, seqdata = tree$info$object, only.leaf = FALSE,
   sortv = NULL, diss = NULL, cex.main = 3, with.legend = "auto",
   cex.legend = cex.main, with.quality = FALSE,
-  cex.quality = cex.main, axes = FALSE,
+  cex.quality = cex.main, xaxis = FALSE,
   imgLeafOnly, dist.matrix, title.cex,
-  withlegend, withquality,  ...)
+  withlegend, withquality, axes,  ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -59,7 +59,7 @@ seqtree2dot(tree, filename, seqdata = tree$info$object, only.leaf = FALSE,
   \item{diss}{The name of an optional dissimilarity matrix used to find representative sequences, \code{\link{seqrplot}}.}
   \item{with.legend}{defines if and where the legend of the state colors is plotted. The default value \code{"auto"} sets the position of the legend automatically. Other possible value is \code{"right"}. Obsolete value \code{TRUE} is equivalent to \code{"auto"}.}
   \item{cex.legend}{Size of the font of the legend.}
-  \item{axes}{if set to \code{"all"} (default value) x axes are drawn for each plot in the graphic. If set to \code{"bottom"} and \code{group} is used, axes are drawn only under the plots located at the bottom of the graphic area. If \code{FALSE}, no x axis is drawn.}
+  \item{xaxis}{Logical. Should the x-axis be drawn on the plots?}
   \item{imagefunc}{Deprecated. Use \code{image.fun} instead.}
   \item{imagedata}{Deprecated. Use \code{image.data} instead.}
   \item{imgLeafOnly}{Deprecated. Use \code{only.leaf} instead.}
@@ -78,6 +78,7 @@ seqtree2dot(tree, filename, seqdata = tree$info$object, only.leaf = FALSE,
   \item{quality.fontsize}{Deprecated. Use \code{cex.quality} instead.}
   \item{dist.matrix}{Deprecated. Use \code{diss} instead.}
   \item{withlegend}{Deprecated. Use \code{with.legend} instead.}
+  \item{axes}{Deprecated. Use \code{xaxis} instead.}
   \item{\dots}{other parameters that will be passed to \code{image.fun} or \code{\link{seqplot}} (for \code{seqtree2dot}).}
 }
 \details{
@@ -88,6 +89,8 @@ present or otherwise a list of indexes (of individuals belonging to a
 node). These functions are not intended to be used by end-user. See \code{\link{seqtreedisplay}}
 and \code{\link{disstreedisplay}} for a much simpler way to generate a graphical representation of a
 tree (\code{\link{seqtree}} or \code{\link{disstree}}).
+
+If the path to GraphViz is not found, pass the path as \code{gvpath} argument among the \dots list.
 
 \code{seqtree2dot} is a shortcut for sequences objects using the plot function \code{\link{seqplot}}. For each node, it calls \code{\link{seqplot}} with the corresponding subset of rows of \code{seqdata} and the provided \code{\link{seqplot}}'s arguments.
     You should at least specify the \code{type} of the plot (e.g.  \code{type="d"}, see \code{\link{seqplot}} for more details).

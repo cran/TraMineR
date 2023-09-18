@@ -51,7 +51,7 @@ seqrep <- function(seqdata, criterion = "density", score = NULL,
 	rep <- dissrep(diss, criterion=criterion, score=score,
 		decreasing=decreasing, coverage=coverage, nrep=nrep, pradius=pradius, dmax=dmax, weights=weights)
 
-	## Occurence of the representative sequence
+	## Occurrence of the representative sequence
 	nds <- nrow(unique(seqdata))
 	message(" [>] ", nds, " distinct sequence(s)")
 
@@ -68,6 +68,8 @@ seqrep <- function(seqdata, criterion = "density", score = NULL,
 	attr(res, "Index") <- as.vector(rep)
 	attr(res, "Scores") <- attr(rep,"Scores")
 	attr(res, "Distances") <- attr(rep,"Distances")
+	attr(res, "Rep.group") <- attr(rep,"Rep.group")
+    attr(res, "idx.rep") <- attr(rep, "idx.rep")
 	attr(res, "Statistics") <- attr(rep,"Statistics")
 	attr(res, "Quality") <- attr(rep,"Quality")
 	attr(res, "weighted") <- weighted

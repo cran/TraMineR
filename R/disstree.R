@@ -45,10 +45,10 @@ DTNsplit <- function(varindex, index,  prob, info, labels=NULL, breaks=NULL, naG
 
 
 ###########################
-## Retrieve leaf belonging
+## Retrieve leaf membership
 ###########################
 
-disstreeleaf <- function(tree, label=FALSE) {
+disstreeleaf <- function(tree, label=FALSE, collapse=", ") {
 	if (inherits(tree, "disstree")) {
 		root <- tree$root
 	}else{
@@ -70,8 +70,10 @@ disstreeleaf <- function(tree, label=FALSE) {
 				str_split[2] <- paste(">", formd(sp$breaks))
 			}
 			else {
-				str_split[1] <- paste0("[", paste(sp$labels[sp$index==1], collapse=", "),"]")
-				str_split[2] <- paste0("[", paste(sp$labels[sp$index==2], collapse=", "),"]")
+				#str_split[1] <- paste0("[", paste(sp$labels[sp$index==1], collapse=", "),"]")
+				#str_split[2] <- paste0("[", paste(sp$labels[sp$index==2], collapse=", "),"]")
+				str_split[1] <- paste0("[", paste(sp$labels[sp$index==1], collapse=collapse),"]")
+				str_split[2] <- paste0("[", paste(sp$labels[sp$index==2], collapse=collapse),"]")
 			}
 			if(!is.null(sp$naGroup)){
 				str_split[sp$naGroup] <- paste(str_split[sp$naGroup], "with NA")
@@ -107,6 +109,72 @@ disstreeleaf <- function(tree, label=FALSE) {
 	}
 	return(DTNdisstreeleaf(root, categorie))
 }
+
+##############################################
+## Get tree classification rules as R commands
+##############################################
+
+disstree.get.rules <- function(tree, collapse="; "){
+    dleafs <- disstreeleaf(tree, label=TRUE, collapse=collapse)
+    rules <- levels(dleafs)
+
+    ## Writing rules as R conditions
+    #cleanrules <- function(rules){
+      for (i in 1:length(rules)){
+        ru <- rules[i]
+        ru <- gsub("\\[","%in% c('", ru)
+        #ru <- gsub(", ","', '", ru)
+        ru <- gsub(collapse,"', '", ru)
+        ru <- gsub("\\]","')", ru)
+        rules[i] <- ru
+      }
+     # return(rules)
+    #}
+    #rules <- cleanrules(rules)
+    attr(rules,"covariates") <- attr(tree$terms,"term.labels")
+    return(rules)
+}
+
+
+########################################################################
+## assigning profiles to end nodes by means of tree classification rules
+########################################################################
+
+disstree.assign <- function(rules, profile, covar=attr(rules,"covariates")){
+    profile <- as.data.frame(profile)
+    ## rules do not work with factors, we convert to characters
+    i <- sapply(profile, is.factor)
+    profile[i] <- lapply(profile[i], as.character)
+    ncovar <- length(covar)
+    if (!is.null(covar)){
+        miss.covar <- which(!covar %in% names(profile))
+        if (length(miss.covar)>0)
+            stop("covariates missing in profile: ", covar[miss.covar])
+        else
+            profile <- profile[covar]
+    }
+    else {
+        stop("list of covariate names covar is NULL")
+    }
+    res <- logical(length(rules))
+    tnode <- integer(nrow(profile))
+    for (j in 1:nrow(profile)){
+      dat <- profile[j,,drop=FALSE]
+      for (k in 1:ncovar) {
+        assign(covar[k], dat[covar[k]])
+      }
+      for (i in 1:length(rules)) {
+        res[i] <- eval(parse(text=rules[i]))
+      }
+      which.res <- which(res)
+      if (length(which.res) == 0)
+        tnode[j] <- NA
+      else
+        tnode[j] <- which.res
+    }
+    return(tnode)
+}
+
 
 ###########################
 ## Internal recursion
@@ -179,9 +247,9 @@ disstree <- function(formula, data = NULL, weights = NULL, min.size = 0.05,
 	formula[[2]] <- NULL
 	## Model matrix from forumla
 	predictor <- as.data.frame(model.frame(formula, data, drop.unused.levels = TRUE, na.action=NULL))
-	tree <- DTNdisstree(dissmatrix=dissmatrix, predictor=predictor, terms=tterms, 
-						weights=weights, min.size=min.size, max.depth=max.depth, R=R, 
-						pval=pval, object =object, weight.permutation=weight.permutation, 
+	tree <- DTNdisstree(dissmatrix=dissmatrix, predictor=predictor, terms=tterms,
+						weights=weights, min.size=min.size, max.depth=max.depth, R=R,
+						pval=pval, object =object, weight.permutation=weight.permutation,
 						squared=squared, first=first)
 	return(tree)
 
@@ -247,7 +315,7 @@ DTNdisstree <- function(dissmatrix, predictor, terms, weights=NULL, min.size=0.0
 
 	vardis <- dissvar(dissmatrix, weights=weights)
 	root <- DTNBuildNode(dmat=dissmatrix, pred=predictor, min.size=min.size, ind=1:nobs,
-			vardis=vardis, depth=1, nbperm=R, pval=pval, max.depth=max.depth, 
+			vardis=vardis, depth=1, nbperm=R, pval=pval, max.depth=max.depth,
 			weights=weights, weight.permutation=weight.permutation, first=first)
 	tree <- list()
 	tree$fitted <- data.frame(disstreeleaf(root))

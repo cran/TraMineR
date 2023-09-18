@@ -61,18 +61,18 @@ representativeness score. The frequency of an object in the data is
 computed as the number of other objects with whom the dissimilarity
 is equal to 0. The more frequent an object the more representative it
 is supposed to be. Hence, objects are sorted in decreasing frequency
-order. Indeed, this criterion is the neighborhood (see below)
-criterion with the neighborhood diameter set to 0.
+order. This criterion is equivalent to the neighborhood (see below)
+criterion with a neighborhood radius equal to 0.
 
 The \emph{neighborhood density} is the
-number---density---of sequences in the neighborhood of the object. This requires to set the neighborhood radius \code{pradius}.  Objects are
+number---density---of objects in the neighborhood of the object. This requires to set the neighborhood radius \code{pradius}.  Objects are
 sorted in decreasing density order.
 
 
 The \emph{centrality} criterion is the sum of distances to all other objects. The
-smallest the sum, the most representative the sequence.
+smallest the sum, the most representative the object.
 
-Use \code{criterion="dist"} and \code{nrep=1} to get the medoid and \code{criterion="density"} and \code{nrep=1} to get the densest object pattern.
+Use \code{criterion="dist"} (centrality) and \code{nrep=1} to get the medoid and \code{criterion="density"} and \code{nrep=1} to get the densest object pattern.
 
 
 For more details, see \cite{Gabadinho and Ritschard, 2013}.
@@ -80,10 +80,12 @@ For more details, see \cite{Gabadinho and Ritschard, 2013}.
 
 \value{An object of class \code{diss.rep}. This is a vector containing
 the indexes of the representative objects with the following additional attributes:
-  \item{Scores}{a vector with the representative score of each object given the chosen criterion.}
-  \item{Distances}{a matrix with the distance of each object to its nearest representative.}
-  \item{Statistics}{a data frame with quality measures for each representative: number of objects attributed to the representative,
-number of object in the representative's neighborhood, mean distance
+  \item{Scores}{vector with the representative score of each object given the chosen criterion.}
+  \item{Distances}{matrix with the distance of each object to its nearest representative.}
+  \item{Rep.group}{vector with, for each object, the representative that represents it.}
+  \item{idx.rep}{list with indexes of occurrences of each representative in original data.}
+  \item{Statistics}{a data frame with quality measures for each representative: number of objects assigned to the representative,
+number of objects in the representative's neighborhood, mean distance
 to the representative.}
   \item{Quality}{overall quality measure.}
 
@@ -104,7 +106,7 @@ Gabadinho A, Ritschard G, Studer M, Müller NS (2011). "Extracting and Rendering
 data(biofam)
 biofam.lab <- c("Parent", "Left", "Married", "Left+Marr",
 "Child", "Left+Child", "Left+Marr+Child", "Divorced")
-biofam.seq <- seqdef(biofam, 10:25, labels=biofam.lab)
+biofam.seq <- seqdef(biofam[, 10:25], labels=biofam.lab)
 
 ## Computing the distance matrix
 costs <- seqsubm(biofam.seq, method="TRATE")
@@ -114,10 +116,13 @@ biofam.om <- seqdist(biofam.seq, method="OM", sm=costs)
 biofam.rep <- dissrep(biofam.om)
 biofam.rep
 summary(biofam.rep)
+## indexes of first occurrence of second representatives in original data
+attr(biofam.rep,"idx.rep")[[2]][1]
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 
-\author{Alexis Gabadinho (with Gilbert Ritschard for the help page)}
+\author{Alexis Gabadinho and Gilbert Ritschard}
 
 \keyword{Dissimilarity-based analysis}
