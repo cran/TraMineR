@@ -63,7 +63,7 @@ seqrfplot(seqdata, group = NULL, main = "auto", ...)
         coordinate plots, \code{"r"} for representative sequence plots, and
         \code{"rf"} for relative frequency plots.}
 
-    \item{main}{Character string. Title of the graphic. Default \code{"auto"} prints group levels as default title when group is not {NULL} and no title otherwise. Set as \code{NULL} to suppress titles. }
+    \item{main}{Character string. Title of the graphic. Default \code{"auto"} prints group levels as default title when group is not \code{NULL} and no title otherwise. Set as \code{NULL} to suppress titles. }
 
     \item{cpal}{Color palette of the states. By default, the \code{cpal} attribute of the \code{seqdata} sequence object is used (see \code{\link{seqdef}}). If user specified, a vector of colors of length and order corresponding to \code{alphabet(seqdata)}.}
 

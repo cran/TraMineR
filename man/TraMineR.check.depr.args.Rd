@@ -23,8 +23,8 @@ argument name is specified. If so and the new one is not, a warning message is r
 and the argument value is assigned to the new argument name. If one of the names declared in check.depr.args() arguments si not an argument of the parent function
 or if both the new and old argument names are specified an error is raised.
 
-The function does not detect when {the new and the old argument names are specified
-together and the new argument value is its default value}. In this case,
+The function does not detect when the new and the old argument names are specified
+together and the new argument value is its default value. In this case,
 the value associated with the old argument name is assigned to the new name and a warning
 message is raised.
 

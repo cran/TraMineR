@@ -4,9 +4,14 @@
 
 plot.stslist.modst <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
   xaxis = TRUE, xtlab = NULL, xtstep = NULL, tick.last = NULL,
-  info = TRUE, cex.axis = 1, cex.plot, ...) {
+  info = TRUE, cex.axis = par("cex.axis"), las = 1, cex.plot, ...) {
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
+
+	## Storing the optional graphical parameters in a list
+	glist <- list(...)
+    parlist <- par()
+    glist <- glist[names(glist) %in% names(parlist)]
 
   sep.ylab <- (isFALSE(yaxis) && (is.null(ylab) || !is.na(ylab)))
   cex.lab <- par("cex.lab")
@@ -83,17 +88,30 @@ plot.stslist.modst <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
 	## Plotting the x axis
 	if (xaxis) {
 		tpos <- seq(1,seql, xtstep)
-    if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
-		axis(1, at=tpos-0.5, labels=xtlab[tpos], pos=-0.02,
-		# mgp=c(3,0.5,0),
-		cex.axis=cex.axis)
+        if (tick.last & tpos[length(tpos)] < seql)
+            tpos <- c(tpos,seql)
+        plist <- list(side=1,
+            at=tpos-0.5,
+            labels=xtlab[tpos],
+            pos=-0.02,
+            las=las)
+        do.call(axis, args=c(plist,glist))
+##    		axis(1, at=tpos-0.5, labels=xtlab[tpos], pos=-0.02,
+##    		# mgp=c(3,0.5,0),
+##    		cex.axis=cex.axis, las=las, ...)
 	}
 
 	## Axis for the state frequencies
-	if (yaxis)
-		axis(2, at=seq(0,1.0,0.25), labels=c("0","0.25",".5","0.75","1"),
-			las=2, cex.axis=cex.axis)
-    if (sep.ylab)
+	if (yaxis){
+        plist <- list(side=2,
+            at=seq(0,1.0,0.25),
+            labels=c("0","0.25",".5","0.75","1"),
+			cex.axis=cex.axis, las=las)
+        do.call(axis, args=c(plist,glist))
+##		axis(2, at=seq(0,1.0,0.25), labels=c("0","0.25",".5","0.75","1"),
+##			cex.axis=cex.axis, las=las, ...)
+    }
+if (sep.ylab)
         title(ylab=sylab, line=1, cex.lab=cex.lab)
 
 

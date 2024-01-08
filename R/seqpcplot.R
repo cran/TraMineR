@@ -93,6 +93,7 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
       mtext <- "colored: "
     }
 
+
     ## set seed
     if (!exists(".Random.seed", envir = .GlobalEnv)) runif(1)
     oldSeed <- get(".Random.seed", mode="numeric", envir=globalenv())
@@ -855,6 +856,11 @@ seqpcplot_private <- function(seqdata, weights = NULL, group,
 
 plot.seqpcplot <- function(x, add = NULL, which = NULL, ...) {
 
+	## Storing the optional graphical parameters in a list
+	glist <- list(...)
+    parlist <- par()
+    glist <- glist[names(glist) %in% names(parlist)]
+
   if (!is.null(add)) x$add <- add; rm(add)
 
   if (!is.null(which)) {
@@ -875,6 +881,7 @@ plot.seqpcplot <- function(x, add = NULL, which = NULL, ...) {
 
   plist <- list(x = 1, y = 1, xlab = x$xlab, ylab = x$ylab, xlim = x$xlim, ylim = x$ylim, type = "n", axes = FALSE)
   plist <- c(plist, list(...)[!names(list(...)) %in% names(plist)])
+  #plist <- c(plist, glist[!names(glist) %in% names(plist)])
 
   for (i in x$which) {
 
@@ -882,10 +889,14 @@ plot.seqpcplot <- function(x, add = NULL, which = NULL, ...) {
 
       do.call(plot, args = plist)
       if (x$xaxis & (((x$axes == "all") & ((par("mar")[1] > 0) | (x$ngroup - i < x$nxl))) | ((x$axes == "bottom") & (x$ngroup - i < x$nxl)))) {
-        axis(1, 1:x$nx, x$xlevs)
+        alist <- list(side=1, 1:x$nx, x$xlevs)
+        do.call(axis, args = c(alist,glist))
+        ##axis(1, 1:x$nx, x$xlevs, las=las)
       }
       if (x$yaxis & ((par("mar")[2] > 0) | (((i-1) %% x$nxl) == 0))) {
-        axis(2, 1:x$ny, x$ylevs, las = 2)
+        alist <- list(side=2, 1:x$ny, x$ylevs)
+        do.call(axis, args=c(alist,glist))
+        ##axis(2, 1:x$ny, x$ylevs, las = 2)
       }
       title(main = x$main[i])
       if (length(x$mtext) != 0) mtext(x$mtext[i], side = 3)

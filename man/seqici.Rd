@@ -50,8 +50,8 @@ sequence.
  }
 
 \seealso{
- \code{\link{seqindic}}, \code{\link{seqient}}, \code{\link{seqipos}}. 
- 
+ \code{\link{seqindic}}, \code{\link{seqient}}, \code{\link{seqipos}}.
+
  For alternative measures of sequence complexity see \code{\link{seqST}},  \code{\link{seqivolatility}}.
 }
 
@@ -65,7 +65,7 @@ séquences catégorielles", In \emph{Extraction et gestion des
 connaissances (EGC 2010), Revue des nouvelles technologies de
 l'information RNTI}. Vol. E-19, pp. 61-66.
 
-Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, \doi{10.1177/00491241211036156}.
+Ritschard, G. (2023), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, 52(4), 2016-2049. \doi{10.1177/00491241211036156}.
 }
 \examples{
 ## Creating a sequence object from the mvad data set

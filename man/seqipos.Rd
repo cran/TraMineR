@@ -53,14 +53,14 @@
 }
 
 \seealso{
-\code{\link{seqindic}}
+\code{\link{seqindic}, \link{seqintegr}, \link{seqivolatility}}
 }
 \references{
 Brzinsky-Fay, C. (2007) Lost in Transition? Labour Market Entry Sequences of School Leavers in Europe, \emph{European Sociological Review}, 23(4). \doi{10.1093/esr/jcm011}
 
 Brzinsky-Fay, C. (2018) Unused Resources: Sequence and Trajectory Indicators. International Symposium on Sequence Analysis and Related Methods, Monte Verita, TI, Switzerland, October 10-12, 2018.
 
-Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, \doi{10.1177/00491241211036156}.
+Ritschard, G. (2023), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, 52(4), 2016-2049. \doi{10.1177/00491241211036156}.
 }
 
 \examples{

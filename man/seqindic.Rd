@@ -9,7 +9,7 @@
   Table of per sequence values of selected indicators.
 }
 \usage{
-seqindic(seqdata, indic=c("visited","trans","entr","cplx","turb2n"), 
+seqindic(seqdata, indic=c("visited","trans","entr","cplx","turb2n"),
     with.missing=FALSE, ipos.args=list(), prec.args=list(), w=.5)
 }
 \arguments{
@@ -20,7 +20,7 @@ seqindic(seqdata, indic=c("visited","trans","entr","cplx","turb2n"),
       \code{"entr"} (longitudinal normalized entropy), \code{"nsubs"} (number of subsequences of the DSS sequence), \code{"volat"} (objective volatility), \code{"cplx"} (complexity index),
       \code{"turb"} (turbulence), \code{"turbn"} (normalized turbulence),
       \code{"turb2"} (turbulence taking non-visited states into account), \code{"turb2n"} (normalized turbulence taking non-visited states into account),
-      \code{"ppos"} (proportion of positive states), \code{"nvolat"} (normative volatility), \code{"vpos"} objective volatility of positive-negative state sequences, \code{"integr"} (integrative potential),  \code{"degrad"} (degradation), \code{"bad"} (badness), \code{"prec"} (precarity index),  \code{"insec"} (insecurity). Can also be \code{"all"}, \code{"basic"}, \code{"diversity"}, \code{"complexity"},  \code{"binary"} or \code{"ranked"} that each selects a subset of the indicators. Setting \code{indic="all"} selects all indicators but \code{"ppos"}, \code{"vpos"}, \code{"nvolat"}, \code{"integr"}, \code{"degrad"}, code{"bad"}, \code{"prec"}, and \code{"insec"} that require an additional argument list.}
+      \code{"ppos"} (proportion of positive states), \code{"nvolat"} (normative volatility), \code{"vpos"} objective volatility of positive-negative state sequences, \code{"integr"} (integrative potential),  \code{"degrad"} (degradation), \code{"bad"} (badness), \code{"prec"} (precarity index),  \code{"insec"} (insecurity). Can also be \code{"all"}, \code{"basic"}, \code{"diversity"}, \code{"complexity"},  \code{"binary"} or \code{"ranked"} that each selects a subset of the indicators. Setting \code{indic="all"} selects all indicators but \code{"ppos"}, \code{"vpos"}, \code{"nvolat"}, \code{"integr"}, \code{"degrad"}, \code{"bad"}, \code{"prec"}, and \code{"insec"} that require an additional argument list.}
 
 	\item{with.missing}{logical: should non-void missing values be treated as a regular state? If \code{FALSE} (default) missing values are ignored.}
 
@@ -78,7 +78,7 @@ seqindic(seqdata, indic=c("visited","trans","entr","cplx","turb2n"),
 
 
 \references{
-Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, \doi{10.1177/00491241211036156}.
+Ritschard, G. (2023), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, 52(4), 2016-2049. \doi{10.1177/00491241211036156}.
 }
 
 

@@ -9,6 +9,15 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 
   TraMineR.check.depr.args(alist(cex.with.axis = cex.plot))
 
+	## Storing the optional graphical parameters in a list
+	glist <- list(...)
+    parlist <- par()
+    glist <- glist[names(glist) %in% names(parlist)]
+
+
+  #las <- par("las")
+  #if ("las" %in% names(list(...))) las <- list(...)[["las"]]
+
 	## Extracting attributes
 	n <- attr(x,"nbseq")
     nn <- length(attr(x,"Scores"))
@@ -70,8 +79,6 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 		statl <- c(statl, nr)
 	}
 
-	## Storing the optional parameters in a list
-	olist <- list(...)
 
 	## ============================
 	## Max distance for axis limits
@@ -85,8 +92,8 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 	vspace <- 0.1
 
 	## Space between seq bars
-	if ("space" %in% names(olist)) space <- olist[["space"]]
-	else space <- 0.2
+    space <- 0.2
+	if ("space" %in% names(list(...))) space <- list(...)[["space"]]
 
 	##
 	if (pbarw)
@@ -124,8 +131,8 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 
     if (!is.na(ylab)){
         cex.lab <- par("cex.lab")
-        if ("cex.lab" %in% names(olist))
-            cex.lab <- olist[["cex.lab"]]
+        if ("cex.lab" %in% names(list(...)))
+            cex.lab <- list(...)[["cex.lab"]]
         title(ylab=ylab, line=0+stats, cex.lab=cex.lab)
     }
 
@@ -134,10 +141,15 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 		tpos <- seq(1,seql, xtstep)
         if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
 
-		axis(1, at=tpos-0.5, labels=xtlab[tpos],
-			pos=-0.04,
-			## mgp=c(.5,.5,0),
-			cex.axis=cex.with.axis)
+        plist <- list(side=1, at=tpos-0.5, labels=xtlab[tpos],
+			pos=-0.04)
+        do.call(axis, args=c(plist,glist))
+
+##		axis(1, at=tpos-0.5, labels=xtlab[tpos],
+##			pos=-0.04,
+##			## mgp=c(.5,.5,0),
+##			##cex.axis=cex.with.axis,
+##            ...)
 	}
 
 	## y (percents) axis
@@ -207,10 +219,15 @@ plot.stslist.rep <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
 
 		nbdec <- if (dmax>=4) 0 else 1
 
-		axis(1, at=seq(0,seql,seql/4),
+        plist <- list(side=1, at=seq(0,seql,seql/4),
 			labels=round(seq(0,dmax,dmax/4),nbdec),
-			pos=dypos, mgp=c(.5,.5,0),
-			cex.axis=cex.with.axis)
+			pos=dypos, mgp=c(.5,.5,0))
+        do.call(axis, args=c(plist,glist))
+
+##		axis(1, at=seq(0,seql,seql/4),
+##			labels=round(seq(0,dmax,dmax/4),nbdec),
+##			pos=dypos, mgp=c(.5,.5,0),
+##			...)
 
 		axis(2, at=c(dist.rep.pos,dist.center.pos),
             pos = 0,

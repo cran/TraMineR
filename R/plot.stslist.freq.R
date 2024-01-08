@@ -4,13 +4,20 @@
 
 plot.stslist.freq <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE,
   ylab = NULL, yaxis = TRUE, xaxis = TRUE, xtlab = NULL, xtstep = NULL,
-  tick.last = NULL, cex.axis = 1, cex.plot, ...) {
+  tick.last = NULL, cex.axis = par("cex.axis"), cex.plot, ...) {
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
+
+	## Storing the optional graphical parameters in a list
+	glist <- list(...)
+    parlist <- par()
+    glist <- glist[names(glist) %in% names(parlist)]
 
   sep.ylab <- (isFALSE(yaxis) && (is.null(ylab) || !is.na(ylab)))
   cex.lab <- par("cex.lab")
   if ("cex.lab" %in% names(list(...))) cex.lab <- list(...)[["cex.lab"]]
+  space <- NULL
+  if ("space" %in% names(list(...))) space <- list(...)[["space"]]
 
   if (!is.logical(yaxis) && !yaxis %in% c("cum","pct"))
     msg.stop("Bad yaxis value!")
@@ -82,13 +89,15 @@ plot.stslist.freq <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE
 	## Plotting the x axis
 	if (xaxis) {
 		tpos <- seq(1, seql, xtstep)
-    if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
-		axis(1, at=tpos-0.5, labels=xtlab[tpos], cex.axis=cex.axis)
+        if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
+        plist <- list(side=1, at=tpos-0.5, labels=xtlab[tpos], cex.axis=cex.axis)
+        do.call(axis, args = c(plist,glist))
+		#axis(1, at=tpos-0.5, labels=xtlab[tpos], cex.axis=cex.axis, ...)
 	}
 
 	## Plotting the y axis
-	if ("space" %in% names(olist)) space <- olist[["space"]]
-	else space <- 0.2
+	if (is.null(space))
+        space <- 0.2
 
 	if (yaxis==TRUE || is.null(yaxis) || yaxis=="cum") {
 		y.lab <- paste(c(0, round(sum(table$Percent),1)),"%",sep="")
@@ -120,13 +129,21 @@ plot.stslist.freq <- function(x, cpal = NULL, missing.color = NULL, pbarw = TRUE
 			}
 	}
 
-	if (yaxis==TRUE || yaxis=="cum" || yaxis=="pct")
-		axis(2, at=y.lab.pos,
+	if (yaxis==TRUE || yaxis=="cum" || yaxis=="pct"){
+        plist <- list(side=2, at=y.lab.pos,
 			labels=y.lab,
 			tick=y.tick,
 			## mgp=c(1.5,1,0),
-			las=1,
+			##las=1,
 			cex.axis=cex.axis)
+        do.call(axis, args = c(plist,glist))
+##		axis(2, at=y.lab.pos,
+##			labels=y.lab,
+##			tick=y.tick,
+##			## mgp=c(1.5,1,0),
+##			##las=1,
+##			cex.axis=cex.axis, ...)
+    }
 
     if (sep.ylab)
         title(ylab=sylab, line=1, cex.lab=cex.lab)

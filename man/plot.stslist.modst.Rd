@@ -8,7 +8,7 @@ Plot method for output produced by the seqmodst function, i.e objects of class s
 \usage{
 \method{plot}{stslist.modst}(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
   xaxis = TRUE, xtlab = NULL, xtstep = NULL, tick.last = NULL,
-  info = TRUE, cex.axis = 1, cex.plot, ...)
+  info = TRUE, cex.axis = par("cex.axis"), las = 1, cex.plot, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -29,15 +29,19 @@ Plot method for output produced by the seqmodst function, i.e objects of class s
   \item{info}{Logical: should info about frequency of occurrence of the sequence of modal states be displayed?}
 
   \item{cex.axis}{Axis annotation magnification. See \code{\link{par}}.}
+  \item{las}{Integer in \{0, 1, 2, 3\}. Orientation of tick labels. See \code{\link{par}}.}
 
   \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
-  
 
-  \item{\dots}{further graphical parameters. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}. }
+
+  \item{\dots}{further graphical and \code{barplot} parameters. See \code{\link{barplot}} and \code{\link{par}}. }
 }
-\details{This is the plot method for the output produced by the \code{\link{seqmodst}} function, i.e. objects of class \emph{stslist.modst}. It produces a plot showing the sequence of modal states with bar width proportional to the state frequencies.
+\details{This is the plot method for output of \code{\link{seqmodst}}, i.e., for objects of class \emph{stslist.modst}. It plots the sequence of modal states with bar height proportional to the frequency of the modal state at each successive position.
 
-This method is called by the generic \code{\link{seqplot}} function (if \code{type="ms"}) that produces more sophisticated plots, allowing grouping and automatic display of the states legend. The \code{seqmsplot} function is a shortcut for calling \code{seqplot} with \code{type="ms"}.
+The method is invoked by \code{\link{seqmsplot}} (\code{seqplot} with \code{type="ms"}), which in addition to the modal states  automatically displays of the state color legend and allows plotting by group.
+}
+\seealso{
+ \code{\link{seqmsplot}}
 }
 
 \examples{

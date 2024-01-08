@@ -7,21 +7,20 @@ This is the plot method for objects of class \emph{stslist.meant} produced by th
 }
 \usage{
 \method{plot}{stslist.meant}(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
-  xaxis = TRUE, cex.axis = 1, ylim = NULL, bar.labels = NULL,
+  xaxis = TRUE, cex.axis = par("cex.axis"), ylim = NULL, bar.labels = NULL,
   cex.barlab = cex.axis, offset.barlab = .1, cex.plot, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{an object of class \code{stslist.meant} as produced by the \code{seqmeant} function.}
-  \item{cpal}{alternative color palette to use for the states. If user specified, a vector of colors with number of elements equal to the number of states in the alphabet. By default, the '\code{cpal}' attribute of the '\code{seqdata}' sequence object is used (see \code{\link{seqdef}}).}
-  \item{ylab}{an optional label for the y axis. If set to \code{NA}, no label is drawn.}
-  \item{yaxis}{controls whether the y axis is plotted. Default is \code{TRUE}.}
-  \item{xaxis}{if \code{TRUE} (default) the xaxis is plotted.}
-
-  \item{cex.axis}{Axis annotation magnification. See \code{\link{par}}.}
-  \item{ylim}{an optional vector setting the limits for the y axis. If \code{NULL} (default), limits are set to (0, max. sequence length).}
+  \item{x}{object of class \code{stslist.meant} as produced by the \code{seqmeant} function.}
+  \item{cpal}{vector of colors of length the number of states in the alphabet. If \code{NULL} (default), the '\code{cpal}' attribute of the '\code{seqdata}' sequence object is used (see \code{\link{seqdef}}).}
+  \item{ylab}{optional label of the y-axis. If set to \code{NA}, no label is drawn.}
+  \item{yaxis}{should the y-axis be plotted. Default is \code{TRUE}.}
+  \item{xaxis}{should the x-axis be plotted. Default is \code{TRUE}.}
+  \item{cex.axis}{Tick labels magnification. See \code{\link{par}}.}
+  \item{ylim}{optional vector of length 2 setting the limits of the y-axis. If \code{NULL} (default), limits are set to (0, max. sequence length).}
   \item{bar.labels}{Vector of bar labels of length equal to size of alphabet.}
-  \item{cex.barlab}{Real. Bar labels magnification. Defaults to \code{cex.axis}} 
+  \item{cex.barlab}{Real. Bar labels magnification. Defaults to \code{cex.axis}}
   \item{offset.barlab}{Real. Vertical offset of bar labels as a proportion of \code{max(ylim)}.  Default is 0.1.}
   \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
   \item{\dots}{further graphical parameters. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}.}
@@ -30,7 +29,7 @@ This is the plot method for objects of class \emph{stslist.meant} produced by th
 
 When the \code{"se"} attribute of \code{x} is \code{TRUE}, i.e., when \code{x} contains also the standard errors of the mean times, error bars are automatically displayed on the plot. See the \code{serr} argument of  \code{\link{seqmeant}}.
 
-This method is called by the generic \code{\link{seqplot}} function (if \code{type="mt"}) that produces more sophisticated plots, allowing grouping and automatic display of the states legend. The \code{\link{seqmtplot}} function is a shortcut for calling \code{seqplot} with \code{type="mt"}.
+The method is invoked by \code{\link{seqmtplot}} (\code{seqplot} with \code{type="mt"}), which plots mean times with automatic display of the state color legend and allows plotting by group.
 }
 
 \examples{

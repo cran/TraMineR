@@ -45,7 +45,7 @@ seqivardur(seqdata, type=1, with.missing=FALSE)
 \code{\link{seqdur}}, \code{\link{seqindic}}
 }
 \references{
-Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, \doi{10.1177/00491241211036156}.
+Ritschard, G. (2023), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, 52(4), 2016-2049. \doi{10.1177/00491241211036156}.
 }
 
 

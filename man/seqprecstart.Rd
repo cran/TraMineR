@@ -62,6 +62,8 @@ The vector of assigned undesirableness degrees sorted according to the original 
 
 \references{
 
+Ritschard, G. (2023), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, 52(4), 2016-2049. \doi{10.1177/00491241211036156}.
+
 Ritschard, G., Bussi, M., and O'Reilly, J. (2018), "An index of precarity for
 measuring early employment insecurity", in G. Ritschard, and M. Studer, \emph{Sequence Analysis and Related Approaches: Innovative Methods and Applications}, Series Life Course Research and Social
 Policies, Vol. 10, pp 279-295. Cham: Springer.

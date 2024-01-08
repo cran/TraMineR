@@ -36,6 +36,9 @@ a single-column matrix with an entropy value for each sequence in \code{seqdata}
 Gabadinho, A., G. Ritschard, N. S. Müller and M. Studer (2011). Analyzing and Visualizing State Sequences in R with TraMineR. \emph{Journal of Statistical Software} \bold{40}(4), 1-37.
 
 Gabadinho, A., G. Ritschard, M. Studer and N. S. Müller (2009). Mining Sequence Data in \code{R} with the \code{TraMineR} package: A user's guide. \emph{Department of Econometrics and Laboratory of Demography, University of Geneva}.
+
+Ritschard, G. (2023), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, 52(4), 2016-2049. \doi{10.1177/00491241211036156}.
+
 }
 
 \seealso{\code{\link{seqindic}}, \code{\link{seqici}}, \code{\link{seqST}}, and \code{\link{seqstatd}} for the entropy of the cross-sectional state distributions by positions in the sequence.

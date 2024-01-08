@@ -1,8 +1,13 @@
 plot.stslist.meant <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
-  xaxis = TRUE, cex.axis = 1, ylim = NULL, bar.labels = NULL,
+  xaxis = TRUE, cex.axis = par("cex.axis"), ylim = NULL, bar.labels = NULL,
   cex.barlab = cex.axis, offset.barlab = .1, cex.plot, ...) {
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
+
+	## Storing the optional graphical parameters in a list
+	glist <- list(...)
+    parlist <- par()
+    glist <- glist[names(glist) %in% names(parlist)]
 
   sep.ylab <- (isFALSE(yaxis) && (is.null(ylab) || !is.na(ylab)))
   cex.lab <- par("cex.lab")
@@ -45,8 +50,11 @@ plot.stslist.meant <- function(x, cpal = NULL, ylab = NULL, yaxis = TRUE,
   ## Plotting the axes
   ## axis(1, at=1:nbstat, labels=ltext, cex.axis=cex.axis)
 
-  if (yaxis)
-    axis(2, at=round(seq(0, max(ylim), length.out=6),0), cex.axis=cex.axis)
+  if (yaxis){
+    plist <- list(side=2, at=round(seq(0, max(ylim), length.out=6),0), cex.axis=cex.axis)
+    do.call(axis, args=c(plist,glist))
+    #axis(2, at=round(seq(0, max(ylim), length.out=6),0), cex.axis=cex.axis, ...)
+  }
 
   if (errbar){
     se.mt <- x[,"SE"]

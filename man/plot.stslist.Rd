@@ -7,9 +7,9 @@ This is the plot method for state sequence objects of class \code{stslist} creat
 \usage{
 \method{plot}{stslist}(x, idxs = NULL, weighted = TRUE, sortv = NULL,
   cpal = NULL, missing.color = NULL, ylab = NULL,
-  yaxis = TRUE, xaxis = TRUE, ytlab = NULL, ylas = 0,
-  xtlab = NULL, xtstep = NULL, tick.last = NULL, cex.axis = 1,
-  tlim, cex.plot, ...)
+  yaxis = TRUE, xaxis = TRUE, ytlab = NULL, las = par("las"),
+  xtlab = NULL, xtstep = NULL, tick.last = NULL, cex.axis = par("cex.axis"),
+  tlim, cex.plot, ylas, ...)
 }
 \arguments{
 	\item{x}{A state sequence object created with the \code{\link{seqdef}} function.}
@@ -24,15 +24,15 @@ This is the plot method for state sequence objects of class \code{stslist} creat
 
 	\item{missing.color}{Color for representing missing values inside the sequences. If \code{NULL} (default) the color is taken from the "missing.color" attribute of the \code{x} sequence object.}
 
-	\item{ylab}{String. An optional label for the y axis. If set to \code{NA}, no label is drawn.}
+	\item{ylab}{String. Optional label of the y-axis. If set to \code{NA}, no label is drawn.}
 
-	\item{yaxis}{Logical. Should the y axis be plotted. When set as \code{TRUE}, sequence indexes are displayed.}
+	\item{yaxis}{Logical. Should the y-axis be plotted. When set as \code{TRUE}, sequence indexes are displayed.}
 
-	\item{xaxis}{Logical. Should the x (time) axis be plotted? Default is \code{TRUE}.}
+	\item{xaxis}{Logical. Should the x-axis (time) be plotted? Default is \code{TRUE}.}
 
-	\item{ytlab}{the labels of the plotted sequences to display on the y axis. Default is the indexes of the sequences as defined by the \code{idxs} argument. Can be set to \code{"id"} for displaying the row names (id) of the sequences instead of their indexes; row names can be assigned to the sequence object with the  \code{id} argument of the \code{\link{seqdef}} function or afterwards with \code{\link{rownames}}. Otherwise \code{ytlab} can be set to a vector of length equal to the number of  sequences to be plotted.}
+	\item{ytlab}{Character string or vector of length equal to the number of  sequences. Labels of the plotted sequences to be used as tick labels on the y-axis. Default is the indexes of the sequences as defined by the \code{idxs} argument. Can be set to \code{"id"} for displaying the row names (id) of the sequences instead of their indexes; row names can be assigned to the sequence object with the  \code{id} argument of the \code{\link{seqdef}} function or afterwards with \code{\link{rownames}}. Otherwise \code{ytlab} can be set to a vector of length equal to the number of  sequences to be plotted.}
 
-  \item{ylas}{sets the orientation of the sequence labels appearing on the y axis. Accepted values are the same as for the \code{las} standard option
+  \item{las}{numeric in \{0,1,2,3\}; the orientation of tick labels.
   \cr
 0: always parallel to the axis (default),
     \cr
@@ -43,9 +43,9 @@ This is the plot method for state sequence objects of class \code{stslist} creat
 3: always vertical.
 }
 
-  \item{xtlab}{optional labels for the x axis ticks labels. If unspecified, the column names of the \code{seqdata} sequence object are used (see \code{\link{seqdef}}).}
+  \item{xtlab}{optional labels for the x-axis tick labels. If unspecified, the column names of the \code{seqdata} sequence object are used (see \code{\link{seqdef}}).}
 
-  \item{xtstep}{optional interval at which the tick-marks and labels of the x-axis are displayed. For example, with \code{xtstep=3} a tick-mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
+  \item{xtstep}{optional interval at which tick marks and labels of the x-axis are displayed. For example, with \code{xtstep=3} a tick mark is drawn at position 1, 4, 7, etc... The display of the corresponding labels depends on the available space and is dealt with automatically. If unspecified, the \code{xtstep} attribute of the \code{x} object is used.}
 
   \item{tick.last}{Logical. Should a tick mark be enforced at the last position on the x-axis? If unspecified, the \code{tick.last} attribute of the \code{x} object is used.}
 
@@ -53,20 +53,22 @@ This is the plot method for state sequence objects of class \code{stslist} creat
 
   \item{tlim}{Deprecated. Use \code{idxs} instead.}
   \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
+  \item{ylas}{Deprecated. Use \code{las} instead.}
 
- \item{...}{arguments to be passed to the plot function or other graphical parameters.}
+ \item{...}{further graphical parameters (see \code{\link{par}}) and \code{\link{barplot}} arguments.}
 }
 
 \details{
-This is the default plot method for state sequence objects (produced by the \code{\link{seqdef}} function), i.e., for objects of class \emph{stslist}. It produces a sequence index plot, where individual sequences are rendered with stacked bars depicting the states over time.
+This is the default plot method for state sequence objects (produced by the \code{\link{seqdef}} function), i.e., for objects of class \emph{stslist}. It produces a sequence index plot, where individual sequences are rendered with stacked bars depicting the successive states in each of the sequences.
 \cr
 \cr
 
-This method is called by the generic \code{\link{seqplot}} function (if \code{type="i"}). The latter produces more sophisticated plots, allowing grouping and automatic display of the state color legend. The \code{seqiplot} function is a shortcut for calling \code{seqplot} with \code{type="i"}.
+This method is invoked by several advanced plot functions such as  \code{seqiplot} and \code{seqIplot} (\code{\link{seqplot}} with \code{type="i"} or \code{"I"}), which, in addition to index plots, automatically display the state color legend and allow plotting by group.
 
-When a \code{sortv} variable is provided to \code{seqiplot} or \code{seqIplot}, its values define the order in which the sequences are plotted. With \code{sortv = "from.start"}, sequence are sorted by the elements of the alphabet at the successive positions starting from the beginning of the sequences. The {"from.end"} method proceeds similarly, but backward from the last position.
+When a \code{sortv} variable is provided, the sequences are sorted bottom-up according to its values. With \code{sortv = "from.start"}, sequence are sorted by the elements of the alphabet at the successive positions starting from the beginning of the sequences. Method \code{"from.end"} proceeds similarly, but backward from the last position.
 
-The interest of sequence index plots has for instance been stressed by \cite{Scherer (2001)} and \cite{Brzinsky-Fay et al. (2006)}. Notice that such index plots for thousands of sequences result in very heavy graphic files if they are stored in PDF or POSTSCRIPT format. To reduce the size, we suggest saving the figures in bitmap format by using for instance \code{\link{png}} instead of \code{\link{postscript}} or \code{\link{pdf}}.
+%The interest of sequence index plots has for instance been stressed by \cite{Scherer (2001)} and \cite{Brzinsky-Fay et al. (2006)}.
+Index plots of thousands of sequences result in very heavy graphic files when stored in vectorial (PDF or POSTSCRIPT) format because each sequence, even if hidden, is drawn individually. To reduce the file size, we suggest saving the figures in bitmap format by using for instance \code{\link{png}} instead of \code{\link{postscript}} or \code{\link{pdf}}.
 }
 
 \seealso{\code{\link{seqplot}}

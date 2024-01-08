@@ -4,14 +4,23 @@
 
 plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
   cpal = NULL, missing.color = NULL, ylab = NULL, yaxis = TRUE, xaxis = TRUE,
-  ytlab = NULL, ylas = 0, xtlab = NULL, xtstep = NULL, tick.last = NULL,
-  cex.axis = 1, tlim, cex.plot, ...) {
+  ytlab = NULL, las = par("las"), xtlab = NULL, xtstep = NULL, tick.last = NULL,
+  cex.axis = par("cex.axis"), tlim, cex.plot, ylas, ...) {
 
-  TraMineR.check.depr.args(alist(idxs = tlim, cex.axis = cex.plot))
+  TraMineR.check.depr.args(alist(idxs = tlim, cex.axis = cex.plot, las = ylas))
+
+	## Storing the optional graphical parameters in a list
+	glist <- list(...)
+    parlist <- par()
+    glist <- glist[names(glist) %in% names(parlist)]
 
   sep.ylab <- (isFALSE(yaxis) && (is.null(ylab) || !is.na(ylab)))
   cex.lab <- par("cex.lab")
   if ("cex.lab" %in% names(list(...))) cex.lab <- list(...)[["cex.lab"]]
+  space <- NULL
+  if ("space" %in% names(list(...))) space <- list(...)[["space"]]
+  #las <- par("las")
+  #if ("las" %in% names(list(...))) las <- list(...)[["las"]]
 
 	n <- nrow(x)
 	seql <- ncol(x)
@@ -71,9 +80,6 @@ plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
 		statl <- c(statl, nr)
 	}
 
-	## Storing the optional parameters in a list
-	olist <- list(...)
-
 	ssamp <- x[idxs,]
 	seqbar <- apply(ssamp, 1, seqgbar, statl=statl, seql=seql)
 
@@ -104,28 +110,35 @@ plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
     }
 
 	## The PLot
-	barplot(seqbar,col=cpal, width=weights,
+    barplot(seqbar,col=cpal, width=weights,
 		ylab=ylab,
 		horiz=TRUE,
 		yaxt="n",
 		axes=FALSE,
-		las=1,
+		#las=1,
 		...
 	)
 
 	## Plotting the x axis
 	if (xaxis) {
 		tpos <- seq(from=1, to=seql, by=xtstep)
-    if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
-		axis(1, at=tpos-0.5, labels=xtlab[tpos],
-		# mgp=c(3,0.5,0),
-		cex.axis=cex.axis)
+        if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
+        plist <- list(side=1, at=tpos-0.5, labels=xtlab[tpos],
+		              cex.axis=cex.axis, las=las)
+        plist <- c(plist,glist)
+        do.call(axis, args=plist)
+
+##		axis(1, at=tpos-0.5, labels=xtlab[tpos],
+##		# mgp=c(3,0.5,0),
+##		cex.axis=cex.axis, las=las, ...)
 	}
 
 	## Plotting the y axis
 	if (is.null(yaxis) || yaxis) {
-		if ("space" %in% names(olist)) sp <- olist[["space"]]
-		else sp <- 0.2
+		if (is.null(space))
+            sp <- 0.2
+		else
+            sp <- space
 
 		idxmax <- length(idxs)
 
@@ -156,9 +169,12 @@ plot.stslist <- function(x, idxs = NULL, weighted = TRUE, sortv = NULL,
                 stop(paste("Bad ytlab value",ytlab))
         }
         else if (length(ytlab)!=length(idxs))
-                stop("Length of ytlab does not much number of sequences!")
+                stop("Length of ytlab does not match number of sequences!")
 
-		axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=ylas, tick=FALSE, cex.axis=cex.axis)
+        plist <- list(side=2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=las, tick=FALSE, cex.axis=cex.axis)
+        plist <- c(plist,glist)
+        do.call(axis, args=plist)
+		##axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=las, tick=FALSE, cex.axis=cex.axis, ...)
 	}
 
     if (sep.ylab)

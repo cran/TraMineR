@@ -1,4 +1,31 @@
 ## =========
+Version 2.2-9 [2024-01-08]
+
+Changes in existing functions:
+
+  - All TraMineR plot functions: improved support of
+    graphical parameters. (E.g., las and cex.axis can
+    now be used to control the display of tick labels.)
+  - seqdist() transforms kweights into vector
+    rep(kweights, ncol(seqdata)) when it is scalar.
+  - seqdist() raises a warning when the vector
+    kweights is shorter than the number of columns
+    in seqdata.
+
+Bug fixes:
+
+  - seqdef(): lack of separation between found tokens 
+    not listed in the alphabet.
+  - seqdist(): error when all DSS have length 1 and
+    method is one of OMspell, NMSMST, and SVRspell.
+  - seqdist(): error when all DSS are identical and
+    of length 1 when method is OMstran.
+  - seqdist() with method="OMstran": returned distance 
+    matrix was not labeled with sequence rownames.
+  - issues with lost braces in .Rd files (NOTE in CRAN check)
+
+
+## =========
 Version 2.2-8 [2023-09-18]
 
 New functions:
@@ -16,7 +43,7 @@ Changes in existing functions:
     the yaxis argument can now also be "pct" or "left.pct".
   - seqrep() and dissrep(): returned object gains attributes
     Rep.group with the representative to which each object
-    is assigned, and idx.rep a list with indexes of all 
+    is assigned, and idx.rep a list with indexes of all
     occurrences of each representative.
   - seqtreedisplay() and seqtree2dot(): argument 'axes'
     is deprecated and replaced by 'xaxis' to be

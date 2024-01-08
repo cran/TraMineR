@@ -132,7 +132,7 @@ and as additional attributes: \code{tr} the used transition weights; \code{signs
 }
 
 \references{
-Ritschard, G. (2021), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, \doi{10.1177/00491241211036156}.
+Ritschard, G. (2023), "Measuring the nature of individual sequences", \emph{Sociological Methods and Research}, 52(4), 2016-2049. \doi{10.1177/00491241211036156}.
 
 Ritschard, G., Bussi, M., and O'Reilly, J. (2018), "An index of precarity for
 measuring early employment insecurity", in G. Ritschard, and M. Studer, \emph{Sequence Analysis and Related Approaches: Innovative Methods and Applications}, Series Life Course Research and Social

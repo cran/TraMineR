@@ -8,6 +8,11 @@ plot.seqalign <- function(x, cpal = NULL, missing.color = NULL, ylab = NULL,
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
+	## Storing the optional graphical parameters in a list
+	glist <- list(...)
+    parlist <- par()
+    glist <- glist[names(glist) %in% names(parlist)]
+
 	showop <- "bars"
 	n <- 2
 	seql <- length(x$seq1)
@@ -31,9 +36,6 @@ plot.seqalign <- function(x, cpal = NULL, missing.color = NULL, ylab = NULL,
 	statl <- c(statl, "-")
 
 
-	## Storing the optional parameters in a list
-	olist <- list(...)
-
 	ssamp <- rbind(x$seq2, x$seq1)
 	seqbar <- apply(ssamp, 1, seqgbar, statl=statl, seql=seql)
 
@@ -47,12 +49,14 @@ plot.seqalign <- function(x, cpal = NULL, missing.color = NULL, ylab = NULL,
 	ylab <- "Alignment"
 
 	## The PLot
+	## Storing the optional parameters in a list
+	olist <- list(...)
 	barplot(seqbar,col=cpal, ylim=c(0,4),
 		## ylab=ylab,
 		horiz=TRUE,
 		yaxt="n",
 		axes=FALSE,
-		las=1,
+		#las=1,
 		...
 	)
 
@@ -103,9 +107,14 @@ plot.seqalign <- function(x, cpal = NULL, missing.color = NULL, ylab = NULL,
 
 	## Plotting the x axis
 	if (xaxis) {
-	axis(1, at=1:seql-0.5, labels=1:seql,
+        xlist <- list(side=1, at=1:seql-0.5, labels=1:seql,
 		## mgp=c(3,0.5,0),
 		cex.axis=cex.axis)
+        do.call(axis, args=c(xlist,glist))
+
+##    	axis(1, at=1:seql-0.5, labels=1:seql,
+##    		## mgp=c(3,0.5,0),
+##    		cex.axis=cex.axis)
 	}
 
 
@@ -120,11 +129,22 @@ plot.seqalign <- function(x, cpal = NULL, missing.color = NULL, ylab = NULL,
 		if (is.null(ytlab)) {ytlab <- paste("seq",2:1, sep="")}
 		## else if (ytlab=="id") {ytlab <- rownames(x)[tlim]}
 
-		axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=ylas, tick=FALSE, cex.axis=cex.axis)
+        xlist <- list(side=2, at=y.lab.pos, mgp=c(1.5,0.5,0), 
+            labels=ytlab, las=ylas, tick=FALSE, cex.axis=cex.axis)
+        gglist <- glist
+        gglist <- glist[!names(glist) %in% names(xlist)]
+        do.call(axis, args=c(xlist,gglist))
+		##axis(2, at=y.lab.pos, mgp=c(1.5,0.5,0), labels=ytlab, las=ylas, tick=FALSE, cex.axis=cex.axis)
 
 		lab.op.pos <- c(2.7+sp, 3.0+sp, 3.3+sp)
-		axis(2, at=lab.op.pos, mgp=c(1.5,0.5,0), labels=c("IND","SUB","EQU"),
+        xlist <- list(side=2, at=lab.op.pos, mgp=c(1.5,0.5,0), 
+            labels=c("IND","SUB","EQU"),
 			las=2, tick=FALSE, cex.axis=cex.axis)
+        if(!is.null(glist[["las"]])) xlist[["las"]] <- glist[["las"]]
+        gglist <- glist[!names(glist) %in% names(xlist)]
+        do.call(axis, args=c(xlist,glist))
+		##axis(2, at=lab.op.pos, mgp=c(1.5,0.5,0), labels=c("IND","SUB","EQU"),
+		##	las=2, tick=FALSE, cex.axis=cex.axis)
 
 	}
 

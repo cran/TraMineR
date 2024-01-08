@@ -1,6 +1,34 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.2-9 [2024-01-08] }{
+
+    \subsection{Changes in existing functions}{
+        \itemize{
+            \item
+            All TraMineR plot functions: improved support of graphical parameters. (E.g., \code{las} and \code{cex.axis} can now be used to control the display of tick labels.)
+            \item
+            \code{seqdist()} transforms \code{kweights} into vector \code{rep(kweights,ncol(seqdata))} when it is scalar.
+            \item
+            \code{seqdist()} raises a warning when the vector \code{kweights} is shorter than the number of columns in \code{seqdata}.
+        }
+    }
+    \subsection{Bug fixes}{
+        \itemize{
+            \item
+            \code{seqdef()}: lack of separation between found tokens not listed in the alphabet.
+            \item
+            \code{seqdist()}: error when all DSS have length 1 and \code{method} is one of OMspell, NMSMST, and SVRspell.
+            \item
+            \code{seqdist()}: error when all DSS are identical with length 1 and \code{method} is OMstran.
+            \item
+            \code{seqdist()} with \code{method="OMstran"}: returned distance matrix was not labeled with sequence rownames.
+            \item
+            Issues with lost braces in .Rd files (NOTE in CRAN check)
+        }
+    }
+}
+
 \section{Changes in version 2.2-8 [2023-09-18] }{
 
     \subsection{New functions}{

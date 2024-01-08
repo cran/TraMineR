@@ -52,7 +52,7 @@ bibentry(bibtype="Article",
     pages   = "288-322",
     doi    = "10.1177/00811750231163833",
 
-    textVersion="Ritschard, G., Liao, T.F. & Struffolino, E.  (2023). Strategies for multidomain sequence analysis in social research, Sociological Methodology, 53(2). DOI: https://doi.org/10.1177/00811750231163833",
+    textVersion="Ritschard, G., Liao, T.F. & Struffolino, E.  (2023). Strategies for multidomain sequence analysis in social research, Sociological Methodology, 53(2), 288-322. DOI: https://doi.org/10.1177/00811750231163833",
     header="For multidomain/multichannel sequence analysis:\n"
 )
 
@@ -103,11 +103,14 @@ bibentry(bibtype="article",
   author = c(p2),
   title = "Measuring the nature of individual sequences",
   journal = "Sociological Methods and Research",
-  year = "2021",
+  year = "2023",
+  volume = "52",
+  Number = "4",
+  Pages = "2016-2049",
   doi = "10.1177/00491241211036156",
-  note = "(first published online)",
+  note = "(First published online Sep 2021)",
 
-  textVersion="Ritschard, G. (2021), Measuring the nature of individual sequences, Sociological Methods and Research. (first published online), DOI https://doi.org/10.1177/00491241211036156",
+  textVersion="Ritschard, G. (2023), Measuring the nature of individual sequences, Sociological Methods and Research, 52(4) 2016-2049. (First published online Sep 2021.) DOI https://doi.org/10.1177/00491241211036156",
   header="For longitudinal characteristics (complexity, badness, precarity, ...):"
 )
 bibentry(bibtype="article",

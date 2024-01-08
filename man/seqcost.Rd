@@ -33,7 +33,7 @@ where \eqn{P(i|j)} is the probability of transition from state \eqn{j} to
 
  \deqn{SC(i,j,t) = cval - P(i|j,t-1) -P(j|i,t-1) - P(i|j,t) - P(j|i,t)}
 
-where \eqn{P(i|j,t-1)} is the probability to transit from state \eqn{j} at \eqn{t-1} to \eqn{i} at {t}. Here, the default \code{cval} value is 4.
+where \eqn{P(i|j,t-1)} is the probability to transit from state \eqn{j} at \eqn{t-1} to \eqn{i} at \eqn{t}. Here, the default \code{cval} value is 4.
 
 With method \code{FUTURE}, the cost between \eqn{i} and \eqn{j} is the Chi-squared distance between the vector (\eqn{d(alphabet | i)}) of probabilities of transition from states \eqn{i} and
 \eqn{j} to all the states in the alphabet \code{lag} positions ahead:

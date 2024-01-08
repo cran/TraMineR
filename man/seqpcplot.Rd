@@ -93,8 +93,8 @@ seqpcfilter(method = c("minfreq", "cumfreq", "linear"), level = 0.05)
 
   \item{main}{title for the graphic. Default \code{"auto"} prints default titles. Set as \code{NULL} to
   suppress the title.}
-  \item{xlab}{label for the x axis}
-  \item{ylab}{label for the y axis}
+  \item{xlab}{label for the x-axis}
+  \item{ylab}{label for the y-axis}
   \item{xaxis}{logical: Should x-axis be plotted?}
   \item{yaxis}{logical: Should y-axis be plotted?}
 

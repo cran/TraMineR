@@ -33,11 +33,10 @@ representative sequence plot.
   \item{seq.alt}{an object of class \emph{stslist} with same number of sequences than the sequence object for which the representatives \code{x} are provided. When not \code{NULL}, representatives are plotted in this alternative domain.}
   \item{info}{Logical. Should coverage info be displayed? Default is \code{TRUE}.}
   \item{cex.with.axis}{
-    Axis annotation and plotting text and symbols magnification.
-    See \code{\link{par}}.
+      Text and symbols magnification.
   }
   \item{cex.plot}{Deprecated. Use \code{cex.with.axis} instead.}
-  \item{\dots}{further graphical parameters. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}.}
+  \item{\dots}{further graphical parameters such as \code{las} to control orientation of tick labels (see \code{\link{par}}) and \code{\link{barplot}} arguments such as \code{border=NA} to remove the borders of the bars.}
 }
 \details{
 This is the plot method for the output produced by the \code{\link{seqrep}} function, i.e. objects of class \emph{stslist.rep}.

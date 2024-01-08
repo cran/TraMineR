@@ -123,17 +123,19 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
     Default: \code{TRUE}.
     When \code{refseq = NULL}, if \code{TRUE}, the full distance matrix is
     returned, if \code{FALSE}, an object of class \code{\link{dist}} is returned,
-    that is, a vector containing only values from the upper triangle of the
+    that is, a vector containing only values from the lower triangle of the
     distance matrix. Objects of class \code{dist} are smaller and can be passed
     directly as arguments to most clustering functions.
   }
   \item{kweights}{
-    Vector of Doubles.
-    Default: vector of \code{1.0}.
+    Double or vector of doubles.
+    Default: vector of \code{1}s.
     The weights applied to subsequences when \code{method} is one of \code{"NMS"},
     \code{"NMSMST"}, or \code{"SVRspell"}. It contains at position \eqn{k} the
-    weight applied to the subsequences of length \eqn{k}. It must be positive.
-    Its length must be equal to the number of columns of \code{seqdata}.
+    weight applied to the subsequences of length \eqn{k}. It must be positive. 
+    Its length should be equal to the number of columns of \code{seqdata}. If shorter,
+    longer subsequences are ignored. If a scalar, it is transformed into
+    \code{rep(kweights,ncol(sedata))}.
   }
   \item{tpow}{
     Double.

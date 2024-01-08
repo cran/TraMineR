@@ -263,6 +263,12 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
   else if (method %in% c("NMS", "NMSMST", "SVRspell")) {
     if (!is.vector(kweights, mode = "numeric") || any(kweights < 0))
       msg.stop("'kweights' must be a vector of positive numbers")
+    if (length(kweights) == 1){
+      kweights <- rep(kweights, ncol(seqdata))
+      msg.warn("scalar kweights transformed into vector rep(kweights, ncol(seqdata))")
+    }
+    if (length(kweights) < ncol(seqdata))
+      msg.warn("length(kweights) < ncol(seqdata), longer subsequences will be ignored!")
   }
   # TWED
   else if (method == "TWED") {
@@ -486,7 +492,6 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
 
   # Transform the alphabet into numbers
   seqdata.num <- seqnum(seqdata, with.missing)
-
   # Keep only distinct sequences
 
   if (refseq.type == "sets") {
@@ -504,7 +509,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
                           floor(sqrt(.Machine$integer.max)),
                           .Machine$integer.max - 1)
     if (refseq.type == "sets") {
-      if((nunique1 * nunique2) > max.allowed.seq)
+      if((sqrt(nunique1) * sqrt(nunique2)) > max.allowed.seq)
         msg.stop("number of ",nunique1, " and ", nunique2, " unique sequences too large for max allowed distances ", max.allowed.seq)
     } else if (nrow(dseqs.num) > max.allowed.seq) {
       msg.stop(nrow(dseqs.num), " unique sequences exceeds max allowed of ", max.allowed.seq)
@@ -600,9 +605,9 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
     dseqs.dur <- seqdur(seqdata, with.missing) ^ tpow # Do not use dseqs.num
     dseqs.oidxs <- match(seqconc(dseqs.num), seqconc(seqdata.num))
     c <- if (method == "OMspell") 1 else 0
-    dseqs.dur <- dseqs.dur[dseqs.oidxs, ] - c
+    dseqs.dur <- dseqs.dur[dseqs.oidxs,,drop=FALSE] - c
     seqdata.dss <- seqdss(seqdata, with.missing)
-    dseqs.num <- seqnum(seqdata.dss[dseqs.oidxs, ], with.missing)
+    dseqs.num <- seqnum(seqdata.dss[dseqs.oidxs,,drop=FALSE], with.missing)
     if (method == "OMspell") {
       seqlength <- seqlength(seqdata, with.missing)
       seqlength <- seqlength[dseqs.oidxs]
@@ -650,10 +655,10 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
 
   # Compute the sequence lengths
   # Modified dseqs.num for OMspell, NMSMST, SVRspell
-  dseqs.lens <- seqlength(dseqs.num)
+  dseqs.lens <- seqlength(dseqs.num)  ## dseqs.lens  length of dss
   ds <- if (method %in% c("OMspell", "NMSMST", "SVRspell")) "spell " else ""
   # TODO Temporary fix because seqdist2 C++ code use a sequence index, not a sequence object!
-  dl <- if (refseq.type == "sequence") dseqs.lens[-length(dseqs.lens)] else dseqs.lens
+  dl <- if (refseq.type == "sequence" & length(dseqs.lens)>1) dseqs.lens[-length(dseqs.lens)] else dseqs.lens
   msg0("min/max ", ds, "sequence lengths: ", min(dl), "/", max(dl))
   rm(ds)
   rm(dl)
@@ -830,25 +835,35 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
     # TODO Integrate into C++ code instead of using OMstran()
     # OMstran() calls seqdist() with 'method = "OM"'
 
-    # Dissimilarities with a reference sequence
-    if (refseq.type != "none") {
-      result <- OMstran(seqdata, indel = indel, sm = sm,
-        full.matrix = full.matrix, transindel = transindel, otto = otto,
-        previous = previous, add.column = add.column, with.missing=with.missing,
-        weighted = weighted, refseq = refseq.id, norm = norm)
-
-      #names(result) <- rownames(seqdata)
-
-      # TODO Temporary fix because seqdist2 C++ code use a sequence index, not a sequence object!
-      if (refseq.type == "sequence")
-        result <- result[-length(result)]
+    if (length(seqstatl(seqdata))==1){  ## only identical constant sequences
+                                        ## dist is 0 as with "HAM"
+        refseq.arg <- if (refseq.type == "none") refseq else refseq.id
+        result <- suppressMessages(seqdist(seqdata, method="HAM", refseq = refseq.arg))
+        rm(refseq.arg)
+        if(refseq.type=="sequence")
+           result <- result[-length(result)]
     }
     else {
-      distances <- OMstran(seqdata, indel = indel, sm = sm,
-        full.matrix = full.matrix, transindel = transindel, otto = otto,
-        previous = previous, add.column = add.column, with.missing=with.missing,
-        weighted = weighted, refseq = refseq, norm = norm)
-      result <- distances
+        # Dissimilarities with a reference sequence
+        if (refseq.type != "none") {
+          result <- OMstran(seqdata, indel = indel, sm = sm,
+            full.matrix = full.matrix, transindel = transindel, otto = otto,
+            previous = previous, add.column = add.column, with.missing=with.missing,
+            weighted = weighted, refseq = refseq.id, norm = norm)
+
+          #names(result) <- rownames(seqdata)
+
+          # TODO Temporary fix because seqdist2 C++ code use a sequence index, not a sequence object!
+          if (refseq.type == "sequence")
+            result <- result[-length(result)]
+        }
+        else {
+          distances <- OMstran(seqdata, indel = indel, sm = sm,
+            full.matrix = full.matrix, transindel = transindel, otto = otto,
+            previous = previous, add.column = add.column, with.missing=with.missing,
+            weighted = weighted, refseq = refseq, norm = norm)
+          result <- distances
+        }
     }
   }
   # Other methods

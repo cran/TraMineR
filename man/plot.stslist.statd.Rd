@@ -7,9 +7,13 @@
 This is the plot method for output produced by the \code{\link{seqstatd}} function, i.e for objects of class \emph{stslist.statd}.
 }
 \usage{
-\method{plot}{stslist.statd}(x, type = "d", cpal = NULL, ylab = NULL,
-  yaxis = TRUE, xaxis = TRUE, xtlab = NULL, xtstep = NULL, tick.last = NULL,
-  cex.axis = 1, space = 0, xlab = NULL, lwd=3.5, col="blue", ylim=NULL, cex.plot, ...)
+\method{plot}{stslist.statd}(x, type = "d", cpal = NULL,
+  ylab = NULL, yaxis = TRUE,
+  xaxis = TRUE, xtlab = NULL, xtstep = NULL,
+  tick.last = NULL,
+  cex.axis = par("cex.axis"),
+  space = 0, xlab = NULL, lwd=3.5, col="blue",
+  ylim=NULL, cex.plot, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -35,11 +39,11 @@ This is the plot method for output produced by the \code{\link{seqstatd}} functi
 
   \item{col}{Color of entropy line. Default is \code{"blue"}. Ignored when \code{type="d"}.}
 
-  \item{ylim}{Real vector of length two. Limits of y axis for entropy line. Default is \code{NULL}. Ignored when \code{type="d"}.}
+  \item{ylim}{Real vector of length two. Limits of the y-axis for the entropy line. Default is \code{NULL}. Ignored when \code{type="d"}.}
 
   \item{cex.plot}{Deprecated. Use \code{cex.axis} instead.}
 
-  \item{\dots}{further graphical parameters such as \code{border=NA} to remove the borders of the bars. For more details about the graphical parameter arguments, see \code{barplot} and \code{par}.}
+  \item{\dots}{further graphical parameters such as \code{las} to control orientation of tick labels (see \code{\link{par}}) and \code{\link{barplot}} arguments such as \code{border=NA} to remove the borders of the bars.}
 }
 \details{This is the plot method for output produced by the \code{\link{seqstatd}} function, i.e. for objects of class \emph{stslist.statd}. If \code{type="d"} it produces a state distribution plot presenting the sequence of the transversal state frequencies at each successive (time) position, as computed by the \code{\link{seqstatd}} function. With \code{type="Ht"}, the series of entropies of the transversal state distributions is plotted.
 With \code{type="dH"} the entropy line is overlayed on the state distribution plot.

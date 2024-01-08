@@ -2,9 +2,13 @@
 ## PLot of the state distribution
 ## ==============================
 
-plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
-  yaxis = TRUE, xaxis = TRUE, xtlab = NULL, xtstep = NULL, tick.last = NULL,
-    cex.axis = 1, space = 0, xlab = NULL, lwd=3.5, col="blue", ylim=NULL, cex.plot, ...) {
+plot.stslist.statd <- function(x, type = "d", cpal = NULL,
+    ylab = NULL, yaxis = TRUE,
+    xaxis = TRUE, xtlab = NULL, xtstep = NULL,
+    tick.last = NULL,
+    cex.axis = par("cex.axis"),
+    space = 0, xlab = NULL, lwd=3.5, col="blue",
+    ylim=NULL, cex.plot, ...) {
 
   TraMineR.check.depr.args(alist(cex.axis = cex.plot))
 
@@ -12,9 +16,17 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
     msg.stop("type can only be 'd', 'Ht', or 'dH'")
   }
 
+	## Storing the optional graphical parameters in a list
+	glist <- list(...)
+    parlist <- par()
+    glist <- glist[names(glist) %in% names(parlist)]
+
+
   sep.ylab <- (isFALSE(yaxis) && (is.null(ylab) || !is.na(ylab)))
   cex.lab <- par("cex.lab")
   if ("cex.lab" %in% names(list(...))) cex.lab <- list(...)[["cex.lab"]]
+  #las <- par("las")
+  #if ("las" %in% names(list(...))) las <- list(...)[["las"]]
 
 	n <- attr(x,"nbseq")
 	weighted <- attr(x, "weighted")
@@ -95,7 +107,9 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
  ##		}
 
 		if (xaxis) {
-			axis(1, at=x.lab.pos, labels=xtlab[tpos], pos=-0.02, cex.axis=cex.axis)
+            plist <- list(side=1, at=x.lab.pos, labels=xtlab[tpos], pos=-0.02, cex.axis=cex.axis)
+            do.call(axis, args=c(plist,glist))
+			#axis(1, at=x.lab.pos, labels=xtlab[tpos], pos=-0.02, cex.axis=cex.axis, ...)
 		}
 
         if (type == "dH") {
@@ -106,8 +120,12 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
             c2 <- .5
             bp <- as.vector(bp)[1:length(y)]
             #plot(x=as.vector(bp)[1:length(y)], y=y, type="n", axes=FALSE,
-            plot(x=x.lab.pos, y=y, type="n", axes=FALSE,
+            plist <- list(x=x.lab.pos, y=y, type="n", axes=FALSE,
                     ylim=ylim, xlab=NA, ylab=NA)
+            plist <- c(plist,glist)
+            do.call(plot, args=plist)
+            #plot(x=x.lab.pos, y=y, type="n", axes=FALSE,
+            #        ylim=ylim, xlab=NA, ylab=NA, ...)
             #lines(x=c1*bp + c2, y=y, col=col, lwd=lwd)
             lines(x=c1*x.lab.pos + c2, y=y, col=col, lwd=lwd)
             #axis(4,at=seq(0,max(c(1,max(y))),.2))
@@ -120,7 +138,7 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
         #if (is.null(ylab.r))
         #    ylab.r <- paste("Entropy index (",wlab,"n=",round(n,2),")",sep="")
 
-		plot(y,
+        plist <- list(x=y,
 			col=col,
 			## frame.plot=TRUE,
 			type="l",
@@ -129,21 +147,42 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL, ylab = NULL,
 			axes=FALSE,
 			ylim=ylim,
 			ylab=ylab,
-			xlab=xlab,
-			...)
+			xlab=xlab)
+        plist <- c(plist,glist)
+        do.call(plot, args=plist)
+
+##		plot(y,
+##			col=col,
+##			## frame.plot=TRUE,
+##			type="l",
+##			lwd=lwd,
+##			lty="solid",
+##			axes=FALSE,
+##			ylim=ylim,
+##			ylab=ylab,
+##			xlab=xlab,
+##			...)
 
 		## Plotting the x axis
 		if (xaxis) {
 			#tpos <- seq(1,seql, xtstep)
-			axis(1, at=tpos, labels=xtlab[tpos], pos=-0.02, cex.axis=cex.axis)
+            plist <- list(side=1, at=tpos, labels=xtlab[tpos],
+                        pos=-0.02, cex.axis=cex.axis)
+            do.call(axis, args=c(plist,glist))
+			#axis(1, at=tpos, labels=xtlab[tpos], pos=-0.02, cex.axis=cex.axis, ...)
 		}
 	}
 
 	##
     if (sep.ylab)
         title(ylab=sylab, line=1, cex.lab=cex.lab)
-	if (is.null(yaxis) || yaxis)
-		axis(2, cex.axis=cex.axis)
+	if (is.null(yaxis) || yaxis){
+        plist <- list(side=2, cex.axis=cex.axis)
+        plist <- c(plist,glist)
+        do.call(axis, args=plist)
+
+		#axis(2, cex.axis=cex.axis, ...)
+    }
 
   if (type == 'Ht') return(invisible(x$Entropy))
   else if (type == 'd') return(invisible(x$Frequencies))
