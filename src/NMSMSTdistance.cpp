@@ -47,7 +47,7 @@ void NMSMSTdistance::computeattr(const int&is, const int& js){
 				t[ij]=t1[ij];
 				st+=t[ij];
 				if(st==DBL_MAX){
-					error(" [!] Number of subsequences is getting too big");
+					Rf_error(" [!] Number of subsequences is getting too big");
 				} 
 			}
 			else{
@@ -122,7 +122,7 @@ void NMSMSTdistance::computeattr(const int&is, const int& js){
 		}
 		this->kvect[k]=temptt;
 		if(temptt==DBL_MAX){
-			error(" [!] Number of subsequences is getting too big");
+			Rf_error(" [!] Number of subsequences is getting too big");
 		} 
 		mrows--;
 		ncols--;

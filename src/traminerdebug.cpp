@@ -8,6 +8,6 @@ extern "C"{
 	}
 	
 	SEXP getTraMineRDebugLevel(void){
-		return ScalarReal(TRAMINER_DEBUG_LEVEL);
+		return Rf_ScalarReal(TRAMINER_DEBUG_LEVEL);
 	}
 }

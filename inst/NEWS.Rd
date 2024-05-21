@@ -1,6 +1,55 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.2-10 [2024-05-20] }{
+
+    \subsection{New functions}{
+        \itemize{
+            \item
+            \code{dissmergegroups()} merges groups so as to minimize loss of partition quality.
+            \item
+            \code{seqhasmiss()} count and identification of sequences with missings.
+        }
+    }
+
+    \subsection{Changes in existing functions}{
+        \itemize{
+            \item
+            \code{seqdist()} new argument \code{opt.args} to test
+            non-documented arguments at development stage.
+            \item
+            \code{seqdef()} now raises an error when it finds negative of \code{NA} weights.
+            \item
+            \code{seqprecstart()} includes derived state.order and state.equiv as attributes of returned object.
+        }
+    }
+
+    \subsection{Bug fixes}{
+        \itemize{
+            \item
+            \code{seqcost()} \code{method="INDELSLOG"} returned \code{NA} costs for token 0 when alphabet is numeric.
+            \item
+            \code{print.stslist(, format="SPS")} error with some version of R.
+            \item
+            \code{plot.stslist.statd(type="dH")} error when \code{xtstep > 1}.
+            \item
+            \code{plot.stslist.statd(type="Ht")} argument \code{main} was ignored.
+            \item
+            \code{plot.stslist.statd(type="Ht")} displayed useless x-label "Index" when \code{xlab=NULL}.
+            \item
+            \code{seqdHplot()} and \code{seqplot(,type="dH")} use \code{col.entr}
+    instead of \code{col} to control color of overlayed entropy
+    because of name conflict.
+            \item
+            \code{seqidegrad()} and \code{seqinsecurity}: unexpected results when order of undesirableness degrees provided with \code{stprec} differed from alphabet order.
+            \item
+            \code{seqdomassoc()} error when only two domains.
+            \item
+            noRemap issues.
+        }
+    }
+}
+
 \section{Changes in version 2.2-9 [2024-01-08] }{
 
     \subsection{Changes in existing functions}{

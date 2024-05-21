@@ -1,4 +1,5 @@
-% Author for TraMineR 2: Pierre-Alexandre Fonta (2016-2017)
+% Author for TraMineR 2: Pierre-Alexandre Fonta (2016-2017) and Gilbert Ritschard
+% for later revisions
 
 \name{seqdist}
 \alias{seqdist}
@@ -7,7 +8,7 @@
   Computes pairwise dissimilarities between sequences or dissimilarity from
   a reference sequence. Several dissimilarity measures can be chosen, including
   optimal matching (OM) and many of its variants, distance based on the count
-  of common attributes, and distances between sequence state distributions.
+  of common attributes, and distances between state distributions within sequences.
 }
 \usage{
 seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL,
@@ -15,7 +16,8 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
   tpow = 1.0, expcost = 0.5, context, link = "mean", h = 0.5, nu,
   transindel = "constant", otto, previous = FALSE, add.column = TRUE,
   breaks = NULL, step = 1, overlap = FALSE, weighted = TRUE,
-  global.pdotj = NULL, prox = NULL, check.max.size=TRUE)
+  global.pdotj = NULL, prox = NULL, check.max.size=TRUE,
+  opt.args = list())
 }
 \arguments{
   \item{seqdata}{
@@ -132,7 +134,7 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
     Default: vector of \code{1}s.
     The weights applied to subsequences when \code{method} is one of \code{"NMS"},
     \code{"NMSMST"}, or \code{"SVRspell"}. It contains at position \eqn{k} the
-    weight applied to the subsequences of length \eqn{k}. It must be positive. 
+    weight applied to the subsequences of length \eqn{k}. It must be positive.
     Its length should be equal to the number of columns of \code{seqdata}. If shorter,
     longer subsequences are ignored. If a scalar, it is transformed into
     \code{rep(kweights,ncol(sedata))}.
@@ -204,10 +206,10 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
     lengths, should the last (first) valid state be duplicated.
   }
   \item{breaks}{
-    \code{NULL}, List of pairs Integers.
+    List of ordered pairs of integers.
     Default: \code{NULL}.
     The list of the possibly overlapping intervals when \code{method = "CHI2"}
-    or \code{method = "EUCLID"}.
+    or \code{method = "EUCLID"}. Each interval is defined by the pair \code{c(t1,t2)} of the start \code{t1} and end \code{t2} positions of the interval.
   }
   \item{step}{
     Integer.
@@ -243,6 +245,9 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
   }
   \item{check.max.size}{
     Logical. Should \code{seqdist} stop when maximum allowed number of unique sequences is exceeded? Caution, setting \code{FALSE} may produce unexpected results or even crash R.
+  }
+  \item{opt.args}{
+    List. List of additional non-documented arguments for development usage.
   }
 }
 \details{
@@ -357,8 +362,8 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
   When \code{refseq} is a \code{list} of two sets of indexes, the matrix
   of distances from the first set of sequences (rows) to the second set (columns).
 
-  Otherwise, a vector with distances between the sequences in the
-  state sequence object and the reference sequence specified with \code{refseq}.
+  Otherwise, a vector with distances from the sequences in the
+  state sequence object to the reference sequence specified with \code{refseq}.
 }
 \references{
   Studer, M. and G. Ritschard (2016), "What matters in differences between life
@@ -395,7 +400,6 @@ seqdist(seqdata, method, refseq = NULL, norm = "none", indel = "auto", sm = NULL
 }
 \author{
   Matthias Studer, Gilbert Ritschard, Pierre-Alexandre Fonta, Alexis Gabadinho, Nicolas S. Müller.
-  .
 }
 \seealso{
   \code{\link{seqcost}}, \code{\link{seqsubm}}, \code{\link{seqdef}}, and \code{\link{seqMD}} for

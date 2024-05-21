@@ -10,6 +10,7 @@ importFrom("colorspace", "qualitative_hcl")
 importFrom("RColorBrewer", "brewer.pal")
 importFrom("boot", "boot")
 importFrom("vegan","wcmdscale")
+##importFrom("WeightedCluster","wcClusterQuality")
 
 export(
   alphabet,
@@ -41,6 +42,7 @@ export(
   seqfpos,
   seqfposend,
   seqgen,
+  seqhasmiss,
   seqHtplot,
   seqibad,
   seqici,
@@ -172,6 +174,7 @@ export(
     dissassoc,
     disscenter,
     dissdomassoc,
+    dissmergegroups,
     dissrep,
     dissrf,
     dissmfacw,

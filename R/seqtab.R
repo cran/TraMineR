@@ -29,7 +29,7 @@ seqtab <- function(seqdata, idxs = 1:10, weighted = TRUE, format = "SPS", tlim) 
 		weighted <- FALSE
 
 	if (seqfcheck(seqdata)=="-X")
-		warning("'-' character in states codes may cause invalid results")
+		warning("'-' character in state codes may cause invalid results")
 
 	if (format=="SPS") {
 		seqlist <- suppressMessages(seqformat(seqdata, from = "STS", to = "SPS",

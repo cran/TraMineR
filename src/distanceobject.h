@@ -31,8 +31,8 @@ public:
 DistanceObject::DistanceObject(SEXP magicIndexS, SEXP magicSeqS){
   this->magicIndex=INTEGER(magicIndexS);
   this->magicSeq=INTEGER(magicSeqS);
-  this->finalnseq=length(magicSeqS);
-  PROTECT(ans = allocVector(REALSXP, (finalnseq*(finalnseq-1)/2)));
+  this->finalnseq=Rf_length(magicSeqS);
+  PROTECT(ans = Rf_allocVector(REALSXP, (finalnseq*(finalnseq-1)/2)));
   result=REAL(ans);
 }
 DistanceObject::~DistanceObject(){}
@@ -65,11 +65,11 @@ void finalizeDistanceObject(SEXP ptr){
 }
 inline SEXP distanceObjectFactory(DistanceObject *ds) {
     SEXP SDO, classname;
-	PROTECT(classname = allocVector(STRSXP, 1));
-	SET_STRING_ELT(classname, 0, mkChar("DistanceObject"));
+	PROTECT(classname = Rf_allocVector(STRSXP, 1));
+	SET_STRING_ELT(classname, 0, Rf_mkChar("DistanceObject"));
     SDO = R_MakeExternalPtr(ds, R_NilValue, R_NilValue);
     R_RegisterCFinalizerEx(SDO, (R_CFinalizer_t) finalizeDistanceObject, TRUE);
-    classgets(SDO, classname);
+    Rf_classgets(SDO, classname);
 	UNPROTECT(1);
     return SDO;
 }

@@ -44,7 +44,7 @@ double SUBSEQdistance::distance(const int&is, const int& js){
 		TMRLOG(5,"s tot:%f\n",s);
 		return (1.0-s/ktot);
 	} else {
-		double Aval=0, Ival=0, Jval=0, ktot=0, dist, maxdist;
+		double Aval=0, Ival=0, Jval=0, dist, maxdist;
 		for(int i =0; i<minimum; i++){
 			if(kweights[i]!=0){
 				TMRLOG(5,"kval(%d)=%g\n", i, kvect[i]);
@@ -53,7 +53,6 @@ double SUBSEQdistance::distance(const int&is, const int& js){
 				TMRLOG(5,"ival(%d)=%g\n", i, selfmatvect[MINDICE(is, i, nseq)]);
 				Jval+=kweights[i]*selfmatvect[MINDICE(js, i, nseq)];
 				TMRLOG(5,"Jval(%d)=%g\n", i, selfmatvect[MINDICE(js, i, nseq)]);
-				ktot+=kweights[i];
 			}
 		}
 		if(distTransform){
@@ -168,7 +167,7 @@ void  NMSdistance::computeattr(const int&is, const int& js){
 			TMRLOG(5,"\n\nEntering %d\n", k);
 			//Building hmat
 			if(htot==DBL_MAX){
-				error(" [!] Number of subsequences is getting too big");
+				Rf_error(" [!] Number of subsequences is getting too big");
 			} 
 			
 			//Building vmat

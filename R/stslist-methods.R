@@ -2,7 +2,7 @@
 ## Methods for stslist objects
 ## ===========================
 
-print.stslist <- function(x,format='STS', extended=FALSE, ...) {
+print.stslist <- function(x, format='STS', extended=FALSE, ...) {
 	if (format=='STS') {
 		if (extended==FALSE) {
 			void <- attr(x,"void")
@@ -10,7 +10,7 @@ print.stslist <- function(x,format='STS', extended=FALSE, ...) {
 			print(x, quote=FALSE, ...)
 		} else NextMethod("print")
 	}
-  right <- ifelse(any(x[ncol(x)]==attr(x,"nr")), NA, 'DEL')
+  right <- ifelse(any(as.data.frame(x)[ncol(x)]==attr(x,"nr")), NA, 'DEL')
 	if (format=='SPS') {
 		x <- seqconc(x, void=attr(x,"void"))
 

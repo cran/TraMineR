@@ -64,7 +64,7 @@ extern int TRAMINER_DEBUG_LEVEL;
 
 	#define TMRASSERT(exp) do{\
 		if(!(exp)){\
-			error("TMRASSERT(%s) failed in %s %d", #exp, __FILE__, __LINE__);\
+			Rf_error("TMRASSERT(%s) failed in %s %d", #exp, __FILE__, __LINE__);\
 		}\
 		}while(false)
 	#define TMRLOGMATRIX(level,  mat, row, col, matsize) do{\

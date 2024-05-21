@@ -88,7 +88,7 @@ When \code{what="cost"}, the matrix of CAT-substitution costs with three attribu
 When \code{what="diss"}, a matrix of pairwise distances between MD sequences.
 }
 
-\seealso{ \code{\link{seqcost}}, \code{\link{seqdef}}, \code{\link{seqdist}}. }
+\seealso{ \code{\link{seqcost}}, \code{\link{seqdef}}, \code{\link{seqdist}}, \code{\link{seqplotMD}}. }
 
 \references{
 Ritschard, G., T.F. Liao, and E. Struffolino (2023). Strategies for

@@ -3,8 +3,8 @@
 DistanceObject::DistanceObject(SEXP magicIndexS, SEXP magicSeqS){
   this->magicIndex=INTEGER(magicIndexS);
   this->magicSeq=INTEGER(magicSeqS);
-  this->finalnseq=length(magicSeqS);
-  PROTECT(ans = allocVector(REALSXP, (finalnseq*(finalnseq-1)/2)));
+  this->finalnseq=Rf_length(magicSeqS);
+  PROTECT(ans = Rf_allocVector(REALSXP, (finalnseq*(finalnseq-1)/2)));
   result=REAL(ans);
 }
 DistanceObject::~DistanceObject(){

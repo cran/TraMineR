@@ -250,9 +250,9 @@ seqdomassoc <- function(seqdata.dom, rep.method="overall", assoc = c("LRT","V"),
   }
 
   ## remove unused columns and rows
-  res <- res[,which(!apply(res,2,function(x) {all(is.na(x))}))]
+  res <- res[,which(!apply(res,2,function(x) {all(is.na(x))})), drop=FALSE]
 
-  res <- res[1:k,]
+  res <- res[1:k,,drop=FALSE]
   rownames(res) <- tabnames
 
 

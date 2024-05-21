@@ -1,4 +1,44 @@
 ## =========
+Version 2.2-10 [2024-05-20]
+
+New functions:
+
+  - dissmergegroups() merges groups so as to minimize
+    loss of partition quality.
+  - seqhasmiss() count and identification of
+    sequences with missings.
+
+Changes in existing functions:
+
+  - seqdist() new argument opt.args to test
+    non-documented arguments at development stage.
+  - seqdef() now raises an error when it finds
+    negative or NA weights.
+  - seqprecstart() includes derived state.order and
+    state.equiv as attributes.
+
+Bug fixes:
+
+  - seqcost() method="INDELSLOG" returned NA costs
+    for token 0 when alphabet is numeric.
+  - print.stslist(, format="SPS") error with some
+    version of R.
+  - plot.stslist.statd(,type="dH") error when xtstep > 1.
+  - plot.stslist.statd(,type="Ht") argument main was
+    ignored.
+  - plot.stslist.statd(,type="Ht") displayed useless
+    x-label "Index" when xlab=NULL.
+  - seqdHplot(), seqplot(,type="dH"), seqplotMD(,type="dH")
+    use col.entr instead of col to control color of
+    overlayed entropy because of name conflict.
+  - seqidegrad() and seqinsecurity: unexpected results
+    when order of undesirableness degrees provided
+    with stprec differed from alphabet order.
+  - seqdomassoc() error when only two domains.
+  - noRemap issues
+
+
+## =========
 Version 2.2-9 [2024-01-08]
 
 Changes in existing functions:
@@ -14,13 +54,13 @@ Changes in existing functions:
 
 Bug fixes:
 
-  - seqdef(): lack of separation between found tokens 
+  - seqdef(): lack of separation between found tokens
     not listed in the alphabet.
   - seqdist(): error when all DSS have length 1 and
     method is one of OMspell, NMSMST, and SVRspell.
   - seqdist(): error when all DSS are identical and
     of length 1 when method is OMstran.
-  - seqdist() with method="OMstran": returned distance 
+  - seqdist() with method="OMstran": returned distance
     matrix was not labeled with sequence rownames.
   - issues with lost braces in .Rd files (NOTE in CRAN check)
 

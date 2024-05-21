@@ -42,7 +42,7 @@ void NMSMSTSoftdistanceII::computeattr(const int&is, const int& js){
 			e[ij]=sf;
 			s+=sf; //total of minimum shared time
 			if(s==DBL_MAX){//ensure we do not have numerical problems
-				error(" [!] Number of subsequences is getting too big"); 
+				Rf_error(" [!] Number of subsequences is getting too big"); 
 			} 
 		}
 	}
@@ -97,7 +97,7 @@ void NMSMSTSoftdistanceII::computeattr(const int&is, const int& js){
 		}
 		this->kvect[k] = phi_k;
 		if(phi_k == DBL_MAX){ // Ensure we do not have numerical errors
-			error(" [!] Number of subsequences is getting too big");
+			Rf_error(" [!] Number of subsequences is getting too big");
 		} 
 		mrows--;
 		ncols--;

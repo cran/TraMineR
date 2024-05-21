@@ -18,7 +18,7 @@ SEXP checktriangleineq(SEXP mat, SEXP matsize, SEXP tolS) {
 			j_indiv=j*n;
 			for (z=0; z<n; z++) {
 				if (d-(matrix[i_indiv+ z] + matrix[j_indiv+z]) >= tol) {
-					PROTECT(ans = allocVector(INTSXP, 3));
+					PROTECT(ans = Rf_allocVector(INTSXP, 3));
 					INTEGER(ans)[0] =i+1;
 					INTEGER(ans)[1] =j+1;
 					INTEGER(ans)[2] =z+1;

@@ -199,6 +199,9 @@ seqdef <- function(data, var=NULL, informat="STS", stsep=NULL,
 		if (length(weights) != nrow(seqdata)) {
 			stop("\n [!] number of weights must equal number of sequences", call.=FALSE)
 		}
+        if (any(is.na(weights)) | any(weights<0)){
+			stop("\n [!] Negative or NA weights!", call.=FALSE)
+        }
 		message(" [>] sum of weights: ", round(sum(weights),2), " - min/max: ",
 			min(weights),"/",max(weights))
 		names(weights) <- rownames(seqdata)

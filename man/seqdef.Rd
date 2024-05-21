@@ -43,7 +43,7 @@ Other separators must be specified explicitly.}
 
   \item{id}{optional argument for setting the rownames of the sequence object. If \code{NULL} (default), the rownames are taken from the input data. If set to \code{"auto"}, sequences are numbered from 1 to the number of sequences. A vector of rownames of length equal to the number of sequences may be specified as well.}
 
-  \item{weights}{optional numerical vector containing weights, which are accounted for by plotting and statistical functions when applicable.}
+  \item{weights}{optional numerical vector containing weights, which are taken into account by plotting and statistical functions when applicable. Weights must be non-negative and cannot be \code{NA}.}
 
     \item{start}{starting time. For instance, if sequences begin
 at age 15, you can specify 15. At this stage, used only for labelling column names.}

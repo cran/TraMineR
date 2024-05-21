@@ -365,6 +365,10 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
 	## ========
 	## Plotting
 	## ========
+  if ("col.entr" %in% names(oolist)){
+      col.entr <- oolist[["col.entr"]]
+      oolist <- c(list(col=col.entr), oolist[!"col.entr" %in% names(oolist)])
+  }
   for (d in 1:ndom) {
     seqdata <- channels[[d]]
 
@@ -620,7 +624,7 @@ seqplotMD <- function(channels, group = NULL, type = "i", main = NULL,
 
         legargs <- names(formals(legend))
         largs <- oolist[names(oolist) %in% legargs]
-        largs <- largs[!names(largs) %in% c("cex")]
+        largs <- largs[!names(largs) %in% c("cex","col")]
         largs <- c(list(legpos, ltext, cpal, cex=cex.legend, leg.ncol=leg.ncol),largs)
 
 		#TraMineR.legend(legpos, ltext, cpal, cex=cex.legend, density=density, angle=angle, leg.ncol=leg.ncol)

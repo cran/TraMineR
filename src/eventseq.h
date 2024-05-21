@@ -25,7 +25,7 @@ class Sequence;
 #define CHECK_TMRSEQ_TYPE(s) do { \
     if (TYPEOF(s) != EXTPTRSXP || \
             R_ExternalPtrTag(s) != TMRSEQUENCE_type_tag) \
-        error("bad sequence format"); \
+        Rf_error("bad sequence format"); \
 } while (0)
 
 ///Checking and cast for Sequence type
@@ -33,7 +33,7 @@ class Sequence;
     #define ASSIGN_TMRSEQ_TYPE(seq,ptr) do { \
         if (TYPEOF(ptr) != EXTPTRSXP || \
                 R_ExternalPtrTag(ptr) != TMRSEQUENCE_type_tag) \
-            error("bad sequence format"); \
+            Rf_error("bad sequence format"); \
         seq= static_cast<Sequence *>(R_ExternalPtrAddr(ptr));\
     } while (0)
 
@@ -46,7 +46,7 @@ inline SEXP makeTMRSequence(Sequence *s, SEXP cl) {
     SEXP tmpseq;
     tmpseq = R_MakeExternalPtr(s, TMRSEQUENCE_type_tag, R_NilValue);
     R_RegisterCFinalizerEx(tmpseq, (R_CFinalizer_t) finalizeSequence, TRUE);
-    classgets(tmpseq, cl);
+    Rf_classgets(tmpseq, cl);
     return tmpseq;
 }
 

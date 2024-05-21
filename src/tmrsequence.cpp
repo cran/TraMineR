@@ -54,8 +54,8 @@ extern "C" {
 		//Get pointers
         double * t=REAL(time);
         int *ev=INTEGER(event);
-        int len=length(time);
-        if (len!=length(event))error("Time and event vector arent of the same size");
+        int len=Rf_length(time);
+        if (len!=Rf_length(event))Rf_error("Time and event vector arent of the same size");
         int id=INTEGER(idpers)[0], i;
         if (len==0)return R_NilValue;
         //Build sequence
@@ -77,7 +77,7 @@ extern "C" {
     SEXP tmrsequenceseveral(SEXP idpers, SEXP time, SEXP event, SEXP endEvent,SEXP classname, SEXP dictionnary) {
     	//Create the dictionnary
     	EventDictionary * ed= new EventDictionary(dictionnary);
-    	bool obsTime=!isNull(endEvent);
+    	bool obsTime=!Rf_isNull(endEvent);
     	int eEvent=0;
     	if(obsTime){
     		eEvent=INTEGER(endEvent)[0];
@@ -87,9 +87,9 @@ extern "C" {
         //events and ids
         int *ev=INTEGER(event),*ids=INTEGER(idpers);
         //lengthes
-        int totlen=length(time);
+        int totlen=Rf_length(time);
         //should all be the same size
-        if (totlen!=length(event)||totlen!=length(idpers))error("Time ,idpers and event vector should have the same size");
+        if (totlen!=Rf_length(event)||totlen!=Rf_length(idpers))Rf_error("Time ,idpers and event vector should have the same size");
         if (totlen==0)return R_NilValue;
         int id=ids[0], i,idlen=1,idpos=0;
         int lastID=id;
@@ -101,11 +101,11 @@ extern "C" {
             }
         }
         lastID=id;
-        if (idlen<1)error("Not enough sequences");
+        if (idlen<1)Rf_error("Not enough sequences");
         //Rprintf((char*)"totlen %i : idlen: %i\n", totlen,idlen);
         SEXP ans,tmpseq;
         //List to return
-        PROTECT(ans=allocVector(VECSXP, idlen));
+        PROTECT(ans=Rf_allocVector(VECSXP, idlen));
         //building first sequence
         Sequence *s=new Sequence(id, ed);
         //For each pair (time,event)
@@ -136,10 +136,10 @@ extern "C" {
 		EventSet es;
 		es.add(eventList);
         //events and ids
-        int numseq=length(seqs);
+        int numseq=Rf_length(seqs);
         bool excl=INTEGER(exclude)[0]==1;
         SEXP seq, ret;
-        PROTECT(ret = allocVector(LGLSXP, numseq));
+        PROTECT(ret = Rf_allocVector(LGLSXP, numseq));
         int *pret=LOGICAL(ret);
         Sequence *s =NULL;
         //lengthes
@@ -156,26 +156,26 @@ extern "C" {
     SEXP tmrsequencegetid(SEXP seq) {
         Sequence *s =NULL;
         ASSIGN_TMRSEQ_TYPE(s,seq);
-        return ScalarInteger(s->getIDpers());
+        return Rf_ScalarInteger(s->getIDpers());
     }
     SEXP tmrsequencegetlength(SEXP seq) {
         Sequence *s =NULL;
         ASSIGN_TMRSEQ_TYPE(s,seq);
-        return ScalarReal(s->getObsTime());
+        return Rf_ScalarReal(s->getObsTime());
     }
 	SEXP tmrsequencegetweight(SEXP seq) {
         Sequence *s =NULL;
         ASSIGN_TMRSEQ_TYPE(s,seq);
-        return ScalarReal(s->getWeight());
+        return Rf_ScalarReal(s->getWeight());
     }
     SEXP tmrsequencesetlength(SEXP seqs, SEXP time) {
     	 double * t=REAL(time);
         //events and ids
-        int numseq=length(seqs);
+        int numseq=Rf_length(seqs);
         SEXP seq;
         Sequence *s =NULL;
         //lengthes
-        if(length(time)!=numseq)error("Time and seq vector should have the same size");
+        if(Rf_length(time)!=numseq)Rf_error("Time and seq vector should have the same size");
 		for (int i=0;i<numseq;i++) {
                 seq=VECTOR_ELT(seqs,i);
                 ASSIGN_TMRSEQ_TYPE(s,seq);
@@ -187,11 +187,11 @@ extern "C" {
 	SEXP tmrsequencesetweight(SEXP seqs, SEXP weight) {
     	 double * w=REAL(weight);
         //events and ids
-        int numseq=length(seqs);
+        int numseq=Rf_length(seqs);
         SEXP seq;
         Sequence *s =NULL;
         //lengthes
-        if (length(weight)!=numseq) error("Weight and seq vector should have the same size");
+        if (Rf_length(weight)!=numseq) Rf_error("Weight and seq vector should have the same size");
 		for (int i=0;i<numseq;i++) {
                 seq=VECTOR_ELT(seqs,i);
                 ASSIGN_TMRSEQ_TYPE(s,seq);
@@ -210,14 +210,14 @@ extern "C" {
         Sequence *s =NULL;
         ASSIGN_TMRSEQ_TYPE(s,seq);
         std::string buffer = s->sprint();
-        return mkChar(buffer.c_str());
+        return Rf_mkChar(buffer.c_str());
     }
     /**Return a string representation of a sequence*/
     SEXP tmrsequencestring(SEXP seq) {
         SEXP str;
         PROTECT(str = tmrsequencestringinternal(seq));
         SEXP ret;
-        PROTECT(ret = allocVector(STRSXP, 1));
+        PROTECT(ret = Rf_allocVector(STRSXP, 1));
         SET_STRING_ELT(ret, 0, str);
         UNPROTECT(2);
         return ret;
@@ -259,7 +259,7 @@ extern "C" {
 
     if (maxK==-1) maxK=INT_MAX;
     SEXP seq;
-    int numseq = length(seqs);
+    int numseq = Rf_length(seqs);
     Sequence * s = NULL;
     int lastNodeCount;
     PrefixTree * root= new PrefixTree();
@@ -302,10 +302,10 @@ extern "C" {
     int returnsize=root->countSubsequence(mSupport);
     // Rprintf((char*)"Counting subseq (%i)\n",returnsize);
     SEXP ans, cnt, supp, subseq;
-    PROTECT(ans=allocVector(VECSXP,3)); // allocate memory
-    PROTECT(cnt=allocVector(REALSXP,returnsize)); // allocate memory
-    PROTECT(supp=allocVector(REALSXP,returnsize)); // allocate memory
-    PROTECT(subseq=allocVector(VECSXP,returnsize)); // allocate memory
+    PROTECT(ans=Rf_allocVector(VECSXP,3)); // allocate memory
+    PROTECT(cnt=Rf_allocVector(REALSXP,returnsize)); // allocate memory
+    PROTECT(supp=Rf_allocVector(REALSXP,returnsize)); // allocate memory
+    PROTECT(subseq=Rf_allocVector(VECSXP,returnsize)); // allocate memory
     int index=0;
     // REprintf((char*)"(%i)\nRetrieving subsequences...",returnsize);
     // extracting all subsequences
@@ -384,14 +384,14 @@ extern "C" {
     if (aMax==-1) aMax=DBL_MAX;
     if (aMaxEnd==-1)aMaxEnd=DBL_MAX;
     Sequence *s =NULL, *sub=NULL;
-    int nsub = length(subseqs);
-    int ns = length(seqs);
+    int nsub = Rf_length(subseqs);
+    int ns = Rf_length(seqs);
     SEXP ans;
     SEXP subseq,seq, namesubseq, nameseq,dimnames;
-    PROTECT(ans = allocMatrix(REALSXP, ns, nsub));
+    PROTECT(ans = Rf_allocMatrix(REALSXP, ns, nsub));
     double *matrix=REAL(ans);
-    PROTECT(namesubseq= allocVector(STRSXP, nsub));
-    PROTECT(nameseq= allocVector(STRSXP, ns));
+    PROTECT(namesubseq= Rf_allocVector(STRSXP, nsub));
+    PROTECT(nameseq= Rf_allocVector(STRSXP, ns));
     for (int j=0;j<ns;j++)
       {
 	seq=VECTOR_ELT(seqs,j);
@@ -417,10 +417,10 @@ extern "C" {
 				      cMethod);
 	  }
       }
-    PROTECT(dimnames = allocVector(VECSXP, 2));
+    PROTECT(dimnames = Rf_allocVector(VECSXP, 2));
     SET_VECTOR_ELT(dimnames, 0,nameseq);
     SET_VECTOR_ELT(dimnames, 1,namesubseq);
-    setAttrib(ans, R_DimNamesSymbol, dimnames);
+    Rf_setAttrib(ans, R_DimNamesSymbol, dimnames);
     UNPROTECT(4);
     return ans;
   }
@@ -429,7 +429,7 @@ extern "C" {
     SEXP tmreventinseq(SEXP seqs, SEXP Sevent) {
         int event=INTEGER(Sevent)[0];
         Sequence *s =NULL;
-        int ns=length(seqs);
+        int ns=Rf_length(seqs);
         SEXP ans;
         SEXP seq;
 		int nseqevent=0, maxnevent=1;
@@ -451,7 +451,7 @@ extern "C" {
             }
         }
 		TMRLOG(4, "Maximum numbers of event %d is %d", event, maxnevent);
-        PROTECT(ans = allocMatrix(REALSXP, ns, maxnevent));
+        PROTECT(ans = Rf_allocMatrix(REALSXP, ns, maxnevent));
         double *matrix=REAL(ans);
 		double age=0;
 		//looking up for events ages
@@ -483,7 +483,7 @@ extern "C" {
     }
 	SEXP tmrseqetotse(SEXP seqs) {
         Sequence *s =NULL;
-        int ns=length(seqs);
+        int ns=Rf_length(seqs);
         SEXP ans, timestamp, event, ids;
         SEXP seq;
 		int nseqevent=0;
@@ -501,9 +501,9 @@ extern "C" {
             }
         }
 		TMRLOG(4, "Numbers of event  is %d", nseqevent);
-		PROTECT(timestamp=allocVector(REALSXP,nseqevent)); // allocate memory
-		PROTECT(event=allocVector(INTSXP,nseqevent)); // allocate memory
-		PROTECT(ids=allocVector(INTSXP,nseqevent)); // allocate memory
+		PROTECT(timestamp=Rf_allocVector(REALSXP,nseqevent)); // allocate memory
+		PROTECT(event=Rf_allocVector(INTSXP,nseqevent)); // allocate memory
+		PROTECT(ids=Rf_allocVector(INTSXP,nseqevent)); // allocate memory
 		double * tt=REAL(timestamp);
 		int * ee=INTEGER(event);
 		int * ii=INTEGER(ids);
@@ -526,7 +526,7 @@ extern "C" {
 				}
             }
         }
-		PROTECT(ans=allocVector(VECSXP,3)); // allocate memory
+		PROTECT(ans=Rf_allocVector(VECSXP,3)); // allocate memory
 		SET_VECTOR_ELT(ans,0,ids); // list of ids
 		SET_VECTOR_ELT(ans,1,timestamp); // list of timestamp
 		SET_VECTOR_ELT(ans,2,event); // list of events

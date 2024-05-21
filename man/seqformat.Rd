@@ -272,6 +272,8 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
 
   When data are in \code{"SPELL"} format (\code{from = "SPELL"}), the begin and end times are expected to be positions in the sequences. Therefore they should be strictly positive integers.
   With \code{process=TRUE}, the outcome sequences will be aligned on ages (process duration since birth), while with \code{process=FALSE} they will be aligned on dates (position on the calendar time). If \code{process=TRUE}, values in the \code{begin} and \code{end} columns of \code{data} are assumed to be ages when \code{pdata} is \code{NULL} and integer dates otherwise. If \code{process=FALSE}, begin and end values are assumed to be integer dates when \code{pdata} is \code{NULL} and ages otherwise.
+  
+  To convert from person-period data use \code{from = "SPELL"} and set both \code{begin} and \code{end} as the column index or name of the time variable. Alternatively, use the \code{\link{reshape}} command of \code{stats}, which is more efficient.
 }
 \value{
   A data frame for \code{SRS}, \code{TSE}, and \code{SPELL}, a matrix otherwise.
@@ -291,7 +293,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   Alexis Gabadinho, Pierre-Alexandre Fonta, Nicolas S. Müller, Matthias Studer,
   and Gilbert Ritschard.
 }
-\seealso{\code{\link{seqdef}}}
+\seealso{\code{\link{seqdef}},\code{\link{reshape}}}
 \examples{
 ## ========================================
 ## Examples with raw STS sequences as input

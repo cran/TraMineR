@@ -1,7 +1,7 @@
 #include "eventdictionary.h"
 
 EventDictionary::EventDictionary(SEXP flist) :numseq(0){
-    for (int i = 0; i < length(flist); i++) {
+    for (int i = 0; i < Rf_length(flist); i++) {
         this->insert(std::make_pair(i+1,std::string(CHAR(STRING_ELT(flist, i)))));// add to respect R indice system
     }
     //ctor
@@ -26,11 +26,11 @@ SEXP EventDictionary::getDictionary()const{
 	SEXP ret;
 	int s=this->size();
 	//REprintf((char*)"size %i\n",s);
-	PROTECT(ret = allocVector(STRSXP, s));
+	PROTECT(ret = Rf_allocVector(STRSXP, s));
 	for(const_iterator it=this->begin();it!=this->end();it++){
 		//REprintf((char*)"Code %i=%s\n",it->first,it->second.c_str());
 		if(it->first<=s){
-			SET_STRING_ELT(ret, it->first-1, mkChar(it->second.c_str()));
+			SET_STRING_ELT(ret, it->first-1, Rf_mkChar(it->second.c_str()));
 			//REprintf((char*)"Code %i=%s\n",it->first,it->second.c_str());
 		}
 	}
@@ -41,7 +41,7 @@ SEXP EventDictionary::getDictionary()const{
 
 void EventSet::add(SEXP elist){
 	int * code=INTEGER(elist);
-	for (int i = 0; i < length(elist); i++) {
+	for (int i = 0; i < Rf_length(elist); i++) {
         this->insert(code[i]);// add to respect R indice system
     }
 }

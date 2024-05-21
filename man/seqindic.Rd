@@ -20,7 +20,7 @@ seqindic(seqdata, indic=c("visited","trans","entr","cplx","turb2n"),
       \code{"entr"} (longitudinal normalized entropy), \code{"nsubs"} (number of subsequences of the DSS sequence), \code{"volat"} (objective volatility), \code{"cplx"} (complexity index),
       \code{"turb"} (turbulence), \code{"turbn"} (normalized turbulence),
       \code{"turb2"} (turbulence taking non-visited states into account), \code{"turb2n"} (normalized turbulence taking non-visited states into account),
-      \code{"ppos"} (proportion of positive states), \code{"nvolat"} (normative volatility), \code{"vpos"} objective volatility of positive-negative state sequences, \code{"integr"} (integrative potential),  \code{"degrad"} (degradation), \code{"bad"} (badness), \code{"prec"} (precarity index),  \code{"insec"} (insecurity). Can also be \code{"all"}, \code{"basic"}, \code{"diversity"}, \code{"complexity"},  \code{"binary"} or \code{"ranked"} that each selects a subset of the indicators. Setting \code{indic="all"} selects all indicators but \code{"ppos"}, \code{"vpos"}, \code{"nvolat"}, \code{"integr"}, \code{"degrad"}, \code{"bad"}, \code{"prec"}, and \code{"insec"} that require an additional argument list.}
+      \code{"ppos"} (proportion of positive states), \code{"nvolat"} (normative volatility), \code{"vpos"} objective volatility of positive-negative state sequences, \code{"integr"} (integrative potential),  \code{"degrad"} (degradation), \code{"bad"} (badness), \code{"prec"} (precarity index),  \code{"insec"} (insecurity). Can also be \code{"all"}, \code{"basic"}, \code{"diversity"}, \code{"complexity"},  \code{"binary"}, and \code{"ranked"}, each selecting a subset of the indicators. Setting \code{indic="all"} selects all indicators but \code{"ppos"}, \code{"vpos"}, \code{"nvolat"}, \code{"integr"}, \code{"degrad"}, \code{"bad"}, \code{"prec"}, and \code{"insec"} that require an additional argument list.}
 
 	\item{with.missing}{logical: should non-void missing values be treated as a regular state? If \code{FALSE} (default) missing values are ignored.}
 
@@ -28,7 +28,7 @@ seqindic(seqdata, indic=c("visited","trans","entr","cplx","turb2n"),
 
   %\item{integr.args}{list: when \code{"integr"} requested, the arguments passed to \code{seqintegr} together with \code{seqdata} and \code{with.missing}. See \code{\link{seqintegr}}.}
 
-  \item{prec.args}{list: when any of \code{"degrad"}, \code{"bad"}, \code{"prec"}, or \code{"insec"} is requested, the arguments passed to the underlying functions together with \code{seqdata} and \code{with.missing}. See \code{\link{seqprecarity}} and \code{link{seqibad}}.}
+  \item{prec.args}{list: when any of \code{"degrad"}, \code{"bad"}, \code{"prec"}, or \code{"insec"} is requested, the arguments passed to the underlying functions together with \code{seqdata} and \code{with.missing}. See \code{\link{seqprecarity}} and \code{\link{seqibad}}.}
 
   \item{w}{real in range [0,1]: when \code{volat} weight coefficient passed to \code{\link{seqivolatility}}. Default is .5.}
 }

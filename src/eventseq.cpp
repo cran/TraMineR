@@ -76,7 +76,7 @@ Sequence::~Sequence() {
 string Sequence::sprint() {
 	SEXP formatSymb;
 	ostringstream oss;
-	PROTECT(formatSymb=lang2(findFun(install("format"), R_GlobalEnv), R_NilValue));
+	PROTECT(formatSymb=Rf_lang2(Rf_findFun(Rf_install("format"), R_GlobalEnv), R_NilValue));
 	//oss.precision(2);
     //if(!this->isGeneric())n = sprintf(buffer, (char*)"[%i] ",this->idpers);
     //Rprintf((char*)"Current buffer %s\n",buffer);
@@ -89,12 +89,12 @@ string Sequence::sprint() {
 }
 SEXP TMRNumberFormat(const double &num, SEXP formatSymb){
 	if(formatSymb==NULL){
-		error(" [!!!!] TMRNumberFormat not initialized.\n");
+		Rf_error(" [!!!!] TMRNumberFormat not initialized.\n");
 	}
-	SETCADR(formatSymb, ScalarReal(num));
+	SETCADR(formatSymb, Rf_ScalarReal(num));
 	SEXP ans, gg;
-	PROTECT(ans = eval(formatSymb, R_GlobalEnv));
-	PROTECT(gg=asChar(ans));
+	PROTECT(ans = Rf_eval(formatSymb, R_GlobalEnv));
+	PROTECT(gg=Rf_asChar(ans));
 	UNPROTECT(2);
 	return gg;
 }

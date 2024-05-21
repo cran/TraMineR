@@ -132,7 +132,7 @@ seqcost <- function(seqdata, method, cval = NULL, with.missing = FALSE,
       if (is.null(ww) || !weighted) {
         ww <- rep(1, nrow(seqdata))
       }
-      indels <- as.numeric(prop.table(xtabs(rep(ww, ncol(seqdata)) ~ unlist(seqdata)))[alphabet])
+      indels <- as.numeric(prop.table(xtabs(rep(ww, ncol(seqdata)) ~ unlist(seqdata)))[as.character(alphabet)])
     }
 
     #ww <- attr(seqdata, "weights")

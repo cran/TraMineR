@@ -11,7 +11,7 @@ n*(i-1) - i*(i-1)/2 + j-i
 */
 SEXP tmrsubmatrixinertiadiss(SEXP diss, SEXP diss_size, SEXP individuals) {
     int n=INTEGER(diss_size)[0];
-    int ilen=length(individuals);
+    int ilen=Rf_length(individuals);
     int * indiv=INTEGER(individuals);
     double *dmat=REAL(diss);
     //Rprintf("mlen = %i \n", mlen);
@@ -31,7 +31,7 @@ SEXP tmrsubmatrixinertiadiss(SEXP diss, SEXP diss_size, SEXP individuals) {
     //Rprintf("Sum = %f\n",result);
     if (ilen>0)result/=(double)ilen;
     //Rprintf("Inertia = %f\n",result);
-    return ScalarReal(result);
+    return Rf_ScalarReal(result);
 
 }
 
@@ -44,8 +44,8 @@ n*(i-1) - i*(i-1)/2 + j-i
     groupesize: taille du groupe
 */
 SEXP tmrsubmatrixinertiaCindividuals(SEXP distmatrix, SEXP individuals) {
-    int mlen=nrows(distmatrix);
-    int ilen=length(individuals);
+    int mlen=Rf_nrows(distmatrix);
+    int ilen=Rf_length(individuals);
     int * indiv=INTEGER(individuals);
     double *dmat=REAL(distmatrix);
     int i, j, base_index;
@@ -57,12 +57,12 @@ SEXP tmrsubmatrixinertiaCindividuals(SEXP distmatrix, SEXP individuals) {
         }
     }
     if (ilen>0)result/=(double)ilen;
-    return ScalarReal(result);
+    return Rf_ScalarReal(result);
 
 }
 SEXP tmrsubmatrixinertia(SEXP distmatrix, SEXP individuals) {
-    int mlen=nrows(distmatrix);
-    int ilen=length(individuals);
+    int mlen=Rf_nrows(distmatrix);
+    int ilen=Rf_length(individuals);
     int * indiv=INTEGER(individuals);
     double *dmat=REAL(distmatrix);
     //Rprintf("mlen = %i \n", mlen);
@@ -82,15 +82,15 @@ SEXP tmrsubmatrixinertia(SEXP distmatrix, SEXP individuals) {
     //Rprintf("Sum = %f\n",result);
     if (ilen>0)result/=(double)ilen;
     //Rprintf("Inertia = %f\n",result);
-    return ScalarReal(result);
+    return Rf_ScalarReal(result);
 
 }
 SEXP tmrinertiacontrib(SEXP distmatrix, SEXP individuals) {
-    int mlen=nrows(distmatrix);
-    int ilen=length(individuals);
+    int mlen=Rf_nrows(distmatrix);
+    int ilen=Rf_length(individuals);
     int * indiv=INTEGER(individuals);
     SEXP ans;
-    PROTECT(ans = allocVector(REALSXP, ilen));
+    PROTECT(ans = Rf_allocVector(REALSXP, ilen));
     double *result=REAL(ans);
     double *dmat=REAL(distmatrix);
 //  Rprintf("mlen = %i \n", mlen);
@@ -119,14 +119,14 @@ SEXP tmrinertiacontrib(SEXP distmatrix, SEXP individuals) {
 }
 
 SEXP tmrinertiacontribext(SEXP distmatrix, SEXP individuals, SEXP extindivS) {
-    int mlen=nrows(distmatrix);
-    int ilen=length(individuals);
-    int ilenExt=length(extindivS);
+    int mlen=Rf_nrows(distmatrix);
+    int ilen=Rf_length(individuals);
+    int ilenExt=Rf_length(extindivS);
     int * indiv=INTEGER(individuals);
     int * indivExt=INTEGER(extindivS);
     int totlen=ilen+ilenExt;
     SEXP ans;
-    PROTECT(ans = allocVector(REALSXP, totlen));
+    PROTECT(ans = Rf_allocVector(REALSXP, totlen));
     double *result=REAL(ans);
     double *dmat=REAL(distmatrix);
 
@@ -166,10 +166,10 @@ SEXP tmrinertiacontribext(SEXP distmatrix, SEXP individuals, SEXP extindivS) {
 
 
 SEXP tmrinertiacontribdiss(SEXP diss, SEXP diss_size, SEXP individuals) {
-    int ilen=length(individuals);
+    int ilen=Rf_length(individuals);
     int * indiv=INTEGER(individuals);
     SEXP ans;
-    PROTECT(ans = allocVector(REALSXP, ilen));
+    PROTECT(ans = Rf_allocVector(REALSXP, ilen));
     double *result=REAL(ans);
     double *dmat=REAL(diss);
 //  Rprintf("mlen = %i \n", mlen);
@@ -207,9 +207,9 @@ SEXP tmrinertiacontribdiss(SEXP diss, SEXP diss_size, SEXP individuals) {
 
 
 SEXP tmrinterinertia(SEXP distmatrix, SEXP grp1,SEXP grp2) {
-    int mlen=nrows(distmatrix);
-    int ilen1=length(grp1);
-    int ilen2=length(grp2);
+    int mlen=Rf_nrows(distmatrix);
+    int ilen1=Rf_length(grp1);
+    int ilen2=Rf_length(grp2);
     int * indiv1=INTEGER(grp1);
     int * indiv2=INTEGER(grp2);
     double *dmat=REAL(distmatrix);
@@ -230,6 +230,6 @@ SEXP tmrinterinertia(SEXP distmatrix, SEXP grp1,SEXP grp2) {
     //Rprintf("Sum = %f\n",result);
     //if(ilen>0)result/=(double)ilen;
     //Rprintf("Inertia = %f\n",result);
-    return ScalarReal(result);
+    return Rf_ScalarReal(result);
 //   Rprintf("Inertia = %f\n",(*result));
 }

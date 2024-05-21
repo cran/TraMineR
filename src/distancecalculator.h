@@ -27,8 +27,8 @@ public:
 	static SEXP distanceCalculatorFactory(DistanceCalculator *ds);
 	SEXP getListElement(SEXP list, const char *str) {
 		int i;
-		SEXP elmt = R_NilValue, names = getAttrib(list, R_NamesSymbol);
-		for (i = 0; i < length(list); i++) {
+		SEXP elmt = R_NilValue, names = Rf_getAttrib(list, R_NamesSymbol);
+		for (i = 0; i < Rf_length(list); i++) {
 			if(strcmp(CHAR(STRING_ELT(names, i)), str) == 0) {
 				elmt = VECTOR_ELT(list, i);
 				break;
@@ -72,11 +72,11 @@ inline double DistanceCalculator::normalizeDistance(const double& rawdist, const
 
 inline SEXP DistanceCalculator::distanceCalculatorFactory(DistanceCalculator *ds) {
     SEXP SDO, classname;
-	PROTECT(classname = allocVector(STRSXP, 1));
-	SET_STRING_ELT(classname, 0, mkChar("DistanceCalculator"));
+	PROTECT(classname = Rf_allocVector(STRSXP, 1));
+	SET_STRING_ELT(classname, 0, Rf_mkChar("DistanceCalculator"));
     SDO = R_MakeExternalPtr(ds, R_NilValue, R_NilValue);
     R_RegisterCFinalizerEx(SDO, (R_CFinalizer_t) finalizeDistanceCalculator, TRUE);
-    classgets(SDO, classname);
+    Rf_classgets(SDO, classname);
 	UNPROTECT(1);
     return SDO;
 }

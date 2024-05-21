@@ -5,12 +5,12 @@ extern "C" {
 	SEXP tmrWeightedInertiaDist(SEXP diss, SEXP diss_size, SEXP isDist, SEXP individuals, SEXP Sweights, SEXP var) {
 		bool isdist = INTEGER(isDist)[0]!=0;
 		int n=INTEGER(diss_size)[0];
-		int ilen=length(individuals);
+		int ilen=Rf_length(individuals);
 		int * indiv=INTEGER(individuals);
 		double *dmat=REAL(diss);
 		double* weights = REAL(Sweights);
 	//	Rprintf("mlen = %i \n", mlen);
-		TMRLOG(5, "Sweights length = %i \n", length(Sweights));
+		TMRLOG(5, "Sweights length = %i \n", Rf_length(Sweights));
 		TMRLOG(5, "ilen = %i \n", ilen);
 		int i, j, i_indiv, base_indice;
 		double result=0, totweights=0, iweight;
@@ -36,16 +36,16 @@ extern "C" {
 		if (INTEGER(var)[0]) {
 			if (totweights>0)result/=totweights;
 		}
-		return ScalarReal(result);
+		return Rf_ScalarReal(result);
 
 	}
 	
 	SEXP tmrWeightedDistObject(SEXP diss, SEXP Sweights) {
-		int ilen=length(Sweights);
+		int ilen=Rf_length(Sweights);
 		double * weights=REAL(Sweights);
 		int n=ilen;
 		SEXP ans;
-		PROTECT(ans = allocVector(REALSXP, (ilen*(ilen-1)/2)));
+		PROTECT(ans = Rf_allocVector(REALSXP, (ilen*(ilen-1)/2)));
 		double *wmat=REAL(ans);
 		double * dmat=REAL(diss);
 		int i, j, i_indiv, base_indice;
@@ -66,12 +66,12 @@ extern "C" {
 
 	}
 	SEXP tmrWeightedInertiaContrib(SEXP distmatrix, SEXP individuals, SEXP Sweights) {
-		int mlen=nrows(distmatrix);
-		int ilen=length(individuals);
+		int mlen=Rf_nrows(distmatrix);
+		int ilen=Rf_length(individuals);
 		int * indiv=INTEGER(individuals);
 		double * weights=REAL(Sweights);
 		SEXP ans;
-		PROTECT(ans = allocVector(REALSXP, ilen));
+		PROTECT(ans = Rf_allocVector(REALSXP, ilen));
 		double *result=REAL(ans);
 		double *dmat=REAL(distmatrix);
 		int i_index=0;
@@ -101,15 +101,15 @@ extern "C" {
 	}
 	
 	SEXP tmrWeightedInertiaContribExt(SEXP distmatrix, SEXP individuals, SEXP extindivS, SEXP Sweights) {
-		int mlen=nrows(distmatrix);
-		int ilen=length(individuals);
-		int ilenExt=length(extindivS);
+		int mlen=Rf_nrows(distmatrix);
+		int ilen=Rf_length(individuals);
+		int ilenExt=Rf_length(extindivS);
 		int * indiv=INTEGER(individuals);
 		int * indivExt=INTEGER(extindivS);
 		double * weights=REAL(Sweights);
 		int totlen=ilen+ilenExt;
 		SEXP ans;
-		PROTECT(ans = allocVector(REALSXP, totlen));
+		PROTECT(ans = Rf_allocVector(REALSXP, totlen));
 		double *result=REAL(ans);
 		double *dmat=REAL(distmatrix);
 		double totweights=0, iweight;
@@ -156,9 +156,9 @@ extern "C" {
 	}
 	
 	SEXP tmrWeightedInterInertia(SEXP distmatrix, SEXP grp1, SEXP grp2, SEXP Sweights) {
-		int mlen=nrows(distmatrix);
-		int ilen1=length(grp1);
-		int ilen2=length(grp2);
+		int mlen=Rf_nrows(distmatrix);
+		int ilen1=Rf_length(grp1);
+		int ilen2=Rf_length(grp2);
 		int * indiv1=INTEGER(grp1);
 		int * indiv2=INTEGER(grp2);
 		double *dmat=REAL(distmatrix);
@@ -183,7 +183,7 @@ extern "C" {
 		//Rprintf("Sum = %f\n",result);
 		//if(ilen>0)result/=(double)ilen;
 		//Rprintf("Inertia = %f\n",result);
-		return ScalarReal(result);
+		return Rf_ScalarReal(result);
 	//   Rprintf("Inertia = %f\n",(*result));
 	}
 

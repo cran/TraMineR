@@ -86,7 +86,7 @@ seqplotMD(channels,
 }
 
 \details{
-The \code{seqplotMD} function is intended for multidomain (or multichannel) sequences, i.e. situations where each case is represented by a sequence in each of several domains. The elements (set of state sequences) of the \code{channels} list are assumed to be paired. Sequences defined in terms of the expanded alphabet formed by the combination of the domain states are called MD sequences. Although the MD sequences may be used for some computations, \code{seqplotMD} does not plot the MD sequences themselves, but the corresponding domain sequences. 
+The \code{seqplotMD} function is intended for multidomain (or multichannel) sequences, i.e. situations where each case is represented by a sequence in each of several domains. The elements (set of state sequences) of the \code{channels} list are assumed to be paired. Sequences defined in terms of the expanded alphabet formed by the combination of the domain states are called MD sequences. Although the MD sequences (which can be obtained with \code{\link{seqMD}}) may be used for some computations, \code{seqplotMD} does not plot the MD sequences themselves, but the corresponding domain sequences. 
 
 For details on the types of plot, see \code{\link{seqplot}}.
 
@@ -110,7 +110,7 @@ No special handling other than the domain-group titles and the organization of t
 
 \seealso{\code{\link{seqplot}},
  \code{\link{plot.stslist}},  \code{\link{seqstatd}}, \code{\link{plot.stslist.statd}}, \code{\link{seqtab}}, \code{\link{plot.stslist.freq}}, \code{\link{seqmodst}}, \code{\link{plot.stslist.modst}}, \code{\link{seqmeant}}, \code{\link{plot.stslist.meant}}, \code{\link{seqrep}}, \code{\link{plot.stslist.rep}}, \code{\link{seqrf}}, 
- \code{\link{plot.seqrf}}, \code{\link{seqpcplot}}.
+ \code{\link{plot.seqrf}}, \code{\link{seqpcplot}}, \code{\link{seqMD}}.
 }
 
 

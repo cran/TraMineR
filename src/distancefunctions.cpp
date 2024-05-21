@@ -13,6 +13,7 @@
 #include "NMSMSTSoftdistance.h"
 #include "NMSMSTSoftdistanceII.h"
 #include "NMSDURSoftdistance.h"
+#include "OMPerdistanceII.h"
 
 /**
 
@@ -50,8 +51,10 @@ DistanceCalculator* getDistanceCalculatorObject(SEXP Ssequences, SEXP seqdim, SE
 			ds = new NMSDURSoftdistance(normS, Ssequences, seqdim, lenS);
 		} else if(disttype==14){
 			ds = new TWEDdistance(normS, Ssequences, seqdim, lenS);
+		} else if(disttype==15){
+			ds = new OMPerdistanceII(normS, Ssequences, seqdim, lenS);
 		} else {
-			error("Unsupported distance type");
+			Rf_error("Unsupported distance type");
 		}
 		TMRLOG(5, "Initparameters\n");
 		ds->setParameters(paramS);
@@ -77,7 +80,7 @@ extern "C" {
     // Ensure correct memory management
     SEXP workers;
 
-    PROTECT(workers = allocVector(VECSXP, 2));
+    PROTECT(workers = Rf_allocVector(VECSXP, 2));
     SET_VECTOR_ELT(workers,0, distanceObjectFactory(distObj));
     SET_VECTOR_ELT(workers,1, DistanceCalculator::distanceCalculatorFactory(ds));
     TMRLOG(5, "Initparameters finished\n");
@@ -137,9 +140,9 @@ extern "C" {
 
     // Ensure correct memory management
     SEXP workers, ans;
-    PROTECT(ans = allocVector(REALSXP, nans));
+    PROTECT(ans = Rf_allocVector(REALSXP, nans));
 
-    PROTECT(workers = allocVector(VECSXP, 1));
+    PROTECT(workers = Rf_allocVector(VECSXP, 1));
     SET_VECTOR_ELT(workers,0, DistanceCalculator::distanceCalculatorFactory(ds));
     TMRLOG(5, "Initparameters finished\n");
     double * distances=REAL(ans);

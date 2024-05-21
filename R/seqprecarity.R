@@ -77,6 +77,8 @@ seqprecarity.private <- function(seqdata, type=1, correction=NULL,
   ##} else {## normalize by maximum value and assign class mean value to members of equiv class
   stprec <- seqprecstart(seqdata, state.order=state.order, state.equiv=state.equiv,
                         stprec=stprec, with.missing=with.missing)
+  state.order <- attr(stprec,"state.order")
+  state.equiv <- attr(stprec,"state.equiv")
   ##}
 
   if (is.null(correction)){

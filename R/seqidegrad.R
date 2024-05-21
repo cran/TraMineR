@@ -63,10 +63,13 @@ seqidegrad.private <- function(seqdata, spell.integr=TRUE, state.order=alphabet(
     if(length(stprec) != length(alphabet(seqdata, with.missing)))
       msg.stop("seqidegrad: length of stprec does not match the size of the alphabet!")
   }
-  if(method %in% c("RANK","RANK+") || spell.integr){
+  #if(method %in% c("RANK","RANK+") || spell.integr){
     stprec <- suppressMessages(seqprecstart(seqdata, state.order=state.order,
                         state.equiv=state.equiv, stprec=stprec, with.missing=with.missing))
-  }
+    state.order <- attr(stprec,"state.order")
+    state.equiv <- attr(stprec,"state.equiv")
+  #}
+
 
   if (is.logical(penalized)){
     if(penalized) penalized<-'BOTH' else penalized<-'NO'

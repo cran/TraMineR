@@ -264,6 +264,10 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
 	## ========
 	## Plotting
 	## ========
+    if ("col.entr" %in% names(oolist)){
+        col.entr <- oolist[["col.entr"]]
+        oolist <- c(list(col=col.entr), oolist[!"col.entr" %in% names(oolist)])
+    }
 	for (np in 1:nplot) {
 		## Storing ... arguments in a list
 		olist <- oolist
@@ -437,7 +441,7 @@ seqplot <- function(seqdata, group = NULL, type = "i", main = "auto",
 
         legargs <- names(formals(legend))
         largs <- oolist[names(oolist) %in% legargs]
-        largs <- largs[!names(largs) %in% c("cex")]
+        largs <- largs[!names(largs) %in% c("cex","col")]
         largs <- c(list(legpos, ltext, cpal, cex=cex.legend, leg.ncol=leg.ncol),largs)
 
 		#TraMineR.legend(legpos, ltext, cpal, cex=cex.legend, density=density, angle=angle, leg.ncol=leg.ncol)

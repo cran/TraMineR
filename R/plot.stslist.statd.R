@@ -19,7 +19,7 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL,
 	## Storing the optional graphical parameters in a list
 	glist <- list(...)
     parlist <- par()
-    glist <- glist[names(glist) %in% names(parlist)]
+    glist <- glist[names(glist) %in% c("main",names(parlist))]
 
 
   sep.ylab <- (isFALSE(yaxis) && (is.null(ylab) || !is.na(ylab)))
@@ -49,11 +49,16 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL,
     ## for x axis
 	x.lab.pos <- NULL
 	tpos <- seq(1,seql, xtstep)
+    x.pos <- NULL
+
     if (tick.last & tpos[length(tpos)] < seql) tpos <- c(tpos,seql)
 
 	for (p in tpos) {
 		x.lab.pos <- c(x.lab.pos, (p-1)+((p-1)*space)+(0.5+space))
 	}
+    for (p in 1:seql) {
+        x.pos <- c(x.pos, (p-1)+((p-1)*space)+(0.5+space))
+    }
 
     ## y label
     if(is.null(ylab)){
@@ -120,14 +125,14 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL,
             c2 <- .5
             bp <- as.vector(bp)[1:length(y)]
             #plot(x=as.vector(bp)[1:length(y)], y=y, type="n", axes=FALSE,
-            plist <- list(x=x.lab.pos, y=y, type="n", axes=FALSE,
+            plist <- list(x=x.pos, y=y, type="n", axes=FALSE,
                     ylim=ylim, xlab=NA, ylab=NA)
             plist <- c(plist,glist)
             do.call(plot, args=plist)
             #plot(x=x.lab.pos, y=y, type="n", axes=FALSE,
             #        ylim=ylim, xlab=NA, ylab=NA, ...)
             #lines(x=c1*bp + c2, y=y, col=col, lwd=lwd)
-            lines(x=c1*x.lab.pos + c2, y=y, col=col, lwd=lwd)
+            lines(x=c1*x.pos + c2, y=y, col=col, lwd=lwd)
             #axis(4,at=seq(0,max(c(1,max(y))),.2))
             #mtext(ylab.r, line=3, side=4, cex = par("cex"))
 
@@ -137,7 +142,7 @@ plot.stslist.statd <- function(x, type = "d", cpal = NULL,
 	else if (type=="Ht") {
         #if (is.null(ylab.r))
         #    ylab.r <- paste("Entropy index (",wlab,"n=",round(n,2),")",sep="")
-
+        if (is.null(xlab)) xlab <- NA
         plist <- list(x=y,
 			col=col,
 			## frame.plot=TRUE,

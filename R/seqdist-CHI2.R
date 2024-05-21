@@ -38,7 +38,7 @@ CHI2 <- function(seqdata, breaks=NULL, step=1, with.missing=FALSE, norm=TRUE,
 		}
 	}
 	if(!is.list(breaks)){
-		msg.stop("breaks should be a list of couples: breaks=list(c(start1, end1), c(start2, end2), ...))")
+		msg.stop("breaks should be a list of ordered pairs: breaks=list(c(start1, end1), c(start2, end2), ...))")
 	}
 
 	labels <- attr(seqdata, "labels")

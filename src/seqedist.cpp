@@ -72,10 +72,10 @@ extern "C" {
         int norm=INTEGER(Snorm)[0];
         double* idcost=REAL(Sidcost);
         Sequence *s =NULL, *s2=NULL;
-        int ns=length(seqs);
+        int ns=Rf_length(seqs);
         SEXP ans;
         SEXP seq;
-        PROTECT(ans = allocMatrix(REALSXP, ns, ns));
+        PROTECT(ans = Rf_allocMatrix(REALSXP, ns, ns));
         double *matrix=REAL(ans);
         int maxevent=0, event=0;
         SequenceEventNode * sen=NULL, *sen2=NULL;
@@ -156,7 +156,7 @@ extern "C" {
                 ei=1;
                 ej=1;
                 TMRLOG(5, "Maximum cost %f", maxcost);
-				//return ScalarInteger(1);
+				//return Rf_ScalarInteger(1);
                 sen=s->getEvent();
                 age1=0;
                 age2=0;

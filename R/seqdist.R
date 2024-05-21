@@ -6,7 +6,8 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
   kweights = rep(1.0, ncol(seqdata)), tpow = 1.0, expcost = 0.5, context,
   link = "mean", h = 0.5, nu, transindel = "constant", otto,
   previous = FALSE, add.column = TRUE, breaks = NULL, step = 1, overlap = FALSE,
-  weighted = TRUE, global.pdotj=NULL, prox = NULL, check.max.size=TRUE) {
+  weighted = TRUE, global.pdotj=NULL, prox = NULL, check.max.size=TRUE,
+  opt.args = list()) {
 
   gc(FALSE)
   ptime.begin <- proc.time()
@@ -587,6 +588,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
     indel.type <- "vector"
   }
 
+
   # OMslen
   if (method == "OMslen") {
     dseqs.dur <- seqdur(dseqs.num, with.missing=with.missing)
@@ -638,6 +640,7 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
     rm(nmin)
   }
 
+
   rm(seqdata.num)
 
   #### Pre-process data (part 2/2) ####
@@ -664,6 +667,17 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
   rm(dl)
 
   #### Configure params ####
+
+  if (method=="OMspell" & is.list(opt.args)){
+    if (!is.null(opt.args[["tokdep.coeff"]])){
+        tokdep.coeff <- opt.args[["tokdep.coeff"]]
+        if (length(tokdep.coeff) != length(indel))
+            msg.stop("tokdep.coeff should be a vector of same length as indel")
+        else method <- "OMtspell"
+    }
+  }
+
+
 
   params <- list()
   nstates <- as.integer(nstates)
@@ -721,6 +735,18 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
     params[["seqdur"]] <- as.double(dseqs.dur)
     params[["timecost"]] <- expcost
     params[["seqlength"]] <- as.integer(seqlength)
+    rm(dseqs.dur)
+  }
+  # OMtspell
+  else if (method == "OMtspell") {
+    params[["alphasize"]] <- nstates
+    params[["indel"]] <- max(indel)
+    params[["indels"]] <- indel
+    params[["scost"]] <- sm
+    params[["seqdur"]] <- as.double(dseqs.dur)
+    params[["timecost"]] <- expcost
+    params[["seqlength"]] <- as.integer(seqlength)
+    params[["tokdepcoeff"]] <- tokdep.coeff
     rm(dseqs.dur)
   }
   # HAM + DHD
@@ -789,7 +815,9 @@ seqdist <- function(seqdata, method, refseq = NULL, norm = "none", indel = "auto
       NMS = if (prox.type == "matrix") 12 else 5,
       NMSMST = 6,
       SVRspell = 13,
-      TWED = 14)
+      TWED = 14,
+      OMtspell = 15
+      )
 
   # Transform the sequence object into a matrix
   # Modified dseqs.num for OMspell, NMSMST, SVRspell

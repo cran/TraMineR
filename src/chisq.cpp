@@ -12,7 +12,7 @@ extern "C" {
         SEXP distS;
 		int n = INTEGER(tdimS)[0];
 		int n1 = n-1;
-		PROTECT(distS=allocVector(REALSXP, n*(n-1)/2));
+		PROTECT(distS=Rf_allocVector(REALSXP, n*(n-1)/2));
 		double * dist=REAL(distS);
 		int col =INTEGER(tdimS)[1];
 		double * chitable=REAL(ChiTableS);
@@ -50,7 +50,7 @@ extern "C" {
 			rseq1 = rseq1 - 1;
 		}
 		//int n1 = n-1;
-		PROTECT(distS=allocVector(REALSXP, na));
+		PROTECT(distS=Rf_allocVector(REALSXP, na));
 		double * dist=REAL(distS);
 		int col =INTEGER(tdimS)[1];
 		double * chitable=REAL(ChiTableS);

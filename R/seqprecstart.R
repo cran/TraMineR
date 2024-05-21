@@ -6,11 +6,20 @@ seqprecstart <- function(seqdata, state.order=alphabet(seqdata, with.missing), s
 
   if (!is.null(stprec)) { ## state.order set from stprec
     if (!is.null(state.order)) {
-       msg.warn("state.order overridden by stprec order!")
+       msg.warn("state.order and state.equiv overridden by stprec order!")
     }
     ord <- order(stprec)
     ord <- ord[(1+sum(stprec<0)):length(ord)] ## only positive values
     state.order <- alphabet(seqdata,with.missing)[ord]
+
+    tab <- table(stprec)
+    mstp <- tab[tab>1]
+    if (length(mstp)>0){ ## equiv classes
+        state.equiv <- list()
+        for (i in 1:length(mstp)){
+            state.equiv[[i]] <- alphabet(seqdata,with.missing)[which(stprec==names(mstp)[i])]
+        }
+    }
     stprec[stprec<0] <- mean(stprec[ord])
   }
 
@@ -52,6 +61,9 @@ seqprecstart <- function(seqdata, state.order=alphabet(seqdata, with.missing), s
       stprec[iequiv] <- mean(stprec[iequiv])
     }
   }
+
+  attr(stprec,"state.order") <- state.order
+  attr(stprec,"state.equiv") <- state.equiv
 
   return(stprec)
 }

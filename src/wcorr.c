@@ -32,7 +32,7 @@ SEXP wcorr(SEXP x, SEXP y, SEXP w){
   double *xx = REAL(x), *yy = REAL(y), *ww = REAL(w);
 
   /* allocate space for output matrix */
-  PROTECT(mat = allocMatrix(REALSXP, ncx, ncy));
+  PROTECT(mat = Rf_allocMatrix(REALSXP, ncx, ncy));
 
   /* for each i and j calculate each correlation and save in matrix mat */
   for (i = 0; i < ncx; i++){
