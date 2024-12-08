@@ -1,6 +1,28 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.2-11 [2024-12-08] }{
+
+    \subsection{Changes in existing functions}{
+        \itemize{
+            \item
+            \code{dissrep()}: when all distances are zero, the
+            number \code{nb} of cases in the neighborhood of the
+            representative is set as the sum of weights
+            (was zero in previous versions)
+        }
+    }
+
+    \subsection{Bug fixes}{
+        \itemize{
+            \item
+            \code{dissrep()} error when seqdata is a single sequence.
+            \item
+            \code{seqecreate()} (and \code{tmrsequenceseveral} cpp function): segfault error when intEvent is NULL. (Fix required by Brian Ripley)
+        }
+    }
+}
+
 \section{Changes in version 2.2-10 [2024-05-20] }{
 
     \subsection{New functions}{
@@ -18,7 +40,7 @@
             \code{seqdist()} new argument \code{opt.args} to test
             non-documented arguments at development stage.
             \item
-            \code{seqdef()} now raises an error when it finds negative of \code{NA} weights.
+            \code{seqdef()} now raises an error when it finds negative or \code{NA} weights.
             \item
             \code{seqprecstart()} includes derived state.order and state.equiv as attributes of returned object.
         }

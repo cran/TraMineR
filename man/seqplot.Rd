@@ -205,7 +205,7 @@ seqIplot(actcal.seq, group=actcal$sex, sortv=actcal$age00)
 ## =======================
 
 ## biofam grouped by sex
-seqplot(biofam.seq, type="d", group=actcal$sex)
+seqplot(biofam.seq, type="d", group=biofam$sex)
 
 ## actcal grouped by sex
 seqplot(actcal.seq, type="d", group=actcal$sex)

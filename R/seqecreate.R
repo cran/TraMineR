@@ -58,7 +58,8 @@ seqecreate.internal <- function(data, id, timestamp, event, end.event, tevent,
 	}
 	#  warning("Event sequence analysis module is still experimental", call.=FALSE)
 	classname <- c("eseq")
-	intEvent <- NULL
+	#intEvent <- NULL (setting NULL causes an error when passed to the cpp function)
+	intEvent <- 0
 	if(!is.factor(event)){
 		event <- factor(event)
 	}
@@ -86,6 +87,30 @@ seqecreate.internal <- function(data, id, timestamp, event, end.event, tevent,
 	timestamp <- as.double(timestamp)
 	event <- as.integer(event)
 
+#   if (is.null(as.integer(id)))
+#     warning("as.integer(id) is NULL")
+# 	else
+# 	  message("length as.integer(id) = ",length(as.integer(id)))
+# 	if (is.null(as.double(timestamp)))
+# 	  warning("as.double(timestamp) is NULL")
+# 	else
+# 	  message("length as.double(timestamp) = ",length(as.double(timestamp)))
+# 	if (is.null(as.integer(event)))
+# 	  warning("as.integer(event) is NULL")
+# 	else
+# 	  message("length as.integer(event) = ",length(as.integer(event)))
+# 	if (is.null(as.integer(c(intEvent))))
+# 	  warning("as.integer(c(intEvent)) is NULL")
+# 	else
+# 	  message("length as.integer(c(intEvent)) = ",length(as.integer(c(intEvent))))
+# 	if (is.null(classname))
+# 	  warning("classname is NULL")
+# 	else
+# 	  message("length classname = ",length(classname))
+# 	if (is.null(as.character(dictionnary)))
+# 	  warning("as.character(dictionnary) is NULL")
+# 	else
+# 	  message("length as.character(dictionnary) = ",length(as.character(dictionnary)))
 
 	ret <- .Call(C_tmrsequenceseveral, as.integer(id),
 		as.double(timestamp), as.integer(event),

@@ -77,7 +77,8 @@ extern "C" {
     SEXP tmrsequenceseveral(SEXP idpers, SEXP time, SEXP event, SEXP endEvent,SEXP classname, SEXP dictionnary) {
     	//Create the dictionnary
     	EventDictionary * ed= new EventDictionary(dictionnary);
-    	bool obsTime=!Rf_isNull(endEvent);
+    	//bool obsTime=!Rf_isNull(endEvent);
+    	bool obsTime=(INTEGER(endEvent)[0]!=0);
     	int eEvent=0;
     	if(obsTime){
     		eEvent=INTEGER(endEvent)[0];

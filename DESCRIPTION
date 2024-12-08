@@ -1,6 +1,6 @@
 Package: TraMineR
-Version: 2.2-10
-Date: 2024-05-20
+Version: 2.2-11
+Date: 2024-12-08
 Title: Trajectory Miner: a Sequence Analysis Toolkit
 Authors@R: c(
   person("Alexis", "Gabadinho",
@@ -30,7 +30,7 @@ Encoding: UTF-8
 Maintainer: Gilbert Ritschard <gilbert.ritschard@unige.ch>
 RoxygenNote: 7.2.3
 NeedsCompilation: yes
-Packaged: 2024-05-20 19:31:28 UTC; grits
+Packaged: 2024-12-08 09:43:20 UTC; grits
 Author: Alexis Gabadinho [aut, cph],
   Matthias Studer [aut, cph] (<https://orcid.org/0000-0002-6269-1412>),
   Nicolas Müller [aut],
@@ -39,4 +39,4 @@ Author: Alexis Gabadinho [aut, cph],
   Gilbert Ritschard [aut, cre, cph]
     (<https://orcid.org/0000-0001-7776-0903>)
 Repository: CRAN
-Date/Publication: 2024-05-21 11:40:03 UTC
+Date/Publication: 2024-12-08 11:40:02 UTC

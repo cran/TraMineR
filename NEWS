@@ -1,4 +1,21 @@
 ## =========
+Version 2.2-11 [2024-12-08]
+
+Changes in existing functions:
+
+  - dissrep(): when all distances are zero, the
+    number nb of cases in the neighborhood of the
+    representative is set as the sum of weights
+    (was zero in previous versions)
+
+Bug fixes:
+
+  - dissrep() error when seqdata is a single sequence
+  - seqecreate() (and tmrsequenceseveral cpp function): 
+    segfault error when intEvent is NULL. 
+    (Fix required by Brian Ripley.)
+
+## =========
 Version 2.2-10 [2024-05-20]
 
 New functions:

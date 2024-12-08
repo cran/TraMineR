@@ -12,6 +12,8 @@ dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE
         diss <- dist2matrix(diss)
 	}
 
+    diss <- as.matrix(diss) #gr
+    diss0 <- if (all(diss==0)) TRUE else FALSE
 	nbobj <- nrow(diss)
 
 	if (is.null(weights)) { weights <- rep(1, nbobj) }
@@ -76,11 +78,11 @@ dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE
 	## ===========================
 	## Sorting candidates by score
 	## ===========================
-	if (length(score)!=nrow(diss))
+	if (length(score)!=nrow(as.matrix(diss)))
 		stop("Score must be a vector of length equal to",nbobj)
 
 	score.sort <- order(score, decreasing=decreasing)
-	rep.dist <- diss[score.sort, score.sort]
+	rep.dist <- diss[score.sort, score.sort, drop=FALSE]
 
 	## ==========================
 	## Selecting representatives
@@ -97,7 +99,7 @@ dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE
 			idx <- idx+1
 			if (idx==1 || all(rep.dist[idx, idxrep]>pradius)) {
 				idxrep <- c(idxrep, idx)
-				tempm <- as.matrix(rep.dist[, idxrep])
+				tempm <- as.matrix(rep.dist[, idxrep, drop=FALSE])
 				nbnear <- sum((rowSums(tempm<pradius)>0)*weights[score.sort])
 				pctrep <- nbnear/weights.sum
 			}
@@ -127,7 +129,7 @@ dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE
 
 	## On force avec as.matrix car sinon il y a une erreur
 	## si 1 seule colonne
-	dist.repseq <- as.matrix(diss[,score.sort[idxrep]])
+	dist.repseq <- as.matrix(diss[,score.sort[idxrep], drop=FALSE])
 
 	## ================
 	## Quality measures
@@ -173,6 +175,7 @@ dissrep <- function(diss, criterion = "density", score = NULL, decreasing = TRUE
 		V <- DC/sum(weights)
         minidx <- rep(1,nrow(dist.repseq))
 	}
+    if (diss0) nb<-sum(weights, na.rm=TRUE)
 
 
     ## List of ids of representatives in original data
