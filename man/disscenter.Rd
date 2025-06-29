@@ -24,9 +24,7 @@ disscenter(diss, group=NULL, medoids.index=NULL,
 If set to \code{"first"}, returns the index of the first encountered
 most central sequence. If \code{group} is set, an index is returned per group. When set to \code{"all"}, indexes of all medoids (one list per group) are returned.}
 
-   \item{allcenter}{logical. If \code{TRUE}, returns a \code{data.frame}
-containing the dissimilarity between each object and its group
-center, each column corresponding to a group.}
+   \item{allcenter}{logical. If \code{TRUE}, computes the distances of all cases to all group centers. Ignored when \code{medoids.index} is not \code{NULL}.}
 
     \item{weights}{optional numerical vector containing weights.}
 	\item{squared}{Logical. If \code{TRUE} \code{diss} is squared.}
@@ -44,7 +42,10 @@ center, each column corresponding to a group.}
 	where \eqn{SS} is the sum of squares (see \code{\link{dissvar}}).
 }
 \value{
-	A vector with the dissimilarity to the group center for each object, or a list of medoid indexes.
+	When \code{medoid.index=NULL}, the vector with the dissimilarity of each case with its group center or \cr
+    when \code{allcenter} is \code{TRUE}, a data frame with distances of all cases (rows) to all group centers (columns). \cr
+    When \code{medoid.index="first"}, vector of the index of first encountered medoid per group.\cr
+    When \code{medoid.index="all"}, list of indexes of all occurrences of each group medoid.
 }
 
 \references{
@@ -80,10 +81,10 @@ center, each column corresponding to a group.}
 data(mvad)
 mvad.seq <- seqdef(mvad[, 17:86])
 
-## Building dissimilarities (any dissimilarity measure can be used)
+## Computing dissimilarities (any dissimilarity measure can be used)
 mvad.ham <- seqdist(mvad.seq, method="HAM")
 
-## Compute distance to center according to group gcse5eq
+## Distance to center according to group gcse5eq
 dc <- disscenter(mvad.ham, group=mvad$gcse5eq)
 
 ## Ploting distribution of dissimilarity  to center
@@ -96,6 +97,14 @@ print(dc)
 ## Retrieving index of all medoids in each group
 dc <- disscenter(mvad.ham, group=mvad$Grammar, medoids.index="all")
 print(dc)
+
+## Distances of all cases to each group center
+dc <- disscenter(mvad.ham, group=mvad$Grammar, allcenter=TRUE)
+print(cbind(dc,mvad$Grammar)[1:10,])
+## Compare with the following
+dc0 <- disscenter(mvad.ham, group=mvad$Grammar)
+print(cbind(dc0,mvad$Grammar)[1:10,])
+
 }
 \author{Matthias Studer (with Gilbert Ritschard for the help page)}
 % Add one or more standard keywords, see file 'KEYWORDS' in the

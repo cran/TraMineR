@@ -21,6 +21,11 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
     #msg.warn("'data' as a string is deprecated, use as.matrix() to convert it")
   }
 
+  if (!is.null(covar) && to != "SRS"){
+    msg.warn('covar ignored when to is not "SRS"')
+    covar <- NULL
+  }
+
   #### Check for arguments that need to be defined ####
 
   # from
@@ -63,7 +68,7 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
 
   # var
   if (!is.null(var))
-    checkindexes(var)
+    checkindexes(var,"var")
 
   # missing
   #missing <- as.character(missing)
@@ -77,8 +82,8 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
     msg.stop("'stsep' must be a character")
 
   # to SRS
-  if (!is.null(covar))
-    checkindexes(covar)
+  if (!is.null(covar) & to == "SRS")
+    checkindexes(covar,"covar")
 
   # to TSE
   if (to == "TSE" && missing(tevent))
@@ -99,7 +104,7 @@ seqformat <- function(data, var = NULL, from, to, compress = FALSE, nrep = NULL,
   # from / to SPELL
   if (from == "SPELL" || to == "SPELL") {
     if (!is.null(pvar)) {
-      checkindexes(pvar)
+      checkindexes(pvar, "pvar")
       if (!is.data.frame(pdata))
         msg.warn0("'pvar' ignored because 'pdata' is not a data frame")
     } else {

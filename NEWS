@@ -1,4 +1,16 @@
 ## =========
+Version 2.2-12 [2025-06-29]
+
+Bug fixes:
+
+  - dissdomassoc() issue with ties when ranking values for spearman correlation.
+  - disscenter() wrong distance values returned when allcenter=TRUE.
+  - seqformat(): useless test on covar when to is not "SRS".
+  - seqformat() with from="SPELL" (SPELL_to_STS): unreadable list of 
+    cases with spells ending before start time.
+  - seqformat(): several internal checkindexes badly specified.
+
+## =========
 Version 2.2-11 [2024-12-08]
 
 Changes in existing functions:

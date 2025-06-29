@@ -2,9 +2,9 @@
 
 \name{seqformat}
 \alias{seqformat}
-\title{Conversion between sequence formats}
+\title{Conversion between sequence representation formats}
 \description{
-  Convert a sequence data set from one format to another.
+  Convert a sequence data set from one representation format to another.
 }
 \usage{
 seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
@@ -17,35 +17,33 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
 \arguments{
   \item{data}{
     Data frame, matrix, \code{stslist} state sequence object, or character string vector.
-    The data to use. (Tibble will be converted with \code{as.data.frame}).
+    The data to use. (If a tibble, \code{data} is internally converted with \code{as.data.frame}).
 
     A data frame or a matrix with sequence data in one or more columns when
     \code{from = "STS"} or \code{from = "SPS"}. If sequence data are in a single
-    column or in a string vector, they are assumed to be in the compressed form (see \code{stsep}).
+    column or in a string vector, they are assumed to be in compressed form (see \code{stsep}).
 
-    A data frame with sequence data in one or more columns when \code{from = "SPELL"}.
-    If sequence data has not four columns ordered as individual ID, spell
-    start time, spell end time, and spell state status, use \code{var} or
-    \code{id} / \code{begin} / \code{end} / \code{status}.
+    A data frame with at least four columns when \code{from = "SPELL"}. Unless specified with the \code{var}, or \code{id} / \code{begin} / \code{end} / \code{status} arguments, the first four columns are assumed to be individual ID, spell
+    start time, spell end time, and spell state status.
 
     A state sequence object when \code{from = "STS"} or \code{from} is not specified.
   }
   \item{var}{
     \code{NULL}, List of Integers or Strings.
     Default: \code{NULL}.
-    The indexes or the names of the columns with the sequence data in \code{data}.
+    Indexes or names of the columns containing the sequence information in \code{data}.
     If \code{NULL}, all columns are considered.
   }
   \item{from}{
     String.
-    The format of the input sequence data.
-    It can be \code{"STS"}, \code{"SPS"}, or \code{"SPELL"}. It is not needed
-    if \code{data} is a state sequence object.
+    Format of the input sequence data.
+    It can be \code{"STS"} (successive states), \code{"SPS"} (successive state-duration spells), or \code{"SPELL"} (vertical id-start-end-state spells). Ignored
+    when \code{data} is a \code{stslist} state sequence object.
   }
   \item{to}{
     String.
-    The format of the output data.
-    It can be \code{"STS"}, \code{"DSS"}, \code{"SPS"}, \code{"SRS"}, \code{"SPELL"}, or \code{"TSE"}.
+    Format of the output data.
+    It can be \code{"STS"} (successive states), \code{"DSS"} (distinct successive states), \code{"SPS"} (sequences of spells), \code{"SRS"} (shifted replicated sequences), \code{"SPELL"} (vertical spells), or \code{"TSE"} (time stamped events).
   }
   \item{compress}{
     % to STS, DSS, SPS
@@ -58,7 +56,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   \item{nrep}{
     % to SRS
     Integer.
-    The number of shifted replications when \code{to = "SRS"}.
+    Number of shifted replications when \code{to = "SRS"}.
   }
   \item{tevent}{
     % to TSE
@@ -73,29 +71,30 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     % from STS, SPS
     \code{NULL}, Character.
     Default: \code{NULL}.
-    The separator between states in the compressed form (strings) when
-    \code{from = "STS"} or \code{from = "SPS"}.
+    When \code{from = "STS"} or \code{from = "SPS"}, separator token between states 
+    in the compressed form (strings).
     If \code{NULL}, \code{\link{seqfcheck}} is called for detecting automatically
-    a separator among "-" and ":". Other separators must be specified explicitly.
+    a separator among "-" and ":". Other separators must be explicitly specified.
     See \code{\link{seqdecomp}}.
   }
   \item{covar}{
     % to SRS
     List of Integers or Strings.
-    The indexes or the names of additional columns in \code{data} to include as
-    covariates in the output when \code{to = "SRS"}.
-    The covariates are replicated across the shifted replicated rows.
+    When \code{to = "SRS"}, indexes or names of \code{data} columns to include as
+    covariates in the output. Ignored otherwise. Applies only when \code{data} is a data frame with both sequence and covariate data. Must be used in conjunction with \code{var}.
+    Covariate values are replicated across the shifted replicated rows.
   }
   \item{SPS.in}{
     % from SPS
     List.
     Default: \code{list(xfix = "()", sdsep = ",")}.
-    The specifications for the state-duration couples in the input data when
+    Specifications for the state-duration couples in the input data when
     \code{from = "SPS"}.
-    The first specification, \code{xfix}, specifies the prefix/suffix character.
-    Use a two-character string if the prefix and the suffix differ. Use
-    \code{xfix = ""} when no prefix/suffix are present. The second
-    specification, \code{sdsep}, specifies the state/duration separator.
+    The first element, \code{xfix}, specifies the prefix/suffix character.
+    If a single character, it is used as both prefix and suffix.
+    If a two-character string, the first character is used as prefix and the second one as suffix.
+    \code{xfix = ""} means no prefix/suffix. The second
+    element, \code{sdsep}, specifies the separator token between state and duration.
   }
 	\item{SPS.out}{
     % to SPS
@@ -108,46 +107,45 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
 	\item{id}{
     % from SPELL
     % to TSE
-    \code{NULL}, Integer, String, List of Integers or Strings.
+    \code{NULL}, Integer, String, Vector of Integers or Strings.
     Default: \code{1}.
 
-    When \code{from = "SPELL"}, the index or the name of the column containing
+    When \code{from = "SPELL"}, index or name of the column containing
     the individual IDs in \code{data} (after \code{var} filtering).
 
-    When \code{to = "TSE"}, the index or the name of the column containing
-    the individual IDs in \code{data} (after \code{var} filtering) or the unique
-    individual IDs. If \code{id} is not manually specified, \code{id} is set as
-    \code{NULL} for backward compatibility with TraMineR 1.8-13 behaviour. If
-    \code{id} is manually or automatically set as \code{NULL}, the original
-    individual IDs are ignored and replaced by the indexes of the sequences in the
-    input data.
+    When \code{to = "TSE"}, index or name of the \code{data} column containing
+    the individual IDs (after \code{var} filtering), or vector of unique
+    individual IDs. If \code{NULL}, indexes of the sequences in the
+    input data are used as IDs. If no \code{id} is provided when calling 
+    the function and \code{from} is
+    not \code{"SPELL"}, \code{id} is set as \code{NULL}.
 
-    When \code{from = "SPELL"} and \code{to = "TSE"}, the index or the name of
-    the column containing the individual IDs in \code{data} (after \code{var}
-    filtering). The TSE output will use the original individual IDs.
+    When \code{from = "SPELL"} and \code{to = "TSE"}, \code{id} cannot 
+    be \code{NULL} and the IDs in the TSE output 
+    refer to the IDs in the \code{id} column of  the \code{SPELL} data.
   }
 	\item{begin}{
     % from SPELL
     Integer or String.
     Default: \code{2}.
-    The index or the name of the column containing the spell start times in
-    \code{data} (after \code{var} filtering) when \code{from = "SPELL"}.
-    Start times should be positive integers.
+    Index or name of the \code{data} column containing the spell start times
+    (after \code{var} filtering) when \code{from = "SPELL"}.
+    Start times must be positive integers.
   }
 	\item{end}{
 	  % from SPELL
     Integer or String.
     Default: \code{3}.
-    The index or the name of the column containing the spell end times in
-    \code{data} (after \code{var} filtering) when \code{from = "SPELL"}.
-    End times should be positive integers.
+    Index or name of the \code{data} column containing the spell end times 
+    (after \code{var} filtering) when \code{from = "SPELL"}.
+    End times must be positive integers.
   }
 	\item{status}{
 		% from SPELL
     Integer or String.
     Default: \code{4}.
-    The index or the name of the column containing the spell statuses in
-    \code{data} (after \code{var} filtering) when \code{from = "SPELL"}.
+    Index or name of the \code{data} column containing the spell statuses
+    (after \code{var} filtering) when \code{from = "SPELL"}.
 	}
 	\item{process}{
 	  % from SPELL
@@ -168,15 +166,17 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     % from SPELL
     % to SPELL
     \code{NULL}, \code{"auto"}, or data frame.
-    Default: \code{NULL}. (tibble will be converted with \code{as.data.frame}).
+    Default: \code{NULL}. (tibbles are internally converted with \code{as.data.frame}).
+    
+    To be used only with \code{from = "SPELL"} or \code{to = "SPELL"}.
 
-    If \code{NULL}, the start and end times of each spell are supposed to be, if
-    \code{process = TRUE}, ages, if \code{process = FALSE}, years when
-    \code{from = "SPELL"}.
+    If \code{NULL}, start and end times of each spell in the from data are supposed to be ages if
+    \code{process = TRUE}, and years if \code{process = FALSE}.
 
-    If \code{"auto"}, ages are computed using the start time of the first spell
-    of each individual as her/his birthdate when \code{from = "SPELL"} and
-    \code{process = TRUE}. For \code{from = "SPELL"} and \code{process = FALSE}, \code{"auto"} is equivalent to \code{NULL}.
+    If \code{"auto"}, ages are computed using 
+    the start time of the first spell
+    of each individual as her/his birthdate and
+    \code{process = TRUE}. For \code{process = FALSE}, \code{"auto"} is equivalent to \code{NULL}.
 
     A data frame containing the ID and the birth time of the individuals when
     \code{from = "SPELL"} or \code{to = "SPELL"}. Use \code{pvar} to specify
@@ -206,39 +206,39 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     Default: \code{TRUE}.
     When \code{from = "SPELL"}, if \code{TRUE}, the most recent episode
     overwrites the older one when they overlap each other, if \code{FALSE},
-    in case of overlap, the most recent episode starts after the end of the
+    the most recent episode starts after the end of the
     previous one.
   }
 	\item{fillblanks}{
     % from SPELL
     Character.
-    The value to fill gaps between episodes when \code{from = "SPELL"}.
+    Token used to fill gaps between episodes when \code{from = "SPELL"}.
   }
 	\item{tmin}{
     % from SPELL
     \code{NULL} or Integer.
     Default: \code{NULL}.
-    The start time of the axis when \code{from = "SPELL"} and \code{process = FALSE}.
-    If \code{NULL}, the value is the minimum of the spell start times
-    (see \code{begin}) or the minimum of the birth time of the individuals
-    (see \code{pdata} when it is a data frame and \code{process = FALSE}).
+    When \code{from = "SPELL"} and \code{process = FALSE}, start time of the axis.
+    If \code{NULL}, \code{tmin} is set as the earliest spell start time
+    (min of \code{begin}) or, when \code{pdata} is a data frame, 
+    as the earliest birth time of the individuals.
   }
 	\item{tmax}{
     % from SPELL & !process
     \code{NULL} or Integer.
     Default: \code{NULL}.
-    The end time of the axis when \code{from = "SPELL"} and \code{process = FALSE}.
-    If \code{NULL}, the value is the maximum of the spell end times (see \code{end})
-    or the sum of the maximum of the spell end times and of the maximum of the
-    birth time of the individuals (see \code{pdata} when it is a data frame and
-    \code{process = FALSE}).
+    When \code{from = "SPELL"} and \code{process = FALSE}, end time of the axis.
+    If \code{NULL}, \code{tmax} is set as the latest spell end time 
+    (max of \code{end}) or,  when \code{pdata} is a data frame, 
+    as the sum of the latest spell end time and the latest
+    birth time of the individuals.
   }
   \item{missing}{
     String.
     Default: \code{"*"}.
-    The code for missing states in \code{data}.
+    Token used for missing states in \code{data}.
     It will be replaced by \code{NA} in the output data. Ignored when \code{data} is a state sequence object
-    (see \code{\link{seqdef}}), in which case the attribute \code{nr} is used as missing value code.
+    (see \code{\link{seqdef}}), in which case the attribute \code{nr} is used as missing value token.
   }
   \item{with.missing}{
     % to SPELL
@@ -250,7 +250,7 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
     % to SPELL
     One of \code{"DEL"} or \code{NA}.
     Default: \code{"DEL"}.
-    When \code{to = "SPELL"} and \code{with.missing=TRUE}, set \code{right=NA} to include the end spells of missing states.
+    When \code{to = "SPELL"} and \code{with.missing=TRUE}, set \code{right=NA} to include ending spells of missing states.
   }
   \item{compressed}{
     Deprecated. Use \code{compress} instead.
@@ -260,23 +260,23 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   }
 }
 \details{
-  The \code{seqformat} function is used to convert data from one format to
-  another. The input data is first converted into the STS format and then
-  converted to the output format. Depending on input and output formats, some
-  information can be lost in the conversion process. The output is a matrix or
-  a data frame, NOT a sequence \code{stslist} object. To process, print or plot
-  the sequences with TraMineR functions, you will have to first transform the data frame
+  The \code{seqformat} function converts data from one format to
+  another. The input data is first converted into STS format and then
+  converted into the output format. Depending on input and output formats, some
+  information can be lost during the conversion process. The output is a matrix or
+  a data frame, NOT a sequence \code{stslist} object. To process, print, and plot
+  the sequences with TraMineR functions, you will have to first transform the returned data frame
   into a \code{stslist} state sequence object with \code{\link{seqdef}}.
   See \cite{Gabadinho et al. (2009)} and \cite{Ritschard et al. (2009)} for more
-  details on longitudinal data formats and converting between them.
+  details on longitudinal data formats and conversion between them.
 
-  When data are in \code{"SPELL"} format (\code{from = "SPELL"}), the begin and end times are expected to be positions in the sequences. Therefore they should be strictly positive integers.
+  When data is in \code{"SPELL"} format (\code{from = "SPELL"}), begin and end times are expected to be positions in the sequences. Therefore, they should be strictly positive integers.
   With \code{process=TRUE}, the outcome sequences will be aligned on ages (process duration since birth), while with \code{process=FALSE} they will be aligned on dates (position on the calendar time). If \code{process=TRUE}, values in the \code{begin} and \code{end} columns of \code{data} are assumed to be ages when \code{pdata} is \code{NULL} and integer dates otherwise. If \code{process=FALSE}, begin and end values are assumed to be integer dates when \code{pdata} is \code{NULL} and ages otherwise.
   
-  To convert from person-period data use \code{from = "SPELL"} and set both \code{begin} and \code{end} as the column index or name of the time variable. Alternatively, use the \code{\link{reshape}} command of \code{stats}, which is more efficient.
+  To convert from person-period data use \code{from = "SPELL"} and set both \code{begin} and \code{end} as the index or name of the time (period) column. Alternatively, use the \code{\link{reshape}} command of \code{stats}, which is more efficient.
 }
 \value{
-  A data frame for \code{SRS}, \code{TSE}, and \code{SPELL}, a matrix otherwise.
+  A data frame for \code{SRS}, \code{TSE}, and \code{SPELL} outcomes, otherwise a matrix.
 
   When \code{from="SPELL"}, outcome has an attribute \code{issues} with indexes of sequences with issues (truncated sequences, missing start time, spells before birth year, ...)
 }
@@ -290,10 +290,9 @@ seqformat(data, var = NULL, from, to, compress = FALSE, nrep = NULL, tevent,
   \emph{Advances in Data Management}, Springer, 2009, 223, 155-175.
 }
 \author{
-  Alexis Gabadinho, Pierre-Alexandre Fonta, Nicolas S. Müller, Matthias Studer,
-  and Gilbert Ritschard.
+  Gilbert Ritschard, Alexis Gabadinho, Pierre-Alexandre Fonta, Nicolas S. Müller, Matthias Studer
 }
-\seealso{\code{\link{seqdef}},\code{\link{reshape}}}
+\seealso{\code{\link{seqdef}}, \code{\link{reshape}}}
 \examples{
 ## ========================================
 ## Examples with raw STS sequences as input
@@ -339,6 +338,11 @@ biofam.seq <- seqdef(biofam, 10:25, alphabet = 0:7,
 bf.spell <- seqformat(biofam.seq, from = "STS", to = "SPELL",
   pdata = biofam, pvar = c("idhous", "birthyr"))
 head(bf.spell)
+
+## Converting to shifted replicated sequences (SRS)
+bf.srs <- seqformat(biofam, var=10:25, from="STS", to="SRS", 
+                    covar=c("sex","plingu02"))
+tail(bf.srs)
 
 
 ## ======================================

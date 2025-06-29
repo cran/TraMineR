@@ -1,6 +1,6 @@
 Package: TraMineR
-Version: 2.2-11
-Date: 2024-12-08
+Version: 2.2-12
+Date: 2025-06-29
 Title: Trajectory Miner: a Sequence Analysis Toolkit
 Authors@R: c(
   person("Alexis", "Gabadinho",
@@ -14,7 +14,7 @@ Authors@R: c(
     role = "aut",
     comment = c(ORCID = "0000-0002-6212-1567")),
   person("Pierre-Alexandre", "Fonta",
-    role = "aut"),
+    role = "ctb"),
   person("Gilbert", "Ritschard",
     role = c("aut", "cre", "cph"),
     email = "gilbert.ritschard@unige.ch",
@@ -30,13 +30,14 @@ Encoding: UTF-8
 Maintainer: Gilbert Ritschard <gilbert.ritschard@unige.ch>
 RoxygenNote: 7.2.3
 NeedsCompilation: yes
-Packaged: 2024-12-08 09:43:20 UTC; grits
+Packaged: 2025-06-29 10:04:56 UTC; grits
 Author: Alexis Gabadinho [aut, cph],
-  Matthias Studer [aut, cph] (<https://orcid.org/0000-0002-6269-1412>),
+  Matthias Studer [aut, cph] (ORCID:
+    <https://orcid.org/0000-0002-6269-1412>),
   Nicolas Müller [aut],
-  Reto Bürgin [aut] (<https://orcid.org/0000-0002-6212-1567>),
-  Pierre-Alexandre Fonta [aut],
-  Gilbert Ritschard [aut, cre, cph]
-    (<https://orcid.org/0000-0001-7776-0903>)
+  Reto Bürgin [aut] (ORCID: <https://orcid.org/0000-0002-6212-1567>),
+  Pierre-Alexandre Fonta [ctb],
+  Gilbert Ritschard [aut, cre, cph] (ORCID:
+    <https://orcid.org/0000-0001-7776-0903>)
 Repository: CRAN
-Date/Publication: 2024-12-08 11:40:02 UTC
+Date/Publication: 2025-06-29 11:50:02 UTC

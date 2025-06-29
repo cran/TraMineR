@@ -28,7 +28,8 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		stop(" [!] Found one or more spell with starting time < 1", call.=FALSE)
 	}
 	if (any(endcolumn-begincolumn<0, na.rm=TRUE)) {
-		stop(" [!] Found one or more spell with ending time < starting time\n",which(endcolumn-begincolumn<0), call.=FALSE)
+		stop(" [!] Found one or more spell with ending time < starting time\n",
+            paste(which(endcolumn-begincolumn<0), collapse=" "), call.=FALSE)
 	}
 
   ## print("Testing whether process==FALSE and pdata=='auto'")
@@ -83,23 +84,23 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 		##names.seqresult <- c(names.seqresult, "id")
 	}
 	else {
-    if (length(endcolumn[!is.na(endcolumn) & endcolumn > 0]) > 0){
-      maxend <- max(endcolumn[!is.na(endcolumn) & endcolumn > 0])
-      ## Check of sequence length <= limit is done later during the transformation
-###       if (frmoption == "year2age"){
-###         #minbeg <- min(begincolumn, na.rm=TRUE)
-###         #mlimit <- maxend - minbeg
-###         #if (mlimit > limit)
-###         #  msg.warn(paste("Some sequence lengths could be larger than 'limit' and will be truncated at",limit))
-###       }
-###       else if (maxend > limit) {
-###         msg.warn(paste("max of 'end' column > limit! Sequences truncated at limit=",limit))
-###       }
-    } else {
-      msg.warn("No positive value in 'end' column!")
-    }
-		#names.seqresult <- c((paste("a", seq(1:limit), sep="")),"id")
-		names.seqresult <- paste0("a", seq(from = 1, to = limit))
+        if (length(endcolumn[!is.na(endcolumn) & endcolumn > 0]) > 0){
+          maxend <- max(endcolumn[!is.na(endcolumn) & endcolumn > 0])
+          ## Check of sequence length <= limit is done later during the transformation
+    ###       if (frmoption == "year2age"){
+    ###         #minbeg <- min(begincolumn, na.rm=TRUE)
+    ###         #mlimit <- maxend - minbeg
+    ###         #if (mlimit > limit)
+    ###         #  msg.warn(paste("Some sequence lengths could be larger than 'limit' and will be truncated at",limit))
+    ###       }
+    ###       else if (maxend > limit) {
+    ###         msg.warn(paste("max of 'end' column > limit! Sequences truncated at limit=",limit))
+    ###       }
+        } else {
+          msg.warn("No positive value in 'end' column!")
+        }
+    		#names.seqresult <- c((paste("a", seq(1:limit), sep="")),"id")
+    		names.seqresult <- paste0("a", seq(from = 1, to = limit))
 	}
 
 	#seqresult <- matrix(nrow=1, ncol=limit+1)
@@ -154,6 +155,7 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
   ntrunc <- 0
   itrunc <- NULL
   ii <- 0
+  #print(frmoption)
 	for (i in 1:nbseq) {
 		spell <- seqdata[seqdata[,id]==lid[i],]
 		# number of spells for individual i
@@ -170,28 +172,30 @@ SPELL_to_STS <- function(seqdata, id=1, begin=2, end=3, status=4,
 				if (!is.na(birthy)) age1 <- 0 else age1 <- NA ## gr Aug 21 fixed for NA birthy
 			}
 			else if (all(lid %in% birthyrid1)) {
-				birthy <- birthyr1[birthyrid1==lid[i]]
-				#print(paste("spell 1 = ", spell[1,begin]))
-				#print(paste("birthyr = ", birthy))
-				age1 <- spell[1,begin] - birthy
-				if (!is.na(age1) & age1 < 0) { ## first spell starts before birthyr
-          nstartbefore <- nstartbefore + 1
-          istartbefore <- c(istartbefore, i)
-          if (spell[1,end] >= birthy) {
-            #if (nstartbefore < 10)
-            #  msg.warn("First spell of sequence",i, "starts before birth year! Start set as birth year")
-            spell[1,begin] <- birthy
-            age1 <- 0
-          }
-          #else if (nstartbefore < 10)
-          #  msg.warn("First spell of sequence",i, "occurs before birth year! Start set as NA")
-          #if (nstartbefore == 10)
-          #  msg.warn("...")
-          else {
-            nendbefore <- nendbefore + 1
-            iendbefore <- c(iendbefore, i)
-          }
-        }
+    			birthy <- birthyr1[birthyrid1==lid[i]]
+    			#if(nbseq<40){
+                    #print(paste("spell 1 = ", spell[1,begin]))
+    			    #print(paste("birthyr = ", birthy))
+                #}
+    			age1 <- spell[1,begin] - birthy
+    			if (!is.na(age1) & age1 < 0) { ## first spell starts before birthyr
+                    nstartbefore <- nstartbefore + 1
+                    istartbefore <- c(istartbefore, i)
+                    if (spell[1,end] >= birthy) {
+                      #if (nstartbefore < 10)
+                      #  msg.warn("First spell of sequence",i, "starts before birth year! Start set as birth year")
+                      spell[1,begin] <- birthy
+                      age1 <- 0
+                    }
+                    #else if (nstartbefore < 10)
+                    #  msg.warn("First spell of sequence",i, "occurs before birth year! Start set as NA")
+                    #if (nstartbefore == 10)
+                    #  msg.warn("...")
+                    else {
+                      nendbefore <- nendbefore + 1
+                      iendbefore <- c(iendbefore, i)
+                    }
+                }
 			}
 			else {
 				stop(" [>] pdata must either contain a birth year per individual or be set as \"auto\"")

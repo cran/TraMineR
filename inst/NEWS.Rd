@@ -1,6 +1,26 @@
 \name{NEWS}
 \title{NEWS file for the TraMineR package}
 
+\section{Changes in version 2.2-12 [2025-06-29] }{
+
+    \subsection{Bug fixes}{
+        \itemize{
+            \item
+            \code{dissdomassoc()}: issue with ties when ranking values for spearman correlation.
+            \item  
+            \code{disscenter()}: wrong distance values returned when allcenter=TRUE.
+            \item
+            \code{seqformat()}: useless test on \code{covar} when \code{to} is not \code{"SRS"}.
+            \item
+            \code{seqformat()} with \code{from="SPELL"} (\code{SPELL_to_STS}): unreadable 
+            list of cases with spells ending before start time.
+            \item
+            \code{seqformat()}: several internal checkindexes badly specified.
+        }
+    }
+}
+
+
 \section{Changes in version 2.2-11 [2024-12-08] }{
 
     \subsection{Changes in existing functions}{
